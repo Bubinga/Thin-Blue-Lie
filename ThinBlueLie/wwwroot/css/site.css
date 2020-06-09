@@ -5,18 +5,32 @@ a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
+  background-size: contain;
+}
+.navbar-brand span {
+	vertical-align: middle;
+	padding: 0 0 0 15px;
 }
 
-/* Provide sufficient contrast against dark background */
+/* changing color and underline on hover */
+.navbar-nav .nav-item.active .nav-link,
+.navbar-nav .nav-item:hover .nav-link {
+    text-decoration: underline !important;
+}
+
+
+/* setting text and header formats/colors */
 h1 {
-    color: #ff0000;
+    color: #1b6ec2;
+}
+h2 {
+    color: #e5e5e5;
+}
+p {
+    color: #ffd800;
 }
 
 /* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
-}
-
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
