@@ -10,20 +10,22 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-secondary mb-3">
-            <div class="container">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark mb-3">
+            <div class="d-flex flex-grow-1 container-fluid" >
                 <a class="navbar-brand text-white" href="/Index">
-                    <img src="/ThinBlueLie Logo.png"  width="30" height="30" >
-                    Thin Blue Lie
+                    <img id="logo" alt="" src="/ThinBlueLieLogo.png"  width="35" height="35" class="d-inline-block">
+                    <span>Thin Blue Lie</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav mr-auto flex-grow-1">
+                <div class="navbar-collapse collapse text-right d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-page="/Timeline">Timeline</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-page="/Officers">Officers</a>
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-page="/Solutions">Solutions</a>
                         <li class="nav-item">
@@ -33,14 +35,14 @@
                     </ul>
                 </div>
                 <div class="navbar-collapse collapse text-right d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-page="/Donate">Donate</a>
                         </li>
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav>        
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -50,8 +52,8 @@
     <style type="text/css">
         body {
             background: #0b0c0d !important;
-        }
-         /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+        }        
+        /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
     </style>
 
    
