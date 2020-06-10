@@ -3,6 +3,54 @@
 @{
     ViewData["Title"] = "TimelineLayout";
 }
-
-<h1>TimelineLayout</h1>
+<style>
+    #second {
+        border: none;
+    }
+    card.header {
+        font-size: 1rem;
+    }
+    hr {
+        border: none;
+        height: 2px;
+        /* Set the hr color */
+        color: #314DB2; /* old IE */
+        background-color: #314DB2; /* Modern Browsers */
+    }
+</style>
+<body>
+    <div class="card border-dark w-50 mb-3" style="max-width: 18rem; float:right;">
+        <div class="card-header text-black"><strong>Data</strong></div>
+        <div class="card-body text-dark">
+            <h5 class="card-title mb-0">General Information</h5>
+            <hr class="mt-0 pb-0 mb-0 pt-0"/>
+            <ul class="list-group list-group-flush">
+                <li id="second" class="list-group-item">
+                    <p>Date: </p>
+                    <p>Location: </p>
+                </li>
+            </ul>
+            <h5 class="card-title text-left mb-0">Victim's Information</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item ">
+                    <p>Name: </p>
+                    <p>Race: </p>
+                    <p>Sex: </p>
+                </li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <a href="#" class="btn btn-primary">Incorrect Info?</a>
+        </div>
+    </div>
+    <div>
+        <iframe width="800" height="500"
+                src="https://www.youtube.com/embed/tgbNymZ7vqY">
+        </iframe>
+    </div>
+    <div>
+        <h5 style="margin-left: 40px; font-size:25px; font-family: Cambira;" class="mt-2"> <strong>Legal Action</strong></h5>
+        <hr style="height: 1px;"class="mt-0 pb-0 mb-0 pt-0" />
+    </div>
+</body>
 
