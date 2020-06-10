@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/ColorPallete.css" />
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark mb-3">
+        <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark mb-3">
             <div class="d-flex flex-grow-1 container-fluid">
                 <a class="navbar-brand text-white" href="/Index">
                     <img id="logo" alt="" src="/ThinBlueLieLogo.png" width="35" height="35" class="d-inline-block">
@@ -32,9 +33,7 @@
                         <li class="nav-item" id="History">
                             <a class="nav-link text-white" asp-page="/History">History</a>
                         <li class="nav-item" id="Statistics">
-                            <a class="nav-link text-white" asp-page="/Statistics">Statistics</a>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-page="/Fuck12">Fuck12</a>
+                            <a class="nav-link text-white" asp-page="/Statistics">Statistics</a>                        
                     </ul>
                 </div>
                 <div class="navbar-collapse collapse text-right d-sm-inline-flex flex-sm-row-reverse">
@@ -63,20 +62,13 @@
             @RenderBody()
         </main>
     </div>
-    <style type="text/css">
-        body {
-            background: #292929 !important;
-        }
-        /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
-    </style>
+   
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        document.querySelectorAll("a[href$='Timeline']").parentElement.classList.add("active");
-    </script>
+
 
     @RenderSection("Scripts", required: false)
 </body>

@@ -18,15 +18,32 @@ a.navbar-brand {
     text-decoration: underline !important;
 }
 
+.onpage {
+    text-decoration: none;
+    background-color: #2B3035;
+    border-radius: 3px;
+}
+/* Fuck 12 */
+.jumbotron {
+    background-color: transparent !important;
+    color: white;
+
+}
+/* Card settings */
+li p {
+    color: #2B3035;
+}
+
+
 /* setting text and header formats/colors */
 h1 {
     color: #1b6ec2;
 }
 h2 {
-    color: #e5e5e5;
+    color: #000000;
 }
 p {
-    color: #ffd800;
+    color: #2B3035;
 }
 
 /* Provide sufficient contrast against white background */
@@ -45,7 +62,8 @@ p {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+  margin-top: 60px;
+    font-size: 14px;
 }
 @media (min-width: 768px) {
   html {
@@ -69,21 +87,21 @@ button.accept-policy {
   line-height: inherit;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
+/* Sticky footer styles-------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
 }
