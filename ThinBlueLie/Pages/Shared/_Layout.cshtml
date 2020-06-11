@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="~/ColorPallete.css" />
 
 </head>
-<body>
+<body class="noscrollbar">
     <header>
         <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark mb-3">
             <div class="d-flex flex-grow-1 container-fluid">
@@ -57,13 +57,11 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="nogap container-fluid">
+        <main>
             @RenderBody()
         </main>
     </div>
-   
-
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

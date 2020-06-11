@@ -1,11 +1,84 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+
+.nogap {
+    margin: 0px;
+    padding: 0px;
+}
+@media (min-width: 25em) {
+
+    html, body {
+        overflow-x: hidden;
+    }
+    body {
+        position: relative;    
+    }
+}
+
+hr.blueline  {
+    border: none;
+    height: 2px;
+    /* Set the hr color */
+    color: #314DB2; /* old IE */
+    background-color: #314DB2; /* Modern Browsers */
+}
+}
+
+/*Index page */
+.body {
+    padding:70px;
+    margin:0px;
+}
+
+.home.jumbotron {
+    padding-top: 150px;
+}
+
+@media (max-width: 480px) {
+    .home.jumbotron {
+        padding-bottom: 70px;
+    }
+}
+
+/*card columns */
+@media (min-width: 20em) {
+    .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+}
+
+@media (min-width: 48em) {
+    .card-columns {
+        -webkit-column-count: 3;
+        -moz-column-count: 3;
+        column-count: 3;
+    }
+}
+
+@media (min-width: 62em) {
+    .card-columns {
+        -webkit-column-count: 4;
+        -moz-column-count: 4;
+        column-count: 4;
+    }
+}
+
+@media (min-width: 75em) {
+    .card-columns {
+        -webkit-column-count: 4;
+        -moz-column-count: 4;
+        column-count: 4;
+    }
+}
+/*Navbar */
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-  background-size: contain;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+    background-size: contain;
 }
 .navbar-brand span {
 	vertical-align: middle;
@@ -18,13 +91,14 @@ a.navbar-brand {
     text-decoration: underline !important;
 }
 
+/* depressing navbar link based on what page user is on */
 .onpage {
     text-decoration: none;
     background-color: #2B3035;
     border-radius: 3px;
 }
 /* Fuck 12 */
-.jumbotron {
+.fuck12.jumbotron {
     background-color: transparent !important;
     color: white;
 
@@ -32,6 +106,13 @@ a.navbar-brand {
 /* Card settings */
 li p {
     color: #2B3035;
+}
+/* Scrollbar gone but functionality remaining */
+.noscrollbar::-webkit-scrollbar {
+    display: none !important;
+}
+.noscrollbar {
+    -ms-overflow-style: none !important;
 }
 
 
@@ -43,7 +124,8 @@ h2 {
     color: #000000;
 }
 p {
-    color: #2B3035;
+    color: #000000;
+    font-size: .8rem
 }
 
 /* Provide sufficient contrast against white background */
