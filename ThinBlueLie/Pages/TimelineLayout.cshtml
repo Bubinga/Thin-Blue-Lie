@@ -19,39 +19,73 @@
     }
 </style>
 <body>
-    <div class="card border-dark w-50 mb-3" style="max-width: 18rem; float:right;">
-        <div class="card-header text-black"><strong>Data</strong></div>
-        <div class="card-body text-dark">
-            <h5 class="card-title mb-0">General Information</h5>
-            <hr style="height:1px; background-color:#808080;" class="mt-0 pb-0 mb-0 pt-0"/>
-            <ul class="list-group list-group-flush">
-                <li id="second" class="list-group-item">
-                    <p>Date: </p>
-                    <p>Location: </p>
-                    <p>Weapom: </p>
-                </li>
-            </ul>
-            <h5 class="card-title text-left mb-0">Victim's Information</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item ">
-                    <p>Name: </p>
-                    <p>Race: </p>
-                    <p>Sex: </p>
-                </li>
-            </ul>
+    <div style="position:relative;"class="container-fluid mt-3 mb-3 text-center">
+        <span class="container-fluid" style="width:80%;" >Sunday Monday Tuesday Wednesday Thursday Friday Saturday </span>
+        <div 
+                 id="imposedline" style="width:80%; border-top: 1px solid black;" class="pt-0 mt-0">            
         </div>
-        <div class="card-footer">
-            <a href="#" class="btn btn-primary">Incorrect Info?</a>
+        <div style="width:80%;" class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="week btn ">
+                <input type="radio" name="options" alt="Sunday" id="option1" autocomplete="off" checked> 
+            </label>
+            <label class="week btn ">
+                <input type="radio" name="options" alt="Monday" id="option2" autocomplete="off">
+            </label>
+            <label class="week btn">
+                <input type="radio" name="options" alt="Tuesday" id="option3" autocomplete="off"> 
+            </label>
+            <label class="week btn">
+                <input type="radio" name="options" alt="Wednesday" id="option4" autocomplete="off"> 
+            </label>
+            <label class="week btn">
+                <input type="radio" name="options" alt="Thursday" id="option5" autocomplete="off"> 
+            </label>
+            <label class="week btn">
+                <input type="radio" name="options" alt="Friday" id="option6" autocomplete="off"> 
+            </label>
+            <label class="week btn">
+                <input type="radio" name="options" alt="Saturday" id="option7" autocomplete="off"> 
+            </label>
         </div>
     </div>
-    <div class=" container embed-responsive embed-responsive-21by9">
-        <iframe class="embed-responsive-item"
-                src="https://www.youtube.com/embed/tgbNymZ7vqY">
-        </iframe>
+    <div class="mr-5">
+        <div class="card border-dark w-50 mb-3" style="max-width: 18rem; float:right;">
+            <div class="card-header text-black"><strong>Data</strong></div>
+            <div class="card-body text-dark">
+                <h5 class="card-title mb-0">General Information</h5>
+                <hr style="height:1px; background-color:#808080;" class="mt-0 pb-0 mb-0 pt-0" />
+                <ul class="list-group list-group-flush">
+                    <li id="second" class="list-group-item">
+                        <p>Date: </p>
+                        <p>Location: </p>
+                        <p>Weapom: </p>
+                    </li>
+                </ul>
+                <h5 class="card-title text-left mb-0">Victim's Information</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item ">
+                        <p>Name: </p>
+                        <p>Race: </p>
+                        <p>Sex: </p>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-primary">Incorrect Info?</a>
+            </div>
+        </div>
+        <div class=" container embed-responsive embed-responsive-21by9">
+            <iframe class="container-fluid embed-responsive-item"
+                    src="https://www.youtube.com/embed/tgbNymZ7vqY">
+            </iframe>
+        </div>
+        <div class="ml-5 mt-3">
+            <h5 style="text-indent: 3em; margin-left: 40px; font-size:25px; font-family: Cambira;" class="mt-2"> <strong>Legal Action</strong></h5>
+            <hr class="blueline mt-0 pb-0 mb-0 pt-0" style="height: 1px;"/>
+        </div>
     </div>
-    <div class="ml-5 mt-3">
-        <h5 style="text-indent: 4em; margin-left: 40px; font-size:25px; font-family: Cambira;" class="mt-2"> <strong>Legal Action</strong></h5>
-        <hr class="blueline" style="height: 1px;"class="mt-0 pb-0 mb-0 pt-0" />
+    <div class="container">
+        <p>At this point no action has been taken</p>
     </div>
 </body>
 
