@@ -23,7 +23,7 @@ hr.blueline  {
     color: #314DB2; /* old IE */
     background-color: #314DB2; /* Modern Browsers */
 }
-}
+
 
 /*Index page */
 .body {
@@ -103,6 +103,40 @@ a.navbar-brand {
     color: white;
 
 }
+/* Timeline Layout */
+.week {
+    background-color: #dedede;    
+    border: 0px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-radius: 0px;
+    padding-top: 1px;
+    height: 30px;
+    
+}
+
+.btn:focus, .btn:active:focus, .btn.active:focus,
+.btn.focus, .btn:active.focus, .btn.active.focus {
+    outline: none;
+}
+
+.btn:focus {
+    box-shadow: none;
+}
+
+#imposedline {
+    border-top: 1px solid black;
+    color: #dee2e6;
+    position: absolute;
+    z-index: 10;
+    top: 38px;
+    left: 10%;
+}
+.btn.active {
+    background-color: #b5b5b5;
+
+}
+
 /* Card settings */
 li p {
     color: #2B3035;
