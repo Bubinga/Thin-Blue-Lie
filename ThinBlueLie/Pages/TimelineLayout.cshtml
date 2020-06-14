@@ -10,41 +10,55 @@
     card.header {
         font-size: 1rem;
     }
-    hr {
+    hr.blueline {
         border: none;
         height: 2px;
         /* Set the hr color */
         color: #314DB2; /* old IE */
         background-color: #314DB2; /* Modern Browsers */
     }
+    .timeline-label {
+        position: absolute !important;
+        top: -25px !important;
+        text-align: center;
+        margin-right: auto;
+    }
+
 </style>
 <body>
-    <div style="position:relative;"class="container-fluid mt-3 mb-3 text-center">
-        <span class="container-fluid" style="width:80%;" >Sunday Monday Tuesday Wednesday Thursday Friday Saturday </span>
-        <div 
-                 id="imposedline" style="width:80%; border-top: 1px solid black;" class="pt-0 mt-0">            
-        </div>
+    <div style="position:relative;" class="container-fluid mt-3 mb-3 text-center">
+   <!-- <div   This draws that "Timeline" idk man, it kinda looks better without it.
+             id="imposedline" style="width:80%; border-top: 1px solid black;" class="pt-0 mt-0">
+        </div> -->
+        <div><span><br /></span></div>
         <div style="width:80%;" class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="week btn ">
-                <input type="radio" name="options" alt="Sunday" id="option1" autocomplete="off" checked> 
+                <span class="timeline-label">Sunday</span>
+                <input type="radio" name="options" alt="Sunday" id="option1" autocomplete="off" checked>
             </label>
             <label class="week btn ">
+                <span class="timeline-label">Monday</span>
                 <input type="radio" name="options" alt="Monday" id="option2" autocomplete="off">
             </label>
             <label class="week btn">
-                <input type="radio" name="options" alt="Tuesday" id="option3" autocomplete="off"> 
+                <span class="timeline-label">Tuesday</span>
+                <input type="radio" name="options" alt="Tuesday" id="option3" autocomplete="off">
             </label>
             <label class="week btn">
-                <input type="radio" name="options" alt="Wednesday" id="option4" autocomplete="off"> 
+                <span class="timeline-label">Wednesday</span>
+                <input type="radio" name="options" alt="Wednesday" id="option4" autocomplete="off">
             </label>
             <label class="week btn">
-                <input type="radio" name="options" alt="Thursday" id="option5" autocomplete="off"> 
+                <span class="timeline-label">Thursday</span>
+                <input type="radio" name="options" alt="Thursday" id="option5" autocomplete="off">
             </label>
             <label class="week btn">
-                <input type="radio" name="options" alt="Friday" id="option6" autocomplete="off"> 
+                <span class="timeline-label">Friday</span>
+                <input type="radio" name="options" alt="Friday" id="option6" autocomplete="off">
             </label>
             <label class="week btn">
-                <input type="radio" name="options" alt="Saturday" id="option7" autocomplete="off"> 
+                <span class="timeline-label">Saturday</span>
+                <input type="radio" name="options" alt="Saturday" id="option7" autocomplete="off">
             </label>
         </div>
     </div>
@@ -53,7 +67,7 @@
             <div class="card-header text-black"><strong>Data</strong></div>
             <div class="card-body text-dark">
                 <h5 class="card-title mb-0">General Information</h5>
-                <hr style="height:1px; background-color:#808080;" class="mt-0 pb-0 mb-0 pt-0" />
+                <hr class="mt-0 pb-0 mb-0 pt-0" />
                 <ul class="list-group list-group-flush">
                     <li id="second" class="list-group-item">
                         <p>Date: </p>
