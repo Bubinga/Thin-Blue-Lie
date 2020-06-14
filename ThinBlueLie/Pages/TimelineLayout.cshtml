@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "TimelineLayout";
 }
+
 <style>
     #second {
         border: none;
@@ -21,7 +22,8 @@
         position: absolute !important;
         top: -25px !important;
         text-align: center;
-        margin-right: auto;
+        padding:0px;
+        margin: 0px;
     }
 
 </style>
@@ -33,13 +35,13 @@
         <div><span><br /></span></div>
         <div style="width:80%;" class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="week btn ">
-                <span class="timeline-label">Sunday</span>
+                <span id="CurrentDay" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Sunday" id="option1" autocomplete="off" checked>
             </label>
             <label class="week btn ">
                 <span class="timeline-label">Monday</span>
                 <input type="radio" name="options" alt="Monday" id="option2" autocomplete="off">
-            </label>
+            </label>      
             <label class="week btn">
                 <span class="timeline-label">Tuesday</span>
                 <input type="radio" name="options" alt="Tuesday" id="option3" autocomplete="off">
@@ -102,4 +104,24 @@
         <p>At this point no action has been taken</p>
     </div>
 </body>
+<script>
+    n = new Date();
+    y = n.getFullYear();
+    m = n.getMonth() + 1;
+    d = n.getDate();
+    document.getElementById("CurrentDay").innerHTML = m + "/" + d + "/" + y;
 
+    var d = new Date();
+    var weekday = new Array(7);
+    weekday[0] = "Sunday";
+    weekday[1] = "Monday";
+    weekday[2] = "Tuesday";
+    weekday[3] = "Wednesday";
+    weekday[4] = "Thursday";
+    weekday[5] = "Friday";
+    weekday[6] = "Saturday";
+
+    var n = weekday[d.getDay()];
+    document.getElementById("CurrentDay").innerHTML = n;
+
+</script>
