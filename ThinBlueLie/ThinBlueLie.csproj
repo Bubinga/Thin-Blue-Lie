@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <ApplicationIcon>thinbluelie_logo_b6V_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
