@@ -40,28 +40,28 @@
                 <span id="Timeline-Day0"  class="timeline-label"></span>
                 <input type="radio" name="options" alt="Sunday" id="option1" autocomplete="off" checked>
             </label>
-            <label id="Timeline-Day1" class="week btn">
-                <span class="timeline-label"></span>
+            <label class="week btn">
+                <span id="Timeline-Day1" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Monday" id="option2" autocomplete="off">
             </label>      
-            <label id="Timeline-Day2" class="week btn">
-                <span class="timeline-label"></span>
+            <label class="week btn">
+                <span id="Timeline-Day2" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Tuesday" id="option3" autocomplete="off">
             </label>
-            <label id="Timeline-Day3" class="week btn">
-                <span class="timeline-label"></span>
+            <label class="week btn">
+                <span id="Timeline-Day3" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Wednesday" id="option4" autocomplete="off">
             </label>
-            <label id="Timeline-Day4" class="week btn">
-                <span class="timeline-label"></span>
+            <label class="week btn">
+                <span id="Timeline-Day4" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Thursday" id="option5" autocomplete="off">
             </label>
-            <label id="Timeline-Day5"  class="week btn">
-                <span class="timeline-label"></span>
+            <label class="week btn">
+                <span id="Timeline-Day5" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Friday" id="option6" autocomplete="off">
             </label>
-            <label id="Timeline-Day6"  class="week btn">
-                <span class="timeline-label"></span>
+            <label class="week btn">
+                <span id="Timeline-Day6" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Saturday" id="option7" autocomplete="off">
             </label>
         </div>
@@ -84,7 +84,7 @@
                     <li id="second" class="list-group-item">
                         <p><strong>Date:</strong> 4/20 </p>
                         <p><strong>Location:</strong> Your mom's House </p>
-                        <p><strong>Weapon:</strong> 12in ribbed BBC</p>
+                        <p><strong>Weapon:</strong> </p>
                     </li>
                 </ul>
                 <h5 class="card-title text-left mb-0">Victim's Information</h5>
@@ -125,18 +125,82 @@
     weekday[6] = "Saturday";
     var todayDate = new Date();
 
-    for (var i = 0; i < 7; i++) {
-        var date = new Date();     
+ //   for (var i = 0; i < 7; i++) {
+    var date = new Date();     
+    var weekDays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+                
+    if (window.matchMedia("(min-width: 768px)").matches) {      
+        for (i = 0; i < 7; ++i)
+            document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " ";
+            //document.getElementById("Timeline-Day0").innerHTML = "Sunday ";
+            //document.getElementById("Timeline-Day1").innerHTML = "Monday "; 
+            //document.getElementById("Timeline-Day2").innerHTML = "Tuesday ";
+            //document.getElementById("Timeline-Day3").innerHTML = "Wednesday ";
+            //document.getElementById("Timeline-Day4").innerHTML = "Thursday ";
+            //document.getElementById("Timeline-Day5").innerHTML = "Friday ";
+            //document.getElementById("Timeline-Day6").innerHTML = "Saturday ";                     
+        }
+
+       // for all numbers larger than the id of the current day set disabled to the class list
+        var curr = new Date(); // get current date
+        var first = curr.getDate() - curr.getDay(); // First day is the  day of the month - the day of the week
+        var last = first + 6; // last day is the first day + 6
+        //firstday = new Date(curr.setDate(first));
+        //secondday = new Date(curr.setDate(curr.getDate() + 1));
+        //thirdday = new Date(curr.setDate(curr.getDate() + 1));
+        //fourthday = new Date(curr.setDate(curr.getDate() + 1));
+        //fifthday = new Date(curr.setDate(curr.getDate() + 1));
+        //sixthday = new Date(curr.setDate(curr.getDate() + 1));
+        //lastday = new Date(curr.setDate(curr.getDate() + 1));
+
+        var day = new Array(7);
+        day[0] = new Date(curr.setDate(first));
+        for (i = 1; i < 7; i++) {
+            day[i] = new Date(curr.setDate(curr.getDate() + 1));
+        }
+
+        var m = new Array(7);
+        var d = new Array(7);
+        for (i = 0; i < 7; i++) {
+            m[i] = day[i].getMonth() + 1;
+            d[i] = day[i].getDate();
+
+            document.getElementById("Timeline-Day" + i ).innerHTML += m[i] + "/" + d[i];
+        }
+
+        //document.getElementById("Timeline-Day0").innerHTML += m[2];
+
+        //m0 = firstday.getMonth() + 1;
+        //d0 = firstday.getDate();
+        //m1 = secondday.getMonth() + 1;
+        //d1 = secondday.getDate();
+        //m2 = thirdday.getMonth() + 1;
+        //d2 = thirdday.getDate();
+        //m3 = fourthday.getMonth() + 1;
+        //d3 = fourthday.getDate();
+        //m4 = fifthday.getMonth() + 1;
+        //d4 = fifthday.getDate();
+        //m5 = sixthday.getMonth() + 1;
+        //d5 = sixthday.getDate();
+        //m6 = lastday.getMonth() + 1;
+        //d6 = lastday.getDate();
+
+        //document.getElementById("Timeline-Day0").innerHTML += m0 + "/" + d0;
+        //document.getElementById("Timeline-Day1").innerHTML += m1 + "/" + d1;
+        //document.getElementById("Timeline-Day2").innerHTML += m2 + "/" + d2;
+        //document.getElementById("Timeline-Day3").innerHTML += m3 + "/" + d3;
+        //document.getElementById("Timeline-Day4").innerHTML += m4 + "/" + d4;
+        //document.getElementById("Timeline-Day5").innerHTML += m5 + "/" + d5;
+        //document.getElementById("Timeline-Day6").innerHTML += m6 + "/" + d6;        
 
         
-        if (window.matchMedia("(min-width: 768px)").matches) {
-            var dayName = weekday[date.getDay()];
-            document.getElementById("Timeline-Day" + date.getDay()).getElementsByClassName("timeline-label")[0].innerHTML = dayName + " ";
-            
-        }
-       // for all numbers larger than the id of the current day set disabled to the class list
-        m = date.getMonth() + 1;
-        d = date.getDate();
-        document.getElementById("Timeline-Day" + date.getDay()).getElementsByClassName("timeline-label")[0].innerHTML += m + "/" + d;
-    }
+
+
+        //m = date.getMonth() + 1;
+        //d = date.getDate();
+        
+        //document.getElementById("Timeline-Day" + date.getDay()).getElementsByClassName("timeline-label")[0].innerHTML += m + "/" + d ;
+        
+   // }
+
 </script>

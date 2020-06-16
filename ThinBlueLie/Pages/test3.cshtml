@@ -1,0 +1,29 @@
+﻿@page
+@model ThinBlueLie.Pages.test3Model
+@{
+    ViewData["Title"] = "test3";
+}
+
+<script>
+    var curr = new Date('2020-06-28T00:00:00'); // get current date
+    var first = curr.getDate() - curr.getDay(); // First day is the  day of the month - the day of the week
+    var last = first + 6; // last day is the first day + 6
+    firstday = new Date(curr.setDate(first));
+    secondday = new Date(curr.setDate(curr.getDate() + 1));
+    thirdday = new Date(curr.setDate(curr.getDate() + 2));
+    fourthday = new Date(curr.setDate(curr.getDate() + 3));
+    fifthday = new Date(curr.setDate(curr.getDate() + 4));
+    sixthday = new Date(curr.setDate(curr.getDate() + 5));
+    lastday = new Date(curr.setDate(curr.getDate() + 6));
+    document.write(firstday);
+    document.write(lastday);
+    m1 = firstday.getMonth() + 1;
+    d1 = firstday.getDate();
+    m2 = lastday.getMonth() + 1;
+    d2 = lastday.getDate();
+    document.write(m1 + "/" + d1 + "   ");
+    document.write(m2 + "/" + d2 + "   ");
+</script>
+<div>
+
+</div>
