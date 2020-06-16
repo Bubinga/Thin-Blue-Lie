@@ -11,7 +11,7 @@
 
     table {
         border-collapse: collapse;
-        font-family: Georgia, Times, serif;
+        font-family: 'Segoe UI', Times , serif;
     }
 
     th {
@@ -52,6 +52,7 @@
     }
 
 </style>
+<div class="container">
     <div class="divcalendar mt-5">
 
         <div id="calendaroverallcontrols">
@@ -77,6 +78,7 @@
 
         <div id="divcalendartable"></div>
     </div>
+</div>
 <script>
     var Calendar = function (o) {
         //Store div id
@@ -218,7 +220,6 @@
 
                     html += '<td id="prevmonthdates">' +
                         '<span id="cellvaluespan">' + (cellvalue) + '</span>' +
-                        '<ul id="cellvaluelist"></ul>' +
                         '</td>';
 
                     // Dates from next month

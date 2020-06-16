@@ -8,9 +8,11 @@
     #second {
         border: none;
     }
+
     card.header {
         font-size: 1rem;
     }
+
     hr.blueline {
         border: none;
         height: 2px;
@@ -18,6 +20,7 @@
         color: #314DB2; /* old IE */
         background-color: #314DB2; /* Modern Browsers */
     }
+
     .timeline-label {
         position: absolute !important;
         top: -25px !important;
@@ -25,47 +28,73 @@
         padding: 0px;
         margin: 0px;
         left: 0px;
-        width: 100%;        
+        width: 100%;
     }
-    
+
+    .btn.focus, .btn.active {
+        box-shadow: none;
+        outline: #919191 solid 3px;
+    }
 </style>
 <body>
-    <div style="position:relative;" class="container-fluid mt-3 mb-3 text-center">
-   <!-- <div   This draws that "Timeline" idk man, it kinda looks better without it.
-             id="imposedline" style="width:80%; border-top: 1px solid black;" class="pt-0 mt-0">
-        </div> -->
-        <div><span><br /></span></div>
-        <div style="width:70%;" id="timelinediv" class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="week btn ">
-                <span id="Timeline-Day0"  class="timeline-label"></span>
+    <div style="position:relative;" class="container-fluid mt-4 mb-3 text-center">
+        <!-- <div   This draws that "Timeline" idk man, it kinda looks better without it.
+         id="imposedline" style="width:80%; border-top: 1px solid black;" class="pt-0 mt-0">
+    </div> -->
+        <div id="calendarDiv"class="container text-left">
+            <div class="divcalendar nogap">
+                <div id="calendaroverallcontrols">
+                    <!-- <div id="year"></div> -->
+                    <div id="calendarmonthcontrols">
+                        <a id="btnPrevYr" href="javascript:void();" title="Previous Year"><span><<</span></a>
+                        <a id="btnPrev" href="javascript:void();" title="Previous Month"><span><</span></a>
+                        <!-- <input type="button" src="images/btnprevmonth.png" alt="Submit" id="btnPrev"/>-->
+                        <!-- <div id="month"></div>-->
+                        <div id="monthandyear"></div>
+                        <!--<input type="button" src="images/btnnextmonth.png" alt="Submit" id="btnNext"/>-->
+                        <a id="btnNext" href="javascript:void();" title="Next Month"><span>></span></a>
+                        <a id="btnNextYr" href="javascript:void();" title="Next Year"><span>>></span></a>
+                    </div>
+                </div>
+                <div id="divcalendartable"></div>
+            </div>
+        </div>  @*Timeline*@
+        <div style="width:70%;" id="timelineDiv" class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label id="Timeline-label0" class="week btn ">
+                <span id="Timeline-Day0" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Sunday" id="option1" autocomplete="off" checked>
             </label>
-            <label class="week btn">
+            <label id="Timeline-label1" class="week btn">
                 <span id="Timeline-Day1" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Monday" id="option2" autocomplete="off">
-            </label>      
-            <label class="week btn">
+            </label>
+            <label id="Timeline-label2" class="week btn">
                 <span id="Timeline-Day2" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Tuesday" id="option3" autocomplete="off">
             </label>
-            <label class="week btn">
+            <label id="Timeline-label3" class="week btn">
                 <span id="Timeline-Day3" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Wednesday" id="option4" autocomplete="off">
             </label>
-            <label class="week btn">
+            <label id="Timeline-label4" class="week btn">
                 <span id="Timeline-Day4" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Thursday" id="option5" autocomplete="off">
             </label>
-            <label class="week btn">
+            <label id="Timeline-label5" class="week btn">
                 <span id="Timeline-Day5" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Friday" id="option6" autocomplete="off">
             </label>
-            <label class="week btn">
+            <label id="Timeline-label6" class="week btn">
                 <span id="Timeline-Day6" class="timeline-label"></span>
                 <input type="radio" name="options" alt="Saturday" id="option7" autocomplete="off">
             </label>
-        </div>
-        <div style="width:18%;" class="content-bottom input-group float-right mb-2 mr-4">
+        </div> @*Format Select*@
+        <div style="width:18%; position:absolute; float:right; left: 80%; top:-15px;" class="input-group">
+            <h5 class="">Format:</h5>
+            <a onclick="showWeek()" class="btn btn-outline-secondary">Week</a>
+            <a onclick="showMonth()" class="btn btn-outline-secondary">Month</a>
+        </div>  @*Date Search*@
+        <div style="width:18%;" class="input-group float-right mb-2 mr-4">
             <input type="number" id="InputMonth" min="0" max="12" class="form-control" placeholder="MM" aria-label="Month">
             <input type="number" id="InputYear" min="1" max="31" class="form-control" placeholder="DD" aria-label="Day">
             <input type="number" id="InputYear" min="1980" max="2020" class="form-control" placeholder="YYYY" aria-label="Year">
@@ -75,6 +104,7 @@
         </div>
     </div>
     <div class="mr-5">
+        @*Information Card*@
         <div class="card border-dark w-50 mb-3" style="max-width: 18rem; float:right;">
             <div class="card-header text-black"><strong>Data</strong></div>
             <div class="card-body text-dark">
@@ -99,108 +129,297 @@
             <div class="card-footer">
                 <a href="#" class="btn btn-primary">Incorrect Info?</a>
             </div>
-        </div>
+        </div>  @*Video*@
         <div style="border-radius: 3px;" class="container embed-responsive embed-responsive-21by9">
             <iframe class="container-fluid embed-responsive-item"
                     src="https://www.youtube.com/embed/cDna8oFt8FQ">
             </iframe>
         </div>
-        <div class="ml-5 mt-3">
+        <div class="ml-5 mt-3"> @*Legal Action header*@            
             <h5 style="text-indent: 3em; margin-left: 40px; font-size:25px; font-family: Cambira;" class="mt-2"> <strong>Legal Action</strong></h5>
-            <hr class="blueline mt-0 pb-0 mb-0 pt-0" style="height: 1px;"/>
+            <hr class="blueline mt-0 pb-0 mb-0 pt-0" style="height: 1px;" />
+        </div>
+        <div class="container"> @*Legal Action content*@
+            <p>At this point no action has been taken</p>
         </div>
     </div>
-    <div class="container">
-        <p>At this point no action has been taken</p>
-    </div>
+         
 </body>
-<script> 
-    var weekday = new Array(7);
-    weekday[0] = "Sunday";
-    weekday[1] = "Monday";
-    weekday[2] = "Tuesday";
-    weekday[3] = "Wednesday";
-    weekday[4] = "Thursday";
-    weekday[5] = "Friday";
-    weekday[6] = "Saturday";
-    var todayDate = new Date();
+<script>
+    var date = new Date();
+    var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
- //   for (var i = 0; i < 7; i++) {
-    var date = new Date();     
-    var weekDays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
-                
-    if (window.matchMedia("(min-width: 768px)").matches) {      
+    if (window.matchMedia("(min-width: 768px)").matches) {
         for (i = 0; i < 7; ++i)
             document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " ";
-            //document.getElementById("Timeline-Day0").innerHTML = "Sunday ";
-            //document.getElementById("Timeline-Day1").innerHTML = "Monday "; 
-            //document.getElementById("Timeline-Day2").innerHTML = "Tuesday ";
-            //document.getElementById("Timeline-Day3").innerHTML = "Wednesday ";
-            //document.getElementById("Timeline-Day4").innerHTML = "Thursday ";
-            //document.getElementById("Timeline-Day5").innerHTML = "Friday ";
-            //document.getElementById("Timeline-Day6").innerHTML = "Saturday ";                     
+    }
+
+    var curr = new Date(); // get current date
+    var first = curr.getDate() - curr.getDay(); // First day is the  day of the month - the day of the week
+    var last = first + 6; // last day is the first day + 6
+
+    var day = new Array(7);
+    day[0] = new Date(curr.setDate(first));
+    for (i = 1; i < 7; i++) { //This for loop creates the time info for each day with the following loop pulls the month and date out of
+        day[i] = new Date(curr.setDate(curr.getDate() + 1));
+    }
+
+    var m = new Array(7);
+    var d = new Array(7);
+    for (i = 0; i < 7; i++) { //This for loop adds the date onto the end of the day using arrays
+        m[i] = day[i].getMonth() + 1;
+        d[i] = day[i].getDate();
+        document.getElementById("Timeline-Day" + i).innerHTML += m[i] + "/" + d[i];
+    }
+
+    // for all numbers larger than the id of the current day set disabled to the class list
+    var current = new Date();
+
+    for (i = 0; i < 7; i++) {
+        if (day[i] > current)
+            // document.getElementById("Timeline-Day" + i).innerHTML += "/";
+            document.getElementById("Timeline-label" + i).classList.add("disabled");
+    }
+</script>
+<script>
+    function showWeek() {
+        var x = document.getElementById("timelineDiv");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+    function showMonth() {
+        var x = document.getElementById("calendarDiv");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
+<script>
+    var Calendar = function (o) {
+        //Store div id
+        this.divId = o.ParentID;
+
+        // Days of week, starting on Sunday
+        this.DaysOfWeek = o.DaysOfWeek;
+        // Months, stating on January
+        this.Months = o.Months;
+        // Set the current month, year
+        var d = new Date();
+        this.CurrentMonth = d.getMonth();
+        this.CurrentYear = d.getFullYear();
+
+        var f = o.Format;
+
+        if (typeof (f) == 'string') {
+            this.f = f.charAt(0).toUpperCase();
+        } else {
+            this.f = 'M';
         }
 
-       // for all numbers larger than the id of the current day set disabled to the class list
-        var curr = new Date(); // get current date
-        var first = curr.getDate() - curr.getDay(); // First day is the  day of the month - the day of the week
-        var last = first + 6; // last day is the first day + 6
-        //firstday = new Date(curr.setDate(first));
-        //secondday = new Date(curr.setDate(curr.getDate() + 1));
-        //thirdday = new Date(curr.setDate(curr.getDate() + 1));
-        //fourthday = new Date(curr.setDate(curr.getDate() + 1));
-        //fifthday = new Date(curr.setDate(curr.getDate() + 1));
-        //sixthday = new Date(curr.setDate(curr.getDate() + 1));
-        //lastday = new Date(curr.setDate(curr.getDate() + 1));
+    };
 
-        var day = new Array(7);
-        day[0] = new Date(curr.setDate(first));
-        for (i = 1; i < 7; i++) {
-            day[i] = new Date(curr.setDate(curr.getDate() + 1));
+    // Goes to next month
+    Calendar.prototype.nextMonth = function () {
+
+        if (this.CurrentMonth == 11) {
+
+            this.CurrentMonth = 0;
+            this.CurrentYear = this.CurrentYear + 1;
+
+        } else {
+
+            this.CurrentMonth = this.CurrentMonth + 1;
+
         }
 
-        var m = new Array(7);
-        var d = new Array(7);
-        for (i = 0; i < 7; i++) {
-            m[i] = day[i].getMonth() + 1;
-            d[i] = day[i].getDate();
+        this.showCurrent();
+    };
 
-            document.getElementById("Timeline-Day" + i ).innerHTML += m[i] + "/" + d[i];
+    // Goes to previous month
+    Calendar.prototype.previousMonth = function () {
+
+        if (this.CurrentMonth == 0) {
+
+            this.CurrentMonth = 11;
+            this.CurrentYear = this.CurrentYear - 1;
+
+        } else {
+
+            this.CurrentMonth = this.CurrentMonth - 1;
+
         }
 
-        //document.getElementById("Timeline-Day0").innerHTML += m[2];
+        this.showCurrent();
+    };
 
-        //m0 = firstday.getMonth() + 1;
-        //d0 = firstday.getDate();
-        //m1 = secondday.getMonth() + 1;
-        //d1 = secondday.getDate();
-        //m2 = thirdday.getMonth() + 1;
-        //d2 = thirdday.getDate();
-        //m3 = fourthday.getMonth() + 1;
-        //d3 = fourthday.getDate();
-        //m4 = fifthday.getMonth() + 1;
-        //d4 = fifthday.getDate();
-        //m5 = sixthday.getMonth() + 1;
-        //d5 = sixthday.getDate();
-        //m6 = lastday.getMonth() + 1;
-        //d6 = lastday.getDate();
+    // 
+    Calendar.prototype.previousYear = function () {
 
-        //document.getElementById("Timeline-Day0").innerHTML += m0 + "/" + d0;
-        //document.getElementById("Timeline-Day1").innerHTML += m1 + "/" + d1;
-        //document.getElementById("Timeline-Day2").innerHTML += m2 + "/" + d2;
-        //document.getElementById("Timeline-Day3").innerHTML += m3 + "/" + d3;
-        //document.getElementById("Timeline-Day4").innerHTML += m4 + "/" + d4;
-        //document.getElementById("Timeline-Day5").innerHTML += m5 + "/" + d5;
-        //document.getElementById("Timeline-Day6").innerHTML += m6 + "/" + d6;        
+        this.CurrentYear = this.CurrentYear - 1;
 
-        
+        this.showCurrent();
+    }
+
+    // 
+    Calendar.prototype.nextYear = function () {
+        console.log(" ");
+
+        console.log("Calendar.prototype.nextYear = function() {");
+
+        console.log("this.CurrentYear == " + this.CurrentYear);
+
+        this.CurrentYear = this.CurrentYear + 1;
+
+        console.log("this.CurrentYear - 1 i.e. this.CurrentYear == " + this.CurrentYear);
+
+        this.showCurrent();
+    }
+
+    // Show current month
+    Calendar.prototype.showCurrent = function () {
+
+        this.Calendar(this.CurrentYear, this.CurrentMonth);
+
+    };
+
+    // Show month (year, month)
+    Calendar.prototype.Calendar = function (y, m) {
+
+        typeof (y) == 'number' ? this.CurrentYear = y : null;
+
+        typeof (y) == 'number' ? this.CurrentMonth = m : null;
 
 
-        //m = date.getMonth() + 1;
-        //d = date.getDate();
-        
-        //document.getElementById("Timeline-Day" + date.getDay()).getElementsByClassName("timeline-label")[0].innerHTML += m + "/" + d ;
-        
-   // }
+        // 1st day of the selected month
+        var firstDayOfCurrentMonth = new Date(y, m, 1).getDay();
 
+        // Last date of the selected month
+        var lastDateOfCurrentMonth = new Date(y, m + 1, 0).getDate();
+
+        // Last day of the previous month
+        var lastDateOfLastMonth = m == 0 ? new Date(y - 1, 11, 0).getDate() : new Date(y, m, 0).getDate();
+
+        // Write selected month and year. This HTML goes into <div id="month"></div>
+        var monthandyearhtml = '<span id="monthandyearspan">' + this.Months[m] + ' - ' + y + '</span>';
+
+        var html = '<table>';
+
+        // Write the header of the days of the week
+        html += '<tr>';
+
+        for (var i = 0; i < 7; i++) {
+
+            html += '<th class="daysheader">' + this.DaysOfWeek[i] + '</th>';
+        }
+
+        html += '</tr>';
+
+
+
+
+        var p = dm = this.f == 'M' ? 1 : firstDayOfCurrentMonth == 0 ? -5 : 2;
+
+        var cellvalue;
+
+        for (var d, i = 0, z0 = 0; z0 < 6; z0++) {
+            html += '<tr>';
+
+            for (var z0a = 0; z0a < 7; z0a++) {
+
+                d = i + dm - firstDayOfCurrentMonth;
+
+                // Dates from prev month
+                if (d < 1) {
+
+                    cellvalue = lastDateOfLastMonth - firstDayOfCurrentMonth + p++;
+
+                    html += '<td id="prevmonthdates">' +
+                        '<span id="cellvaluespan">' + (cellvalue) + '</span>' +
+                        '</td>';
+
+                    // Dates from next month
+                } else if (d > lastDateOfCurrentMonth) {
+
+                    html += '<td id="nextmonthdates">' + (p++) + '</td>';
+
+                    // Current month dates
+                } else {
+                    html += '<td id="currentmonthdates">' + (d) + '</td>';
+
+                    p = 1;
+
+                }
+
+                if (i % 7 == 6 && d >= lastDateOfCurrentMonth) {
+
+                    z0 = 10; // no more rows
+                }
+
+                i++;
+
+            }
+
+            html += '</tr>';
+        }
+
+        // Closes table
+        html += '</table>';
+
+
+        document.getElementById("monthandyear").innerHTML = monthandyearhtml;
+
+        document.getElementById(this.divId).innerHTML = html;
+    };
+
+    // On Load of the window
+    window.onload = function () {
+
+        // Start calendar
+        var c = new Calendar({
+            ParentID: "divcalendartable",
+
+            DaysOfWeek: [
+                'MON',
+                'TUE',
+                'WED',
+                'THU',
+                'FRI',
+                'SAT',
+                'SUN'
+            ],
+
+            Months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+
+            Format: 'dd/mm/yyyy'
+        });
+
+        c.showCurrent();
+
+        // Bind next and previous button clicks
+        getId('btnPrev').onclick = function () {
+            c.previousMonth();
+        };
+
+        getId('btnPrevYr').onclick = function () {
+            c.previousYear();
+        };
+
+        getId('btnNext').onclick = function () {
+            c.nextMonth();
+        };
+
+        getId('btnNextYr').onclick = function () {
+            c.nextYear();
+        };
+    }
+
+    // Get element by id
+    function getId(id) {
+        return document.getElementById(id);
+    }
 </script>
