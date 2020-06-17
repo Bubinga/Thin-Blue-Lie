@@ -28,8 +28,8 @@ th {
 
 td {
     height: 1.2em;
-    width: 8em;
-    padding: 10px;
+    width: 10em;
+    padding: 8px;
     border: 1px solid #A8A8A8;
     vertical-align: top;
 }
@@ -173,12 +173,6 @@ a.navbar-brand {
     cursor: pointer !important;
 }
 
-.timeline-label {
-    position: absolute !important;
-    top: -25px !important;
-}
-
-
 #imposedline {
     border-top: 1px solid black;
     color: #dee2e6;
@@ -191,6 +185,41 @@ a.navbar-brand {
     background-color: #919191;
 
 }
+.brokencard {
+    border: none;
+}
+
+card.header {
+    font-size: 1rem;
+}
+
+hr.blueline {
+    border: none;
+    height: 2px;
+    /* Set the hr color */
+    color: #314DB2; /* old IE */
+    background-color: #314DB2; /* Modern Browsers */
+}
+
+.timeline-label {
+    position: absolute !important;
+    top: -25px !important;
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+    left: 0px;
+    width: 100%;
+}
+
+.btn.week.focus, .btn.week.active {
+    box-shadow: none;
+    outline: #919191 solid 3px;
+}
+
+.btn {
+    cursor: pointer;
+}
+
 
 .embed-responsive-2by1::before {
     padding-top: 50%;

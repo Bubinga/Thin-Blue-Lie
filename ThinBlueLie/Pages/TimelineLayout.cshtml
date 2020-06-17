@@ -40,12 +40,12 @@
     }
 
 </style>
-<body>
+<body onresize="loadTimes()">
     <div style="position:relative;" class="container-fluid mt-4 mb-3 text-center d-block">
         <!-- <div   This draws that "Timeline" idk man, it kinda looks better without it.
              id="imposedline" style="width:80%; border-top: 1px solid black;" class="pt-0 mt-0">
         </div> -->
-        <div id="calendarDiv" class="text-left container">
+        <div id="calendarDiv" class="text-left container">  
             <div class="divcalendar nogap mb-3 mx-auto">
                 <div id="calendaroverallcontrols">
                     <!-- <div id="year"></div> -->
@@ -94,11 +94,11 @@
             </label>
         </div> @*Format Select*@
         <div style="width:15%;" class=" ml-4 d-inline-block">
-            <div id="format-select" style="width:100%; float:right;" class="d-none d-md-inline-block input-group">
+            <div id="format-select" style="width:100%; float:right;" class="d-none d-md-inline-block input-group mb-1">
                 <a onclick="showWeek()" class="btn btn-outline-info">Week</a>
                 <a onclick="showMonth()" class="btn btn-outline-info">Month</a>
             </div>  @*Date Search*@
-            <br /><br />
+            <br />
             <div style="" class="input-group mb-2 mr-4">
                 <input type="number" id="InputMonth" min="0" max="12" class="form-control" placeholder="MM" aria-label="Month">
                 <input type="number" id="InputYear" min="1" max="31" class="form-control" placeholder="DD" aria-label="Day">
@@ -203,15 +203,16 @@
 
 </body>
 <script>
-
-    var date = new Date();
-    var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-
-    if (window.matchMedia("(min-width: 768px)").matches) {
-        for (i = 0; i < 7; ++i)
-            document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " ";
-    }
-
+    var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]   
+    //function loadDays() {    
+    //var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]   
+        
+        if (window.matchMedia("(min-width: 768px)").matches) {
+            for (i = 0; i < 7; ++i)
+                document.getElementById("Timeline-Day" + i).innerHTML += weekDays[i] + " ";
+        }
+    //}
+    //loadDays();
     var curr = new Date(); // get current date
     var first = curr.getDate() - curr.getDay(); // First day is the  day of the month - the day of the week
     var last = first + 6; // last day is the first day + 6
@@ -230,6 +231,18 @@
         document.getElementById("Timeline-Day" + i).innerHTML += m[i] + "/" + d[i];
     }
 
+    function loadTimes() {
+        for (i = 0; i < 7; i++) {
+            if (document.getElementById("Timeline-Day" + i).innerHTML == m[i] + "/" + d[i] && window.matchMedia("(min-width: 768px)").matches) {
+                document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " " + m[i] + "/" + d[i];
+            }
+            if (document.getElementById("Timeline-Day" + i).innerHTML == weekDays[i] + " " + m[i] + "/" + d[i] && window.matchMedia("(max-width: 767px)").matches) {
+                    document.getElementById("Timeline-Day" + i).innerHTML = m[i] + "/" + d[i];
+                }                        
+        }
+    }
+    
+
     // for all numbers larger than the id of the current day set disabled to the class list and disabled clicking
     var current = new Date();
 
@@ -247,7 +260,7 @@
     function showMonth() {
         var x = document.getElementById("calendarDiv");
         if (x.style.display === "none") {
-            x.style.display = "block";
+            x.style.display = "inline-block";
             document.getElementById("timelineDiv").style.display = "none";
         } 
     }
@@ -255,7 +268,7 @@
     function showWeek() {
         var x = document.getElementById("timelineDiv");
         if (x.style.display === "none") {
-            x.style.display = "inline-block";
+            x.style.display = "inline-flex";
             document.getElementById("calendarDiv").style.display = "none";
         } 
     }
