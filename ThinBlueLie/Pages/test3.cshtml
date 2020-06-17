@@ -4,26 +4,47 @@
     ViewData["Title"] = "test3";
 }
 
-<script>
-    var curr = new Date('2020-06-28T00:00:00'); // get current date
-    var first = curr.getDate() - curr.getDay(); // First day is the  day of the month - the day of the week
-    var last = first + 6; // last day is the first day + 6
-    firstday = new Date(curr.setDate(first));
-    secondday = new Date(curr.setDate(curr.getDate() + 1));
-    thirdday = new Date(curr.setDate(curr.getDate() + 2));
-    fourthday = new Date(curr.setDate(curr.getDate() + 3));
-    fifthday = new Date(curr.setDate(curr.getDate() + 4));
-    sixthday = new Date(curr.setDate(curr.getDate() + 5));
-    lastday = new Date(curr.setDate(curr.getDate() + 6));
-    document.write(firstday);
-    document.write(lastday);
-    m1 = firstday.getMonth() + 1;
-    d1 = firstday.getDate();
-    m2 = lastday.getMonth() + 1;
-    d2 = lastday.getDate();
-    document.write(m1 + "/" + d1 + "   ");
-    document.write(m2 + "/" + d2 + "   ");
-</script>
-<div>
-
+<div style="display:block; overflow:auto; white-space:nowrap;">    
+        @*Video*@
+    <div style="height:100%; margin-left:6rem;" class="w-75 d-inline-block">
+        <div style="border-radius:3px; width:100%;" class="embed-responsive embed-responsive-2by1 d-inline-block">
+            <iframe class="embed-responsive-item"
+                    src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
+            </iframe>
+        </div>
+    </div>    @*Information Card*@
+    <div class="card border-dark mr-5 mb-3 float-right d-inline-block" style="width: 14rem;">
+        <div class="card-header text-black"><strong>Data</strong></div>
+        <div class="card-body text-dark">
+            <h5 class="card-title mb-0">General Information</h5>
+            <hr class="mt-0 pb-0 mb-0 pt-0" />
+            <ul class="list-group list-group-flush">
+                <li id="second" class="list-group-item">
+                    <p><strong>Date:</strong></p>
+                    <p><strong>Location:</strong></p>
+                </li>
+            </ul>
+            <h5 class="card-title text-left mb-0">Officer's Information</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item ">
+                    <p><strong>Name:</strong></p>
+                    <p><strong>Race:</strong></p>
+                    <p><strong>Agency:</strong></p>
+                    @*Have little label/tags for "violence" "harrassment" "negligence" "evidence planting"*@
+                </li>
+            </ul>
+            <h5 class="card-title text-left mb-0">Victim's Information</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item ">
+                    <p><strong>Name:</strong></p>
+                    <p><strong>Race:</strong></p>
+                    <p><strong>Sex:</strong></p>
+                    <p><strong>Weapon:</strong> </p>
+                </li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <a href="" class="btn btn-primary">Incorrect Info?</a>
+        </div>
+    </div>
 </div>
