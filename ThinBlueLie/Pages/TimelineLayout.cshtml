@@ -5,7 +5,7 @@
 }
 
 <style>
-    #second {
+    .brokencard {
         border: none;
     }
 
@@ -31,18 +31,22 @@
         width: 100%;
     }
 
-    .btn.focus, .btn.active {
+    .btn.week.focus, .btn.week.active {
         box-shadow: none;
-        outline: #919191 solid 3px;
+        outline: #919191 solid 3px;        
     }
+    .btn {
+        cursor: pointer;
+    }
+
 </style>
 <body>
-    <div style="position:relative;" class="container-fluid mt-4 mb-3 text-center">
+    <div style="position:relative;" class="container-fluid mt-4 mb-3 text-center d-block">
         <!-- <div   This draws that "Timeline" idk man, it kinda looks better without it.
-         id="imposedline" style="width:80%; border-top: 1px solid black;" class="pt-0 mt-0">
-    </div> -->
-        <div id="calendarDiv"class="container text-left">
-            <div class="divcalendar nogap">
+             id="imposedline" style="width:80%; border-top: 1px solid black;" class="pt-0 mt-0">
+        </div> -->
+        <div id="calendarDiv" class="text-left container">
+            <div class="divcalendar nogap mb-3 mx-auto">
                 <div id="calendaroverallcontrols">
                     <!-- <div id="year"></div> -->
                     <div id="calendarmonthcontrols">
@@ -89,63 +93,117 @@
                 <input type="radio" name="options" alt="Saturday" id="option7" autocomplete="off">
             </label>
         </div> @*Format Select*@
-        <div style="width:18%; position:absolute; float:right; left: 80%; top:-15px;" class="input-group">
-            <h5 class="">Format:</h5>
-            <a onclick="showWeek()" class="btn btn-outline-secondary">Week</a>
-            <a onclick="showMonth()" class="btn btn-outline-secondary">Month</a>
-        </div>  @*Date Search*@
-        <div style="width:18%;" class="input-group float-right mb-2 mr-4">
-            <input type="number" id="InputMonth" min="0" max="12" class="form-control" placeholder="MM" aria-label="Month">
-            <input type="number" id="InputYear" min="1" max="31" class="form-control" placeholder="DD" aria-label="Day">
-            <input type="number" id="InputYear" min="1980" max="2020" class="form-control" placeholder="YYYY" aria-label="Year">
-            <div class="input-group-append">
-                <button class="btn btn-outline-success" type="button">Search</button>
+        <div style="width:15%;" class=" ml-4 d-inline-block">
+            <div id="format-select" style="width:100%; float:right;" class="d-none d-md-inline-block input-group">
+                <a onclick="showWeek()" class="btn btn-outline-info">Week</a>
+                <a onclick="showMonth()" class="btn btn-outline-info">Month</a>
+            </div>  @*Date Search*@
+            <br /><br />
+            <div style="" class="input-group mb-2 mr-4">
+                <input type="number" id="InputMonth" min="0" max="12" class="form-control" placeholder="MM" aria-label="Month">
+                <input type="number" id="InputYear" min="1" max="31" class="form-control" placeholder="DD" aria-label="Day">
+                <input type="number" id="InputYear" min="1980" max="2020" class="form-control" placeholder="YYYY" aria-label="Year">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-success" type="button">Search</button>
+                </div>
             </div>
         </div>
     </div>
-    <div class="mr-5">
+    <div style="display:block; white-space:nowrap; width:100%;">
+        @*Video*@
+        <div style="width:65%; margin-left:8%; margin-right:5%; vertical-align:top;" class="h-100 d-inline-block">
+            <div style="border-radius:3px; width:100%;" class="embed-responsive embed-responsive-2by1 d-inline-block">
+                <iframe class="embed-responsive-item"
+                        src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
+                </iframe>
+            </div>
+        </div>
         @*Information Card*@
-        <div class="card border-dark w-50 mb-3" style="max-width: 18rem; float:right;">
+    <div id="side-info">
+        <div class="card border-dark mr-5 mb-3 float-right d-inline-block" style="width: 15rem;">
             <div class="card-header text-black"><strong>Data</strong></div>
             <div class="card-body text-dark">
                 <h5 class="card-title mb-0">General Information</h5>
                 <hr class="mt-0 pb-0 mb-0 pt-0" />
                 <ul class="list-group list-group-flush">
-                    <li id="second" class="list-group-item">
-                        <p><strong>Date:</strong> 4/20 </p>
-                        <p><strong>Location:</strong> Your mom's House </p>
-                        <p><strong>Weapon:</strong> </p>
+                    <li class="brokencard list-group-item">
+                        <p><strong>Date:</strong></p>
+                        <p><strong>Location:</strong></p>
+                    </li>
+                </ul>
+                <h5 class="card-title text-left mb-0">Officer's Information</h5>
+                <hr style="height:1px;" class="mt-0 pb-0 mb-0 pt-0" />
+                <ul class=" list-group list-group-flush">
+                    <li class="brokencard list-group-item">
+                        <p><strong>Name:</strong></p>
+                        <p><strong>Race:</strong></p>
+                        <p><strong>Agency:</strong></p>
+                        @*Have little label/tags for "violence" "harrassment" "negligence" "evidence planting"*@
                     </li>
                 </ul>
                 <h5 class="card-title text-left mb-0">Victim's Information</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item ">
-                        <p><strong>Name:</strong> Killer Bean</p>
-                        <p><strong>Race:</strong> Bean </p>
-                        <p><strong>Sex:</strong> Yes please</p>
+                        <p><strong>Name:</strong></p>
+                        <p><strong>Race:</strong></p>
+                        <p><strong>Sex:</strong></p>
+                        <p><strong>Weapon:</strong> </p>
                     </li>
                 </ul>
             </div>
             <div class="card-footer">
-                <a href="#" class="btn btn-primary">Incorrect Info?</a>
+                <a href="" class="btn btn-primary">Incorrect Info?</a>
             </div>
-        </div>  @*Video*@
-        <div style="border-radius: 3px;" class="container embed-responsive embed-responsive-21by9">
-            <iframe class="container-fluid embed-responsive-item"
-                    src="https://www.youtube.com/embed/cDna8oFt8FQ">
-            </iframe>
         </div>
-        <div class="ml-5 mt-3"> @*Legal Action header*@            
-            <h5 style="text-indent: 3em; margin-left: 40px; font-size:25px; font-family: Cambira;" class="mt-2"> <strong>Legal Action</strong></h5>
-            <hr class="blueline mt-0 pb-0 mb-0 pt-0" style="height: 1px;" />
+    </div></div>
+    <div id="bottom-info" style="width:65%;" class="card-group mx-auto mt-3 w-100 d-block">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-left mb-0">General Information</h5>               
+                <ul class=" list-group list-group-flush">
+                    <li class="list-group-item">
+                        <p><strong>Date:</strong></p>
+                        <p><strong>Location:</strong></p>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <a href="" class="btn btn-primary">Incorrect Info?</a>
+            </div>
         </div>
-        <div class="container"> @*Legal Action content*@
-            <p>At this point no action has been taken</p>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-left mb-0">Officer's Information</h5>
+                <hr style="height:1px;" class="mt-0 pb-0 mb-0 pt-0" />
+                <ul class=" list-group list-group-flush">
+                    <li class="brokencard list-group-item">
+                        <p><strong>Name:</strong></p>
+                        <p><strong>Race:</strong></p>
+                        <p><strong>Agency:</strong></p>
+                        @*Have little label/tags for "violence" "harrassment" "negligence" "evidence planting"*@
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-left mb-0">Victim's Information</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item ">
+                        <p><strong>Name:</strong></p>
+                        <p><strong>Race:</strong></p>
+                        <p><strong>Sex:</strong></p>
+                        <p><strong>Weapon:</strong> </p>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-         
+
+
 </body>
 <script>
+
     var date = new Date();
     var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
@@ -172,32 +230,36 @@
         document.getElementById("Timeline-Day" + i).innerHTML += m[i] + "/" + d[i];
     }
 
-    // for all numbers larger than the id of the current day set disabled to the class list
+    // for all numbers larger than the id of the current day set disabled to the class list and disabled clicking
     var current = new Date();
 
     for (i = 0; i < 7; i++) {
-        if (day[i] > current)
+        if (day[i] > current) {
             // document.getElementById("Timeline-Day" + i).innerHTML += "/";
             document.getElementById("Timeline-label" + i).classList.add("disabled");
+            document.getElementById("Timeline-label" + i).style.pointerEvents = "none";
+        }
     }
 </script>
 <script>
-    function showWeek() {
-        var x = document.getElementById("timelineDiv");
-        if (x.style.display === "none") {
-            x.style.display = "block";
-        } else {
-            x.style.display = "none";
-        }
-    }
+    document.getElementById("calendarDiv").style.display = "none";
+
     function showMonth() {
         var x = document.getElementById("calendarDiv");
         if (x.style.display === "none") {
             x.style.display = "block";
-        } else {
-            x.style.display = "none";
-        }
+            document.getElementById("timelineDiv").style.display = "none";
+        } 
     }
+
+    function showWeek() {
+        var x = document.getElementById("timelineDiv");
+        if (x.style.display === "none") {
+            x.style.display = "inline-block";
+            document.getElementById("calendarDiv").style.display = "none";
+        } 
+    }
+   
 </script>
 <script>
     var Calendar = function (o) {

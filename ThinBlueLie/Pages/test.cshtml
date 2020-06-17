@@ -3,119 +3,29 @@
 @{
     ViewData["Title"] = "test";
 }
-
-
 <style>
-   
+    .wrapper {
+        white-space: nowrap;
+        height: 350px;
+        overflow-x: auto;
+    }
+
+    .side-by-side {
+        display: inline-block;
+        width: 300px;
+        height: 300px;
+        background-color: #e6e6e6;
+        margin-right: 10px;
+        vertical-align: top;
+    }
 </style>
 <body>
-    <div class="dropdown container mt-5">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span id="selected">Month</span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">January</a> </li>
-            <li><a class="dropdown-item" href="#">February</a> </li>
-            <li><a class="dropdown-item" href="#">March</a>  </li>
-            <li><a class="dropdown-item" href="#">April</a>  </li>
-            <li><a class="dropdown-item" href="#">May</a>    </li>
-            <li><a class="dropdown-item" href="#">June</a>   </li>
-            <li><a class="dropdown-item" href="#">July</a>   </li>
-            <li><a class="dropdown-item" href="#">August</a> </li>
-            <li><a class="dropdown-item" href="#">September</a> </li>
-            <li><a class="dropdown-item" href="#">October</a> </li>
-            <li><a class="dropdown-item" href="#">November</a> </li>
-            <li><a class="dropdown-item" href="#">December</a> </li>
-        </ul>
-    </div>
-    <div class="container">
-        <div class="btn-gro row">
-            <div class="col"><button class="container-fluid btn btn-outline-secondary">1</button></div>
-            <div class="col"><button class="container-fluid btn btn-outline-secondary">2</button></div>
-            <div class="col">3</div>
-            <div class="col">4</div>
-            <div class="col">5</div>
-            <div class="col">6</div>
-            <div class="col">7</div>
+    <div class="wrapper">
+        <div class="nogap side-by-side">
+            <p>tfygub</p>
         </div>
-        <div class="row">
-            <div class="col">8</div>
-            <div class="col">9</div>
-            <div class="col">10</div>
-            <div class="col">11</div>
-            <div class="col">12</div>
-            <div class="col">13</div>
-            <div class="col">14</div>
+        <div class="side-by-side">
+            <p>tfygub</p>
         </div>
     </div>
-    <table border="1" cellpadding="0" cellspacing="0" style="width:900px;" class="container">
-        <tbody>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-        </tbody>
-    </table>
 </body>
-<script>
-    $(function () {
-
-        $(".dropdown-menu li a").click(function () {
-
-            $(".btn:first-child").text($(this).text());
-            $(".btn:first-child").val($(this).text());
-
-        });
-
-    });
-</script>
