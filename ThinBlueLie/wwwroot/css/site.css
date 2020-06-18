@@ -230,7 +230,16 @@ hr.blueline {
         display:none;
     }
 }
-/* 600px wide or less */
+
+ /*1150x wide or less */
+@media screen and (min-width: 1150px) {
+    #bottom-info {
+        display: none;
+    }
+    #side-info {
+        display: inline-block;
+    }        
+}
 @media screen and (max-width: 1149px) {
     #side-info {
         display: none;
@@ -239,14 +248,7 @@ hr.blueline {
         display: inline-block;
     }
 }
-@media screen and (min-width: 1150px) {
-    #bottom-info {
-        display: none;
-    }
-    #side-info {
-        display: inline-block;
-    }
-}
+
 
 
 /* Card settings */

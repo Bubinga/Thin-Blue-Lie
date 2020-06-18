@@ -1,3 +1,4 @@
 ﻿id, name, data, manner of death, armed, age, gender, race, city, state, signs of mental illness, threat level, flee, body_camera,
 Gender: M= Male, F=Female, None= Unknown 
 Race: A= Asian, B= Black Non-Hispanic, W= White Non-Hispanic, N= Native American, O=Other, None= Unknown
+Body_Camera: News reports have indicated an officer was wearing a body camera and it may have recorded some portion of the incident.
