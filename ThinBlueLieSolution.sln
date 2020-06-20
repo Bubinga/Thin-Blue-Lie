@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThinBlueLie", "ThinBlueLie\ThinBlueLie.csproj", "{49464F78-0528-4204-8BB7-27DDFD723A86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThinBlueLie", "ThinBlueLie\ThinBlueLie.csproj", "{49464F78-0528-4204-8BB7-27DDFD723A86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{74C9EA1D-AC07-4FF9-BAEC-4070EF718AD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{49464F78-0528-4204-8BB7-27DDFD723A86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49464F78-0528-4204-8BB7-27DDFD723A86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49464F78-0528-4204-8BB7-27DDFD723A86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74C9EA1D-AC07-4FF9-BAEC-4070EF718AD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74C9EA1D-AC07-4FF9-BAEC-4070EF718AD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74C9EA1D-AC07-4FF9-BAEC-4070EF718AD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74C9EA1D-AC07-4FF9-BAEC-4070EF718AD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
