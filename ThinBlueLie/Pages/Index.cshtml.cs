@@ -5,16 +5,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using DataAccessLibrary.thinblue;
 
 namespace ThinBlueLie.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        public readonly ILogger<IndexModel> _logger;
+        public readonly ThinbluelieContext db;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ILogger<IndexModel> logger, ThinbluelieContext db)
         {
             _logger = logger;
+            this.db = db;
         }
 
         public void OnGet()
