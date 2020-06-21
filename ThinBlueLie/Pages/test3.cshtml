@@ -1,50 +1,55 @@
 ﻿@page
-@model ThinBlueLie.Pages.test3Model
+@model ThinBlueLie.Pages.Test3Model
 @{
     ViewData["Title"] = "test3";
 }
 
-<div style="display:block; overflow:auto; white-space:nowrap;">    
-        @*Video*@
-    <div style="height:100%; margin-left:6rem;" class="w-75 d-inline-block">
-        <div style="border-radius:3px; width:100%;" class="embed-responsive embed-responsive-2by1 d-inline-block">
-            <iframe class="embed-responsive-item"
-                    src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
-            </iframe>
+    <div>
+        <div style="display:block; overflow:auto; white-space:nowrap;">
+            @*Video*@
+            <div style="height:100%; margin-left:6rem;" class="w-75 d-inline-block">
+                <div style="border-radius:3px; width:100%;" class="embed-responsive embed-responsive-2by1 d-inline-block">
+                    <iframe class="embed-responsive-item"
+                            src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
+                    </iframe>
+                </div>
+            </div>    @*Information Card*@
+            <div class="card border-dark mr-5 mb-3 float-right d-inline-block" style="width: 14rem;">
+                <div class="card-header text-black"><strong>Data</strong></div>
+                <div class="card-body text-dark">
+                    <h5 class="card-title mb-0">General Information</h5>
+                    <hr class="mt-0 pb-0 mb-0 pt-0" />
+                    <ul class="list-group list-group-flush">
+                        <li id="second" class="list-group-item">
+                            <p><strong>Date:</strong></p>
+                            <p><strong>Location:</strong></p>
+                        </li>
+                    </ul>
+                    <h5 class="card-title text-left mb-0">Officer's Information</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item ">
+                            <p><strong>Name:</strong></p>
+                            <p><strong>Race:</strong></p>
+                            <p><strong>Agency:</strong></p>
+                            @*Have little label/tags for "violence" "harrassment" "negligence" "evidence planting"*@
+                        </li>
+                    </ul>
+                    <h5 class="card-title text-left mb-0">Victim's Information</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item ">
+                            <p><strong>Name:</strong></p>
+                            <p><strong>Race:</strong></p>
+                            <p><strong>Sex:</strong></p>
+                            <p><strong>Weapon:</strong> </p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="" class="btn btn-primary">Incorrect Info?</a>
+                </div>
+            </div>
         </div>
-    </div>    @*Information Card*@
-    <div class="card border-dark mr-5 mb-3 float-right d-inline-block" style="width: 14rem;">
-        <div class="card-header text-black"><strong>Data</strong></div>
-        <div class="card-body text-dark">
-            <h5 class="card-title mb-0">General Information</h5>
-            <hr class="mt-0 pb-0 mb-0 pt-0" />
-            <ul class="list-group list-group-flush">
-                <li id="second" class="list-group-item">
-                    <p><strong>Date:</strong></p>
-                    <p><strong>Location:</strong></p>
-                </li>
-            </ul>
-            <h5 class="card-title text-left mb-0">Officer's Information</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item ">
-                    <p><strong>Name:</strong></p>
-                    <p><strong>Race:</strong></p>
-                    <p><strong>Agency:</strong></p>
-                    @*Have little label/tags for "violence" "harrassment" "negligence" "evidence planting"*@
-                </li>
-            </ul>
-            <h5 class="card-title text-left mb-0">Victim's Information</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item ">
-                    <p><strong>Name:</strong></p>
-                    <p><strong>Race:</strong></p>
-                    <p><strong>Sex:</strong></p>
-                    <p><strong>Weapon:</strong> </p>
-                </li>
-            </ul>
-        </div>
-        <div class="card-footer">
-            <a href="" class="btn btn-primary">Incorrect Info?</a>
+        <div>
+            
         </div>
     </div>
-</div>
