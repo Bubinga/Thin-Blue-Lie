@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
+
 namespace ThinBlueLie.Pages
 {
-    public class test3Model : PageModel
+    public class Test3Model : PageModel
     {
         public void OnGet()
         {
-
+            
         }
     }
 }
