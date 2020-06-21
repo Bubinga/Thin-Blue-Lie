@@ -1,0 +1,120 @@
+﻿@page
+@model ThinBlueLie.Pages.NewFolder.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].SubjectName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].SubjectSex)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].SubjectRace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].Armed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].OfficerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].OfficerSex)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].OfficerRace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].Misconduct)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].Weapon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].Context)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].Gore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Timelineinfo[0].VidLink)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Timelineinfo) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectSex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectRace)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Armed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficerSex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficerRace)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Misconduct)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weapon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Context)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gore)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VidLink)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.IdTimelineInfo">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.IdTimelineInfo">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.IdTimelineInfo">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
