@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataAccessLibrary.thinblue
 {
     public partial class Timelineinfo
     {
+        
         public int IdTimelineInfo { get; set; }
+        [Required]
         public string Date { get; set; }
+        [Required]
         public string State { get; set; }
+        [Required]
         public string City { get; set; }
         public string SubjectName { get; set; }
         public string SubjectSex { get; set; }
@@ -19,6 +24,7 @@ namespace DataAccessLibrary.thinblue
         public string Misconduct { get; set; }
         public string Weapon { get; set; }
         public string Context { get; set; }
+        [Required]
         public string Gore { get; set; }
         public string VidLink { get; set; }
     }
