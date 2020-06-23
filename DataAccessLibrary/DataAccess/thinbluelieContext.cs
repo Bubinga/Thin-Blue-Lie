@@ -17,19 +17,45 @@ namespace DataAccessLibrary.thinblue
         }
 
         public virtual DbSet<Timelineinfo> Timelineinfo { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=Holland173$;database=thin-blue-lie", x => x.ServerVersion("8.0.20-mysql"));
+//               optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=Holland173$;database=thin-blue-lie", x => x.ServerVersion("8.0.20-mysql"));
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Timelineinfo>(entity =>
+            modelBuilder.Entity<Users>(entity =>
+            {
+                entity.HasKey(e => e.IdUsers)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("users");
+
+                entity.Property(e => e.IdUsers).HasColumnName("idusers");
+
+                entity.Property(e => e.Username)
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Email)
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Password)
+                    .HasColumnType("longtext")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");               
+            });
+
+           modelBuilder.Entity<Timelineinfo>(entity =>
             {
                 entity.HasKey(e => e.IdTimelineInfo)
                     .HasName("PRIMARY");

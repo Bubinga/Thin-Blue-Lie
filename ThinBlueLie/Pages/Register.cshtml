@@ -1,0 +1,49 @@
+﻿@page
+@model ThinBlueLie.Pages.RegisterModel
+
+@{
+
+}
+
+
+<div class="container-fluid h-100 row nogap">
+    <div class="card border-secondary mx-auto center col-lg-3 col-md-4 p-0" style="margin-top:100px;">
+        <div class="card-header">
+            Register
+            <a class="float-right" asp-page="/Login">Login</a>
+        </div>
+        <div class="card-body text-secondary">
+            <div class="form-group">
+                <label asp-for="Users.Email" class="control-label">Email</label>
+                <input type="email" asp-for="Users.Email" class="form-control">
+                <span asp-validation-for="Users.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Users.Password" class="control-label">Password</label>
+                <input type="password" asp-for="Users.Password" class="form-control">
+                <span asp-validation-for="Users.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Users.Password" class="control-label">Confirm Password</label>
+                <input type="password" asp-for="Users.Password" class="form-control">
+                <span asp-validation-for="Users.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Users.Username" class="control-label">Username</label>
+                <input type="email" asp-for="Users.Username" class="form-control">
+                <span asp-validation-for="Users.Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-primary" style="float:right" />
+            </div>
+        </div>
+        <div class="card-footer">
+            <a>Log in with Google</a>
+        </div>
+    </div>
+</div>
+
+@*@section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }*@
+
