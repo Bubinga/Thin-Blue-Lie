@@ -1,0 +1,291 @@
+﻿@page
+@model ThinBlueLie.Pages.SubmitModel
+
+@{
+    ViewData["Title"] = "Submit";
+}
+
+
+
+
+<div class="offset-md-3 row container-fluid">
+    <div class="col-md-4 border-left border-right border-bottom">
+        <div class="d-block mb-0 pt-3 border-bottom">
+            <h4 class="mb-0">Information Submission Form</h4>            
+        </div>
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>
+                <div class="form-group">
+                    <label asp-for="Timelineinfo.Date" class="control-label">Date<span class="text-danger ml-1">*</span></label>
+                    <input type="date" asp-for="Timelineinfo.Date" class="form-control" placeholder="mm/dd/yyyy">
+                    <span asp-validation-for="Timelineinfo.Date" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-5">
+                    <label asp-for="Timelineinfo.State" class="control-label">State<span class="text-danger ml-1">*</span></label>
+                    <input asp-for="Timelineinfo.State" class="form-control" />
+                    <span asp-validation-for="Timelineinfo.State" class="text-danger"></span>
+                </div>
+                <div class="col-7">
+                    <label asp-for="Timelineinfo.City" class="control-label">City<span class="text-danger ml-1">*</span></label>
+                    <input asp-for="Timelineinfo.City" class="form-control" />
+                    <span asp-validation-for="Timelineinfo.City" class="text-danger"></span>
+                </div>
+            </div>
+            <hr /> <h6>Fill out the following information for the Subject/Victim</h6>
+            <div class="form-group">
+                <label asp-for="Timelineinfo.SubjectName" class="control-label">Name <span class="text-muted ml-1">(First Last)</span></label>
+                <input asp-for="Timelineinfo.SubjectName" class="form-control" />
+                <span asp-validation-for="Timelineinfo.SubjectName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="form-check-label">Sex</label>
+                <div class="form-check">
+                    <input type="radio" asp-for="Timelineinfo.SubjectSex" class="form-check-input" value="option1">
+                    <label class="form-check-label">Male</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" asp-for="Timelineinfo.SubjectSex" class="form-check-input" value="option2" />
+                    <label class="form-check-label">Female</label>
+                    <span asp-validation-for="Timelineinfo.SubjectSex" class="text-danger"></span>
+                </div>
+                <div class="form-check">
+                    <input type="radio" asp-for="Timelineinfo.SubjectSex" class="form-check-input" value="option3" />
+                    <label class="form-check-label">Unclear</label>
+                    <span asp-validation-for="Timelineinfo.SubjectSex" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-check-label">Race</label>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="">
+                    <label class="form-check-label">White</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="">
+                    <label class="form-check-label">Black</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="">
+                    <label class="form-check-label">Hispanic</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="">
+                    <label class="form-check-label">Asian</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="">
+                    <label class="form-check-label">Native American or Pacific Islander</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="">
+                    <label class="form-check-label">Unclear</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-check-label">Were they armed?</label>
+                <div class="form-check">
+                    <input id="ArmedNo" type="radio" asp-for="Timelineinfo.Armed" class="form-check-input" value="option1">
+                    <label class="form-check-label">No</label>
+                </div>
+                <div class="form-check">
+                    <input id="ArmedYes" type="radio" asp-for="Timelineinfo.Armed" class="form-check-input" value="option2" />
+                    <label class="form-check-label">Yes</label>
+                    <span asp-validation-for="Timelineinfo.Armed" class="text-danger"></span>
+                </div>
+            </div>
+            <hr /> <h6>Fill out the following information for the Officer</h6>
+            <div class="form-group">
+                <label asp-for="Timelineinfo.OfficerName" class="control-label">Name</label>
+                <input asp-for="Timelineinfo.OfficerName" class="form-control" />
+                <span asp-validation-for="Timelineinfo.OfficerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="form-check-label">Sex</label>
+                <div class="form-check">
+                    <input type="radio" asp-for="Timelineinfo.OfficerSex" class="form-check-input" value="option1">
+                    <label class="form-check-label">Male</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" asp-for="Timelineinfo.OfficerSex" class="form-check-input" value="option2" />
+                    <label class="form-check-label">Female</label>
+                    <span asp-validation-for="Timelineinfo.OfficerSex" class="text-danger"></span>
+                </div>
+                <div class="form-check">
+                    <input type="radio" asp-for="Timelineinfo.OfficerSex" class="form-check-input" value="option3" />
+                    <label class="form-check-label">Unclear</label>
+                    <span asp-validation-for="Timelineinfo.OfficerSex" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-check-label">Race</label>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="">
+                    <label class="form-check-label">White</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="">
+                    <label class="form-check-label">Black</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="">
+                    <label class="form-check-label">Hispanic</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="">
+                    <label class="form-check-label">Asian</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="">
+                    <label class="form-check-label">Native American or Pacific Islander</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="">
+                    <label class="form-check-label">Unclear</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-check-label">Type of Misconduct</label>
+                <div class="form-check">
+                    <input id="UnnesForce" onclick="showWeapon()" class="form-check-input" asp-for="Timelineinfo.Misconduct" type="checkbox" value="">
+                    <label class="form-check-label">Unnecessary Use of Force</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Misconduct" type="checkbox" value="">
+                    <label class="form-check-label">Evidence Planting/Falsification/Spoilation</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Misconduct" type="checkbox" value="">
+                    <label class="form-check-label">Non-Violent Harassment/Intimidation</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Misconduct" type="checkbox" value="">
+                    <label class="form-check-label">Negligence</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Misconduct" type="checkbox" value="">
+                    <label class="form-check-label">Unwarranted Suizure of Property/Theft</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Misconduct" type="checkbox" value="">
+                    <label class="form-check-label">Unwarranted Search</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Misconduct" type="checkbox" value="">
+                    <label class="form-check-label">Killing of Pets</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Misconduct" type="checkbox" value="">
+                    <label class="form-check-label">Abuse of Authority for Personal Gain</label>
+                </div>
+            </div>
+            <div id="weaponDiv" class="form-group">
+                <label class="form-check-label">Type of Weapon</label>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Weapon" type="checkbox" value="">
+                    <label class="form-check-label">Bodily Force</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Weapon" type="checkbox" value="">
+                    <label class="form-check-label">Taser</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Weapon" type="checkbox" value="">
+                    <label class="form-check-label">Firearm</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Weapon" type="checkbox" value="">
+                    <label class="form-check-label">Tear Gas</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Weapon" type="checkbox" value="">
+                    <label class="form-check-label">Rubber Bullets/Bean Bags</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Timelineinfo.Weapon" type="checkbox" value="">
+                    <label class="form-check-label">Vehicle</label>
+                </div>                
+            </div>
+            <hr />
+            <div class="form-group">
+                <label asp-for="Timelineinfo.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, if there were more people involved, if there was any followup to the event or coverage in the news, etc.</label>
+                <textarea asp-for="Timelineinfo.Context" class="form-control"></textarea>
+                <span asp-validation-for="Timelineinfo.Context" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="form-check-label">Is there any blood or gore in the video?<span class="text-danger ml-1">*</span></label>
+                <div class="form-check">
+                    <input type="radio" asp-for="Timelineinfo.Gore" class="form-check-input" value="option1">
+                    <label class="form-check-label">No</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" asp-for="Timelineinfo.Gore" class="form-check-input" value="option2" />
+                    <label class="form-check-label">Yes</label>
+                    <span asp-validation-for="Timelineinfo.Gore" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Timelineinfo.VidLink" class="control-label">Video Link</label>
+                <input asp-for="Timelineinfo.VidLink" class="form-control" />
+                <span asp-validation-for="Timelineinfo.VidLink" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-page="Index" style="float:right">Back to Home</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-5">
+        <div class="d-block border-bottom">
+            <h4 class="pt-2">Similar Videos</h4>
+            <p style="font-size:.8em">
+                Here are similar pages that share have some similarities with the information you are filling out,
+                either a date, name, video, or some combination of the three
+            </p>
+            <hr />
+        </div>
+        <div id="likeVideos">
+            <div class="card border-secondary mb-3">
+                <div class="card-header">Date</div>
+                <div class="card-body text-secondary row">
+                    <div class="col-6">                        
+                            <p><strong>Location:</strong></p>
+                            <p><strong>Subjects:</strong></p>
+                            <p><strong>Officer:</strong></p>
+                            <p><strong>Context:</strong></p>                        
+                    </div>
+                    <div class="col-6">
+                        <div style="border-radius:3px; width:100%;" class="embed-responsive embed-responsive-2by1">
+                            <iframe class="embed-responsive-item border"
+                                    src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("weaponDiv").style.display = "none";
+    var forceCheckState = 0;
+    function showWeapon() {        
+        if (forceCheckState === 0) {
+            document.getElementById("weaponDiv").style.display = "block";
+            forceCheckState = 1;
+        }
+        else {
+            document.getElementById("weaponDiv").style.display = "none";
+            forceCheckState = 0;
+        }
+    }
+</script>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
