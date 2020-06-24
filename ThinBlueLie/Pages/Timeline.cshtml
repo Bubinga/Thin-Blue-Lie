@@ -64,33 +64,33 @@
             </div>
         </div>  @*Timeline*@
         <div style="width:70%;" id="timelineDiv" class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label id="Timeline-label0" class="week btn ">
+            <label onclick="location.href='?d=2020/6/23';" id="Timeline-label0" class="week btn">
                 <span id="Timeline-Day0" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Sunday" id="option1" autocomplete="off" checked>
+                <input type="radio" alt="Sunday" id="option1">
             </label>
             <label id="Timeline-label1" class="week btn">
                 <span id="Timeline-Day1" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Monday" id="option2" autocomplete="off">
+                <input type="radio" name="options" alt="Monday" id="option2">
             </label>
             <label id="Timeline-label2" class="week btn">
                 <span id="Timeline-Day2" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Tuesday" id="option3" autocomplete="off">
+                <input type="radio" name="options" alt="Tuesday" id="option3">
             </label>
             <label id="Timeline-label3" class="week btn">
                 <span id="Timeline-Day3" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Wednesday" id="option4" autocomplete="off">
+                <input type="radio" name="options" alt="Wednesday" id="option4">
             </label>
             <label id="Timeline-label4" class="week btn">
                 <span id="Timeline-Day4" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Thursday" id="option5" autocomplete="off">
+                <input type="radio" name="options" alt="Thursday" id="option5">
             </label>
             <label id="Timeline-label5" class="week btn">
                 <span id="Timeline-Day5" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Friday" id="option6" autocomplete="off">
+                <input type="radio" name="options" alt="Friday" id="option6">
             </label>
             <label id="Timeline-label6" class="week btn">
                 <span id="Timeline-Day6" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Saturday" id="option7" autocomplete="off">
+                <input type="radio" name="options" alt="Saturday" id="option7">
             </label>
         </div> @*Format Select*@
         <div style="width:15%;" class=" ml-4 d-inline-block">
@@ -261,7 +261,13 @@
             document.getElementById("Timeline-label" + i).classList.add("disabled");
             document.getElementById("Timeline-label" + i).style.pointerEvents = "none";
         }
-    }
+    }   
+    //// make the current day "active"
+    //for (i = 0; i < 7; i++) {
+    //    if (!(day[i] > current) && !(day[i] < current)) {
+    //        document.getElementById("Timeline-label" + i).classList.add("active");
+    //    }
+    //}
 </script>
 <script>
     document.getElementById("calendarDiv").style.display = "none";
