@@ -12,38 +12,53 @@
             Register
             <a class="float-right" asp-page="/Login">Login</a>
         </div>
-        <div class="card-body text-secondary">
-            <div class="form-group">
-                <label asp-for="Users.Email" class="control-label">Email</label>
-                <input type="email" asp-for="Users.Email" class="form-control">
-                <span asp-validation-for="Users.Email" class="text-danger"></span>
+        <form method="post">
+            <div class="card-body text-secondary">
+                <div class="form-group">
+                    <label asp-for="Users.Email" class="control-label">Email</label>
+                    <input type="email" asp-for="Users.Email" class="form-control">
+                    <span asp-validation-for="Users.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Password</label>
+                    <input id="password" type="password" class="form-control">
+                    <span asp-validation-for="Users.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Users.Password" class="control-label">Confirm Password</label>
+                    <input id="confirmPass" type="password" asp-for="Users.Password" class="form-control">
+                    <span asp-validation-for="Users.Password" class="text-danger"></span>
+                </div>
+                <asp:CompareValidator ID="CompareValidator1" runat="server"
+                                      ControlToValidate="confirmPass"
+                                      CssClass="ValidationError"
+                                      ControlToCompare="password"
+                                      ErrorMessage="No Match"
+                                      ToolTip="Password must be the same" />
+
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server"
+                                            ErrorMessage="&laquo; (Required)"
+                                            ControlToValidate="confirmPass"
+                                            CssClass="ValidationError"
+                                            ToolTip="Compare Password is a REQUIRED field">
+                </asp:RequiredFieldValidator>
+                <div class="form-group">
+                    <label asp-for="Users.Username" class="control-label">Username</label>
+                    <input type="text" asp-for="Users.Username" class="form-control">
+                    <span asp-validation-for="Users.Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Register" class="btn btn-primary" style="float:right" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Users.Password" class="control-label">Password</label>
-                <input type="password" asp-for="Users.Password" class="form-control">
-                <span asp-validation-for="Users.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Users.Password" class="control-label">Confirm Password</label>
-                <input type="password" asp-for="Users.Password" class="form-control">
-                <span asp-validation-for="Users.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Users.Username" class="control-label">Username</label>
-                <input type="email" asp-for="Users.Username" class="form-control">
-                <span asp-validation-for="Users.Username" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-primary" style="float:right" />
-            </div>
-        </div>
+        </form>
         <div class="card-footer">
             <a>Log in with Google</a>
         </div>
     </div>
 </div>
 
-@*@section Scripts {
+@section Scripts {
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    }*@
+    }
 

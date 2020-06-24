@@ -4,12 +4,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="394077889019-i50ldubor11lftmjksjn5ul9ub659sp5.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <title>@ViewData["Title"] - Thin Blue Lie</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/ColorPallete.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
-    <link rel="icon" href="~/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
 
 </head>
 <body class="noscrollbar">
@@ -61,7 +64,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" asp-page="/Login">Login</a>
-                                <a class="dropdown-item" asp-page="">Log Out</a>
+                                <a class="dropdown-item" onclick="signOut();" asp-page="">Log Out</a>
                             </div>
                         </li>
                     </ul>
