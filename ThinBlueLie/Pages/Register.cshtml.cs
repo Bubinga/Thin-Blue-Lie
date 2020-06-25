@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using DataAccessLibrary.thinblue;
 using static DataAccessLibrary.thinblue.Users;
+using System.ComponentModel.DataAnnotations;
 
 namespace ThinBlueLie.Pages
 {
@@ -26,6 +27,17 @@ namespace ThinBlueLie.Pages
 
         [BindProperty]
         public Users Users { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        [DataType(DataType.Password)]
+        [Display(Name ="Confirm Password")]
+        [Compare("Password", ErrorMessage ="Passwords do not match")]
+        public string ConfirmPassword { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
