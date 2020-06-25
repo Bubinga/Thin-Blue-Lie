@@ -239,7 +239,7 @@ hr.blueline {
 }
 
  /*1150x wide or less */
-@media screen and (min-width: 1150px) {
+/*@media screen and (min-width: 1150px) {
     #bottom-info {
         display: none;
     }
@@ -254,7 +254,7 @@ hr.blueline {
     #bottom-info{
         display: inline-block;
     }
-}
+}*/
 
 
 

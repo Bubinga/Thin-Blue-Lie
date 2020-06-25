@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="394077889019-i50ldubor11lftmjksjn5ul9ub659sp5.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <title>@ViewData["Title"] - Thin Blue Lie</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>    
+    <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/ColorPallete.css" />
+    <link rel="stylesheet" href="~/css/ColorPallete.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
     <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
 
@@ -21,7 +21,7 @@
             <div class="d-flex flex-grow-1 container-fluid">
                 <a class="navbar-brand text-white" href="/Index">
                     <img id="logo" alt="" src="/ThinBlueLieLogo.png" width="35" height="35" class="d-inline-block">
-                    <span style = "white-space: nowrap;" class="d-inline-block" >Thin Blue Lie</span>
+                    <span style="white-space: nowrap;" class="d-inline-block">Thin Blue Lie</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -30,7 +30,7 @@
                 <div class="navbar-collapse collapse text-right d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item" id="Timeline">
-                            <a class="nav-link text-white" asp-page="/Timeline">Timeline</a>                       
+                            <a class="nav-link text-white" asp-page="/Timeline">Timeline</a>
                         <li class="nav-item" id="Solutions">
                             <a class="nav-link text-white" asp-page="/Solutions">Solutions</a>
                         <li class="nav-item" id="History">
@@ -39,7 +39,7 @@
                             <a class="nav-link text-white" asp-page="/Statistics">Statistics</a>
                     </ul>
                 </div>
-                <div class="navbar-collapse collapse text-right d-sm-inline-flex flex-sm-row-reverse">
+                <div class="navbar-collapse collapse text-right d-sm-inline-flex flex-sm-row-reverse mr-3">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -63,8 +63,8 @@
                                 User
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-page="/Login">Login</a>
-                                <a class="dropdown-item" onclick="signOut();" asp-page="">Log Out</a>
+                                <a class="dropdown-item" id="login" asp-page="/Login">Login</a>
+                                <a class="dropdown-item" id="logout" onclick="signOut();" asp-page="">Log Out</a>
                             </div>
                         </li>
                     </ul>
@@ -85,5 +85,23 @@
 
 
     @RenderSection("Scripts", required: false)
+    <script>       
+        function init() {
+            gapi.load('auth2', function () {
+                gapi.auth2.init();        
+                const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
+                var profile = googleUser.getBasicProfile();       
+                if (googleUser.isSignedIn = true) {
+                    document.getElementById("login").style.display = "none";
+                    document.getElementById("loginDropdown").innerHTML = profile.getGivenName();
+                }
+            });
+        }
+        document.getElementById("logout").style.display = "none";
+        
+    
+    </script>
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 </body>
+
 </html>
