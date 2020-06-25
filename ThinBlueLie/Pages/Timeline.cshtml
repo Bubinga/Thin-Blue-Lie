@@ -1,7 +1,7 @@
 ﻿@page
 @model ThinBlueLie.Pages.TimelineModel
 @{
-    ViewData["Title"] = "Timeline";
+    ViewBag.Title = "Timeline";
 }
 
 <style>
@@ -109,9 +109,9 @@
             </div>
         </div>
     </div>
-    <div style="display:block; white-space:nowrap; width:100%;">
+    <div class="row">
         @*Video*@
-        <div style="width:65%; margin-left:8%; margin-right:5%; vertical-align:top;" class="h-100 d-inline-block">
+        <div style="vertical-align:top;" class="h-100 d-inline-block offset-md-1 col-md-8">
             <div style="border-radius:3px; width:100%;" class="embed-responsive embed-responsive-2by1 d-inline-block">
                 <iframe class="embed-responsive-item"
                         src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
@@ -119,8 +119,8 @@
             </div>
         </div>
         @*Information Card*@
-        <div id="side-info">
-            <div class="card border-dark mr-5 mb-3 float-right d-inline-block" style="width: 15rem;">
+        <div class="col-md-2 ml-xl-5" >
+            <div class="card border-dark mb-3 w-100" style="min-width:175px;">
                 <div class="card-header text-black"><strong>Data</strong></div>
                 <div class="card-body text-dark">
                     <h5 class="card-title mb-0">General Information</h5>
@@ -157,55 +157,10 @@
                 <div class="card-footer">
                     <a href="" class="btn btn-primary">Incorrect Info?</a>
                 </div>
-            </div>
-            <div> @Model.Date </div>
+            </div>            
         </div>
     </div>
-    <div id="bottom-info" style="width:100%;">
-        <div style="width:65%;" class="card-group mx-auto mt-3 w-100 d-inline-block">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title text-left mb-0">General Information</h5>
-                    <ul class=" list-group list-group-flush">
-                        <li class="list-group-item">
-                            <p><strong>Date:</strong></p>
-                            <p><strong>Location:</strong></p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title text-left mb-0">Officer's Information</h5>
-                    <hr style="height:1px;" class="mt-0 pb-0 mb-0 pt-0" />
-                    <ul class=" list-group list-group-flush">
-                        <li class="brokencard list-group-item">
-                            <p><strong>Name:</strong></p>
-                            <p><strong>Race:</strong></p>
-                            <p><strong>Agency:</strong></p>
-                            @*Have little label/tags for "violence" "harrassment" "negligence" "evidence planting"*@
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title text-left mb-0">Victim's Information</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item ">
-                            <p><strong>Name:</strong></p>
-                            <p><strong>Race:</strong></p>
-                            <p><strong>Sex:</strong></p>
-                            <p><strong>Weapon:</strong> </p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-footer">
-                    <a href="" class="btn btn-primary">Incorrect Info?</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
 
 </body>
