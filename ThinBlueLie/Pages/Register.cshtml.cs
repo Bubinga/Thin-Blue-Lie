@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using DataAccessLibrary.thinblue;
 using static DataAccessLibrary.thinblue.Users;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace ThinBlueLie.Pages
 {
@@ -26,17 +28,18 @@ namespace ThinBlueLie.Pages
         }
 
         [BindProperty]
-        public Users Users { get; set; }
+        public Users Users { get; set; }        
 
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        [BindProperty]
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [Required]
+        [BindProperty]
         [DataType(DataType.Password)]
         [Display(Name ="Confirm Password")]
-        [Compare("Password", ErrorMessage ="Passwords do not match")]
+        [Compare("Password", ErrorMessage = "Passwords do not match")]
         public string ConfirmPassword { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -49,13 +52,27 @@ namespace ThinBlueLie.Pages
             if (!ModelState.IsValid)
             {
                 return Page();
-            }
-                       
+            }           
 
             _context.Users.Add(Users);
-            await _context.SaveChangesAsync();
+             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+             return RedirectToPage("./Index");        
+         
         }
     }
 }
+
+//byte[] salt = new byte[128 / 8];
+//using (var rng = RandomNumberGenerator.Create())
+//{
+//    rng.GetBytes(salt);
+//}
+//Convert.ToBase64String(salt);
+//string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+//password: ConfirmPassword,
+//salt: salt,
+//prf: KeyDerivationPrf.HMACSHA1,
+//iterationCount: 10000,
+//numBytesRequested: 256 / 8));
+//Users.Password = hashed;
