@@ -1,5 +1,6 @@
 ﻿using System;
 using DataAccessLibrary.thinblue;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
