@@ -18,7 +18,7 @@ namespace ThinBlueLie.Pages
             _context = context;
         }
 
-        public Users Users { get; set; }
+        public Users Users { get; set; }       
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -34,6 +34,20 @@ namespace ThinBlueLie.Pages
             //    return NotFound();
             //}
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+
+            _context.Users.Add(Users);
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("./Index");
         }
     }
 }
