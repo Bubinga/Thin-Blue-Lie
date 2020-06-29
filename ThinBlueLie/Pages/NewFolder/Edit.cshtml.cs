@@ -6,15 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLibrary.thinblue;
+using ThinBlue;
 
 namespace ThinBlueLie.Pages.NewFolder
 {
     public class EditModel : PageModel
     {
-        private readonly DataAccessLibrary.thinblue.ThinbluelieContext _context;
+        private readonly ThinBlue.ThinbluelieContext _context;
 
-        public EditModel(DataAccessLibrary.thinblue.ThinbluelieContext context)
+        public EditModel(ThinBlue.ThinbluelieContext context)
         {
             _context = context;
         }

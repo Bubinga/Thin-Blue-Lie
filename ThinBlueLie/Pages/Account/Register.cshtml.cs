@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using DataAccessLibrary.thinblue;
+using ThinBlue;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -14,9 +14,9 @@ namespace ThinBlueLie.Pages
 {
     public class RegisterModel : PageModel
     {
-        private readonly DataAccessLibrary.thinblue.ThinbluelieContext _context;
+        private readonly ThinBlue.ThinbluelieContext _context;
 
-        public RegisterModel(DataAccessLibrary.thinblue.ThinbluelieContext context)
+        public RegisterModel(ThinBlue.ThinbluelieContext context)
         {
             _context = context;
         }
