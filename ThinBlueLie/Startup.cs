@@ -12,6 +12,9 @@ using Pomelo.EntityFrameworkCore.MySql;
 using MySql.Data;
 using Microsoft.EntityFrameworkCore;
 using DataAccessLibrary.thinblue;
+using ThinBlueLie.Models;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace ThinBlueLie
 {
@@ -27,6 +30,13 @@ namespace ThinBlueLie
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<IdentityContext>(options =>
+       options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddDefaultTokenProviders();
+
             services.AddDbContext<ThinbluelieContext>(options =>
             {
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
