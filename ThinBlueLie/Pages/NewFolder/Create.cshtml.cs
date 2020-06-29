@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using DataAccessLibrary.thinblue;
+using ThinBlue;
 
 namespace ThinBlueLie.Pages.NewFolder
 {
     public class CreateModel : PageModel
     {
-        private readonly DataAccessLibrary.thinblue.ThinbluelieContext _context;
+        private readonly ThinBlue.ThinbluelieContext _context;
 
-        public CreateModel(DataAccessLibrary.thinblue.ThinbluelieContext context)
+        public CreateModel(ThinBlue.ThinbluelieContext context)
         {
             _context = context;
         }

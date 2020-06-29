@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLibrary.thinblue;
+using ThinBlue;
 
 namespace ThinBlueLie.Pages.NewFolder
 {
     public class IndexModel : PageModel
     {
-        private readonly DataAccessLibrary.thinblue.ThinbluelieContext _context;
+        private readonly ThinBlue.ThinbluelieContext _context;
 
-        public IndexModel(DataAccessLibrary.thinblue.ThinbluelieContext context)
+        public IndexModel(ThinBlue.ThinbluelieContext context)
         {
             _context = context;
         }

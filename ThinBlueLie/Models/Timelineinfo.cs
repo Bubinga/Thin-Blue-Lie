@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DataAccessLibrary.thinblue
+namespace ThinBlue
 {
     public partial class Timelineinfo
     {

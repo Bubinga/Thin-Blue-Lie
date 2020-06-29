@@ -1,0 +1,42 @@
+﻿@page
+@model ThinBlueLie.Pages.LoginModel
+
+@{
+
+}
+
+<div class="container-fluid h-100 row nogap">
+    <div class="card border-secondary mx-auto center col-lg-3 col-md-4 p-0" style="margin-top:100px;">
+        <div class="card-header">
+            Login
+            <a class="float-right" asp-page="/Register">Register</a>
+        </div>
+        <div class="card-body text-secondary">
+            <div class="form-group">
+                <label asp-for="Users.Email" class="control-label">Email</label>
+                <input type="email" asp-for="Users.Email" class="form-control">
+                <span asp-validation-for="Users.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">Password</label>
+                <input type="password" asp-for="Password" class="form-control">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-primary" style="float:right" />
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="mx-auto" id="my-signin2"></div>           
+        </div>
+    </div>
+</div>
+<script>   
+ 
+</script>
+<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+@*<div>
+        <a asp-page="./Edit" asp-route-id="@Model.Users.IdUsers">Edit</a> |
+        <a asp-page="./Index">Back to List</a>
+    </div>*@
