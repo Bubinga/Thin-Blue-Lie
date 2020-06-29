@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Pomelo.EntityFrameworkCore.MySql;
 using MySql.Data;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLibrary.thinblue;
+using ThinBlue;
 using ThinBlueLie.Models;
 using Microsoft.AspNetCore.Identity;
 

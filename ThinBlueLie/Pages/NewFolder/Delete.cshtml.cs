@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLibrary.thinblue;
+using ThinBlue;
 
 namespace ThinBlueLie.Pages.NewFolder
 {
     public class DeleteModel : PageModel
     {
-        private readonly DataAccessLibrary.thinblue.ThinbluelieContext _context;
+        private readonly ThinBlue.ThinbluelieContext _context;
 
-        public DeleteModel(DataAccessLibrary.thinblue.ThinbluelieContext context)
+        public DeleteModel(ThinBlue.ThinbluelieContext context)
         {
             _context = context;
         }
