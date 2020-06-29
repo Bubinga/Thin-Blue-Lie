@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using DataAccessLibrary.thinblue;
-using static DataAccessLibrary.thinblue.Users;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -27,7 +26,7 @@ namespace ThinBlueLie.Pages
             return Page();
         }
 
-        [BindProperty]
+        
         public Users Users { get; set; }        
 
         [BindProperty]
@@ -38,7 +37,7 @@ namespace ThinBlueLie.Pages
         [Required]
         [BindProperty]
         [DataType(DataType.Password)]
-        [Display(Name ="Confirm Password")]
+        [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "Passwords do not match")]
         public string ConfirmPassword { get; set; }
 
@@ -49,6 +48,7 @@ namespace ThinBlueLie.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (!ModelState.IsValid)
             {
                 return Page();
