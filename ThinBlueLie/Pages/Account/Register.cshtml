@@ -1,6 +1,7 @@
 ﻿@page
 @model ThinBlueLie.Pages.RegisterModel
 
+
 @{
     ViewBag.Title = "Register";
 }
@@ -10,29 +11,30 @@
     <div class="card border-secondary mx-auto center col-lg-3 col-md-4 p-0" style="margin-top:100px;">
         <div class="card-header">
             Register
-            <a class="float-right" asp-page="/Login">Login</a>
+            <a class="float-right" asp-page="/Account/Login">Login</a>
         </div>
         <form method="post">
             <div class="card-body text-secondary">
+                <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Users.Email" class="control-label">Email</label>
-                    <input type="email" asp-for="Users.Email" class="form-control">
-                    <span asp-validation-for="Users.Email" class="text-danger"></span>
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <input asp-for="Email" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label  asp-for="Password"class="control-label"></label>
-                    <input asp-for="Password" type="password" class="form-control" >
+                    <input asp-for="Password" class="form-control" >
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ConfirmPassword" class="control-label"></label>
-                    <input type="password" asp-for="ConfirmPassword" class="form-control">
+                    <input asp-for="ConfirmPassword" class="form-control">
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>                      
                 <div class="form-group">
-                    <label asp-for="Users.Username" class="control-label"></label>
-                    <input type="text" asp-for="Users.Username" class="form-control">
-                    <span asp-validation-for="Users.Username" class="text-danger"></span>
+                    <label asp-for="Username" class="control-label"></label>
+                    <input type="text" asp-for="Username" class="form-control">
+                    <span asp-validation-for="Username" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Register" class="btn btn-primary mb-1" style="float:right" />
