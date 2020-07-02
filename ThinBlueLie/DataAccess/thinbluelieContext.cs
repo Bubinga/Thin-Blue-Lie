@@ -1,10 +1,13 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
+
 namespace ThinBlue
 {
-    public partial class ThinbluelieContext : DbContext
+    public partial class ThinbluelieContext : IdentityDbContext<IdentityUser>
     {
         public ThinbluelieContext()
         {
@@ -15,12 +18,9 @@ namespace ThinBlue
         {
         }
 
-        public virtual DbSet<Timelineinfo> Timelineinfo { get; set; }
-        public virtual DbSet<Roles> Roles { get; set; }
-        public virtual DbSet<Userclaims> Userclaims { get; set; }
-        public virtual DbSet<Userlogins> Userlogins { get; set; }
-        public virtual DbSet<Userroles> Userroles { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Timelineinfo> Timelineinfo { get; set; }       
+        
+       
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -33,6 +33,7 @@ namespace ThinBlue
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Timelineinfo>(entity =>
             {
                 entity.HasKey(e => e.IdTimelineInfo)
@@ -168,7 +169,7 @@ namespace ThinBlue
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Userclaims)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("ApplicationUser_Claims");
+                    .HasConstraintName("IdentityUser_Claims");
             });
 
             modelBuilder.Entity<Userlogins>(entity =>
@@ -179,7 +180,7 @@ namespace ThinBlue
                 entity.ToTable("userlogins");
 
                 entity.HasIndex(e => e.UserId)
-                    .HasName("ApplicationUser_Logins");
+                    .HasName("IdentityUser_Logins");
 
                 entity.Property(e => e.LoginProvider)
                     .HasColumnType("varchar(128)")
@@ -199,7 +200,7 @@ namespace ThinBlue
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Userlogins)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("ApplicationUser_Logins");
+                    .HasConstraintName("IdentityUser_Logins");
             });
 
             modelBuilder.Entity<Userroles>(entity =>
@@ -230,7 +231,7 @@ namespace ThinBlue
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Userroles)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("ApplicationUser_Roles");
+                    .HasConstraintName("IdentityUser_Roles");
             });
 
             modelBuilder.Entity<Users>(entity =>

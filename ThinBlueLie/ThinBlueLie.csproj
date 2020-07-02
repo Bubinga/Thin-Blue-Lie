@@ -6,6 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataAccess\IdentityContext.cs" />
+    <Compile Remove="Migrations\20200701015905_IdentityFix.cs" />
+    <Compile Remove="Migrations\20200701015905_IdentityFix.Designer.cs" />
+    <Compile Remove="Migrations\20200701052958_IdentityFix.cs" />
+    <Compile Remove="Migrations\20200701052958_IdentityFix.Designer.cs" />
+    <Compile Remove="Migrations\20200701053310_IdentityFix.cs" />
+    <Compile Remove="Migrations\20200701053310_IdentityFix.Designer.cs" />
+    <Compile Remove="Migrations\20200701053454_IdentityFix.cs" />
+    <Compile Remove="Migrations\20200701053454_IdentityFix.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />

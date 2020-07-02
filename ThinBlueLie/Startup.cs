@@ -12,9 +12,8 @@ using Pomelo.EntityFrameworkCore.MySql;
 using MySql.Data;
 using Microsoft.EntityFrameworkCore;
 using ThinBlue;
-using ThinBlueLie.Models;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.AspNetCore.Mvc;
 
 namespace ThinBlueLie
 {
@@ -29,21 +28,21 @@ namespace ThinBlueLie
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddDbContext<IdentityContext>(options =>
-       options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityContext>()
-                .AddDefaultTokenProviders();
-
+        {            
             services.AddDbContext<ThinbluelieContext>(options =>
             {
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ThinbluelieContext>()
+                .AddDefaultTokenProviders();
+           
+            services.AddMvc();
+            services.AddControllers();
             services.AddRazorPages()
-                .AddRazorRuntimeCompilation();
+                .AddRazorRuntimeCompilation()
+                .AddMvcOptions(options => options.EnableEndpointRouting = false);
 
         }
 
@@ -64,15 +63,19 @@ namespace ThinBlueLie
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            app.UseMvc(routes =>
             {
-                endpoints.MapRazorPages();
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //app.UseEndpoints(endpoints =>
+            //{               
+            //    endpoints.MapRazorPages();
+            //    endpoints.MapDefaultControllerRoute();
+            //});
         }
     }
 }
