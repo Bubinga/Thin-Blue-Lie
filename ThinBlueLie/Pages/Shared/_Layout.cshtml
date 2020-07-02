@@ -64,7 +64,8 @@
                                 User
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" id="login" asp-page="/Account/Login">Login</a>
+                                <a class="dropdown-item" id="login" asp-action="Register" asp-controller="Account">Register</a>
+                                <a class="dropdown-item" id="login" asp-action="Login" asp-controller="Account">Login</a>
                                 <a class="dropdown-item" id="logout" onclick="signOut();" asp-page="">Log Out</a>
                             </div>
                         </li>
@@ -87,20 +88,7 @@
 
     @RenderSection("Scripts", required: false)
     <script>       
-        function init() {
-            gapi.load('auth2', function () {
-                gapi.auth2.init();        
-                const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
-                var profile = googleUser.getBasicProfile();       
-                if (googleUser.isSignedIn = true) {
-                    document.getElementById("login").style.display = "none";
-                    //document.getElementById("loginDropdown").innerHTML = profile.getGivenName();
-                }
-            });
-        }
-        document.getElementById("logout").style.display = "none";
         
-    
     </script>
     <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 </body>

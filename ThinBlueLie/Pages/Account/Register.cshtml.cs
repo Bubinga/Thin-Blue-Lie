@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using ThinBlue;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Identity;
 
 namespace ThinBlueLie.Pages
 {
     public class RegisterModel : PageModel
     {
-        private readonly ThinBlue.ThinbluelieContext _context;
+        //private readonly ThinBlue.ThinbluelieContext _context;
 
-        public RegisterModel(ThinBlue.ThinbluelieContext context)
-        {
-            _context = context;
-        }
+        //public RegisterModel(ThinBlue.ThinbluelieContext context)
+        //{
+        //    _context = context;
+        //}
 
         public IActionResult OnGet()
         {
@@ -27,38 +27,70 @@ namespace ThinBlueLie.Pages
         }
 
         
-        public Users Users { get; set; }        
+       
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
 
-        [BindProperty]
+        
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Required]
-        [BindProperty]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "Passwords do not match")]
         public string ConfirmPassword { get; set; }
 
+        [Required]
+        public string Username { get; set; }
+
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
 
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly SignInManager<IdentityUser> signInManager;
+
+        public RegisterModel(UserManager<IdentityUser> userManager,
+                                 SignInManager<IdentityUser> signInManager)
+        {
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+        }
 
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(RegisterModel model)
         {
             var errors = ModelState.Values.SelectMany(v => v.Errors);
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return Page();
-            }           
+                var user = new IdentityUser { UserName = model.Username, Email = model.Email };
+                var result = await userManager.CreateAsync(user, model.Password);
 
-            _context.Users.Add(Users);
-             await _context.SaveChangesAsync();
+                if (result.Succeeded)
+                {
+                    await signInManager.SignInAsync(user, isPersistent: false); //change isPersistent to true later
+                    return RedirectToPage("./Index");
+                }
+                //foreach (var error in result.Errors)
+                //{
+                //    ModelState.AddModelError("", error.Description);
+                //}
+            }
+            return Page();
 
-             return RedirectToPage("./Index");        
-         
+            //var errors = ModelState.Values.SelectMany(v => v.Errors);
+            //if (!ModelState.IsValid)
+            //{
+            //    return Page();
+            //}           
+
+            ////_context.Users.Add(Users);
+            // await _context.SaveChangesAsync();
+
+            // return RedirectToPage("./Index");        
+
         }
     }
 }

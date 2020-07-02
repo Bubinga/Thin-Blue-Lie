@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ThinBlue;
-using ThinBlueLie.Models;
+
 
 namespace ThinBlueLie.Pages
 {
@@ -20,24 +20,17 @@ namespace ThinBlueLie.Pages
             _context = context;
         }
 
-        public Users Users { get; set; }
+        [Required]
+        [BindProperty]
+        public string Email { get; set; }
         [Required]
         [BindProperty]
         public string Password { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Users = await _context.Users.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (Users == null)
-            {
-              return NotFound();
-            }
+        public async Task<IActionResult> OnGetAsync()
+        {            
+             
+            await _context.SaveChangesAsync();
             return Page();
         }
 
@@ -49,7 +42,7 @@ namespace ThinBlueLie.Pages
             }
 
 
-            _context.Users.Add(Users);
+             // _context.Users.Add(Users);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
