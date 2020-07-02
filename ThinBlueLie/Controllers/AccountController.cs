@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ThinBlueLie.Pages;
+using ThinBlueLie.ViewModels;
 
 namespace ThinBlueLie.Controllers
 {
+    
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> userManager;
@@ -19,23 +21,24 @@ namespace ThinBlueLie.Controllers
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
-
+        
 
         [HttpGet]
         public IActionResult Login()
-        {
-            
-            return View();           
+        {            
+            return View("Pages/Account/Login.cshtml");           
         }        
 
 
         [HttpGet]
+        
         public IActionResult Register()
         {            
-            return View();
+            return View("Pages/Account/Register.cshtml");
         }
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterModel model)
+        [Route("Account/Register")]
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid)
@@ -46,12 +49,12 @@ namespace ThinBlueLie.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false); //change isPersistent to true later
-                    return RedirectToPage("./Index");
+                    return RedirectToPage("/Index");
                 }
-                //foreach (var error in result.Errors)
-                //{
-                //    ModelState.AddModelError("", error.Description);
-                //}
+                foreach (var error in result.Errors)
+                {
+                   ModelState.AddModelError("", error.Description);
+                }
             }
             return View(model);
         }
