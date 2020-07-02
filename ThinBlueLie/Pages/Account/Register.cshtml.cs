@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.AspNetCore.Identity;
 
 namespace ThinBlueLie.Pages
 {
@@ -27,6 +27,12 @@ namespace ThinBlueLie.Pages
         }
 
         
+
+        public RegisterModel()
+        {
+          
+        }
+                
        
         [Required]
         [EmailAddress]
@@ -49,62 +55,22 @@ namespace ThinBlueLie.Pages
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
 
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
-
-        public RegisterModel(UserManager<IdentityUser> userManager,
-                                 SignInManager<IdentityUser> signInManager)
-        {
-            this.userManager = userManager;
-            this.signInManager = signInManager;
-        }
 
 
-        public async Task<IActionResult> OnPostAsync(RegisterModel model)
-        {
-            var errors = ModelState.Values.SelectMany(v => v.Errors);
-            if (ModelState.IsValid)
-            {
-                var user = new IdentityUser { UserName = model.Username, Email = model.Email };
-                var result = await userManager.CreateAsync(user, model.Password);
+        //public async Task<IActionResult> OnPostAsync()
+        //{
+        //    var errors = ModelState.Values.SelectMany(v => v.Errors);
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return Page();
+        //    }           
 
-                if (result.Succeeded)
-                {
-                    await signInManager.SignInAsync(user, isPersistent: false); //change isPersistent to true later
-                    return RedirectToPage("./Index");
-                }
-                //foreach (var error in result.Errors)
-                //{
-                //    ModelState.AddModelError("", error.Description);
-                //}
-            }
-            return Page();
+        //    //_context.Users.Add(Users);
+        //     await _context.SaveChangesAsync();
 
-            //var errors = ModelState.Values.SelectMany(v => v.Errors);
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}           
-
-            ////_context.Users.Add(Users);
-            // await _context.SaveChangesAsync();
-
-            // return RedirectToPage("./Index");        
-
-        }
+        //     return RedirectToPage("./Index");        
+         
+        //}
     }
 }
 
-//byte[] salt = new byte[128 / 8];
-//using (var rng = RandomNumberGenerator.Create())
-//{
-//    rng.GetBytes(salt);
-//}
-//Convert.ToBase64String(salt);
-//string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-//password: ConfirmPassword,
-//salt: salt,
-//prf: KeyDerivationPrf.HMACSHA1,
-//iterationCount: 10000,
-//numBytesRequested: 256 / 8));
-//Users.Password = hashed;
