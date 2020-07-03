@@ -12,32 +12,13 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace ThinBlueLie.Pages
 {
-    public class RegisterModel : PageModel
+    public class RegisterModel
     {
-        //private readonly ThinBlue.ThinbluelieContext _context;
-
-        //public RegisterModel(ThinBlue.ThinbluelieContext context)
-        //{
-        //    _context = context;
-        //}
-
-        public IActionResult OnGet()
-        {
-            return Page();
-        }
-
-        
-
-        public RegisterModel()
-        {
-          
-        }
-                
+                     
        
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-
         
         [Required]
         [DataType(DataType.Password)]
@@ -50,27 +31,13 @@ namespace ThinBlueLie.Pages
         public string ConfirmPassword { get; set; }
 
         [Required]
+        [RegularExpression("^[a-zA-Z ]*$")]
+        [MaxLength(25)]
         public string Username { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
 
-
-
-        //public async Task<IActionResult> OnPostAsync()
-        //{
-        //    var errors = ModelState.Values.SelectMany(v => v.Errors);
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return Page();
-        //    }           
-
-        //    //_context.Users.Add(Users);
-        //     await _context.SaveChangesAsync();
-
-        //     return RedirectToPage("./Index");        
-         
-        //}
     }
 }
 
