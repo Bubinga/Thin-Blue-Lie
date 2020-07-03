@@ -63,8 +63,9 @@
                 <div id="divcalendartable"></div>
             </div>
         </div>  @*Timeline*@
-        <div style="width:70%;" id="timelineDiv" class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label onclick="location.href='?d=2020/6/23';" id="Timeline-label0" class="week btn">
+    <div class="row">
+        <div style="" id="timelineDiv" class="btn-group btn-group-toggle my-auto col-lg-9 ml-md-5 pl-md-5" data-toggle="buttons">
+            <label  id="Timeline-label0" class="week btn">
                 <span id="Timeline-Day0" class="timeline-label"></span>
                 <input type="radio" alt="Sunday" id="option1">
             </label>
@@ -93,13 +94,15 @@
                 <input type="radio" name="options" alt="Saturday" id="option7">
             </label>
         </div> @*Format Select*@
-        <div style="width:15%;" class=" ml-4 d-inline-block">
-            <div id="format-select" style="width:100%; float:right;" class="d-none d-md-inline-block input-group mb-1">
-                <a id="showWeekButton" onclick="showWeek()" class="btn btn-outline-info">Week</a>
-                <a id="showMonthButton" onclick="showMonth()" class="btn btn-outline-info">Month</a>
+        <div style="" class="col-lg-2 col-6 d-inline-block container pl-0">
+            <div id="format-select" style="float:right;" class="input-group mb-1">
+                <div class="mx-auto mt-1">
+                    <a id="showWeekButton" onclick="showWeek()" class="btn btn-outline-info">Week</a>
+                    <a id="showMonthButton" onclick="showMonth()" class="btn btn-outline-info">Month</a>
+                </div>
             </div>  @*Date Search*@
             <br />
-            <div style="" class="input-group mb-2 mr-4">
+            <div style="" class="input-group mb-2">
                 <input type="number" id="InputMonth" min="0" max="12" class="form-control" placeholder="MM" aria-label="Month">
                 <input type="number" id="InputYear" min="1" max="31" class="form-control" placeholder="DD" aria-label="Day">
                 <input type="number" id="InputYear" min="1930" max="2020" class="form-control" placeholder="YYYY" aria-label="Year">
@@ -109,17 +112,18 @@
             </div>
         </div>
     </div>
+    </div>
     <div class="row">
         @*Video*@
-        <div style="vertical-align:top;" class="h-100 d-inline-block offset-md-1 col-md-8">
-            <div style="border-radius:3px; width:100%;" class="embed-responsive embed-responsive-2by1 d-inline-block border">
+        <div style="vertical-align:top;" class="h-100 d-inline-block col-md-8 offset-md-1">
+            <div style="border-radius:3px; width:100%; border: 1px solid #000000 !important;" class="embed-responsive embed-responsive-2by1 d-inline-block">
                 <iframe class="embed-responsive-item"
                         src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
                 </iframe>
             </div>
         </div>
         @*Information Card*@
-        <div class="col-md-2 ml-xl-5" >
+        <div class="col-md-2 mx-auto mx-md-0 p-md-0" style="max-width:400px;" >
             <div class="card border-dark mb-3 w-100" style="min-width:175px;">
                 <div class="card-header text-black"><strong>Data</strong></div>
                 <div class="card-body text-dark pb-0">
@@ -189,10 +193,15 @@
 
     var m = new Array(7);
     var d = new Array(7);
-    for (i = 0; i < 7; i++) { //This for loop adds the date onto the end of the day using arrays
+    var y = new Array(7);
+    for (let i = 0; i < 7; i++) { //This for loop adds the date onto the end of the day using arrays
         m[i] = day[i].getMonth() + 1;
         d[i] = day[i].getDate();
-        document.getElementById("Timeline-Day" + i).innerHTML += m[i] + "/" + d[i];
+        y[i] = day[i].getYear() + 1900;
+        document.getElementById("Timeline-Day" + i).innerHTML += m[i] + "/" + d[i];   
+        //document.getElementById("Timeline-label" + i).setAttribute = ('href', "?d=" + y[i] + "/" + m[i] + "/" + d[i]);
+        document.getElementById("Timeline-label" + i).onclick = function () {location.href = "?d=" + y[i] + "/" + m[i] + "/" + d[i]; };
+        //document.getElementById("Timeline-label" + i).href = "?d=" + y[i] + "/" + m[i] + "/" + d[i];                
     }
 
     function loadTimes() {

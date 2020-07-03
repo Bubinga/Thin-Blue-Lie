@@ -70,7 +70,7 @@ namespace ThinBlueLie.Controllers
 
                 if (result.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, isPersistent: false); //change isPersistent to true later
+                    await signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToPage("/Index");
                 }
                 foreach (var error in result.Errors)
