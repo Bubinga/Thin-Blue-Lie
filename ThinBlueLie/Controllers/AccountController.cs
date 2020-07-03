@@ -38,8 +38,18 @@ namespace ThinBlueLie.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(RegisterModel model)
+        public async Task<IActionResult> Login(LoginModel model)
         {
+            if (ModelState.IsValid)
+            {
+                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+                if (result.Succeeded)
+                {                    
+                    return RedirectToPage("/Index");
+                }                              
+                    ModelState.AddModelError(string.Empty, "Invalid Email or Pass");                
+            }
             return View("Pages/Account/Login.cshtml", model);
         }
 
