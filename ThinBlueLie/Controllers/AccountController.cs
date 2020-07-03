@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using ThinBlueLie.Pages;
-using ThinBlueLie.ViewModels;
+
 
 namespace ThinBlueLie.Controllers
 {
@@ -23,24 +24,35 @@ namespace ThinBlueLie.Controllers
         }
         
 
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToPage("/Index");
+        }
+
+
         [HttpGet]
         public IActionResult Login()
         {            
             return View("Pages/Account/Login.cshtml");           
-        }        
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(RegisterModel model)
+        {
+            return View("Pages/Account/Login.cshtml", model);
+        }
 
 
-        [HttpGet]
-        
+        [HttpGet]        
         public IActionResult Register()
         {            
             return View("Pages/Account/Register.cshtml");
         }
         [HttpPost]
         [Route("Account/Register")]
-        public async Task<IActionResult> Register(RegisterViewModel model)
-        {
-            var errors = ModelState.Values.SelectMany(v => v.Errors);
+        public async Task<IActionResult> Register(RegisterModel model)
+        {            
             if (ModelState.IsValid)
             {
                 var user = new IdentityUser {UserName = model.Username, Email = model.Email};
@@ -56,7 +68,7 @@ namespace ThinBlueLie.Controllers
                    ModelState.AddModelError("", error.Description);
                 }
             }
-            return View(model);
+            return View("Pages/Account/Register.cshtml", model);
         }
     }
 }

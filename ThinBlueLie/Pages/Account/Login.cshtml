@@ -11,31 +11,35 @@
             Login
             <a class="float-right" asp-page="/Account/Register">Register</a>
         </div>
-        <div class="card-body text-secondary">
-            <div class="form-group">
-                <label asp-for="Email" class="control-label">Email</label>
-                <input type="email" asp-for="Email" class="form-control">
-                <span asp-validation-for="Email" class="text-danger"></span>
+        <form method="post">
+            <div class="card-body text-secondary">
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <input type="email" asp-for="Email" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label">Password</label>
+                    <input type="password" asp-for="Password" class="form-control">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-0">
+                    <div class="form-check">
+                        <label asp-for="RememberMe">
+                            <input asp-for="RememberMe"/> @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                </div>                
+                    <input type="submit" value="Login" class="btn btn-primary mb-2 px-3" style="float:right" />                
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label">Password</label>
-                <input type="password" asp-for="Password" class="form-control">
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary" style="float:right" />
-            </div>
-        </div>
+        </form>
         <div class="card-footer">
-            <div class="mx-auto" id="my-signin2"></div>           
+            <div class="mx-auto" id="my-signin2"></div>
         </div>
     </div>
 </div>
-<script>   
- 
-</script>
 
-@*<div>
-        <a asp-page="./Edit" asp-route-id="@Model.Users.IdUsers">Edit</a> |
-        <a asp-page="./Index">Back to List</a>
-    </div>*@
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
