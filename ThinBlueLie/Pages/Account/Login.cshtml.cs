@@ -11,41 +11,16 @@ using ThinBlue;
 
 namespace ThinBlueLie.Pages
 {
-    public class LoginModel : PageModel
-    {
-        private readonly ThinBlue.ThinbluelieContext _context;
-
-        public LoginModel(ThinBlue.ThinbluelieContext context)
-        {
-            _context = context;
-        }
-
+    public class LoginModel
+    {       
         [Required]
-        [BindProperty]
+        [EmailAddress]
         public string Email { get; set; }
         [Required]
-        [BindProperty]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public async Task<IActionResult> OnGetAsync()
-        {            
-             
-            await _context.SaveChangesAsync();
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-
-             // _context.Users.Add(Users);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
-        }
+        [Display(Name = "Remember me")]
+        public bool RememberMe { get; set; }
     }
 }
