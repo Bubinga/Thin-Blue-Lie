@@ -38,6 +38,7 @@ namespace ThinBlueLie.Controllers
         }
 
         [HttpPost]
+        [Route("Account/Login")]
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)

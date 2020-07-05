@@ -31,7 +31,7 @@ namespace DataAccessLibrary.Migrations
                     SubjectRace = table.Column<string>(type: "varchar(45)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                         .Annotation("MySql:Collation", "utf8mb4_0900_ai_ci"),
-                    Armed = table.Column<string>(name: "Armed?", type: "varchar(45)", nullable: true)
+                    Armed = table.Column<string>(name: "Armed", type: "varchar(45)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                         .Annotation("MySql:Collation", "utf8mb4_0900_ai_ci"),
                     OfficerName = table.Column<string>(type: "varchar(45)", nullable: true)

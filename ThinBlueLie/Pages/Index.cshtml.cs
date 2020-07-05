@@ -22,7 +22,8 @@ namespace ThinBlueLie.Pages
 
         public void OnGet()
         {
-
+            var a = (Timelineinfo.MisconductEnum)37;
+            Console.WriteLine(a);           
         }
     }
 }
