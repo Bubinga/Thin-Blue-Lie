@@ -1,8 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using System.Web;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
+using Pomelo.EntityFrameworkCore.MySql.Query.ExpressionVisitors.Internal;
 using ThinBlue;
 using ThinBlueLie.Pages;
 
@@ -18,28 +25,89 @@ namespace ThinBlueLie.Controllers
             _context = context;
         }
 
-
-        
+        [BindProperty(SupportsGet = true)]
+        public string date { get; set; }
 
         [HttpGet]
+        [Route("/Timeline")]
+        public async Task<IActionResult> Timeline()
+        {            
+            date = Request.Query["d"];
+
+            return View("Pages/Timeline.cshtml");
+        }
+
+
+
+
+        [HttpGet]
+        [Route("/Submit")]
         public IActionResult Submit()
         {
-            return View("Pages/Submit.cshtml");
+            var model = new SubmitModel
+            {
+                AvailableWeapons = GetWeapons(),
+                AvailableMisconducts = GetMisconducts()
+            };
+            return View("Pages/Submit.cshtml", model);
         }
+
         [HttpPost]
         [Route("/Submit")]
-        public async Task<IActionResult> OnPostAsync(SubmitModel model)
-        {
-            if (!ModelState.IsValid)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Submit(SubmitModel model)
+        {           
+            if (ModelState.IsValid)
             {
-                return View("Pages/Submit.cshtml");
+                var weaponsSum = model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
+                var misconductsSum = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
+
+                var weapons = new Timelineinfo { Weapon = weaponsSum };
+                var misconducts = new Timelineinfo { Misconduct = misconductsSum };
+
+                _context.Timelineinfo.AddRange(model.Timelineinfo, weapons, misconducts);
+                await _context.SaveChangesAsync();
+
+                // Save data to database, and redirect to Success page.
+
+                return RedirectToAction("Success");
             }
+            model.AvailableWeapons = GetWeapons();
+            model.AvailableMisconducts = GetMisconducts();
+            return View("Pages/Submit.cshtml", model);
+        }
 
-            _context.Timelineinfo.Add(model.Timelineinfo);
-            await _context.SaveChangesAsync();
+        public ActionResult Success()
+        {
+            return View("/Index");
+        }
 
-            return RedirectToPage("./Index");
-            
+        private IList<SelectListItem> GetWeapons()
+        {
+            return new List<SelectListItem>
+        {
+            new SelectListItem {Text = "Body", Value = "0"},
+            new SelectListItem {Text = "Projectile", Value = "2"},
+            new SelectListItem {Text = "Taser", Value = "4"},
+            new SelectListItem {Text = "Tear Gas", Value = "8"},
+            new SelectListItem {Text = "Vehicle", Value = "16"},
+            new SelectListItem {Text = "Gun", Value = "32"},
+        };
+        }
+        private IList<SelectListItem> GetMisconducts()
+        {
+            return new List<SelectListItem>
+        {
+            new SelectListItem {Text = "Unnecessary use of Force", Value = "0"},
+            new SelectListItem {Text = "Killing of Pets", Value = "2"},
+            new SelectListItem {Text = "Evidence Planting/Falsification/Spoilation", Value = "4"},
+            new SelectListItem {Text = "Non-Violent Harassment/Intimidation", Value = "8"},
+            new SelectListItem {Text = "Negligence", Value = "16"},
+            new SelectListItem {Text = "Unwarranted Suizure of Property/Theft", Value = "32"},
+            new SelectListItem {Text = "Unwarranted Search", Value = "64"},
+            new SelectListItem {Text = "False Arrest/Detention", Value = "128"},
+            new SelectListItem {Text = "Abuse of Authority for Personal Gain", Value = "256"},
+        };
         }
     }
 }
