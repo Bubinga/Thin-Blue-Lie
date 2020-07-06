@@ -24,13 +24,6 @@ namespace ThinBlueLie.Pages
 
         public async Task OnGet()
         {
-            if (string.IsNullOrWhiteSpace(Request.Query["d"]))
-            {
-                DateTime today = DateTime.Today;
-                date = today.ToString("yyyy/MM/dd");
-                Response.Redirect("/Timeline?d=" + (date));
-
-            }
             Timelineinfo = await _context.Timelineinfo.ToListAsync();
         }
     }
