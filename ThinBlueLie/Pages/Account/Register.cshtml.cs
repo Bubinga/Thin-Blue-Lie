@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -13,8 +12,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 namespace ThinBlueLie.Pages
 {
     public class RegisterModel
-    {
-                     
+    {                    
        
         [Required]
         [EmailAddress]

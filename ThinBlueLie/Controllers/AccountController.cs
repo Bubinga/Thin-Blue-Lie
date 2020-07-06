@@ -55,7 +55,8 @@ namespace ThinBlueLie.Controllers
         }
 
 
-        [HttpGet]        
+        [HttpGet]
+        [Route("Account/Register")]
         public IActionResult Register()
         {            
             return View("Pages/Account/Register.cshtml");

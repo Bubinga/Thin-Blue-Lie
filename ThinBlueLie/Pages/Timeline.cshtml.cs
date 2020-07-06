@@ -7,21 +7,31 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using ThinBlue;
 using MySql.Data.MySqlClient;
 using DataAccessLibrary;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace ThinBlueLie.Pages
 {
     public class TimelineModel : PageModel
     {
-        [BindProperty(SupportsGet = true)]
-        public string Date { get; set; }       
-        
-        public void OnGet()
+        private readonly ThinBlue.ThinbluelieContext _context;
+
+        public TimelineModel(ThinBlue.ThinbluelieContext context)
         {
-            if (string.IsNullOrWhiteSpace(Date))
+            _context = context;
+        }
+        public IList<Timelineinfo> Timelineinfo { get; set; }
+        public string date { get; set; }
+
+        public async Task OnGet()
+        {
+            if (string.IsNullOrWhiteSpace(Request.Query["d"]))
             {
-                Date = DateTime.Now.ToString("d");
+                DateTime today = DateTime.Today;
+                date = today.ToString("yyyy/MM/dd");
+                Response.Redirect("/Timeline?d=" + (date));
+
             }
+            Timelineinfo = await _context.Timelineinfo.ToListAsync();
         }
     }
 }
