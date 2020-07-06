@@ -31,14 +31,64 @@
         width: 100%;
     }
 
+    #triangle-left {
+        width: 0;
+        height: 0;
+        border-top: 16px solid transparent;
+        border-right: 30px solid black;
+        border-bottom: 15px solid transparent;
+        margin-right: 0.4rem;
+        position: relative;
+        cursor: pointer;
+    }
+
+    #triangle-left .empty {
+        left: 10px;
+        width: 0;
+        height: 0;
+        border-top: 11px solid transparent;
+        border-right: 20px solid white;
+        border-bottom: 11px solid transparent;
+        left: 7px;
+        position: absolute;
+        top: -12px;
+        content: '';
+    }
+
+    #triangle-right {
+        width: 0;
+        height: 0;
+        border-top: 16px solid transparent;
+        border-left: 30px solid black;
+        border-bottom: 15px solid transparent;
+        margin-left: 0.4rem;
+        cursor: pointer;
+        position: relative;
+    }
+
+    #triangle-right .empty {
+        width: 0;
+        height: 0;
+        border-top: 11px solid transparent;
+        border-left: 20px solid white;
+        border-bottom: 11px solid transparent;
+        position: absolute;
+        left: -27px;
+        top: -12px;
+        content: '';
+    }    
+
     .btn.week.focus, .btn.week.active {
         box-shadow: none;
         outline: #919191 solid 3px;
     }
+
     .btn {
         cursor: pointer;
     }
-
+    .thick {
+        height:31px !important;
+    }
 </style>
 <body onresize="loadTimes()">
     <div style="position:relative;" class="container-fluid mt-4 mb-3 text-center d-block">
@@ -63,55 +113,57 @@
                 <div id="divcalendartable"></div>
             </div>
         </div>  @*Timeline*@
-    <div class="row">
-        <div style="" id="timelineDiv" class="btn-group btn-group-toggle my-auto col-lg-9 ml-md-5 pl-md-5" data-toggle="buttons">
-            <label  id="Timeline-label0" class="week btn">
-                <span id="Timeline-Day0" class="timeline-label"></span>
-                <input type="radio" alt="Sunday" id="option1">
-            </label>
-            <label id="Timeline-label1" class="week btn">
-                <span id="Timeline-Day1" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Monday" id="option2">
-            </label>
-            <label id="Timeline-label2" class="week btn">
-                <span id="Timeline-Day2" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Tuesday" id="option3">
-            </label>
-            <label id="Timeline-label3" class="week btn">
-                <span id="Timeline-Day3" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Wednesday" id="option4">
-            </label>
-            <label id="Timeline-label4" class="week btn">
-                <span id="Timeline-Day4" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Thursday" id="option5">
-            </label>
-            <label id="Timeline-label5" class="week btn">
-                <span id="Timeline-Day5" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Friday" id="option6">
-            </label>
-            <label id="Timeline-label6" class="week btn">
-                <span id="Timeline-Day6" class="timeline-label"></span>
-                <input type="radio" name="options" alt="Saturday" id="option7">
-            </label>
-        </div> @*Format Select*@
-        <div style="" class="col-lg-2 col-6 d-inline-block container pl-0">
-            <div id="format-select" style="float:right;" class="input-group mb-1">
-                <div class="mx-auto mt-1">
-                    <a id="showWeekButton" onclick="showWeek()" class="btn btn-outline-info">Week</a>
-                    <a id="showMonthButton" onclick="showMonth()" class="btn btn-outline-info">Month</a>
-                </div>
-            </div>  @*Date Search*@
-            <br />
-            <div style="" class="input-group mb-2">
-                <input type="number" id="InputMonth" min="0" max="12" class="form-control" placeholder="MM" aria-label="Month">
-                <input type="number" id="InputYear" min="1" max="31" class="form-control" placeholder="DD" aria-label="Day">
-                <input type="number" id="InputYear" min="1930" max="2020" class="form-control" placeholder="YYYY" aria-label="Year">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-success" type="button">Search</button>
+        <div class="row">
+            <div style="" id="timelineDiv" class="btn-group btn-group-toggle my-auto col-lg-9 ml-md-5 pl-md-5" data-toggle="buttons">
+                <div id="triangle-left"> <div class="empty"></div></div>
+                <label id="Timeline-label0" class="week btn thick">
+                    <span id="Timeline-Day0" class="timeline-label"></span>
+                    <input type="radio" alt="Sunday" id="option1">
+                </label>
+                <label id="Timeline-label1" class="week btn thick">
+                    <span id="Timeline-Day1" class="timeline-label"></span>
+                    <input type="radio" name="options" alt="Monday" id="option2">
+                </label>
+                <label id="Timeline-label2" class="week btn thick">
+                    <span id="Timeline-Day2" class="timeline-label"></span>
+                    <input type="radio" name="options" alt="Tuesday" id="option3">
+                </label>
+                <label id="Timeline-label3" class="week btn thick">
+                    <span id="Timeline-Day3" class="timeline-label"></span>
+                    <input type="radio" name="options" alt="Wednesday" id="option4">
+                </label>
+                <label id="Timeline-label4" class="week btn thick">
+                    <span id="Timeline-Day4" class="timeline-label"></span>
+                    <input type="radio" name="options" alt="Thursday" id="option5">
+                </label>
+                <label id="Timeline-label5" class="week btn thick">
+                    <span id="Timeline-Day5" class="timeline-label"></span>
+                    <input type="radio" name="options" alt="Friday" id="option6">
+                </label>
+                <label id="Timeline-label6" class="week btn thick">
+                    <span id="Timeline-Day6" class="timeline-label"></span>
+                    <input type="radio" name="options" alt="Saturday" id="option7">
+                </label>
+                <div id="triangle-right"><div class="empty"></div></div>
+            </div> @*Format Select*@
+            <div style="" class="col-lg-2 col-6 d-inline-block container pl-0">
+                <div id="format-select" style="float:right;" class="input-group mb-1">
+                    <div class="mx-auto mt-1">
+                        <a id="showWeekButton" onclick="showWeek()" class="btn btn-outline-info">Week</a>
+                        <a id="showMonthButton" onclick="showMonth()" class="btn btn-outline-info">Month</a>
+                    </div>
+                </div>  @*Date Search*@
+                <br />
+                <div style="" class="input-group mb-2">
+                    <input type="number" id="InputMonth" min="0" max="12" class="form-control" placeholder="MM" aria-label="Month">
+                    <input type="number" id="InputYear" min="1" max="31" class="form-control" placeholder="DD" aria-label="Day">
+                    <input type="number" id="InputYear" min="1930" max="2020" class="form-control" placeholder="YYYY" aria-label="Year">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success" type="button">Search</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <div class="row">
         @*Video*@
@@ -123,7 +175,7 @@
             </div>
         </div>
         @*Information Card*@
-        <div class="col-md-2 mx-auto mx-md-0 p-md-0" style="max-width:400px;" >
+        <div class="col-md-2 mx-auto mx-md-0 p-md-0" style="max-width:400px;">
             <div class="card border-dark mb-3 w-100" style="min-width:175px;">
                 <div class="card-header text-black"><strong>Data</strong></div>
                 <div class="card-body text-dark pb-0">
@@ -161,10 +213,10 @@
                 <div class="card-footer">
                     <a href="" class="btn btn-primary">Incorrect Info?</a>
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
-    
+
 
 
 </body>
@@ -198,13 +250,13 @@
         m[i] = day[i].getMonth() + 1;
         d[i] = day[i].getDate();
         y[i] = day[i].getYear() + 1900;
-        document.getElementById("Timeline-Day" + i).innerHTML += m[i] + "/" + d[i];   
+        document.getElementById("Timeline-Day" + i).innerHTML += m[i] + "/" + d[i];
 
         //Pad month and day to always be two places
-        if (m[i] <= 100) {m[i] = ("0"+m[i]).slice(-2) }
+        if (m[i] <= 100) { m[i] = ("0" + m[i]).slice(-2) }
         if (d[i] <= 100) { d[i] = ("0" + d[i]).slice(-2) }
         //Change query string on button click
-        document.getElementById("Timeline-label" + i).onclick = function () {location.href = "?d=" + y[i] + "/" + m[i] + "/" + d[i]; };                    
+        document.getElementById("Timeline-label" + i).onclick = function () { location.href = "?d=" + y[i] + "/" + m[i] + "/" + d[i]; };
     }
 
     function loadTimes() {
@@ -228,7 +280,7 @@
             document.getElementById("Timeline-label" + i).classList.add("disabled");
             document.getElementById("Timeline-label" + i).style.pointerEvents = "none";
         }
-    }   
+    }
     //// make the current day "active"
     //for (i = 0; i < 7; i++) {
     //    if (!(day[i] > current) && !(day[i] < current)) {

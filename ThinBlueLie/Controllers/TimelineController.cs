@@ -31,9 +31,15 @@ namespace ThinBlueLie.Controllers
         [HttpGet]
         [Route("/Timeline")]
         public async Task<IActionResult> Timeline()
-        {            
-            date = Request.Query["d"];
+        {
+            if (string.IsNullOrWhiteSpace(Request.Query["d"]))
+            {
+                DateTime today = DateTime.Today;
+                date = today.ToString("yyyy/MM/dd");
+                Response.Redirect("/Timeline?d=" + (date));
 
+            }
+            date = Request.Query["d"];
             return View("Pages/Timeline.cshtml");
         }
 
