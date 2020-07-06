@@ -12,6 +12,10 @@ namespace ThinBlueLie.Controllers
         {
             return View();
         }
+        public IActionResult Submit()
+        {
+            return RedirectToAction("Submit", "TimelineController");
+        }
         public IActionResult Timeline()
         {
             return View();

@@ -1,25 +1,45 @@
 ﻿@page
 @model ThinBlueLie.Pages.Test3Model
 @{
-    ViewBag.Title = "test3";
+    ViewBag.Title = "Test3";
 }
 
 
-<h1>The input list attribute</h1>
+<div class="row">
+    <div class="offset-3 col-5 border">
+        <div id="weaponDiv" class="form-group" type="checkbox">
+            <label class="form-check-label">Type of Weapon</label>
+            @*@using (Html.BeginForm("Index", "TestController"))
+                {
+                    foreach (var item in Model.AvailableWeapons)
+                    {
+                        <div class="form-check">
+                            <label class="form-check-label"> @item.Text
+                                <input class="form-check-input" type="checkbox" name="SelectedFruits" value="@item.Value"
+                                       @if (Model.SelectedWeapons.Contains(item.Value)) { <text> checked </text> } />
+                            </label>
+                        </div>
+                    }*@
+            @using (Html.BeginForm("Index", "test3"))
+            {
+                foreach (var item in Model.AvailableWeapons)
+                {
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                   name="SelectedWeapons"
+                                   value="@item.Value"
+                                   @if (Model.SelectedWeapons.Contains(item.Value)) { <text> checked </text> } /> @item.Text
+                            </label>
+                        </div>
+                    }
+                    <div class="form-group text-center">
+                        <input type="submit" class="btn btn-primary" value="Submit" />
+                    </div>
+                }
+        </div>
+    </div>
+</div>
 
-<p>The list attribute refers to a datalist element that contains pre-defined options for an input element.</p>
 
-<form action="post">
-    <input list="browsers" name="browser" class="dropdown-menu" placeholder="Chrome">
-    <datalist id="browsers">
-        <option value="Internet Explorer"/>
-        <option value="Firefox"/>
-        <option value="Chrome"/>
-        <option value="Opera"/>
-        <option value="Safari"/>
-    </datalist>
-    <input type="submit" value="Submit">
-</form>
-
-<p><b>Note:</b> The datalist tag is not supported in Safari 12.0 (or earlier).</p>
 

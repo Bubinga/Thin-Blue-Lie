@@ -36,9 +36,9 @@ namespace ThinBlue
         [Column(TypeName = "TINYINT(1)")]
         public int OfficerRace { get; set; }
         [Column(TypeName = "TINYINT(3)")]
-        public string Misconduct { get; set; }
+        public int Misconduct { get; set; }
         [Column(TypeName = "TINYINT(2)")]
-        public string Weapon { get; set; }
+        public int Weapon { get; set; }
         [Column(TypeName = "LONGTEXT")]
         public string Context { get; set; }
         [Required]
@@ -87,13 +87,15 @@ namespace ThinBlue
         [Flags]
         public enum MisconductEnum : short
         {
-            Search = 0b_0000_0001,
-            Force = 0b_0000_0010,
-            FalseArrest = 0b_0000_0100,
+            Force = 0b_0000_0001,
+            PetMurder = 0b_0000_0001,
             Evidence = 0b_0000_1000,
-            Theft = 0b_0001_0000,           
             Harassment = 0b_0010_0000,
-            Negligence = 0b_0100_0000,            
+            Negligence = 0b_0100_0000,
+            Theft = 0b_0001_0000,
+            Search = 0b_0000_0001,
+            FalseArrest = 0b_0000_0100,
+            AbusePower = 0b_0000_0001,
         }
 
         [Flags]
