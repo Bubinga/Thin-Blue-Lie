@@ -57,7 +57,7 @@ namespace ThinBlueLie.Controllers
             };
             return View("Pages/Submit.cshtml", model);
         }
-
+        
         [HttpPost]
         [Route("/Submit")]
         [ValidateAntiForgeryToken]
@@ -65,16 +65,16 @@ namespace ThinBlueLie.Controllers
         {           
             if (ModelState.IsValid)
             {
+               
+                //Add the checkboxes together and convert them to ints
                 var weaponsSum = model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
                 var misconductsSum = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
+                //Put the sums from above into the Timeline model
+                model.Timelineinfo.Weapon = weaponsSum;
+                model.Timelineinfo.Misconduct = misconductsSum;
 
-                var weapons = new Timelineinfo { Weapon = weaponsSum };
-                var misconducts = new Timelineinfo { Misconduct = misconductsSum };
-
-                _context.Timelineinfo.AddRange(model.Timelineinfo, weapons, misconducts);
-                await _context.SaveChangesAsync();
-
-                // Save data to database, and redirect to Success page.
+                _context.Timelineinfo.Add(model.Timelineinfo);                
+                await _context.SaveChangesAsync();              
 
                 return RedirectToAction("Success");
             }
@@ -85,14 +85,14 @@ namespace ThinBlueLie.Controllers
 
         public ActionResult Success()
         {
-            return View("/Index");
+            return View("Pages/Index.cshtml");
         }
 
         private IList<SelectListItem> GetWeapons()
         {
             return new List<SelectListItem>
         {
-            new SelectListItem {Text = "Body", Value = "0"},
+            new SelectListItem {Text = "Body", Value = "1"},
             new SelectListItem {Text = "Projectile", Value = "2"},
             new SelectListItem {Text = "Taser", Value = "4"},
             new SelectListItem {Text = "Tear Gas", Value = "8"},
@@ -104,7 +104,7 @@ namespace ThinBlueLie.Controllers
         {
             return new List<SelectListItem>
         {
-            new SelectListItem {Text = "Unnecessary use of Force", Value = "0"},
+            new SelectListItem {Text = "Unnecessary use of Force", Value = "1"},
             new SelectListItem {Text = "Killing of Pets", Value = "2"},
             new SelectListItem {Text = "Evidence Planting/Falsification/Spoilation", Value = "4"},
             new SelectListItem {Text = "Non-Violent Harassment/Intimidation", Value = "8"},
