@@ -43,13 +43,6 @@
             </div>
             <div class="form-group">
                 <label class="form-check-label">Sex</label>
-                @*@foreach (int gender in (Timelineinfo.SexEnum[])Enum.GetValues(typeof(Timelineinfo.SexEnum))) 
-                    {
-                        <div class="form-check">
-                            <input type="radio" asp-for="Timelineinfo.SubjectSex" class="form-check-input" value="0">
-                            <label class="form-check-label">Male</label>
-                      </div>
-                    }*@
                 <div class="form-check">
                     <input type="radio" asp-for="Timelineinfo.SubjectSex" class="form-check-input" value="0">
                     <label class="form-check-label">Male</label>
@@ -205,6 +198,20 @@
                 <label asp-for="Timelineinfo.VidLink" class="control-label">Video Link</label>
                 <input type="url" asp-for="Timelineinfo.VidLink" class="form-control" />
                 <span asp-validation-for="Timelineinfo.VidLink" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Timelineinfo.Credit" class="control-label">Who is credited for the video?</label>
+                <input asp-for="Timelineinfo.Credit" class="form-control" />
+                <span asp-validation-for="Timelineinfo.Credit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @foreach (var source in (Timelineinfo.SourceEnum[])Enum.GetValues(typeof(Timelineinfo.SourceEnum)))
+                {
+                    <div class="form-check">
+                        <input type="radio" asp-for="Timelineinfo.Source" class="form-check-input" value="@((int)source)">
+                        <label asp-for="Timelineinfo.Source" class="form-check-label">@source</label>
+                    </div>
+                }
             </div>
             <div class="form-group">
                 <input type="submit" value="Submit" class="btn btn-primary" />

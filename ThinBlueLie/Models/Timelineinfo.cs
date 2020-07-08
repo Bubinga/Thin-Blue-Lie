@@ -44,6 +44,7 @@ namespace ThinBlue
         [Required]
         [Column(TypeName = "TINYINT")]
         public int Gore { get; set; }
+        [Required]
         [Column(TypeName = "TINYINT")]
         public int Source { get; set; }
         [Column(TypeName = "VARCHAR(60)")]
@@ -109,12 +110,13 @@ namespace ThinBlue
             Gun        = 0b_0010_0000
         }
 
-        public enum SourceEnum : short
+        public enum SourceEnum
         {
             Youtube,
             Reddit,
             Instagram,
             Facebook,
+            [Display(Name ="From Phone or Computer")]
             PhoneComputer,
             Other,
         }
