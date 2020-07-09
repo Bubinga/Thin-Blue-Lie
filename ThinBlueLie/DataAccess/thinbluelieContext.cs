@@ -18,7 +18,7 @@ namespace ThinBlue
         {
         }
 
-        public virtual DbSet<Timelineinfo> Timelineinfo { get; set; }       
+        public virtual DbSet<Timelineinfo> Timelineinfo { get; set; }      
         
        
 
@@ -45,80 +45,80 @@ namespace ThinBlue
 
                 entity.Property(e => e.Armed)
                     .HasColumnName("Armed")
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("TINYINT")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.City)
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("varchar(20)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.Context)
-                    .HasColumnType("longtext")
+                    .HasColumnType("MEDIUMTEXT")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.Date)
                     .IsRequired()
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("CHAR(10)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.Gore)
                     .IsRequired()
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("TINYINT")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.Misconduct)
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("TINYINT")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.OfficerName)
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("varchar(60)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.OfficerRace)
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("TINYINT")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.OfficerSex)
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("TINYINT")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.State)
                     .IsRequired()
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("TINYINT")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.SubjectName)
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("varchar(60)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.SubjectRace)
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("TINYINT")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.SubjectSex)
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("TINYINT")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.VidLink)
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("varchar(100)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.Weapon)
-                    .HasColumnType("varchar(45)")
+                    .HasColumnType("TINYINT")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
             });     

@@ -20,6 +20,7 @@ namespace ThinBlueLie.Pages.NewFolder
 
         public Timelineinfo Timelineinfo { get; set; }
 
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)

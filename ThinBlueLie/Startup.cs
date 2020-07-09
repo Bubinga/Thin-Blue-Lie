@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using ThinBlue;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Pomelo.EntityFrameworkCore.MySql.Internal;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace ThinBlueLie
 {
@@ -31,7 +33,8 @@ namespace ThinBlueLie
         {            
             services.AddDbContext<ThinbluelieContext>(options =>
             {
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), MySqlOptions => MySqlOptions
+                .ServerVersion(new Version(8, 0, 18), ServerType.MySql));
             });
 
             services.AddIdentity<IdentityUser, IdentityRole>()

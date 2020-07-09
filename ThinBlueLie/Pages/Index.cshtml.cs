@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using ThinBlue;
+using ThinBlueLie.Models;
 
 namespace ThinBlueLie.Pages
 {
@@ -22,7 +23,7 @@ namespace ThinBlueLie.Pages
 
         public void OnGet()
         {
-            var a = (Timelineinfo.MisconductEnum)37;
+            var a = (TimelineinfoEnums.StateEnum)43;
             Console.WriteLine(a);           
         }
     }
