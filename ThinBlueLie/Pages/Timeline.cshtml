@@ -259,7 +259,7 @@
         if (m[i] <= 100) { m[i] = ("0" + m[i]).slice(-2) }
         if (d[i] <= 100) { d[i] = ("0" + d[i]).slice(-2) }
         //Change query string on button click
-        document.getElementById("Timeline-label" + i).onclick = function () { location.href = "?d=" + y[i] + "/" + m[i] + "/" + d[i]; };
+        document.getElementById("Timeline-label" + i).onclick = function () { location.href = "?d=" + y[i] + "-" + m[i] + "-" + d[i]; };
     }
 
     function loadTimes() {
