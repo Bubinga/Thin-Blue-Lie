@@ -8,10 +8,17 @@ namespace ThinBlueLie.Models
 {
     public class TimelineinfoEnums
     {
+
         public enum ArmedEnum
         {
             No, 
             Yes
+        }
+
+        public enum StatesEnum
+        {
+            [Display(Name = "Rhode Island")]
+            RhodeIsland = 43
         }
 
         public enum StateEnum

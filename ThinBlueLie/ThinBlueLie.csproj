@@ -51,7 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\NewFolder\" />
     <Folder Include="Pages\Test\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Views\" />
