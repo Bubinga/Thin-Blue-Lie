@@ -36,18 +36,18 @@ namespace ThinBlueLie.Controllers
         [Route("/Timeline")]
         public async Task<IActionResult> Timeline(TimelineModel model)
         {
+            date = Request.Query["d"];
             //If query string is null fill out with current date
-            //if (string.IsNullOrWhiteSpace(Request.Query["d"]))
-            //{
-            //    var today = DateTime.Today.ToString("yyyy/MM/dd");               
-            //    Response.Redirect("/Timeline?d=" + (today));
-            //}
-            //query database using query string, load data into model.Timelineinfo, display/convert information
-           // date = DateTime.Today.ToString("yyyy/MM/dd");
-            //date = Request.Query["d"];
-
-            model.Timelineinfos = _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '2020-07-07'").ToList();
-            int armed = model.Timelineinfos[0].Armed;
+            if (date == null | string.IsNullOrWhiteSpace(Request.Query["d"]))
+            {
+                var today = DateTime.Today.ToString("yyyy-MM-dd");
+                Response.Redirect("/Timeline?d=" + (today));
+                date = today;
+            }
+            
+            //query database using query string
+            model.Timelineinfos = _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{date}'").ToList();
+            //load data into ViewData to be used in the Timeline page
             ViewData["Timelineinfo"] = model.Timelineinfos;
 
             return View("Pages/Timeline.cshtml");
