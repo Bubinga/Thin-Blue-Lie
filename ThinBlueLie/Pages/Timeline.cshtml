@@ -1,7 +1,10 @@
-﻿@page
+﻿
+@using static ThinBlueLie.Models.TimelineinfoEnums;
 @model ThinBlueLie.Pages.TimelineModel
 @{
     ViewBag.Title = "Timeline";
+    var Event = ViewData["Timelineinfo"] as List<ThinBlue.Timelineinfo>;
+
 }
 
 <style>
@@ -165,60 +168,60 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        @*Video*@
-        <div style="vertical-align:top;" class="h-100 d-inline-block col-md-8 offset-md-1">
-            <div style="border-radius:3px; width:100%; border: 1px solid #000000 !important;" class="embed-responsive embed-responsive-2by1 d-inline-block">
-                <iframe class="embed-responsive-item"
-                        src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
-                </iframe>
-            </div>
-        </div>
-        @*Information Card*@
-        <div class="col-md-2 mx-auto mx-md-0 p-md-0" style="max-width:400px;">
-            <div class="card border-dark mb-3 w-100" style="min-width:175px;">
-                <div class="card-header text-black"><strong>Data</strong></div>
-                <div class="card-body text-dark pb-0">
-                    <h5 class="card-title mb-0">General Information</h5>
-                    <hr class="mt-0 pb-0 mb-0 pt-0" />
-                    <ul class="list-group list-group-flush">
-                        <li class="brokencard list-group-item">
-                            <p><strong>Location: </strong></p>
-                            <p><strong>Source: </strong></p>
-                            <p><strong>Credit: </strong></p>
-                        </li>
-                    </ul>
-                    <h5 class="card-title text-left mb-0">Officer's Information</h5>
-                    <hr style="height:1px;" class="mt-0 pb-0 mb-0 pt-0" />
-                    <ul class=" list-group list-group-flush">
-                        <li class="brokencard list-group-item">
-                            <p><strong>Name: </strong></p>
-                            <p><strong>Sex:</strong></p>
-                            <p><strong>Race:</strong></p>
-                            <p><strong>Agency:</strong></p>
-                            <p><strong>Agency: </strong></p>
-                            @*Have little label/tags for "violence" "harrassment" "negligence" "evidence planting"*@
-                        </li>
-                    </ul>
-                    <h5 class="card-title text-left mb-0">Victim's Information</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item ">
-                            <p><strong>Name: </strong></p>
-                            <p><strong>Sex: </strong></p>
-                            <p><strong>Race: </strong></p>
-                            <p><strong>Armed: </strong> </p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-footer">
-                    <a href="" class="btn btn-primary">Incorrect Info?</a>
+    @foreach (var Timelineinfo in Event) {
+        <div class="row">
+            @*Video*@
+            <div style="vertical-align:top;" class="h-100 d-inline-block col-md-8 offset-md-1">
+                <div style="border-radius:3px; width:100%; border: 1px solid #000000 !important;" class="embed-responsive embed-responsive-2by1 d-inline-block">
+                    <iframe class="embed-responsive-item"
+                            src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
+                    </iframe>
                 </div>
             </div>
+            @*Information Card*@
+            <div class="col-md-2 mx-auto mx-md-0 p-md-0" style="max-width:400px;">
+                <div class="card border-dark mb-3 w-100" style="min-width:175px;">
+                    <div class="card-header text-black"><strong>Data</strong></div>
+                    <div class="card-body text-dark pb-0">
+                        <h5 class="card-title mb-0">General Information</h5>
+                        <hr class="mt-0 pb-0 mb-0 pt-0" />
+                        <ul class="list-group list-group-flush">
+                            <li class="brokencard list-group-item">
+                                <p><strong>Location:</strong>  @Enum.GetName(typeof(StateEnum), Timelineinfo.State), @Timelineinfo.City</p>
+                                <p><strong>Source:</strong> @Enum.GetName(typeof(SourceEnum), Timelineinfo.Source) </p>
+                                <p><strong>Credit:</strong> @Timelineinfo.Credit</p>
+                            </li>
+                        </ul>
+                        <h5 class="card-title text-left mb-0">Officer's Information</h5>
+                        <hr style="height:1px;" class="mt-0 pb-0 mb-0 pt-0" />
+                        <ul class=" list-group list-group-flush">
+                            <li class="brokencard list-group-item">
+                                <p><strong>Name:</strong> @Timelineinfo.OfficerName</p>
+                                <p><strong>Sex:</strong> @Enum.GetName(typeof(SexEnum), Timelineinfo.OfficerSex)</p>
+                                <p><strong>Race:</strong> @Enum.GetName(typeof(RaceEnum), Timelineinfo.OfficerRace)</p>
+                                @*Have little label/tags for "violence" "harrassment" "negligence" "evidence planting"*@
+                            </li>
+                        </ul>
+                        <h5 class="card-title text-left mb-0">Victim's Information</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item ">
+                                <p><strong>Name:</strong> @Timelineinfo.SubjectName</p>
+                                <p><strong>Sex:</strong> @Enum.GetName(typeof(SexEnum), Timelineinfo.SubjectSex)</p>
+                                <p><strong>Race:</strong> @Enum.GetName(typeof(RaceEnum),Timelineinfo.SubjectRace)</p>
+                                <p><strong>Armed:</strong> @Enum.GetName(typeof(ArmedEnum),Timelineinfo.Armed) </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a href="" class="btn btn-primary">Incorrect Info?</a>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-
-
-
+        <div>
+            <p>@Timelineinfo.Context</p>
+        </div>
+    }
 </body>
 <script>
     document.getElementById("Timeline").classList.add("onpage");

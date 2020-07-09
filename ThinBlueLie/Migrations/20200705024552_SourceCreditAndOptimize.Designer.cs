@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThinBlue;
+using ThinBlueLie.Models;
 
 namespace DataAccessLibrary.Migrations
 {
@@ -275,7 +276,7 @@ namespace DataAccessLibrary.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8mb4")
                         .HasAnnotation("MySql:Collation", "utf8mb4_0900_ai_ci");
 
-                    b.Property<Timelineinfo.SourceEnum>("Source")
+                    b.Property<TimelineinfoEnums.SourceEnum>("Source")
                         .HasColumnType("TINYINT(1)");
 
                     b.Property<string>("State")

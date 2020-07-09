@@ -11,20 +11,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ThinBlueLie.Pages
 {
-    public class TimelineModel : PageModel
+    public class TimelineModel
     {
-        private readonly ThinBlue.ThinbluelieContext _context;
-
-        public TimelineModel(ThinBlue.ThinbluelieContext context)
+        public TimelineModel()
         {
-            _context = context;
         }
-        public IList<Timelineinfo> Timelineinfo { get; set; }
-        public string date { get; set; }
+      
+        public IList<Timelineinfo> Timelineinfos { get; set; }      
 
-        public async Task OnGet()
-        {
-            Timelineinfo = await _context.Timelineinfo.ToListAsync();
-        }
+        //public string date { get; set; }
+
+        //public async Task OnGet()
+        //{
+        //    int armed = Timelineinfo[0].Armed;
+        //    Timelineinfo = await _context.Timelineinfo.ToListAsync();
+        //}
     }
 }

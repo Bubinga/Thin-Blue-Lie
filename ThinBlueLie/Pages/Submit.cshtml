@@ -1,4 +1,4 @@
-﻿
+﻿@using ThinBlueLie.Models; 
 @model ThinBlueLie.Pages.SubmitModel
 
 @{
@@ -24,7 +24,7 @@
             <div class="form-row">
                 <div class="col-5 dropdown" style="position:relative;">
                     <label style="position:absolute; bottom:38px;" class="control-label">State<span class="text-danger ml-1">*</span></label>
-                    <select asp-for="Timelineinfo.State" asp-items="Html.GetEnumSelectList(typeof(Timelineinfo.StateEnum))" style="position:absolute; bottom:0; width:85%;" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <select asp-for="Timelineinfo.State" asp-items="Html.GetEnumSelectList(typeof(TimelineinfoEnums.StateEnum))" style="position:absolute; bottom:0; width:85%;" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <option class="dropdown-item">State</option>
                     </select>
                     <span asp-validation-for="Timelineinfo.State" class="text-danger"></span>
@@ -205,7 +205,7 @@
                 <span asp-validation-for="Timelineinfo.Credit" class="text-danger"></span>
             </div>
             <div class="form-group">
-                @foreach (var source in (Timelineinfo.SourceEnum[])Enum.GetValues(typeof(Timelineinfo.SourceEnum)))
+                @foreach (var source in (TimelineinfoEnums.SourceEnum[])Enum.GetValues(typeof(TimelineinfoEnums.SourceEnum)))
                 {
                     <div class="form-check">
                         <input type="radio" asp-for="Timelineinfo.Source" class="form-check-input" value="@((int)source)">
