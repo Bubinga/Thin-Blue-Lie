@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Pomelo.EntityFrameworkCore.MySql.Query.ExpressionVisitors.Internal;
 using ThinBlue;
 using ThinBlueLie.Pages;
@@ -27,22 +29,29 @@ namespace ThinBlueLie.Controllers
 
         [BindProperty(SupportsGet = true)]
         public string date { get; set; }
-
+        //public IList<Timelineinfo> Timelineinfo { get; set; }
+        //public Timelineinfo Timelineinfo { get; set; }
+       
         [HttpGet]
         [Route("/Timeline")]
-        public async Task<IActionResult> Timeline()
+        public async Task<IActionResult> Timeline(TimelineModel model)
         {
-            if (string.IsNullOrWhiteSpace(Request.Query["d"]))
-            {
-                DateTime today = DateTime.Today;
-                date = today.ToString("yyyy/MM/dd");
-                Response.Redirect("/Timeline?d=" + (date));
+            //If query string is null fill out with current date
+            //if (string.IsNullOrWhiteSpace(Request.Query["d"]))
+            //{
+            //    var today = DateTime.Today.ToString("yyyy/MM/dd");               
+            //    Response.Redirect("/Timeline?d=" + (today));
+            //}
+            //query database using query string, load data into model.Timelineinfo, display/convert information
+           // date = DateTime.Today.ToString("yyyy/MM/dd");
+            //date = Request.Query["d"];
 
-            }
-            date = Request.Query["d"];
+            model.Timelineinfos = _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '2020-07-07'").ToList();
+            int armed = model.Timelineinfos[0].Armed;
+            ViewData["Timelineinfo"] = model.Timelineinfos;
+
             return View("Pages/Timeline.cshtml");
         }
-
 
 
 

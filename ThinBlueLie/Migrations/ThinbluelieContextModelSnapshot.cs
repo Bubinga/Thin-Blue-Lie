@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThinBlue;
+using ThinBlueLie.Models;
 
 namespace DataAccessLibrary.Migrations
 {
@@ -236,9 +237,7 @@ namespace DataAccessLibrary.Migrations
                         .HasAnnotation("MySql:Collation", "utf8mb4_0900_ai_ci");
 
                     b.Property<string>("Credit")
-                        .HasColumnType("VARCHAR(60)")
-                        .HasAnnotation("MySql:CharSet", "utf8mb4")
-                        .HasAnnotation("MySql:Collation", "utf8mb4_0900_ai_ci");
+                        .HasColumnType("VARCHAR(60)");
 
                     b.Property<string>("Date")
                         .IsRequired()
@@ -275,10 +274,8 @@ namespace DataAccessLibrary.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8mb4")
                         .HasAnnotation("MySql:Collation", "utf8mb4_0900_ai_ci");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("TINYINT(1)")
-                        .HasAnnotation("MySql:CharSet", "utf8mb4")
-                        .HasAnnotation("MySql:Collation", "utf8mb4_0900_ai_ci");
+                    b.Property<TimelineinfoEnums.SourceEnum>("Source")
+                        .HasColumnType("TINYINT(1)");
 
                     b.Property<string>("State")
                         .IsRequired()
