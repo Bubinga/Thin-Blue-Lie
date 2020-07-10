@@ -3,15 +3,24 @@ for details on configuring this project to bundle and minify static web assets. 
 
 /*Mobile or desktop specific stuff */
 
-content-mobile{ display:none;}
-content-desktop {display: none;}
+content-mobile {
+    display: none;
+}
+
+content-desktop {
+    display: none;
+}
 
 .nogap {
     margin: 0px;
     padding: 0px;
 }
 
-center {
+.indent {
+    text-indent: 3rem;
+}
+
+.center {
     margin: 0;
     position: absolute;
     top: 50%;
@@ -71,12 +80,13 @@ td {
     html, body {
         overflow-x: hidden;
     }
+
     body {
-        position: relative;    
+        position: relative;
     }
 }
 
-hr.blueline  {
+hr.blueline {
     border: none;
     height: 2px;
     /* Set the hr color */
@@ -87,8 +97,8 @@ hr.blueline  {
 
 /*Index page */
 .body {
-    padding:70px;
-    margin:0px;
+    padding: 70px;
+    margin: 0px;
 }
 
 .home.jumbotron {
@@ -144,9 +154,10 @@ a.navbar-brand {
     word-break: break-all;
     background-size: contain;
 }
+
 .navbar-brand span {
-	vertical-align: middle;
-	padding: 0 0 0 15px;
+    vertical-align: middle;
+    padding: 0 0 0 15px;
 }
 
 /* changing color and underline on hover */
@@ -165,11 +176,10 @@ a.navbar-brand {
 .fuck12.jumbotron {
     background-color: transparent !important;
     color: white;
-
 }
 /* Timeline Layout */
 .week {
-    background-color: #dedede;    
+    background-color: #dedede;
     border: 0px;
     border-left: 1px solid black;
     border-right: 1px solid black;
@@ -187,10 +197,11 @@ a.navbar-brand {
     top: 38px;
     left: 10%;
 }
+
 .btn.active {
     background-color: #919191;
-
 }
+
 .brokencard {
     border: none;
 }
@@ -233,11 +244,16 @@ hr.blueline {
 
 @media (max-width: 30em) {
     #format-select {
-        display:none;
+        display: none;
     }
 }
 
- /*1150x wide or less */
+.context {
+    font-size: 1.2rem;
+}
+
+
+/*1150x wide or less */
 /*@media screen and (min-width: 1150px) {
     #bottom-info {
         display: none;
@@ -265,62 +281,55 @@ li p {
 .noscrollbar::-webkit-scrollbar {
     display: none !important;
 }
+
 .noscrollbar {
     -ms-overflow-style: none !important;
 }
 
 
-/* setting text and header formats/colors */
-h1 {
-    color: #1b6ec2;
-}
-h2 {
-    color: #000000;
-}
-p {
-    color: #000000;
-    font-size: .8rem
-}
+
 
 /* Provide sufficient contrast against white background */
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  margin-top: 60px;
+    margin-top: 60px;
     font-size: 14px;
 }
+
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    font-size: 1rem;
+    line-height: inherit;
 }
 
 /* Sticky footer styles-------------------------------------------------- */

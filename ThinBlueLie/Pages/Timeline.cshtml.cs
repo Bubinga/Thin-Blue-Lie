@@ -19,12 +19,6 @@ namespace ThinBlueLie.Pages
       
         public IList<Timelineinfo> Timelineinfos { get; set; }      
 
-        //public string date { get; set; }
-
-        //public async Task OnGet()
-        //{
-        //    int armed = Timelineinfo[0].Armed;
-        //    Timelineinfo = await _context.Timelineinfo.ToListAsync();
-        //}
+        
     }
 }
