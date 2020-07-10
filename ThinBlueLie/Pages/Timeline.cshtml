@@ -1,13 +1,17 @@
-﻿
-@using static ThinBlueLie.Models.TimelineinfoEnums;
+﻿@using static ThinBlueLie.Models.TimelineinfoEnums;
 @model ThinBlueLie.Pages.TimelineModel
 @{
     ViewBag.Title = "Timeline";
     var Event = ViewData["Timelineinfo"] as List<ThinBlue.Timelineinfo>;
-
 }
 
 <style>
+    .indent {
+        text-indent: 4rem;
+    }
+    .context {
+        font-size: 1.1rem;
+    }
     .brokencard {
         border: none;
     }
@@ -118,7 +122,7 @@
         </div>  @*Timeline*@
         <div class="row">
             <div style="" id="timelineDiv" class="btn-group btn-group-toggle my-auto col-lg-9 ml-md-5 pl-md-5" data-toggle="buttons">
-                <div id="triangle-left"> <div class="empty"></div></div>
+                <div onclick="PrevWeek()" id="triangle-left"> <div class="empty"></div></div>
                 <label id="Timeline-label0" class="week btn thick">
                     <span id="Timeline-Day0" class="timeline-label"></span>
                     <input type="radio" alt="Sunday" id="option1">
@@ -147,7 +151,7 @@
                     <span id="Timeline-Day6" class="timeline-label"></span>
                     <input type="radio" name="options" alt="Saturday" id="option7">
                 </label>
-                <div id="triangle-right"><div class="empty"></div></div>
+                <div onclick="NextWeek()" id="triangle-right"><div class="empty"></div></div>
             </div> @*Format Select*@
             <div style="" class="col-lg-2 col-6 d-inline-block container pl-0">
                 <div id="format-select" style="float:right;" class="input-group mb-1">
@@ -168,7 +172,8 @@
             </div>
         </div>
     </div>
-    @foreach (var Timelineinfo in Event) {
+    @foreach (var Timelineinfo in Event)
+    {
         <div class="row">
             @*Video*@
             <div style="vertical-align:top;" class="h-100 d-inline-block col-md-8 offset-md-1">
@@ -207,20 +212,23 @@
                             <li class="list-group-item ">
                                 <p><strong>Name:</strong> @Timelineinfo.SubjectName</p>
                                 <p><strong>Sex:</strong> @Enum.GetName(typeof(SexEnum), Timelineinfo.SubjectSex)</p>
-                                <p><strong>Race:</strong> @Enum.GetName(typeof(RaceEnum),Timelineinfo.SubjectRace)</p>
-                                <p><strong>Armed:</strong> @Enum.GetName(typeof(ArmedEnum),Timelineinfo.Armed) </p>
+                                <p><strong>Race:</strong> @Enum.GetName(typeof(RaceEnum), Timelineinfo.SubjectRace)</p>
+                                <p><strong>Armed:</strong> @Enum.GetName(typeof(ArmedEnum), Timelineinfo.Armed) </p>                                
                             </li>
                         </ul>
                     </div>
                     <div class="card-footer">
-                        <a href="" class="btn btn-primary">Incorrect Info?</a>
+                        <a class="btn btn-primary">Incorrect Info?</a>
                     </div>
                 </div>
             </div>
         </div>
         <div>
-            <p>@Timelineinfo.Context</p>
-        </div>
+            <h5 style="margin-left: 8rem; font-size:30px; font-family: Cambira;" class="mt-2 mb-0"> <strong>Context and Followup</strong></h5>
+            <div class="border mb-3" style="min-height:100px;">               
+                <p style="margin-left: 8rem; margin-right: 15rem;" class="context indent">@Timelineinfo.Context</p>              
+            </div>
+        </div>       
     }
 </body>
 <script>
@@ -234,36 +242,56 @@
         for (i = 0; i < 7; ++i)
             document.getElementById("Timeline-Day" + i).innerHTML += weekDays[i] + " ";
     }
-    //}
-    //loadDays();
-    var curr = new Date(); // get current date
-    var first = curr.getDate() - curr.getDay(); // First day is the  day of the month - the day of the week
-    var last = first + 6; // last day is the first day + 6
 
-    var day = new Array(7);
-    day[0] = new Date(curr.setDate(first));
-    for (i = 1; i < 7; i++) { //This for loop creates the time info for each day with the following loop pulls the month and date out of
-        day[i] = new Date(curr.setDate(curr.getDate() + 1));
-    }
-
+    var first = -0xFFFFFFFF;
     var m = new Array(7);
     var d = new Array(7);
     var y = new Array(7);
-    for (let i = 0; i < 7; i++) { //This for loop adds the date onto the end of the day using arrays
-        m[i] = day[i].getMonth() + 1;
-        d[i] = day[i].getDate();
-        y[i] = day[i].getYear() + 1900;
-        document.getElementById("Timeline-Day" + i).innerHTML += m[i] + "/" + d[i];
+    var day = new Array(7);
 
-        //Pad month and day to always be two places
-        if (m[i] <= 100) { m[i] = ("0" + m[i]).slice(-2) }
-        if (d[i] <= 100) { d[i] = ("0" + d[i]).slice(-2) }
-        //Change query string on button click
-        document.getElementById("Timeline-label" + i).onclick = function () { location.href = "?d=" + y[i] + "-" + m[i] + "-" + d[i]; };
+   function PrevWeek() {
+        first = first - 7;
+        UpdateDays();
+    }
+    function NextWeek() {
+        first = first + 7;
+        UpdateDays();
     }
 
+    
+    function UpdateDays() {
+        var curr = new Date(); // get current date
+        if (first == -0xFFFFFFFF) {
+            first = curr.getDate() - curr.getDay(); // First day is the  day of the month - the day of the week
+        }
+        var last = first + 6; // last day is the first day + 6
+       
+       
+        day[0] = new Date(curr.setDate(first));
+        for (i = 1; i < 7; i++) { //This for loop creates the time info for each day with the following loop pulls the month and date out of
+            day[i] = new Date(curr.setDate(curr.getDate() + 1));
+        }
+
+        for (let i = 0; i < 7; i++) { //This for loop adds the date onto the end of the day using arrays
+            m[i] = day[i].getMonth() + 1;
+            d[i] = day[i].getDate();
+            y[i] = day[i].getYear() + 1900;
+            document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " " + m[i] + "/" + d[i];
+
+            //Pad month and day to always be two places
+            if (m[i] <= 100) { m[i] = ("0" + m[i]).slice(-2) }
+            if (d[i] <= 100) { d[i] = ("0" + d[i]).slice(-2) }
+            //Change query string on button click
+            document.getElementById("Timeline-label" + i).onclick = function () { location.href = "?d=" + y[i] + "-" + m[i] + "-" + d[i]; };
+        }
+    }
+    UpdateDays();
+    
     function loadTimes() {
         for (i = 0; i < 7; i++) {
+            m[i] = day[i].getMonth() + 1;
+            d[i] = day[i].getDate();
+            y[i] = day[i].getYear() + 1900;
             if (document.getElementById("Timeline-Day" + i).innerHTML == m[i] + "/" + d[i] && window.matchMedia("(min-width: 768px)").matches) {
                 document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " " + m[i] + "/" + d[i];
             }
@@ -272,6 +300,8 @@
             }
         }
     }
+    
+   
 
 
     // for all numbers larger than the id of the current day set disabled to the class list and disabled clicking
