@@ -213,12 +213,13 @@
                                 <p><strong>Name:</strong> @Timelineinfo.SubjectName</p>
                                 <p><strong>Sex:</strong> @Enum.GetName(typeof(SexEnum), Timelineinfo.SubjectSex)</p>
                                 <p><strong>Race:</strong> @Enum.GetName(typeof(RaceEnum), Timelineinfo.SubjectRace)</p>
-                                <p><strong>Armed:</strong> @Enum.GetName(typeof(ArmedEnum), Timelineinfo.Armed) </p>                                
+                                <p><strong>Armed:</strong> @Enum.GetName(typeof(ArmedEnum), Timelineinfo.Armed) </p>     
+                                <p id="test"></p>
                             </li>
                         </ul>
                     </div>
                     <div class="card-footer">
-                        <a class="btn btn-primary">Incorrect Info?</a>
+                        <a onclick="test()" class="btn btn-primary">Incorrect Info?</a>
                     </div>
                 </div>
             </div>
@@ -243,34 +244,56 @@
             document.getElementById("Timeline-Day" + i).innerHTML += weekDays[i] + " ";
     }
 
-    var first = -0xFFFFFFFF;
+    var first = -0xFFFFFFFF;   
     var m = new Array(7);
     var d = new Array(7);
     var y = new Array(7);
     var day = new Array(7);
 
    function PrevWeek() {
-        first = first - 7;
+        first = parseInt(first) - 7;
         UpdateDays();
     }
     function NextWeek() {
-        first = first + 7;
+        first = parseInt(first) + 7;
         UpdateDays();
     }
-
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+    function RestoreDate() {
+        var x = parseInt(getCookie("savedFirst"));
+        if (Number.isNaN(x) == false) {
+            first = x;
+        }
+    }
+    RestoreDate();
     
     function UpdateDays() {
         var curr = new Date(); // get current date
-        if (first == -0xFFFFFFFF) {
-            first = curr.getDate() - curr.getDay(); // First day is the  day of the month - the day of the week
-        }
+        if (first == -0xFFFFFFFF) { //if there is no value for first stored, make first the first day of the current week
+            first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+        }        
         var last = first + 6; // last day is the first day + 6
-       
        
         day[0] = new Date(curr.setDate(first));
         for (i = 1; i < 7; i++) { //This for loop creates the time info for each day with the following loop pulls the month and date out of
             day[i] = new Date(curr.setDate(curr.getDate() + 1));
         }
+
+        
 
         for (let i = 0; i < 7; i++) { //This for loop adds the date onto the end of the day using arrays
             m[i] = day[i].getMonth() + 1;
@@ -278,11 +301,25 @@
             y[i] = day[i].getYear() + 1900;
             document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " " + m[i] + "/" + d[i];
 
+            var current = new Date();
+            if (day[i] > current) {
+                // document.getElementById("Timeline-Day" + i).innerHTML += "/";
+                document.getElementById("Timeline-label" + i).classList.add("disabled");
+                document.getElementById("Timeline-label" + i).style.pointerEvents = "none";
+            }
+            if (day[i] < current) {
+                // document.getElementById("Timeline-Day" + i).innerHTML += "/";
+                document.getElementById("Timeline-label" + i).classList.remove("disabled");
+                document.getElementById("Timeline-label" + i).style.pointerEvents = "pointer";
+            }
+
+
             //Pad month and day to always be two places
             if (m[i] <= 100) { m[i] = ("0" + m[i]).slice(-2) }
             if (d[i] <= 100) { d[i] = ("0" + d[i]).slice(-2) }
             //Change query string on button click
             document.getElementById("Timeline-label" + i).onclick = function () { location.href = "?d=" + y[i] + "-" + m[i] + "-" + d[i]; };
+            document.cookie = "savedFirst=" + first
         }
     }
     UpdateDays();
@@ -305,15 +342,14 @@
 
 
     // for all numbers larger than the id of the current day set disabled to the class list and disabled clicking
-    var current = new Date();
-
-    for (i = 0; i < 7; i++) {
-        if (day[i] > current) {
-            // document.getElementById("Timeline-Day" + i).innerHTML += "/";
-            document.getElementById("Timeline-label" + i).classList.add("disabled");
-            document.getElementById("Timeline-label" + i).style.pointerEvents = "none";
-        }
-    }
+    //var current = new Date();
+    //for (i = 0; i < 7; i++) {
+    //    if (day[i] > current) {
+    //        // document.getElementById("Timeline-Day" + i).innerHTML += "/";
+    //        document.getElementById("Timeline-label" + i).classList.add("disabled");
+    //        document.getElementById("Timeline-label" + i).style.pointerEvents = "none";
+    //    }
+    //}
     //// make the current day "active"
     //for (i = 0; i < 7; i++) {
     //    if (!(day[i] > current) && !(day[i] < current)) {
