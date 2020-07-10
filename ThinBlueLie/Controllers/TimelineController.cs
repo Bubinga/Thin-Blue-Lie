@@ -46,7 +46,7 @@ namespace ThinBlueLie.Controllers
             }
             
             //query database using query string
-            model.Timelineinfos = _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{date}'").ToList();
+            model.Timelineinfos = await _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{date}'").ToListAsync();
             //load data into ViewData to be used in the Timeline page
             ViewData["Timelineinfo"] = model.Timelineinfos;
 
