@@ -17,8 +17,6 @@ namespace ThinBlueLie.Pages
         {
         }
       
-        public IList<Timelineinfo> Timelineinfos { get; set; }      
-
-        
+        public IList<Timelineinfo> Timelineinfos { get; set; }     
     }
 }
