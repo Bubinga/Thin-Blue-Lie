@@ -32,6 +32,7 @@ namespace ThinBlueLie.Controllers
 
 
         [HttpGet]
+        
         public IActionResult Login()
         {            
             return View("Pages/Account/Login.cshtml");           

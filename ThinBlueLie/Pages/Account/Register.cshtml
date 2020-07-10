@@ -6,10 +6,10 @@
 
 
 <div class="container-fluid h-100 row nogap">
-    <div class="card border-secondary mx-md-auto center col-lg-3 col-md-4 p-0 mx-5" style="margin-top:100px;">
+    <div class="card border-secondary mx-md-auto col-lg-3 col-md-4 p-0 mx-5" style="margin-top:100px;">
         <div class="card-header">
             Register
-            <a class="float-right" asp-page="/Account/Login">Login</a>
+            <a class="float-right" asp-action="Login" asp-controller="Account">Login</a>
         </div>
         <form method="post">
             <div class="card-body text-secondary">
@@ -39,8 +39,7 @@
                 </div>
             </div>
         </form>
-        <div class="card-footer">
-            <a>Log in with Google</a>
+        <div class="card-footer p-4">            
         </div>
     </div>
 </div>
