@@ -2,7 +2,7 @@
 @model ThinBlueLie.Pages.SubmitModel
 
 @{
-    ViewBag.Title = "Submit";
+    ViewBag.Title = "Submit";    
 }
 
 <div class="offset-md-3 row container-fluid">
@@ -17,7 +17,7 @@
             <div>
                 <div class="form-group">
                     <label asp-for="Timelineinfo.Date" class="control-label">Date<span class="text-danger ml-1">*</span></label>
-                    <input type="date" asp-for="Timelineinfo.Date" class="form-control" placeholder="mm/dd/yyyy">
+                    <input id="DateInput" type="date" asp-for="Timelineinfo.Date" class="form-control SimFinder" placeholder="mm/dd/yyyy">
                     <span asp-validation-for="Timelineinfo.Date" class="text-danger"></span>
                 </div>
             </div>
@@ -38,7 +38,7 @@
             <hr /> <h6>Fill out the following information for the Subject/Victim</h6>
             <div class="form-group">
                 <label asp-for="Timelineinfo.SubjectName" class="control-label">Name <span class="text-muted ml-1">(First Last)</span></label>
-                <input asp-for="Timelineinfo.SubjectName" class="form-control" />
+                <input id="SNameInput" asp-for="Timelineinfo.SubjectName" class="form-control SimFinder" />
                 <span asp-validation-for="Timelineinfo.SubjectName" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -100,7 +100,7 @@
             <hr /> <h6>Fill out the following information for the Officer</h6>
             <div class="form-group">
                 <label asp-for="Timelineinfo.OfficerName" class="control-label">Name</label>
-                <input asp-for="Timelineinfo.OfficerName" class="form-control" />
+                <input id="ONameInput" asp-for="Timelineinfo.OfficerName" class="form-control SimFinder" />
                 <span asp-validation-for="Timelineinfo.OfficerName" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -227,30 +227,24 @@
                 either a date, name, video, or some combination of the three
             </p>
             <hr />
-        </div>
-        <div id="likeVideos">
-            <div class="card border-secondary mb-3">
-                <div class="card-header">Date</div>
-                <div class="card-body text-secondary row">
-                    <div class="col-6">
-                        <p><strong>Location:</strong></p>
-                        <p><strong>Subjects:</strong></p>
-                        <p><strong>Officer:</strong></p>
-                        <p><strong>Context:</strong></p>
-                    </div>
-                    <div class="col-6">
-                        <div style="border-radius:3px; width:100%;" class="embed-responsive embed-responsive-2by1">
-                            <iframe class="embed-responsive-item border"
-                                    src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
-                            </iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div>     
+        <div id="VideoList"><partial name="_SimilarPartial" /></div>
     </div>
 </div>
 <script>
+    $(".SimFinder").change(function () {
+        $('#VideoList').load('@Url.Action("GetSimilar","Timeline")', { TempDate: $("#DateInput").val() });
+
+        // TempDate: $("#DateInput").val() ,OName: $("ONameInput").val(), SName: $("SNameInput" ).val()
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/Submit/GetSimilar",
+        //    data: {TempDate: $("#DateInput").val()},
+        //}).done(function () {
+        //    alert('data posted' + $("#DateInput").val());
+        //});
+    });
+
     $(".dropdown-menu a").click(function () {
         $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
         $(this).parents(".dropdown").find('.btn').val($(this).data('value'));

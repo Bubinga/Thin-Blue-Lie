@@ -162,7 +162,7 @@ Calendar.prototype.Calendar = function (y, m) {
 
                 // Current month dates
             } else {
-                html += '<td id="currentmonthdates">' + (d) + '</td>';
+                html += '<td id="currentmonthdates" onclick="function () { location.href = "?d=" + this.CurrentYear + "-" + this.CurrentMonth + "-" + (cellvalue); }">' + (d) + '</td>';
 
                 p = 1;
 
