@@ -46,14 +46,13 @@ namespace ThinBlueLie.Controllers
             }
             
             //query database using query string
-            model.Timelineinfos = await _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{date}'").ToListAsync();
+           // model.Timelineinfos = await _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{date}'").ToListAsync();
+            model.Timelineinfos = await _context.Timelineinfo.Where(t => t.Date.Equals(date)).ToListAsync();
             //load data into ViewData to be used in the Timeline page
             ViewData["Timelineinfo"] = model.Timelineinfos;
 
             return View("Pages/Timeline.cshtml");
         }
-
-
 
         [HttpGet]
         [Route("/Submit")]
@@ -64,6 +63,7 @@ namespace ThinBlueLie.Controllers
                 AvailableWeapons = GetWeapons(),
                 AvailableMisconducts = GetMisconducts()
             };
+            GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
             return View("Pages/Submit.cshtml", model);
         }
         
@@ -92,10 +92,29 @@ namespace ThinBlueLie.Controllers
             return View("Pages/Submit.cshtml", model);
         }
 
+       
         public ActionResult Success()
         {
             return View("Pages/Index.cshtml");
+            //display thank you banner
         }
+
+#nullable enable
+        public string TempDate { get; set; }
+#nullable enable
+        public string OName { get; set; }
+#nullable enable
+        public string Sname { get; set; }
+
+        [Route("/Submit/GetSimilar")]        
+        public PartialViewResult GetSimilar(string? TempDate)
+        {
+            //load events where date or officer/subject name is shared and load it into SimilarEvents.            
+            IList<Timelineinfo> SimilarEvents = _context.Timelineinfo.Where(t => t.Date.Equals(TempDate)).ToList();
+            ViewData["SimilarEvents"] = SimilarEvents;
+            return PartialView("_SimilarPartial");
+        }
+
 
         private IList<SelectListItem> GetWeapons()
         {

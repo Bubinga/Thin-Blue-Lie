@@ -8,7 +8,7 @@ namespace ThinBlueLie.Models
 {
     public class TimelineinfoEnums
     {
-
+      
         public enum ArmedEnum
         {
             No, 
