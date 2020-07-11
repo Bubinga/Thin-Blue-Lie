@@ -98,7 +98,7 @@
     }
 </style>
 <body onresize="loadTimes()">
-    <div style="position:relative;" class="container-fluid mt-4 mb-3 text-center d-block">
+    <div style="position:relative;" class="container-fluid mt-4 mb-1 text-center d-block">
         <!-- <div   This draws that "Timeline" idk man, it kinda looks better without it.
              id="imposedline" style="width:80%; border-top: 1px solid black;" class="pt-0 mt-0">
         </div> -->
@@ -172,6 +172,25 @@
             </div>
         </div>
     </div>
+    @if (Event.Count == 0)
+    {
+        <div class="container mt-2 text-center">
+            <h3>There are no events recorded for this day yet</h3>
+            <h5>If you know about an event on this date, please record it by submitting the info:</h5>
+            <a style="font-size: 2rem;" class="btn btn-success mr-md-2 mb-md-0 mb-2 text-nowrap" href="/Submit">Submit Info</a>
+        </div>
+    }
+    @if (Event.Count > 1)
+    {
+        <div class="container w-25">
+            <div class="btn-group mb-1" role="group" aria-label="Select Event">
+                <h5 class="mb-0 mr-1 mt-1">Event:</h5>
+                @foreach ((var value, Int32 i) in Event.Select((value, i) => (value, i+1))) {
+                <button onclick="ScrollToEvent()" type="button" class="btn btn-outline-primary px-3">@i</button>
+               }
+            </div>
+        </div>
+    }
     @foreach (var Timelineinfo in Event)
     {
         <div class="row">
@@ -192,7 +211,7 @@
                         <hr class="mt-0 pb-0 mb-0 pt-0" />
                         <ul class="list-group list-group-flush">
                             <li class="brokencard list-group-item">
-                                <p><strong>Location:</strong>  @Enum.GetName(typeof(StateEnum), Timelineinfo.State), @Timelineinfo.City</p>
+                                <p><strong>Location:</strong> @Timelineinfo.City, @Enum.GetName(typeof(StateEnum), Timelineinfo.State)</p>
                                 <p><strong>Source:</strong> @Enum.GetName(typeof(SourceEnum), Timelineinfo.Source) </p>
                                 <p><strong>Credit:</strong> @Timelineinfo.Credit</p>
                             </li>
@@ -213,7 +232,7 @@
                                 <p><strong>Name:</strong> @Timelineinfo.SubjectName</p>
                                 <p><strong>Sex:</strong> @Enum.GetName(typeof(SexEnum), Timelineinfo.SubjectSex)</p>
                                 <p><strong>Race:</strong> @Enum.GetName(typeof(RaceEnum), Timelineinfo.SubjectRace)</p>
-                                <p><strong>Armed:</strong> @Enum.GetName(typeof(ArmedEnum), Timelineinfo.Armed) </p>     
+                                <p><strong>Armed:</strong> @Enum.GetName(typeof(ArmedEnum), Timelineinfo.Armed) </p>
                                 <p id="test"></p>
                             </li>
                         </ul>
@@ -224,15 +243,21 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div href="#divider" id="event2">
             <h5 style="margin-left: 8rem; font-size:30px; font-family: Cambira;" class="mt-2 mb-0"> <strong>Context and Followup</strong></h5>
-            <div class="border mb-3" style="min-height:100px;">               
-                <p style="margin-left: 8rem; margin-right: 15rem;" class="context indent">@Timelineinfo.Context</p>              
+            <div class="border mb-3" style="min-height:100px;">
+                <p style="margin-left: 8rem; margin-right: 15rem;" class="context indent">@Timelineinfo.Context</p>
             </div>
-        </div>       
+        </div>        
     }
 </body>
 <script>
+    //function ScrollToEvent() {
+    //    var elmt = document.getElementById("divider");
+    //    elmt.scrollIntoView();
+    //}
+
+
     document.getElementById("Timeline").classList.add("onpage");
 
     var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
