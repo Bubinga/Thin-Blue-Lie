@@ -3,31 +3,37 @@
 @{
     ViewBag.Title = "Test3";
 }
-
-    <div class=" row">
-        <div id="likeVideos" class="offset-1 col-4 mt-5">
-            <div class="card border-secondary mb-3">
-                <div class="card-header">Date</div>
-                <div class="card-body text-dark row">
-                    <div class="col-6">
-                        <p><strong>Location:</strong></p>
-                        <p><strong>Subjects:</strong></p>
-                        <p><strong>Officer:</strong></p>
-                    </div>
-                    <div class="col-6">
-                        <div style="border-radius:3px; width:100%;" class="embed-responsive embed-responsive-2by1">
-                            <iframe class="embed-responsive-item border"
-                                    src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
-                            </iframe>
-                        </div>
-                    </div>
-                    <div class="row card-body ml-1 pb-0" style="text-indent: -.5rem;">
-                        <p><strong>Context:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit, magna aliqua. Ut enim ad minim veniam, ...</p>
-                    </div>
-                </div>
-            </div>
+<style>
+    .badge {
+        padding:.4rem;
+    }
+</style>
+<div class="row">
+    <div class="offset-1 col-2 mt-5 border">
+        <span class="badge badge-warning">Force</span>
+        <span class="badge badge-warning">Pet Murder</span>
+        <span class="badge badge-warning">Evidence Tampering</span>
+        <span class="badge badge-warning">Harassment</span>
+        <span class="badge badge-warning">Negligence</span>
+        <span class="badge badge-warning">Theft</span>
+        <span class="badge badge-warning">Search</span>
+        <span class="badge badge-warning">False Arrest</span>
+        <span class="badge badge-warning">Abuse of Power</span>
+        <span class="badge badge-danger">Bodily Force</span>
+        <span class="badge badge-danger">Projectile</span>
+        <span class="badge badge-danger">Taser</span>
+        <span class="badge badge-danger">Tear Gas</span>
+        <span class="badge badge-danger">Vehicle</span>
+        <span class="badge badge-danger">Firearm</span>
+    </div>
+    <div class=" offset-1 col-2 border ">
+        <div class="btn-group mt-5" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-outline-primary px-3">1</button>
+            <button type="button" class="btn btn-outline-primary px-3">2</button>
+            <button type="button" class="btn btn-outline-primary px-3">3</button>
         </div>
     </div>
+</div>
 
 
 
