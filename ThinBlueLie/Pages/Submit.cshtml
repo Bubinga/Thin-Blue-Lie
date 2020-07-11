@@ -156,6 +156,7 @@
                             <input type="checkbox"
                                    name="SelectedMisconducts"
                                    value="@item.Value"
+                                   id="@item.Value"
                                    @if (Model.SelectedMisconducts.Contains(item.Value)) { <text> checked </text> } /> @item.Text
                             </label>
                             <span asp-validation-for="Timelineinfo.Misconduct" class="text-danger"></span>
@@ -232,34 +233,38 @@
     </div>
 </div>
 <script>
+    //If Date changes, run the getsimilar action in the Timeline Controller and load the partial view. 
     $(".SimFinder").change(function () {
         $('#VideoList').load('@Url.Action("GetSimilar","Timeline")', { TempDate: $("#DateInput").val() });
-
-        // TempDate: $("#DateInput").val() ,OName: $("ONameInput").val(), SName: $("SNameInput" ).val()
-        //$.ajax({
-        //    type: "POST",
-        //    url: "/Submit/GetSimilar",
-        //    data: {TempDate: $("#DateInput").val()},
-        //}).done(function () {
-        //    alert('data posted' + $("#DateInput").val());
-        //});
     });
 
     $(".dropdown-menu a").click(function () {
         $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
         $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
     });
+
     document.getElementById("weaponDiv").style.display = "none";
-    var forceCheckState = 0;
+    var WeaponCheckState = 0;
+   
+    document.getElementById("1").onclick = function () { showWeapon(); };
+    //function resetForm() {
+    //    $("[name ='SelectedWeapons']").val(function () {
+    //        return this.defaultValue;
+    //    });
+    //}
+
     function showWeapon() {
-        if (forceCheckState === 0) {
+        if (WeaponCheckState === 0) {
             document.getElementById("weaponDiv").style.display = "block";
-            forceCheckState = 1;
+            WeaponCheckState = 1;
         }
         else {
-            document.getElementById("weaponDiv").style.display = "none";
-            document.getElementById("weaponDiv").reset();
-            forceCheckState = 0;
+            $('input[name=SelectedWeapons]')                
+                .val('')
+                .prop('checked', false)
+                .prop('selected', false);
+            document.getElementById("weaponDiv").style.display = "none";            
+            WeaponCheckState = 0;
         }
     }
 </script>
