@@ -58,6 +58,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
     <None Include="wwwroot\favicon.ico" />
   </ItemGroup>
 

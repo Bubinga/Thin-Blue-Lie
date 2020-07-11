@@ -226,6 +226,7 @@ hr.blueline {
     margin: 0px;
     left: 0px;
     width: 100%;
+    white-space: nowrap;
 }
 
 .btn.week.focus, .btn.week.active {
