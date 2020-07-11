@@ -2,7 +2,7 @@
 @model ThinBlueLie.Pages.TimelineModel
 @{
     ViewBag.Title = "Timeline";
-    var Event = ViewData["Timelineinfo"] as List<ThinBlue.Timelineinfo>;
+    var Event = ViewData["Timelineinfo"] as IList<ThinBlue.Timelineinfo>;
 }
 
 <style>
@@ -273,7 +273,7 @@
         }
         return "";
     }
-    function RestoreDate() {
+    function RestoreDate() { //load cookie data into variable "first"
         var x = parseInt(getCookie("savedFirst"));
         if (Number.isNaN(x) == false) {
             first = x;
