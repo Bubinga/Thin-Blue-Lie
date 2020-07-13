@@ -318,26 +318,24 @@
             day[i] = new Date(curr.setDate(curr.getDate() + 1));
         }
 
-        
-
+      
         for (let i = 0; i < 7; i++) { //This for loop adds the date onto the end of the day using arrays
             m[i] = day[i].getMonth() + 1;
             d[i] = day[i].getDate();
             y[i] = day[i].getYear() + 1900;
             document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " " + m[i] + "/" + d[i];
-
-            var current = new Date();
-            if (day[i] > current) {
-                // document.getElementById("Timeline-Day" + i).innerHTML += "/";
+           
+            var current = new Date();           
+            if (day[i] > current) {               
                 document.getElementById("Timeline-label" + i).classList.add("disabled");
                 document.getElementById("Timeline-label" + i).style.pointerEvents = "none";
+                document.getElementById("Timeline-label" + i).style.color = "green";                
             }
-            if (day[i] < current) {
-                // document.getElementById("Timeline-Day" + i).innerHTML += "/";
+            else {               
                 document.getElementById("Timeline-label" + i).classList.remove("disabled");
-                document.getElementById("Timeline-label" + i).style.pointerEvents = "pointer";
+                document.getElementById("Timeline-label" + i).style.pointerEvents = "auto";
+                document.getElementById("Timeline-label" + i).style.color = "blue";              
             }
-
 
             //Pad month and day to always be two places
             if (m[i] <= 100) { m[i] = ("0" + m[i]).slice(-2) }
@@ -363,24 +361,7 @@
         }
     }
     
-   
 
-
-    // for all numbers larger than the id of the current day set disabled to the class list and disabled clicking
-    //var current = new Date();
-    //for (i = 0; i < 7; i++) {
-    //    if (day[i] > current) {
-    //        // document.getElementById("Timeline-Day" + i).innerHTML += "/";
-    //        document.getElementById("Timeline-label" + i).classList.add("disabled");
-    //        document.getElementById("Timeline-label" + i).style.pointerEvents = "none";
-    //    }
-    //}
-    //// make the current day "active"
-    //for (i = 0; i < 7; i++) {
-    //    if (!(day[i] > current) && !(day[i] < current)) {
-    //        document.getElementById("Timeline-label" + i).classList.add("active");
-    //    }
-    //}
 </script>
 <script>
     document.getElementById("calendarDiv").style.display = "none";
