@@ -5,7 +5,7 @@
 }
 <style>
     .badge {
-        padding:.4rem;
+        padding: .4rem;
     }
 </style>
 <div class="row">
@@ -26,14 +26,29 @@
         <span class="badge badge-danger">Vehicle</span>
         <span class="badge badge-danger">Firearm</span>
     </div>
-    <div class=" offset-1 col-2 border ">
-        <div class="btn-group mt-5" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-outline-primary px-3">1</button>
-            <button type="button" class="btn btn-outline-primary px-3">2</button>
-            <button type="button" class="btn btn-outline-primary px-3">3</button>
-        </div>
+    @*<div class=" offset-1 col-2 border ">
+            <div class="btn-group mt-5" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-outline-primary px-3">1</button>
+                <button type="button" class="btn btn-outline-primary px-3">2</button>
+                <button type="button" class="btn btn-outline-primary px-3">3</button>
+            </div>
+        </div>*@
+    <div class="container offset-3 col-2 mt-5">
+        <a tabindex="0" onclick="movePopover()" class="btn btn-primary" data-placement="left" role="button" data-html="true" data-toggle="popover" title="Incorrect Info"
+           data-content="And here's some amazing content. It's very engaging. Right?">
+            Incorrect Info?
+        </a>
     </div>
 </div>
+<script>
+    $(document).ready(function () { //enables popover
+        $('[data-toggle="popover"]').popover();
+    });
+    movePopover = setTimeout(function () {
+        $("#toggle").popover('update')
+    }, 5000);
+    
+</script>
 
 
 

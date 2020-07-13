@@ -238,7 +238,20 @@
                         </ul>
                     </div>
                     <div class="card-footer">
-                        <a onclick="test()" class="btn btn-primary">Incorrect Info?</a>
+                        <div class="row">
+                            <div class="col-6 px-0 offset-1">
+                                <a tabindex="0" class="btn btn-primary position-relative" data-placement="left" role="button" data-html="true" data-toggle="popover" data-trigger="focus" title="Incorrect Info"
+                                   data-content="And here's some amazing content. It's very engaging. Right?">
+                                    Incorrect Info?
+                                </a>
+                            </div>
+                            <div class="col-5 px-0">
+                                <a tabindex="0" class="btn btn-danger position-relative" data-placement="left" role="button" data-html="true" data-toggle="popover" data-trigger="focus" title="Incorrect Info"
+                                   data-content="Report for inappropriate, racist, or false information">
+                                    Flag ⚐
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -252,11 +265,12 @@
     }
 </body>
 <script>
-    //function ScrollToEvent() {
-    //    var elmt = document.getElementById("divider");
-    //    elmt.scrollIntoView();
-    //}
-
+    $(document).ready(function () { //enables popover
+        $('[data-toggle="popover"]').popover();
+    });
+    //$('.popover-dismiss').popover({
+    //    trigger: 'focus'
+    //})
 
     document.getElementById("Timeline").classList.add("onpage");
 
