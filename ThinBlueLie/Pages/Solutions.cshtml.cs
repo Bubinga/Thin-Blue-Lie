@@ -9,11 +9,11 @@ using Microsoft.Extensions.Logging;
 
 namespace ThinBlueLie.Pages
 {
-    public class PrivacyModel : PageModel
+    public class SolutionModel : PageModel
     {
-        private readonly ILogger<PrivacyModel> _logger;
+        private readonly ILogger<SolutionModel> _logger;
 
-        public PrivacyModel(ILogger<PrivacyModel> logger)
+        public SolutionModel(ILogger<SolutionModel> logger)
         {
             _logger = logger;
         }
