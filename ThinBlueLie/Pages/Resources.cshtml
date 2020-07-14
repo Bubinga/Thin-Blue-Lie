@@ -4,7 +4,47 @@
     ViewData["Title"] = "History";
 }
 
-<h1>History</h1>
+<style>
+    .sidenav {
+        max-width: 250px;
+        position: fixed;
+        z-index: 1;
+        top: 400px;
+        left: 150px;
+        background: #eee;
+        overflow-x: hidden;
+        padding: 8px 0;
+    }
+
+        .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #0091ff;
+            display: block;
+        }
+
+            .sidenav a:hover {
+                color: #064579;
+            }
+</style>
+<div class="jumbotron home" style=" background-image: url(FlagAndFire.jpg) !important;">
+    <div class="ml-5 pl-5 container container-fluid">
+        <h1 style="font-family: MillerItalic, Georgia, serif; font-size: 4em;" class="text-primary font-italic">Learn aboot das negros</h1>
+    </div>
+</div>
+<div class="sidenav">
+    <a href="#books">Websites</a>
+    <a href="#books">Books</a>
+    <a href="#people">People</a>
+    <a href="#music">Music</a>
+</div>
+<div class="container">
+    <h4>Purpose</h4>
+    <p>Here you can read about possible solutions to the problem along with an array of other resources</p>
+    <hr class="blueline mt-0 pb-0 mb-0 pt-0" style="" />
+    <br />
+</div>
 <script>
     document.getElementById("Resources").classList.add("onpage");
 </script>
