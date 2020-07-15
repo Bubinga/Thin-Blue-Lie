@@ -23,7 +23,7 @@ namespace ThinBlueLie.Pages
 
         public void OnGet()
         {
-            var a = (TimelineinfoEnums.StatesEnum)43;
+            var a = (TimelineinfoEnums.StateEnum)43;
             Console.WriteLine(a);           
         }
     }
