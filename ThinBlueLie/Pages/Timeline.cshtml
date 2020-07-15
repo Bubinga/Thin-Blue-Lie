@@ -1,4 +1,5 @@
 ﻿@using static ThinBlueLie.Models.TimelineinfoEnums;
+@using static ThinBlueLie.Models.EnumExtensions; 
 @model ThinBlueLie.Pages.TimelineModel
 @{
     ViewBag.Title = "Timeline";
@@ -211,8 +212,8 @@
                         <hr class="mt-0 pb-0 mb-0 pt-0" />
                         <ul class="list-group list-group-flush">
                             <li class="brokencard list-group-item">
-                                <p><strong>Location:</strong> @Timelineinfo.City, @Enum.GetName(typeof(StateEnum), Timelineinfo.State)</p>
-                                <p><strong>Source:</strong> @Enum.GetName(typeof(SourceEnum), Timelineinfo.Source) </p>
+                                <p><strong>Location:</strong> @Timelineinfo.City, @GetEnumDisplayName((StateEnum)Timelineinfo.State)</p>
+                                <p><strong>Source:</strong> @GetEnumDisplayName((SourceEnum)Timelineinfo.Source) </p>
                                 <p><strong>Credit:</strong> @Timelineinfo.Credit</p>
                             </li>
                         </ul>

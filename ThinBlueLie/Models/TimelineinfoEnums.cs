@@ -2,23 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ThinBlueLie.Models
 {
-    public class TimelineinfoEnums
-    {
-      
+    public static class TimelineinfoEnums
+    {      
         public enum ArmedEnum
         {
             No, 
             Yes
-        }
-
-        public enum StatesEnum
-        {
-            [Display(Name = "Rhode Island")]
-            RhodeIsland = 43
         }
 
         public enum StateEnum
