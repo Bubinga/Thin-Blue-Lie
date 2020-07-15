@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ThinBlueLie.Models;
 using ThinBlueLie.Pages;
 
 
@@ -31,8 +32,7 @@ namespace ThinBlueLie.Controllers
         }
 
 
-        [HttpGet]
-        
+        [HttpGet]        
         public IActionResult Login()
         {            
             return View("Pages/Account/Login.cshtml");           
@@ -44,13 +44,14 @@ namespace ThinBlueLie.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                var signedUser = await userManager.FindByEmailAsync(model.Email);
+                var result = await signInManager.PasswordSignInAsync(signedUser.Email, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)
                 {                    
                     return RedirectToPage("/Index");
                 }                              
-                    ModelState.AddModelError(string.Empty, "Invalid Email or Pass");                
+                    ModelState.AddModelError(string.Empty, "Invalid Email or Password");                
             }
             return View("Pages/Account/Login.cshtml", model);
         }
