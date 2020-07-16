@@ -79,6 +79,7 @@ namespace ThinBlueLie.Models
             Reddit,
             Instagram,
             Facebook,
+            Twitter,
             [Display(Name = "From Phone or Computer")]
             PhoneComputer,
             Other,

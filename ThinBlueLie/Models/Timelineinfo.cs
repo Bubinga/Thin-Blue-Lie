@@ -43,17 +43,22 @@ namespace ThinBlue
         public int Weapon { get; set; }
         [Column(TypeName = "LONGTEXT")]
         public string Context { get; set; }
-        [Required]
+        //[Required]
+        //[Column(TypeName = "TINYINT")]
+        //public int Gore { get; set; }
+        //[Required]
+        //[Column(TypeName = "TINYINT")]
+        //public int Source { get; set; }
+        //[Column(TypeName = "VARCHAR(60)")]
+        //public string Credit { get; set; }
+        //[Column(TypeName = "VARCHAR(100)")]
+        //public string VidLink { get; set; }
+        [Column(TypeName = "VARCHAR(50)")]
+        public string SubmittedBy { get; set; }
         [Column(TypeName = "TINYINT")]
-        public int Gore { get; set; }
-        [Required]
+        public int Locked { get; set; }
         [Column(TypeName = "TINYINT")]
-        public int Source { get; set; }
-        [Column(TypeName = "VARCHAR(60)")]
-        public string Credit { get; set; }
-        [Column(TypeName = "VARCHAR(100)")]
-        public string VidLink { get; set; }
-
+        public int Verified { get; set; }
 
     }
 }

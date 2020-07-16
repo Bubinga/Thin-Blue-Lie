@@ -33,13 +33,14 @@
                 <button type="button" class="btn btn-outline-primary px-3">3</button>
             </div>
         </div>*@
-    <div class="container offset-3 col-2 mt-5">
-        <a tabindex="0" onclick="movePopover()" class="btn btn-primary" data-placement="left" role="button" data-html="true" data-toggle="popover" title="Incorrect Info"
-           data-content="And here's some amazing content. It's very engaging. Right?">
-            Incorrect Info?
-        </a>
+    <div class="container offset-3 col-8 mt-5">
+        <blockquote class="reddit-card">
+            <a href="https://www.reddit.com/r/PublicFreakout/comments/hry8db/armed_troops_in_portland_oregon_are_taking_people/">Armed troops in Portland, Oregon, are taking people prisoner in the streets while refusing to identify themselves as law enforcement and operating out of civilian vehicles. No one on scene knows what jurisdiction or capacity they are operating in, or what happened to the person taken into the van.</a>
+            <a href="http://www.reddit.com/r/PublicFreakout">r/PublicFreakout</a>
+        </blockquote>
     </div>
 </div>
+<script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>
 <script>
     $(document).ready(function () { //enables popover
         $('[data-toggle="popover"]').popover();
@@ -47,7 +48,7 @@
     movePopover = setTimeout(function () {
         $("#toggle").popover('update')
     }, 5000);
-    
+
 </script>
 
 
