@@ -45,7 +45,7 @@ namespace ThinBlueLie.Controllers
             if (ModelState.IsValid)
             {
                 var signedUser = await userManager.FindByEmailAsync(model.Email);
-                var result = await signInManager.PasswordSignInAsync(signedUser.Email, model.Password, model.RememberMe, false);
+                var result = await signInManager.PasswordSignInAsync(signedUser, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)
                 {                    

@@ -18,9 +18,10 @@ namespace ThinBlue
         {
         }
 
-        public virtual DbSet<Timelineinfo> Timelineinfo { get; set; }      
-        
-       
+        public virtual DbSet<Timelineinfo> Timelineinfo { get; set; }
+        public virtual DbSet<Media> Media { get; set; }
+        public virtual DbSet<Logins> Logins { get; set; }
+        public virtual DbSet<Flagged> Flagged { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -63,13 +64,7 @@ namespace ThinBlue
                     .IsRequired()
                     .HasColumnType("CHAR(10)")
                     .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
-
-                entity.Property(e => e.Gore)
-                    .IsRequired()
-                    .HasColumnType("TINYINT")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                    .HasCollation("utf8mb4_0900_ai_ci");             
 
                 entity.Property(e => e.Misconduct)
                     .HasColumnType("TINYINT")
@@ -110,12 +105,7 @@ namespace ThinBlue
                 entity.Property(e => e.SubjectSex)
                     .HasColumnType("TINYINT")
                     .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
-
-                entity.Property(e => e.VidLink)
-                    .HasColumnType("varchar(100)")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                    .HasCollation("utf8mb4_0900_ai_ci");              
 
                 entity.Property(e => e.Weapon)
                     .HasColumnType("TINYINT")
