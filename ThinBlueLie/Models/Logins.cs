@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,7 +12,8 @@ namespace ThinBlue
         [Key]
         public int IdLogin { get; set; }
         public string Id { get; set; } //id of AspNetUser
-        public string Time { get; set; }
+        [Column(TypeName = "DATETIME")]
+        public string Time { get; set; } //
         public string IpAddress { get; set; }
         public string UserAgent { get; set; }
     }
