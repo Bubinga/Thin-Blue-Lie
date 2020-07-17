@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Pomelo.EntityFrameworkCore.MySql.Query.ExpressionVisitors.Internal;
 using ThinBlue;
 using ThinBlueLie.Pages;
+using ThinBlueLie.ViewModels;
 
 namespace ThinBlueLie.Controllers
 {
@@ -52,6 +53,27 @@ namespace ThinBlueLie.Controllers
             ViewData["Timelineinfo"] = model.Timelineinfos;
 
             return View("Pages/Timeline.cshtml");
+        }
+
+       
+        public ActionResult GetFlagView()
+        {
+            return PartialView("Pages/Shared/_FlagPartial.cshtml");
+        }
+
+        [HttpPost]
+        [Route("/Timeline")]
+        public async Task<IActionResult> Timeline(FlagModel flagModel)
+        {
+            if (ModelState.IsValid)
+            {
+                flagModel.IdTimelineInfo = Request.Query["d"];
+                flagModel.IdUser = "testIdUser";
+
+                _context.Flagged.Add(flagModel.Flags);
+                await _context.SaveChangesAsync();
+            }
+            return View("Pages/Shared/_FlagPartial.cshtml", flagModel);
         }
 
         [HttpGet]
