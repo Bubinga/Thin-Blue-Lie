@@ -1,0 +1,28 @@
+﻿@using static ThinBlueLie.Models.FlaggedEnums;
+@model ThinBlueLie.ViewModels.FlagModel
+@{
+    Layout = null;
+}
+
+
+    <form method="post" class="mt-4" style="width:200px; height:175px;">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <div class="col-5 dropdown pl-0" style="position:relative;">
+                <label style="position:absolute; bottom:38px;" class="control-label">Type<span class="text-danger ml-1">*</span></label>
+                <select asp-for="FlagType" asp-items="Html.GetEnumSelectList<FlagType>()" style="" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <option class="dropdown-item">Select</option>
+                </select>
+                <span asp-validation-for="FlagType" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Message" class="control-label">Explain why you are flagging:<span class="text-danger ml-1">*</span></label>
+            <input asp-for="Message" class="form-control" />
+            <span asp-validation-for="Message" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary float-right" />           
+        </div>
+    </form>
+

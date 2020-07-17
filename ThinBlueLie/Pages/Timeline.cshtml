@@ -181,7 +181,7 @@
             <a style="font-size: 2rem;" class="btn btn-success mr-md-2 mb-md-0 mb-2 text-nowrap" href="/Submit">Submit Info</a>
         </div>
     }
-    @if (Event.Count > 1)
+    @*@if (Event.Count > 1)
     {
         <div class="container w-25">
             <div class="btn-group mb-1" role="group" aria-label="Select Event">
@@ -190,7 +190,7 @@
                 <button onclick="ScrollToEvent()" type="button" class="btn btn-outline-primary px-3">@i</button>
                }
             </div>
-        </div>
+        </div>*@
     }
     @foreach (var Timelineinfo in Event)
     {
@@ -241,16 +241,15 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-6 px-0 offset-1">
-                                <a tabindex="0" class="btn btn-primary position-relative" data-placement="left" role="button" data-html="true" data-toggle="popover" data-trigger="focus" title="Incorrect Info"
-                                   data-content="And here's some amazing content. It's very engaging. Right?">
+                                <a class="btn btn-primary position-relative" href="/Edit" data-placement="left" title="Incorrect Info">
                                     Incorrect Info?
                                 </a>
                             </div>
                             <div class="col-5 px-0">
-                                <a tabindex="0" class="btn btn-danger position-relative" data-placement="top" role="button" data-html="true" data-toggle="popover" data-trigger="focus" title="Incorrect Info"
-                                   data-content="Report for inappropriate, racist, or false information">
-                                    Flag ⚐
-                                </a>
+                                <a tabindex="0" class="btn btn-danger position-relative" data-placement="top" role="button" data-html="true" data-toggle="popover" data-trigger="click" title="Report"
+                                   data-content='@await Html.PartialAsync("Shared/_FlagPartial.cshtml")'>
+                                   Flag ⚐
+                                </a>                               
                             </div>
                         </div>
                     </div>
@@ -267,11 +266,23 @@
 </body>
 <script>
     $(document).ready(function () { //enables popover
-        $('[data-toggle="popover"]').popover();
+        $('[data-toggle="popover"]').popover({
+
+            sanitize: false,
+        })
     });
-    //$('.popover-dismiss').popover({
-    //    trigger: 'focus'
-    //})
+
+    @*$.ajax({
+        url: '@Url.Action("GetFlagView","Timeline")',
+        success: function (result) {
+            $('#popoverNavLink').popover({
+                content: result,
+                trigger: 'click',
+                html: true,
+                animation: false
+            })
+        }
+    });*@
 
     document.getElementById("Timeline").classList.add("onpage");
 
@@ -284,7 +295,7 @@
             document.getElementById("Timeline-Day" + i).innerHTML += weekDays[i] + " ";
     }
 
-    var first = -0xFFFFFFFF;   
+    var first = -0xFFFFFFFF;
     var m = new Array(7);
     var d = new Array(7);
     var y = new Array(7);
@@ -320,36 +331,36 @@
         }
     }
     RestoreDate();
-    
+
     function UpdateDays() {
         var curr = new Date(); // get current date
         if (first == -0xFFFFFFFF) { //if there is no value for first stored, make first the first day of the current week
             first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-        }        
+        }
         var last = first + 6; // last day is the first day + 6
-       
+
         day[0] = new Date(curr.setDate(first));
         for (i = 1; i < 7; i++) { //This for loop creates the time info for each day with the following loop pulls the month and date out of
             day[i] = new Date(curr.setDate(curr.getDate() + 1));
         }
 
-      
+
         for (let i = 0; i < 7; i++) { //This for loop adds the date onto the end of the day using arrays
             m[i] = day[i].getMonth() + 1;
             d[i] = day[i].getDate();
             y[i] = day[i].getYear() + 1900;
             document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " " + m[i] + "/" + d[i];
-           
-            var current = new Date();           
-            if (day[i] > current) {               
+
+            var current = new Date();
+            if (day[i] > current) {
                 document.getElementById("Timeline-label" + i).classList.add("disabled");
                 document.getElementById("Timeline-label" + i).style.pointerEvents = "none";
-                document.getElementById("Timeline-label" + i).style.color = "green";                
+                document.getElementById("Timeline-label" + i).style.color = "green";
             }
-            else {               
+            else {
                 document.getElementById("Timeline-label" + i).classList.remove("disabled");
                 document.getElementById("Timeline-label" + i).style.pointerEvents = "auto";
-                document.getElementById("Timeline-label" + i).style.color = "blue";              
+                document.getElementById("Timeline-label" + i).style.color = "blue";
             }
 
             //Pad month and day to always be two places
@@ -361,7 +372,7 @@
         }
     }
     UpdateDays();
-    
+
     function loadTimes() {
         for (i = 0; i < 7; i++) {
             m[i] = day[i].getMonth() + 1;
@@ -375,7 +386,7 @@
             }
         }
     }
-    
+
 
 </script>
 <script>

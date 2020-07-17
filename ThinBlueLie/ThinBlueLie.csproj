@@ -52,7 +52,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\Test\" />
-    <Folder Include="ViewModels\" />
     <Folder Include="Views\" />
     <Folder Include="wwwroot\8CantWait\" />
   </ItemGroup>

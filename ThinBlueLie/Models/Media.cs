@@ -11,11 +11,11 @@ namespace ThinBlue
     {
         [Key]
         public int IdMedia { get; set; }
-        public int Type { get; set; }
+        public int MediaType { get; set; }
         public int IdTimelineinfo { get; set; }
-        public string SourceLocation { get; set; }
+        public int SourceFrom { get; set; }
         public int Gore { get; set; }
-        public int SourceFile { get; set; }
+        public string SourceFile { get; set; }
         public string Blurb { get; set; }
         [Column(TypeName = "VARCHAR(50)")]
         public string SubmittedBy { get; set; }
