@@ -22,6 +22,7 @@ namespace ThinBlueLie.Models
             Instagram,
             Facebook,
             Twitter,
+            [Display(Name = "News Website")]
             NewsSite,
             [Display(Name = "Phone or Computer")]
             Device,           

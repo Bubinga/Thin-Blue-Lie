@@ -1,4 +1,4 @@
-﻿
+﻿@using static ThinBlueLie.Models.MediaEnums;
 @model ThinBlueLie.Pages.Test3Model
 @{
     ViewBag.Title = "Test3";
@@ -34,21 +34,46 @@
             </div>
         </div>*@
     <div class="container offset-3 col-8 mt-5">
-        <blockquote class="reddit-card">
-            <a href="https://www.reddit.com/r/PublicFreakout/comments/hry8db/armed_troops_in_portland_oregon_are_taking_people/">Armed troops in Portland, Oregon, are taking people prisoner in the streets while refusing to identify themselves as law enforcement and operating out of civilian vehicles. No one on scene knows what jurisdiction or capacity they are operating in, or what happened to the person taken into the van.</a>
-            <a href="http://www.reddit.com/r/PublicFreakout">r/PublicFreakout</a>
-        </blockquote>
+        <div class="col-6 dropdown my-2 px-0">
+            <label class="control-label">Source:<span class="text-danger ml-1">*</span></label>
+            <select id="SourceFormSelect" asp-for="Medias.SourceFrom" asp-items="Html.GetEnumSelectList(typeof(SourceFromEnum))" style="width:85%;" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <option class="dropdown-item" selected>Select</option>
+            </select>
+            <span asp-validation-for="Medias.SourceFrom" class="text-danger"></span>
+        </div>
+        <div class="col-5">
+            <div id="mediaFile" class="form-group">
+                <label for="exampleFormControlFile1">Pick a File</label>
+                <input type="file" class="form-control-file" id="exampleFormControlFile1">
+            </div>
+            <div id="mediaLink" class="form-group">
+                <label for="url">Link the Media</label>
+                <input type="url" class="form-control" id="exampleFormControlFile1">
+            </div>
+        </div>
     </div>
 </div>
-<script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>
 <script>
-    $(document).ready(function () { //enables popover
-        $('[data-toggle="popover"]').popover();
-    });
-    movePopover = setTimeout(function () {
-        $("#toggle").popover('update')
-    }, 5000);
+    //$(document).ready(function () { //enables popover
+    //    $('[data-toggle="popover"]').popover();
+    //});
 
+    document.getElementById("mediaFile").style.display = "none";
+
+    $('#SourceFormSelect').change(function () {
+        var e = document.getElementById("SourceFormSelect");
+        var strUser = e.options[e.selectedIndex].value;
+        if (strUser == 6) {
+            document.getElementById("mediaFile").style.display = "inline-block";
+            document.getElementById("mediaLink").style.display = "none";
+            alert("if ran");
+        }
+        else {
+            document.getElementById("mediaFile").style.display = "none";
+            document.getElementById("mediaLink").style.display = "inline-block";
+            alert("else ran");
+        }
+    })
 </script>
 
 
