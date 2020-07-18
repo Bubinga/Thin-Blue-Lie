@@ -13,6 +13,8 @@ namespace ThinBlueLie.Pages
     { 
         [BindProperty]
         public Timelineinfo Timelineinfo { get; set; }
+        [BindProperty]
+        public Media Medias { get; set; }
 
 
         public IList<string> SelectedWeapons { get; set; }

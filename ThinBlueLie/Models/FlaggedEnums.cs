@@ -8,7 +8,7 @@ namespace ThinBlueLie.Models
 {
     public class FlaggedEnums
     {
-        public enum FlagType { 
+        public enum FlagTypeEnum { 
             [Display(Name = "Vulgar or Racist")]
             Vulgar,
             [Display(Name = "False Information")]

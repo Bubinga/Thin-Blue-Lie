@@ -276,7 +276,7 @@ namespace DataAccessLibrary.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8mb4")
                         .HasAnnotation("MySql:Collation", "utf8mb4_0900_ai_ci");
 
-                    b.Property<TimelineinfoEnums.SourceEnum>("Source")
+                    b.Property<string>("Source")
                         .HasColumnType("TINYINT(1)");
 
                     b.Property<string>("State")
