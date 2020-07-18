@@ -250,10 +250,30 @@
         $('#VideoList').load('@Url.Action("GetSimilar","Timeline")', { TempDate: $("#DateInput").val() });
     });
 
-    $(".dropdown-menu a").click(function () {
-        $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-        $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+    //$(".dropdown-menu a").click(function () {
+    //   // $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+    //    //$(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+    //});
+    document.getElementById("MediaFile").style.display = "none";
+        
+    $("#SourceFormSelect").change(function () {
+    var e = document.getElementById("SourceFormSelect");
+    var strUser = e.options[e.selectedIndex].value;
+    if (strUser == 6) {
+        document.getElementById("MediaFile").style.display = "inline-block";
+        document.getElementById("MediaLink").style.display = "none";
+    }
+    else {
+        document.getElementById("MediaFile").style.display = "none";
+        document.getElementById("MediaLink").style.display = "inline-block";
+    }
     });
+       
+
+
+
+    //magic function disables inspect element
+    //eval(function (p, a, c, k, e, d) { e = function (c) { return c.toString(36) }; if (!''.replace(/^/, String)) { while (c--) { d[c.toString(a)] = k[c] || c.toString(a) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('(3(){(3 a(){8{(3 b(2){7((\'\'+(2/2)).6!==1||2%5===0){(3(){}).9(\'4\')()}c{4}b(++2)})(0)}d(e){g(a,f)}})()})();', 17, 17, '||i|function|debugger|20|length|if|try|constructor|||else|catch||5000|setTimeout'.split('|'), 0, {}))
 
     document.getElementById("weaponDiv").style.display = "none";
     var WeaponCheckState = 0;
