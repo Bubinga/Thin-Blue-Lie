@@ -2,7 +2,7 @@
 @using static ThinBlueLie.Models.TimelineinfoEnums;
 @{
     var Time = ViewData["SimilarEvents"] as List<ThinBlue.Timelineinfo>;
-
+    Layout = null;
     string TruncateString(string str)
     {
         const int MaxLength = 100;
@@ -33,7 +33,7 @@
 @foreach (var Similar in Time)
 {
     <div id="likeVideos">
-        <div class="card border-secondary mb-3">
+        <div class="card border-dark mb-3 ml-1">
             <div class="card-header">@Similar.Date</div>
             <div class="card-body text-dark row">
                 <div class="col-6">

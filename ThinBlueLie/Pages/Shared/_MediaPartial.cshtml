@@ -1,0 +1,58 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using static ThinBlueLie.Models.MediaEnums;
+@model ThinBlueLie.Pages.SubmitModel;
+@{
+    Layout = null;
+}
+
+<div id="AddMedia">
+    <div class="card border-dark mb-3 ml-2">        
+        <div class="card-body text-dark row pt-0">
+            <form>
+                <div class="container">
+                    <div class="form-row">
+                        <div class="col-6 dropdown my-2 px-0">
+                            <label class="control-label">Type of Media:<span class="text-danger ml-1">*</span></label>
+                            <select asp-for="Medias.MediaType" asp-items="Html.GetEnumSelectList(typeof(MediaTypeEnum))" style="width:85%;" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <option class="dropdown-item">Select</option>
+                            </select>
+                            <span asp-validation-for="Medias.MediaType" class="text-danger"></span>
+                        </div>
+                        <div class="col-6 dropdown my-2 px-0">
+                            <label class="control-label">Source:<span class="text-danger ml-1">*</span></label>
+                            <select asp-for="Medias.SourceFrom" asp-items="Html.GetEnumSelectList(typeof(SourceFromEnum))" style="width:85%;" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <option class="dropdown-item">Select</option>
+                            </select>
+                            <span asp-validation-for="Medias.SourceFrom" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label asp-for="Medias.Blurb" class="control-label">Blurb<span class="text-danger ml-1">*</span> <span class="text-muted ml-1">Explain what is in the media</span></label>
+                        <input id="SNameInput" asp-for="Medias.Blurb" class="form-control" />
+                        <span asp-validation-for="Medias.Blurb" class="text-danger"></span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Pick a File</label>
+                            <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                        </div>
+                        <div class="form-group">
+                            <label for="url">Pick a File</label>
+                            <input type="url" class="form-control" id="exampleFormControlFile1">
+                        </div>
+                        <label class="form-check-label">Is there any blood or gore in the video?<span class="text-danger ml-1">*</span></label>
+                        <div class="form-check">
+                            <input type="radio" asp-for="Medias.Gore" class="form-check-input" value="0">
+                            <label class="form-check-label">No</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" asp-for="Medias.Gore" class="form-check-input" value="1" />
+                            <label class="form-check-label">Yes</label>
+                            <span asp-validation-for="Medias.Gore" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>        
+    </div>
+</div>

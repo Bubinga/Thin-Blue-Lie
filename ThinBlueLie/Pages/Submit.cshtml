@@ -1,8 +1,8 @@
-﻿@using ThinBlueLie.Models; 
+﻿@using ThinBlueLie.Models;
 @model ThinBlueLie.Pages.SubmitModel
 
 @{
-    ViewBag.Title = "Submit";    
+    ViewBag.Title = "Submit";
 }
 
 <div class="offset-md-3 row container-fluid">
@@ -184,36 +184,36 @@
                 <span asp-validation-for="Timelineinfo.Context" class="text-danger"></span>
             </div>
             @*<div class="form-group">
-                <label class="form-check-label">Is there any blood or gore in the video?<span class="text-danger ml-1">*</span></label>
-                <div class="form-check">
-                    <input type="radio" asp-for="Timelineinfo.Gore" class="form-check-input" value="0">
-                    <label class="form-check-label">No</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" asp-for="Timelineinfo.Gore" class="form-check-input" value="1" />
-                    <label class="form-check-label">Yes</label>
-                    <span asp-validation-for="Timelineinfo.Gore" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Timelineinfo.VidLink" class="control-label">Video Link</label>
-                <input type="url" asp-for="Timelineinfo.VidLink" class="form-control" />
-                <span asp-validation-for="Timelineinfo.VidLink" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Timelineinfo.Credit" class="control-label">Who is credited for the video?</label>
-                <input asp-for="Timelineinfo.Credit" class="form-control" />
-                <span asp-validation-for="Timelineinfo.Credit" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                @foreach (var source in (TimelineinfoEnums.SourceEnum[])Enum.GetValues(typeof(TimelineinfoEnums.SourceEnum)))
-                {
+                    <label class="form-check-label">Is there any blood or gore in the video?<span class="text-danger ml-1">*</span></label>
                     <div class="form-check">
-                        <input type="radio" asp-for="Timelineinfo.Source" class="form-check-input" value="@((int)source)">
-                        <label asp-for="Timelineinfo.Source" class="form-check-label">@source</label>
+                        <input type="radio" asp-for="Timelineinfo.Gore" class="form-check-input" value="0">
+                        <label class="form-check-label">No</label>
                     </div>
-                }
-            </div>*@
+                    <div class="form-check">
+                        <input type="radio" asp-for="Timelineinfo.Gore" class="form-check-input" value="1" />
+                        <label class="form-check-label">Yes</label>
+                        <span asp-validation-for="Timelineinfo.Gore" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Timelineinfo.VidLink" class="control-label">Video Link</label>
+                    <input type="url" asp-for="Timelineinfo.VidLink" class="form-control" />
+                    <span asp-validation-for="Timelineinfo.VidLink" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Timelineinfo.Credit" class="control-label">Who is credited for the video?</label>
+                    <input asp-for="Timelineinfo.Credit" class="form-control" />
+                    <span asp-validation-for="Timelineinfo.Credit" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    @foreach (var source in (TimelineinfoEnums.SourceEnum[])Enum.GetValues(typeof(TimelineinfoEnums.SourceEnum)))
+                    {
+                        <div class="form-check">
+                            <input type="radio" asp-for="Timelineinfo.Source" class="form-check-input" value="@((int)source)">
+                            <label asp-for="Timelineinfo.Source" class="form-check-label">@source</label>
+                        </div>
+                    }
+                </div>*@
             <div class="form-group">
                 <input type="submit" value="Submit" class="btn btn-primary" />
                 <a asp-page="/Index" style="float:right">Back to Home</a>
@@ -221,19 +221,31 @@
         }
     </div>
     <div class="col-md-5">
-        <div class="d-block border-bottom">
-            <h4 class="pt-2">Similar Videos</h4>
-            <p style="font-size:.8em">
-                Here are similar pages that share some similarities with the information you are filling out,
-                either a date, name, video, or some combination of the three
-            </p>
-            <hr />
-        </div>     
-        <div id="VideoList"><partial name="_SimilarPartial" /></div>
+        <div class="row">
+            <div class="container-fluid d-block">
+                <h4 class="pt-2">Similar Videos</h4>
+                <p class="mb-0" style="font-size:1em">
+                    Here are similar pages that share some similarities with the information you are filling out,
+                    either a date, name, video, or some combination of the three
+                </p>
+                <hr />
+            </div>
+            <div id="VideoList"><partial name="_SimilarPartial" /></div>
+        </div>
+        <div class="row">
+            <div class="d-block border-top container-fluid">
+                <h4 class="pt-2">Add Media</h4>
+                <p class="mb-0" style="font-size:1em">
+                    Add Media relavent to the event, such as videos, images, news articles, etc.
+                </p>
+                <hr />
+            </div>
+            <div id="MediaList"><partial name="_MediaPartial" /></div>
+        </div>
     </div>
 </div>
 <script>
-    //If Date changes, run the getsimilar action in the Timeline Controller and load the partial view. 
+    //If Date changes, run the getsimilar action in the Timeline Controller and load the partial view.
     $(".SimFinder").change(function () {
         $('#VideoList').load('@Url.Action("GetSimilar","Timeline")', { TempDate: $("#DateInput").val() });
     });
@@ -245,7 +257,7 @@
 
     document.getElementById("weaponDiv").style.display = "none";
     var WeaponCheckState = 0;
-   
+
     document.getElementById("1").onclick = function () { showWeapon(); };
     //function resetForm() {
     //    $("[name ='SelectedWeapons']").val(function () {
@@ -259,11 +271,11 @@
             WeaponCheckState = 1;
         }
         else {
-            $('input[name=SelectedWeapons]')                
+            $('input[name=SelectedWeapons]')
                 .val('')
                 .prop('checked', false)
                 .prop('selected', false);
-            document.getElementById("weaponDiv").style.display = "none";            
+            document.getElementById("weaponDiv").style.display = "none";
             WeaponCheckState = 0;
         }
     }

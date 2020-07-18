@@ -241,7 +241,8 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-6 px-0 offset-1">
-                                <a class="btn btn-primary position-relative" href="/Edit" data-placement="left" title="Incorrect Info">
+                                <a class="btn btn-primary position-relative" href="/Edit" data-placement="top"
+                                   data-toggle="tooltip" title="Edit info">
                                     Incorrect Info?
                                 </a>
                             </div>
@@ -267,9 +268,9 @@
 <script>
     $(document).ready(function () { //enables popover
         $('[data-toggle="popover"]').popover({
-
             sanitize: false,
         })
+        $('[data-toggle="tooltip"]').tooltip()
     });
 
     @*$.ajax({

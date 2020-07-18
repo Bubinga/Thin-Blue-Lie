@@ -12,13 +12,6 @@ namespace ThinBlueLie.ViewModels
     {
         [BindProperty]
         public Flagged Flags { get; set; }
-
-        public int IdFlagged { get; set; }
-        public string IdTimelineInfo { get; set; }
-        public string IdUser { get; set; }
-        [Required]
-        public int FlagType { get; set; }
-        [Required]
-        public string Message { get; set; }
+       
     }
 }
