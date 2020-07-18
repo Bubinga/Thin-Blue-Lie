@@ -67,13 +67,13 @@ namespace ThinBlueLie.Controllers
         {
             if (ModelState.IsValid)
             {
-                flagModel.IdTimelineInfo = Request.Query["d"];
-                flagModel.IdUser = "testIdUser";
+                flagModel.Flags.IdTimelineInfo = 1;
+                flagModel.Flags.IdUser = "testIdUser";              
 
                 _context.Flagged.Add(flagModel.Flags);
                 await _context.SaveChangesAsync();
             }
-            return View("Pages/Shared/_FlagPartial.cshtml", flagModel);
+            return PartialView("Pages/Shared/_FlagPartial.cshtml", flagModel);
         }
 
         [HttpGet]

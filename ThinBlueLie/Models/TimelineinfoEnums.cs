@@ -73,16 +73,5 @@ namespace ThinBlueLie.Models
             Gun = 0b_0010_0000
         }
 
-        public enum SourceEnum
-        {
-            Youtube,
-            Reddit,
-            Instagram,
-            Facebook,
-            Twitter,
-            [Display(Name = "From Phone or Computer")]
-            PhoneComputer,
-            Other,
-        }
     }
 }

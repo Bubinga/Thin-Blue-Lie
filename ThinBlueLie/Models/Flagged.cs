@@ -10,9 +10,11 @@ namespace ThinBlue
     {
         [Key]
         public int IdFlagged { get; set; }
-        public string IdTimelineInfo { get; set; }
+        public int IdTimelineInfo { get; set; }
         public string IdUser { get; set; }
+        [Required]
         public int FlagType { get; set; }
+        [Required]
         public string Message { get; set; }
     }
 }
