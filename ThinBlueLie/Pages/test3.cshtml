@@ -7,7 +7,34 @@
     .badge {
         padding: .4rem;
     }
+    
+    #section1 {
+        height: 600px;
+        background-color: pink;
+    }
+
+    #section2 {
+        height: 600px;
+        background-color: yellow;
+    }
 </style>
+<body>
+
+    <h1>Smooth Scroll</h1>
+
+    <div class="main" id="section1">
+        <h2>Section 1</h2>
+        <p>Click on the link to see the "smooth" scrolling effect.</p>
+        <a href="#section2">Click Me to Smooth Scroll to Section 2 Below</a>
+        <p>Note: Remove the scroll-behavior property to remove smooth scrolling.</p>
+    </div>
+
+    <div class="main" id="section2">
+        <h2>Section 2</h2>
+        <a href="#section1">Click Me to Smooth Scroll to Section 1 Above</a>
+    </div>
+
+</body>
 <div class="row">
     <div class="offset-1 col-2 mt-5 border">
         <span class="badge badge-warning">Force</span>
@@ -66,12 +93,10 @@
         if (strUser == 6) {
             document.getElementById("mediaFile").style.display = "inline-block";
             document.getElementById("mediaLink").style.display = "none";
-            alert("if ran");
         }
         else {
             document.getElementById("mediaFile").style.display = "none";
             document.getElementById("mediaLink").style.display = "inline-block";
-            alert("else ran");
         }
     })
 </script>

@@ -3,13 +3,6 @@ for details on configuring this project to bundle and minify static web assets. 
 
 /*Mobile or desktop specific stuff */
 
-content-mobile {
-    display: none;
-}
-
-content-desktop {
-    display: none;
-}
 
 .nogap {
     margin: 0px;
@@ -361,7 +354,9 @@ button.accept-policy {
 html {
     position: relative;
     min-height: 100%;
+    scroll-behavior: smooth;
 }
+
 
 body {
     /* Margin bottom by footer height */
@@ -375,3 +370,4 @@ body {
     white-space: nowrap;
     line-height: 60px; /* Vertically center the text there */
 }
+
