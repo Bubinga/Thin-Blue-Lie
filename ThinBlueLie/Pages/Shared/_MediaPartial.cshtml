@@ -10,21 +10,24 @@
         <div class="card-body text-dark row pt-0">
             <form>
                 <div class="container">
-                    <div class="form-row">
-                        <div class="col-6 dropdown my-2 px-0">
+                    <div class="form-row position-relative">
+                        <div class="col-5 dropdown my-2 px-0">
                             <label class="control-label">Type of Media:<span class="text-danger ml-1">*</span></label>
                             <select asp-for="Medias.MediaType" asp-items="Html.GetEnumSelectList(typeof(MediaTypeEnum))" style="width:85%;" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <option class="dropdown-item" >Select</option>
+                                <option class="dropdown-item">Select</option>
                             </select>
                             <span asp-validation-for="Medias.MediaType" class="text-danger"></span>
                         </div>
                         <div class="col-6 dropdown my-2 px-0">
                             <label class="control-label">Source:<span class="text-danger ml-1">*</span></label>
-                            <select id="SourceFormSelect" asp-for="Medias.SourceFrom" asp-items="Html.GetEnumSelectList(typeof(SourceFromEnum))" style="width:85%;" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <select id="SourceFromSelect" asp-for="Medias.SourceFrom" asp-items="Html.GetEnumSelectList(typeof(SourceFromEnum))" style="width:85%;" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <option class="dropdown-item" selected>Select</option>
                             </select>
                             <span asp-validation-for="Medias.SourceFrom" class="text-danger"></span>
                         </div>
+                        <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;" >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                     <div class="form-row">
                         <label asp-for="Medias.Blurb" class="control-label">Blurb<span class="text-danger ml-1">*</span> <span class="text-muted ml-1">Explain what is in the media</span></label>
@@ -61,20 +64,5 @@
     </div>
 </div>
 <script>
-    document.getElementById("mediaFile").style.display = "none";
-
-    $('#SourceFormSelect').change(function () {
-        var e = document.getElementById("SourceFormSelect");
-        var strUser = e.options[e.selectedIndex].value;
-        if (strUser == 6) {
-            document.getElementById("mediaFile").style.display = "inline-block";
-            document.getElementById("mediaLink").style.display = "none";
-            alert("if ran");
-        }
-        else {
-            document.getElementById("mediaFile").style.display = "none";
-            document.getElementById("mediaLink").style.display = "inline-block";
-            alert("else ran");
-        }
-    })
+   
 </script>

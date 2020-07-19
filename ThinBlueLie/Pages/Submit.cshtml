@@ -2,6 +2,8 @@
 @model ThinBlueLie.Pages.SubmitModel
 
 @{
+    int i;
+    int MediaCount = 1;
     ViewBag.Title = "Submit";
 }
 
@@ -182,38 +184,7 @@
                 <label asp-for="Timelineinfo.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, if there were more people involved, if there was any followup to the event or coverage in the news, etc.</label>
                 <textarea asp-for="Timelineinfo.Context" class="form-control"></textarea>
                 <span asp-validation-for="Timelineinfo.Context" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-                    <label class="form-check-label">Is there any blood or gore in the video?<span class="text-danger ml-1">*</span></label>
-                    <div class="form-check">
-                        <input type="radio" asp-for="Timelineinfo.Gore" class="form-check-input" value="0">
-                        <label class="form-check-label">No</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" asp-for="Timelineinfo.Gore" class="form-check-input" value="1" />
-                        <label class="form-check-label">Yes</label>
-                        <span asp-validation-for="Timelineinfo.Gore" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Timelineinfo.VidLink" class="control-label">Video Link</label>
-                    <input type="url" asp-for="Timelineinfo.VidLink" class="form-control" />
-                    <span asp-validation-for="Timelineinfo.VidLink" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Timelineinfo.Credit" class="control-label">Who is credited for the video?</label>
-                    <input asp-for="Timelineinfo.Credit" class="form-control" />
-                    <span asp-validation-for="Timelineinfo.Credit" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    @foreach (var source in (TimelineinfoEnums.SourceEnum[])Enum.GetValues(typeof(TimelineinfoEnums.SourceEnum)))
-                    {
-                        <div class="form-check">
-                            <input type="radio" asp-for="Timelineinfo.Source" class="form-check-input" value="@((int)source)">
-                            <label asp-for="Timelineinfo.Source" class="form-check-label">@source</label>
-                        </div>
-                    }
-                </div>*@
+            </div>            
             <div class="form-group">
                 <input type="submit" value="Submit" class="btn btn-primary" />
                 <a asp-page="/Index" style="float:right">Back to Home</a>
@@ -240,7 +211,20 @@
                 </p>
                 <hr />
             </div>
-            <div id="MediaList"><partial name="_MediaPartial" /></div>
+            <div id="MediaList">
+                @*<partial name="_MediaPartial" />
+                <partial name="_MediaPartial" />*@
+                @for (i = 0; i < MediaCount; ++i)
+                {
+                    <partial name="_MediaPartial" />
+                }
+                @if (MediaCount < 10)
+                {
+                    <div class="container">
+                        <button class="btn-lg btn-info mx-auto" data-placement="top" data-toggle="tooltip" title="Add another piece of Media">+ Media</button>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>
@@ -255,20 +239,29 @@
     //    //$(this).parents(".dropdown").find('.btn').val($(this).data('value'));
     //});
     document.getElementById("MediaFile").style.display = "none";
-        
-    $("#SourceFormSelect").change(function () {
-    var e = document.getElementById("SourceFormSelect");
-    var strUser = e.options[e.selectedIndex].value;
-    if (strUser == 6) {
-        document.getElementById("MediaFile").style.display = "inline-block";
-        document.getElementById("MediaLink").style.display = "none";
+
+    const addMedia = document.querySelector("#AddMedia")
+    addMedia.addEventListener('change', function (e) {
+        if (e.target.getAttribute('id') === 'SourceFromSelect') {
+            changeFile(e);
+        }
+    });   
+
+    function changeFile(e) {
+       // $("#SourceFromSelect").change(function () {
+        console.log(e.target)
+            var e = document.getElementById("SourceFromSelect");
+            var strUser = e.options[e.selectedIndex].text;
+            if (strUser == "Phone or Computer") {
+                document.getElementById("MediaFile").style.display = "inline-block";
+                document.getElementById("MediaLink").style.display = "none";
+            }
+            else {
+                document.getElementById("MediaFile").style.display = "none";
+                document.getElementById("MediaLink").style.display = "inline-block";
+            }
+       // })
     }
-    else {
-        document.getElementById("MediaFile").style.display = "none";
-        document.getElementById("MediaLink").style.display = "inline-block";
-    }
-    });
-       
 
 
 
