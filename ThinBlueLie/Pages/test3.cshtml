@@ -6,37 +6,10 @@
 <style>
     .badge {
         padding: .4rem;
-    }
-    
-    #section1 {
-        height: 600px;
-        background-color: pink;
-    }
-
-    #section2 {
-        height: 600px;
-        background-color: yellow;
-    }
+    }   
 </style>
-<body>
-
-    <h1>Smooth Scroll</h1>
-
-    <div class="main" id="section1">
-        <h2>Section 1</h2>
-        <p>Click on the link to see the "smooth" scrolling effect.</p>
-        <a href="#section2">Click Me to Smooth Scroll to Section 2 Below</a>
-        <p>Note: Remove the scroll-behavior property to remove smooth scrolling.</p>
-    </div>
-
-    <div class="main" id="section2">
-        <h2>Section 2</h2>
-        <a href="#section1">Click Me to Smooth Scroll to Section 1 Above</a>
-    </div>
-
-</body>
 <div class="row">
-    <div class="offset-1 col-2 mt-5 border">
+    @*<div class="offset-1 col-2 mt-5 border">
         <span class="badge badge-warning">Force</span>
         <span class="badge badge-warning">Pet Murder</span>
         <span class="badge badge-warning">Evidence Tampering</span>
@@ -53,52 +26,68 @@
         <span class="badge badge-danger">Vehicle</span>
         <span class="badge badge-danger">Firearm</span>
     </div>
-    @*<div class=" offset-1 col-2 border ">
-            <div class="btn-group mt-5" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-outline-primary px-3">1</button>
-                <button type="button" class="btn btn-outline-primary px-3">2</button>
-                <button type="button" class="btn btn-outline-primary px-3">3</button>
-            </div>
-        </div>*@
-    <div class="container offset-3 col-8 mt-5">
-        <div class="col-6 dropdown my-2 px-0">
-            <label class="control-label">Source:<span class="text-danger ml-1">*</span></label>
-            <select id="SourceFormSelect" asp-for="Medias.SourceFrom" asp-items="Html.GetEnumSelectList(typeof(SourceFromEnum))" style="width:85%;" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <option class="dropdown-item" selected>Select</option>
-            </select>
-            <span asp-validation-for="Medias.SourceFrom" class="text-danger"></span>
+    <div class=" offset-1 col-2 border ">
+        <div class="btn-group mt-5" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-outline-primary px-3">1</button>
+            <button type="button" class="btn btn-outline-primary px-3">2</button>
+            <button type="button" class="btn btn-outline-primary px-3">3</button>
         </div>
-        <div class="col-5">
-            <div id="mediaFile" class="form-group">
-                <label for="exampleFormControlFile1">Pick a File</label>
-                <input type="file" class="form-control-file" id="exampleFormControlFile1">
-            </div>
-            <div id="mediaLink" class="form-group">
-                <label for="url">Link the Media</label>
-                <input type="url" class="form-control" id="exampleFormControlFile1">
-            </div>
+    </div>*@
+    <div class="container offset-3 col-8 mt-5">
+        <div class="AddMedia">
+            <form>
+                <div class="container">
+                    <div class="form-row">
+                        <div class="col-6 dropdown my-2 px-0">
+                            <label class="control-label">Source:<span class="text-danger ml-1">*</span></label>
+                            <select class="SourceFromSelect btn border-dark" asp-for="Medias.SourceFrom" asp-items="Html.GetEnumSelectList(typeof(SourceFromEnum))" style="width:85%;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <option class="dropdown-item" selected>Select</option>
+                            </select>
+                            <span asp-validation-for="Medias.SourceFrom" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-5">
+                            <div class="MediaFile form-group">
+                                <label for="exampleFormControlFile1">Pick a File</label>
+                                <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                            </div>
+                            <div class="MediaLink form-group">
+                                <label for="url">Link the Media</label>
+                                <input type="url" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     //$(document).ready(function () { //enables popover
     //    $('[data-toggle="popover"]').popover();
     //});
+    
+    $('.AddMedia').on('change', 'select', function (e) {
+        //console.log($(this).parents(".AddMedia"));
+        changeFile(e, $(this).parents(".AddMedia"));
+    });
 
-    document.getElementById("mediaFile").style.display = "none";
-
-    $('#SourceFormSelect').change(function () {
-        var e = document.getElementById("SourceFormSelect");
-        var strUser = e.options[e.selectedIndex].value;
-        if (strUser == 6) {
-            document.getElementById("mediaFile").style.display = "inline-block";
-            document.getElementById("mediaLink").style.display = "none";
+    function changeFile(e, parent) {
+       // console.log(e, parent);
+        let el = e.target;
+        var strUser = el.options[el.selectedIndex].text;
+        console.log(el, parent.find('.MediaFile'));
+        if (strUser == "Phone or Computer") {
+            parent.find('.MediaFile').css('display', 'inline-block');
+            parent.find('.MediaLink').css('display', 'none');           
         }
         else {
-            document.getElementById("mediaFile").style.display = "none";
-            document.getElementById("mediaLink").style.display = "inline-block";
+            parent.find('.MediaLink').css('display', 'inline-block');
+            parent.find('.MediaFile').css('display', 'none');
         }
-    })
+    }
 </script>
 
 
