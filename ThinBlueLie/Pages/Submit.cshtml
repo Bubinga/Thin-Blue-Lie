@@ -3,12 +3,12 @@
 
 @{
     int i;
-    int MediaCount = 1;
+    int MediaCount = 2;
     ViewBag.Title = "Submit";
 }
 
-<div class="offset-md-3 row container-fluid">
-    <div class="col-md-4 border-left border-right border-bottom">
+<div class="offset-lg-3 row container-fluid">
+    <div class="col-lg-4 col-md-5 border-left border-right border-bottom">
         <div class="d-block mb-0 pt-3 border-bottom">
             <h4 class="mb-0">Information Submission Form</h4>
         </div>
@@ -26,7 +26,7 @@
             <div class="form-row">
                 <div class="col-5 dropdown" style="position:relative;">
                     <label style="position:absolute; bottom:38px;" class="control-label">State<span class="text-danger ml-1">*</span></label>
-                    <select asp-for="Timelineinfo.State" asp-items="Html.GetEnumSelectList(typeof(TimelineinfoEnums.StateEnum))" style="position:absolute; bottom:0; width:85%;" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <select asp-for="Timelineinfo.State" asp-items="Html.GetEnumSelectList(typeof(TimelineinfoEnums.StateEnum))" style="position:absolute; bottom:0; width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false">
                         <option class="dropdown-item">State</option>
                     </select>
                     <span asp-validation-for="Timelineinfo.State" class="text-danger"></span>
@@ -191,7 +191,7 @@
             </div>
         }
     </div>
-    <div class="col-md-5">
+    <div class="col-lg-5 col-md-5">
         <div class="row">
             <div class="container-fluid d-block">
                 <h4 class="pt-2">Similar Videos</h4>
@@ -218,12 +218,12 @@
                 {
                     <partial name="_MediaPartial" />
                 }
-                @if (MediaCount < 10)
+                @*@if (MediaCount < 10)
                 {
                     <div class="container">
                         <button class="btn-lg btn-info mx-auto" data-placement="top" data-toggle="tooltip" title="Add another piece of Media">+ Media</button>
                     </div>
-                }
+                }*@
             </div>
         </div>
     </div>
@@ -238,29 +238,26 @@
     //   // $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
     //    //$(this).parents(".dropdown").find('.btn').val($(this).data('value'));
     //});
-    document.getElementById("MediaFile").style.display = "none";
 
-    const addMedia = document.querySelector("#AddMedia")
-    addMedia.addEventListener('change', function (e) {
-        if (e.target.getAttribute('id') === 'SourceFromSelect') {
-            changeFile(e);
+
+    $('.MediaFile').css('display', 'none');
+
+    $('.AddMedia').on('change', 'select', function (e) {        
+        changeFile(e, $(this).parents(".AddMedia"));
+    });
+
+    function changeFile(e, parent) {       
+        let el = e.target;
+        var strUser = el.options[el.selectedIndex].text;
+        //console.log(el, parent.find('.MediaFile'));
+        if (strUser == "Phone or Computer") {
+            parent.find('.MediaFile').css('display', 'inline-block');
+            parent.find('.MediaLink').css('display', 'none');
         }
-    });   
-
-    function changeFile(e) {
-       // $("#SourceFromSelect").change(function () {
-        console.log(e.target)
-            var e = document.getElementById("SourceFromSelect");
-            var strUser = e.options[e.selectedIndex].text;
-            if (strUser == "Phone or Computer") {
-                document.getElementById("MediaFile").style.display = "inline-block";
-                document.getElementById("MediaLink").style.display = "none";
-            }
-            else {
-                document.getElementById("MediaFile").style.display = "none";
-                document.getElementById("MediaLink").style.display = "inline-block";
-            }
-       // })
+        else {
+            parent.find('.MediaLink').css('display', 'inline-block');
+            parent.find('.MediaFile').css('display', 'none');
+        }
     }
 
 
@@ -271,12 +268,8 @@
     document.getElementById("weaponDiv").style.display = "none";
     var WeaponCheckState = 0;
 
-    document.getElementById("1").onclick = function () { showWeapon(); };
-    //function resetForm() {
-    //    $("[name ='SelectedWeapons']").val(function () {
-    //        return this.defaultValue;
-    //    });
-    //}
+    //gets first box in misconduct and on click runs showWeapon
+    document.getElementById("1").onclick = function () { showWeapon(); }; 
 
     function showWeapon() {
         if (WeaponCheckState === 0) {
