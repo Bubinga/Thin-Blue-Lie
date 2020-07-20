@@ -54,8 +54,7 @@ namespace ThinBlueLie.Controllers
 
             return View("Pages/Timeline.cshtml");
         }
-
-       
+              
         public ActionResult GetFlagView()
         {
             return PartialView("Pages/Shared/_FlagPartial.cshtml");
@@ -114,7 +113,12 @@ namespace ThinBlueLie.Controllers
             return View("Pages/Submit.cshtml", model);
         }
 
-       
+        [Route("/Submit/MoreMedia")]
+        public ActionResult GetMediaPartial()
+        {
+            return PartialView("_MediaPartial");
+        }
+
         public ActionResult Success()
         {
             return View("Pages/Index.cshtml");
