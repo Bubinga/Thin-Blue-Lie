@@ -241,13 +241,13 @@
             $('.AddMedia').on('change', 'select', function (e) {
                 changeFile(e, $(this).parents(".AddMedia"));
             });
-            $("#Close").on('click', function (e) {
+            $(".close").on('click', function (e) {
                 closeMedia(e, $(this).parents(".AddMedia"));
             });
         });       
     });
 
-    $("#Close").on('click', function (e) {
+    $(".close").on('click', function (e) {
         closeMedia(e, $(this).parents(".AddMedia"));
     });
 
