@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
@@ -22,10 +24,17 @@ namespace ThinBlueLie.Controllers
     {
 
         private readonly ThinBlue.ThinbluelieContext _context;
-
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         public TimelineController(ThinBlue.ThinbluelieContext context)
         {
             _context = context;
+        }
+        public TimelineController(UserManager<IdentityUser> userManager,
+                                 SignInManager<IdentityUser> signInManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -61,7 +70,7 @@ namespace ThinBlueLie.Controllers
         }
 
         [HttpPost]
-        [Route("/Timeline")]
+        [Route("/Timeline")] //flagging
         public async Task<IActionResult> Timeline(FlagModel flagModel)
         {
             if (ModelState.IsValid)
@@ -95,7 +104,6 @@ namespace ThinBlueLie.Controllers
         {           
             if (ModelState.IsValid)
             {
-               
                 //Add the checkboxes together and convert them to ints
                 var weaponsSum = model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
                 var misconductsSum = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
@@ -112,6 +120,28 @@ namespace ThinBlueLie.Controllers
             model.AvailableMisconducts = GetMisconducts();
             return View("Pages/Submit.cshtml", model);
         }
+
+        [HttpPost]
+        [Route("/Submit")]
+        [ValidateAntiForgeryToken] //Add media form handler
+        public async Task<IActionResult> MediaAdd(SubmitModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!_signInManager.IsSignedIn(User)) 
+                {
+                   
+                }
+                model.Medias.IdTimelineinfo = model.Timelineinfo.IdTimelineInfo;
+                model.Medias.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                _context.Media.Add(model.Medias);
+                await _context.SaveChangesAsync();
+            }
+            
+            return View("Pages/Submit.cshtml", model);
+        }
+
+
 
         [Route("/Submit/MoreMedia")]
         public ActionResult GetMediaPartial()

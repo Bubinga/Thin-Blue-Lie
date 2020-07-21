@@ -11,10 +11,9 @@ namespace ThinBlue
     {
         [Key]
         public int IdLogin { get; set; }
-        public string Id { get; set; } //id of AspNetUser
+        public string IdUser { get; set; } //id of AspNetUser
         [Column(TypeName = "DATETIME")]
-        public string Time { get; set; } //
-        public string IpAddress { get; set; }
+        public string Time { get; set; } //        
         public string UserAgent { get; set; }
     }
 }
