@@ -16,8 +16,9 @@ namespace ThinBlueLie.Pages
         public TimelineModel()
         {
         }
-      
-        public IList<Timelineinfo> Timelineinfos { get; set; }
-        public IList<Flagged> Flags { get; set; }
+        [BindProperty]
+        public Flagged Flags { get; set; }
+
+        public IList<Timelineinfo> Timelineinfos { get; set; }      
     }
 }

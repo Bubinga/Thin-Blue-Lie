@@ -15,7 +15,7 @@ namespace ThinBlueLie.Pages
         public Timelineinfo Timelineinfo { get; set; }
         [BindProperty]
         public Media Medias { get; set; }
-
+        public bool SignedIn { get; set; }
 
         public IList<string> SelectedWeapons { get; set; }
         public IList<SelectListItem> AvailableWeapons { get; set; }
