@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Pomelo.EntityFrameworkCore.MySql.Query.ExpressionVisitors.Internal;
 using ThinBlue;
 using ThinBlueLie.Pages;
-using ThinBlueLie.ViewModels;
+
 
 namespace ThinBlueLie.Controllers
 {
@@ -26,16 +26,14 @@ namespace ThinBlueLie.Controllers
         private readonly ThinBlue.ThinbluelieContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-        public TimelineController(ThinBlue.ThinbluelieContext context)
-        {
-            _context = context;
-        }
-        public TimelineController(UserManager<IdentityUser> userManager,
+        public TimelineController(ThinBlue.ThinbluelieContext context, 
+                                 UserManager<IdentityUser> userManager,
                                  SignInManager<IdentityUser> signInManager)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
-        }
+        }       
 
         [BindProperty(SupportsGet = true)]
         public string date { get; set; }
@@ -71,15 +69,21 @@ namespace ThinBlueLie.Controllers
 
         [HttpPost]
         [Route("/Timeline")] //flagging
-        public async Task<IActionResult> Timeline(FlagModel flagModel)
+        public async Task<IActionResult> Flag(TimelineModel flagModel)
         {
             if (ModelState.IsValid)
             {
-                flagModel.Flags.IdTimelineInfo = 1;
-                flagModel.Flags.IdUser = "testIdUser";              
-
+                if (!_signInManager.IsSignedIn(User))
+                {
+                    flagModel.Flags.IdUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                }
+                else 
+                {
+                    flagModel.Flags.IdUser = "null";
+                }
+                             
                 _context.Flagged.Add(flagModel.Flags);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();               
             }
             return PartialView("Pages/Shared/_FlagPartial.cshtml", flagModel);
         }
@@ -128,9 +132,13 @@ namespace ThinBlueLie.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!_signInManager.IsSignedIn(User)) 
+                if (!_signInManager.IsSignedIn(User))
                 {
-                   
+                    //add them in Log appropriately
+                }
+                else 
+                {
+                    //add them in Log appropriately
                 }
                 model.Medias.IdTimelineinfo = model.Timelineinfo.IdTimelineInfo;
                 model.Medias.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -142,6 +150,11 @@ namespace ThinBlueLie.Controllers
         }
 
 
+        [Route("/Submit/CheckSignedIn")]
+        public ActionResult CheckSignedIn()
+        {
+            return Ok(_signInManager.IsSignedIn(User));
+        }      
 
         [Route("/Submit/MoreMedia")]
         public ActionResult GetMediaPartial()
