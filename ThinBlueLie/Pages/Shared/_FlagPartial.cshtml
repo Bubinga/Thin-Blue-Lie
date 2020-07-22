@@ -1,28 +1,34 @@
 ﻿@using static ThinBlueLie.Models.FlaggedEnums;
-@model ThinBlueLie.ViewModels.FlagModel
+@model ThinBlueLie.Pages.TimelineModel;
 @{
     Layout = null;
 }
 
-
-    <form method="post" class="mt-4" style="width:200px; height:175px;">
-        <div asp-validation-summary="All" class="text-danger"></div>
-        <div class="form-group">
-            <div class="col-5 dropdown pl-0" style="position:relative;">
-                <label style="position:absolute; bottom:38px;" class="control-label">Type<span class="text-danger ml-1">*</span></label>
-                <select asp-for="Flags.FlagType" asp-items="Html.GetEnumSelectList<FlagTypeEnum>()" style="" class="btn border-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <option class="dropdown-item">Select</option>
-                </select>
-                <span asp-validation-for="Flags.FlagType" class="text-danger"></span>
+    <div class="flagPopover">
+        @using (Html.BeginForm("Flag", "Timeline", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="mt-4" style="width:200px; height:175px;">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <div class="col-5 dropdown pl-0" style="position:relative;">
+                        <label style="position:absolute; bottom:38px;" class="control-label">Type<span class="text-danger ml-1">*</span></label>
+                        <select asp-for="Flags.FlagType" asp-items="Html.GetEnumSelectList<FlagTypeEnum>()" style="" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false">
+                            <option class="dropdown-item">Select</option>
+                        </select>
+                        <span asp-validation-for="Flags.FlagType" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Flags.Message" class="control-label">Explain why you are flagging:<span class="text-danger ml-1">*</span></label>
+                    <textarea asp-for="Flags.Message" class="form-control" rows="2"></textarea>
+                    <span asp-validation-for="Flags.Message" class="text-danger"></span>
+                </div>
+                <textarea asp-for="Flags.IdTimelineInfo" class="idTimelineInput d-none"></textarea>
+                <div class="form-group">
+                    <input value="Submit" class="submitFlag btn btn-primary float-right w-50" />
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Flags.Message" class="control-label">Explain why you are flagging:<span class="text-danger ml-1">*</span></label>
-            <textarea asp-for="Flags.Message" class="form-control" rows="2"/>
-            <span asp-validation-for="Flags.Message" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Submit" class="btn btn-primary float-right" />           
-        </div>
-    </form>
+        }
+    </div>
 

@@ -205,11 +205,12 @@
             </div>
             @*Information Card*@
             <div class="col-md-2 mx-auto mx-md-0 p-md-0" style="max-width:400px;">
-                <div class="card border-dark mb-3 w-100" style="min-width:175px;">
+                <div class="dataCard card border-dark mb-3 w-100" style="min-width:175px;">
                     <div class="card-header text-black"><strong>Data</strong></div>
                     <div class="card-body text-dark pb-0">
                         <h5 class="card-title mb-0">General Information</h5>
                         <hr class="mt-0 pb-0 mb-0 pt-0" />
+                        <span class="d-none eventId">@Timelineinfo.IdTimelineInfo</span>
                         <ul class="list-group list-group-flush">
                             <li class="brokencard list-group-item">
                                 <p><strong>Location:</strong> @Timelineinfo.City, @GetEnumDisplayName((StateEnum)Timelineinfo.State)</p>
@@ -233,8 +234,7 @@
                                 <p><strong>Name:</strong> @Timelineinfo.SubjectName</p>
                                 <p><strong>Sex:</strong> @Enum.GetName(typeof(SexEnum), Timelineinfo.SubjectSex)</p>
                                 <p><strong>Race:</strong> @Enum.GetName(typeof(RaceEnum), Timelineinfo.SubjectRace)</p>
-                                <p><strong>Armed:</strong> @Enum.GetName(typeof(ArmedEnum), Timelineinfo.Armed) </p>
-                                <p id="test"></p>
+                                <p><strong>Armed:</strong> @Enum.GetName(typeof(ArmedEnum), Timelineinfo.Armed) </p>                                
                             </li>
                         </ul>
                     </div>
@@ -246,8 +246,8 @@
                                     Incorrect Info?
                                 </a>
                             </div>
-                            <div class="col-5 px-0">
-                                <a tabindex="0" class="btn btn-danger position-relative" data-placement="top" role="button" data-html="true" data-toggle="popover" data-trigger="click" title="Report"
+                            <div class="col-5 px-0">                                
+                                <a tabindex="0" class="btn btn-danger position-relative flag" data-placement="top" role="button" data-html="true" data-toggle="popover" data-trigger="click" title="Report"
                                    data-content='@await Html.PartialAsync("Shared/_FlagPartial.cshtml")'>
                                    Flag ⚐
                                 </a>                               
@@ -268,10 +268,37 @@
 <script>
     $(document).ready(function () { //enables popover
         $('[data-toggle="popover"]').popover({
+            container: 'body',
             sanitize: false,
         })
-        $('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="tooltip"]').tooltip();
     });
+
+    @*$('.submit').click(function (e) {
+       
+        //@Url.Action("Flag", "Timeline", new { id = Model.Flags.IdTimelineInfo });
+
+        //You want to use event handlers to on form submit find the parent function's eventid and pass it to flag in controller.
+        //You don't need to use url, it is a post, it will find it.
+    });*@
+    $(document).ready(function () { //enables popover
+        $('.flag').click(function (e) {
+            var test = $(this).parents(".dataCard").find(".eventId").html();
+            console.log(test)
+            $('.submitFlag').click(function () {
+                $(this).parents(".flagPopover").find(".idTimelineInput").html(test);                
+                $(this).parents(".flagPopover").find("form").submit();
+
+
+
+                //You want to use event handlers to on form submit find the parent function's eventid and pass it to flag in controller.
+                //You don't need to use url, it is a post, it will find it.
+            });
+        });
+    });
+
+
+
 
     @*$.ajax({
         url: '@Url.Action("GetFlagView","Timeline")',

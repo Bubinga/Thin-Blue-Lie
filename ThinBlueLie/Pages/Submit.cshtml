@@ -184,7 +184,8 @@
                 <span asp-validation-for="Timelineinfo.Context" class="text-danger"></span>
             </div>            
             <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary" />
+                <input id="submit" type="button" value="Submit" class="btn btn-primary" onclick="submitForms()" data-toggle="popover" data-trigger="manual" data-html="true" data-placement="top"
+                       data-content=' @await Html.PartialAsync("Shared/_PleaseLogin.cshtml") '/>
                 <a asp-page="/Index" style="float:right">Back to Home</a>
             </div>
         }
@@ -221,15 +222,31 @@
     </div>
 </div>
 <script>
+    $(function () {
+        $('[data-toggle="popover"]').popover();
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+    
     //If Date changes, run the getsimilar action in the Timeline Controller and load the partial view.
     $(".SimFinder").change(function () {
         $('#VideoList').load('@Url.Action("GetSimilar","Timeline")', { TempDate: $("#DateInput").val() });
     });
+    
+    submitForms = function () {
+        $.get('Submit/CheckSignedIn', function (data) {
+            if (data == false) {
+                $('#submit').popover('show');
+                var attempt = 1;
+                alert("if ran");
+            }
+            else if (attempt ==  1 | data == true) {
+                $('form').submit();
+                alert("else if ran");
+            }
+        });         
+    }
 
-    //$(".dropdown-menu a").click(function () {
-    //   // $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-    //    //$(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-    //});
+
     $("#MoreMedia").click(function () {
         //$("#MediaList").append("Submit/MoreMedia");
         var content;
