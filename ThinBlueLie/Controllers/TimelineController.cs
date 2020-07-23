@@ -83,9 +83,11 @@ namespace ThinBlueLie.Controllers
                 }
                              
                 _context.Flagged.Add(flagModel.Flags);
-                await _context.SaveChangesAsync();               
+                await _context.SaveChangesAsync();
+
+                return Ok(true);
             }
-            return PartialView("Pages/Shared/_FlagPartial.cshtml", flagModel);
+            return (IActionResult)flagModel;
         }
 
         [HttpGet]

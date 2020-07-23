@@ -5,8 +5,7 @@
 }
 
     <div class="flagPopover">
-        @using (Html.BeginForm("Flag", "Timeline", FormMethod.Post))
-        {
+        <form>
             @Html.AntiForgeryToken()
             <div class="mt-4" style="width:200px; height:175px;">
                 <div asp-validation-summary="All" class="text-danger"></div>
@@ -29,6 +28,6 @@
                     <input value="Submit" class="submitFlag btn btn-primary float-right w-50" />
                 </div>
             </div>
-        }
+        </form>
     </div>
 
