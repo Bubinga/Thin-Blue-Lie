@@ -283,11 +283,14 @@
     });*@
     $(document).ready(function () { //enables popover
         $('.flag').click(function (e) {
-            var test = $(this).parents(".dataCard").find(".eventId").html();
-            console.log(test)
-            $('.submitFlag').click(function () {
-                $(this).parents(".flagPopover").find(".idTimelineInput").html(test);                
-                $(this).parents(".flagPopover").find("form").submit();
+            var id = $(this).parents(".dataCard").find(".eventId").html();
+            console.log(id)
+            $('.submitFlag').click(function (e) {
+                $(this).parents(".flagPopover").find(".idTimelineInput").html(id);  
+                //var flagSuccess = $(this).parents.$(".flagPopover").html("test");
+                var flagSuccess = $(this).parents.$(".flagPopover").attr('data-content', "test").data('bs.popover');
+                flagSuccess.$tip.addClass(popover.options.placement);
+               // $(this).parents(".flagPopover").find("form").submit();
 
 
                 //You want to use event handlers to on form submit find the parent function's eventid and pass it to flag in controller.
