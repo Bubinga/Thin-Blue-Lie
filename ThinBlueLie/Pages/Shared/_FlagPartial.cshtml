@@ -7,16 +7,15 @@
     <div class="flagPopover">
         <form>
             @Html.AntiForgeryToken()
-            <div class="mt-4" style="width:200px; height:175px;">
-                <div asp-validation-summary="All" class="text-danger"></div>
+            <div style="width:200px; min-height:150px;">                
                 <div class="form-group">
-                    <div class="col-5 dropdown pl-0" style="position:relative;">
-                        <label style="position:absolute; bottom:38px;" class="control-label">Type<span class="text-danger ml-1">*</span></label>
+                    <div class="dropdown pl-0" style="position:relative;">
+                        <label  class="control-label">Type<span class="text-danger ml-1">*</span></label>
                         <select asp-for="Flags.FlagType" asp-items="Html.GetEnumSelectList<FlagTypeEnum>()" style="" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false">
                             <option class="dropdown-item">Select</option>
                         </select>
                         <span asp-validation-for="Flags.FlagType" class="text-danger"></span>
-                    </div>
+                    </div>                    
                 </div>
                 <div class="form-group mb-2">
                     <label asp-for="Flags.Message" class="control-label">Explain why you are flagging:<span class="text-danger ml-1">*</span></label>
@@ -24,11 +23,10 @@
                     <span asp-validation-for="Flags.Message" class="text-danger"></span>
                 </div>
                 <textarea asp-for="Flags.IdTimelineInfo" class="idTimelineInput d-none"></textarea>
-                <div class="form-group">
-                    <button class="submitFlag btn btn-primary float-right w-50 mb-1">Submit</button>
-                    
-                </div>
             </div>
         </form>
+        <div>
+            <button class="submitFlag btn btn-primary float-right w-50 mb-1">Submit</button>
+        </div>
     </div>
 
