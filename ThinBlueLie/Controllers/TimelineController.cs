@@ -87,7 +87,7 @@ namespace ThinBlueLie.Controllers
 
                 return Ok(true);
             }
-            return (IActionResult)flagModel;
+            return PartialView("Pages/Shared/_FlagPartial.cshtml",flagModel);
         }
 
         [HttpGet]

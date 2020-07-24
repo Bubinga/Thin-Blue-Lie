@@ -59,7 +59,7 @@
         border-bottom: 11px solid transparent;
         left: 7px;
         position: absolute;
-        top: -12px;
+        top: -11px;
         content: '';
     }
 
@@ -82,7 +82,7 @@
         border-bottom: 11px solid transparent;
         position: absolute;
         left: -27px;
-        top: -12px;
+        top: -11px;
         content: '';
     }    
 
@@ -281,38 +281,36 @@
         //You want to use event handlers to on form submit find the parent function's eventid and pass it to flag in controller.
         //You don't need to use url, it is a post, it will find it.
     });*@
-    $(document).ready(function () { //enables popover
-        $('.flag').click(function (e) {
-            var id = $(this).parents(".dataCard").find(".eventId").html();
-            console.log(id)
-            $('.submitFlag').click(function (e) {
-                $(this).parents(".flagPopover").find(".idTimelineInput").html(id);  
-                //var flagSuccess = $(this).parents.$(".flagPopover").html("test");
-                var flagSuccess = $(this).parents.$(".flagPopover").attr('data-content', "test").data('bs.popover');
-                flagSuccess.$tip.addClass(popover.options.placement);
-               // $(this).parents(".flagPopover").find("form").submit();
 
+    $('.flag').click(function () {
+        var id = $(this).parents(".dataCard").find(".eventId").html();
 
-                //You want to use event handlers to on form submit find the parent function's eventid and pass it to flag in controller.
-                //You don't need to use url, it is a post, it will find it.
-            });
+        $('.submitFlag').click(function () {
+            $(this).parents(".flagPopover").find(".idTimelineInput").html(id);
+           // $(this).parents(".flagPopover").find("form").submit();
+
+            $.post('', $('form').serialize())
+                .done(function (data) {
+                    alert(data)
+                    if (data == true) {
+                        alert("Data Loaded: " + data);
+                    }
+                    else {
+                        $(this).parents('flagPopover').html(data);
+                    }
+
+               });
+            //$('#VideoList').load('@@Url.Action("GetSimilar","Timeline")');
+
+            //$(".flag").attr('data-content', 'hello');
+            //var flagpopover = $(".flag").data('bs.popover');
+            //flagpopover.setContent();
+            //flagpopover.tip.addClass(popover.options.placement);
+
         });
     });
 
 
-
-
-    @*$.ajax({
-        url: '@Url.Action("GetFlagView","Timeline")',
-        success: function (result) {
-            $('#popoverNavLink').popover({
-                content: result,
-                trigger: 'click',
-                html: true,
-                animation: false
-            })
-        }
-    });*@
 
     document.getElementById("Timeline").classList.add("onpage");
 
