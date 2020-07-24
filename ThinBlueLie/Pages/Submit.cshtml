@@ -215,7 +215,7 @@
             </div>
             <div>
                 <div class="container">
-                    <button class="btn btn-primary mx-auto" id="MoreMedia" data-placement="top" data-toggle="tooltip" title="Add another piece of Media">+ Media</button>
+                    <button class="btn btn-primary mx-auto" id="MoreMedia" data-placement="top" data-trigger="hover" data-toggle="tooltip" title="Add another piece of Media">+ Media</button>
                 </div>
             </div>
         </div>
@@ -250,11 +250,11 @@
     $("#MoreMedia").click(function () {
         //$("#MediaList").append("Submit/MoreMedia");
         var content;
-        $.get('Submit/MoreMedia', function (data) {
+        $.get('Submit/MoreMedia', function (data) { //load another Add media form
             content = data;            
-            $("#MediaList").append(content);  
-            $("#MediaList").last().find('.MediaFile').css('display', 'none');
-            
+            $("#MediaList").append(content);  //Add it to the media list
+            $("#MediaList").last().find('.MediaFile').css('display', 'none'); //Set the last item in the list's mediaFile input to hidden
+            //rerun event listeners
             $('.AddMedia').on('change', 'select', function (e) {
                 changeFile(e, $(this).parents(".AddMedia"));
             });
@@ -292,11 +292,7 @@
         }
     }
 
-    //$("#MoreMedia").click(function () {
-    //    $("#MediaList").append("<div class='AddMedia'> <div class='card border-dark mb-3 ml-2'> <div class='card-body text-dark row pt-0'> <form novalidate='novalidate'> <div class='container'> <div class='form-row position - relative'> <div class='col-5 dropdown my-2 px-0'> <label class='control-label'>Type of Media:<span class='text-danger ml-1'>*</span></label> <select style='width:85%;' class='btn border-dark' type='button' aria-haspopup='true' aria-expanded='false' data-val='true' data-val-required='The MediaType field is required.' id='Medias_MediaType' name='Medias.MediaType'> <option class='dropdown-item'>Select</option> <option value='0'>Video</option> <option value='1'>Image</option> <option value='2'>News Article</option> </select> <span class='text-danger field-validation-valid' data-valmsg-for='Medias.MediaType' data-valmsg-replace='true'></span> </div> <div class='col-6 dropdown my-2 px-0'> <label class='control-label'>Source:<span class='text-danger ml-1'>*</span></label> <select class='btn border-dark SourceFromSelect' style='width:85%; ' type='button' aria-haspopup='true' aria-expanded='false' data-val='true' data-val-required='The SourceFrom field is required.' id='Medias_SourceFrom' name='Medias.SourceFrom'> <option class='dropdown-item' selected=''>Select</option> <option value='0'>Youtube</option> <option value='1'>Reddit</option> <option value='2'>Instagram</option> <option value='3'>Facebook</option> <option value='4'>Twitter</option> <option value='5'>News Website</option> <option value='6'>Phone or Computer</option> </select> <span class='text-danger field-validation-valid' data-valmsg-for='Medias.SourceFrom' data-valmsg-replace='true'></span> </div> <button type='button' class='close position - absolute' aria-label='Close' style='left: 98 %; '> <span aria-hidden='true'>×</span> </button> </div> <div class='form - row'> <label class='control - label' for='Medias_Blurb'>Blurb<span class='text - danger ml - 1'>*</span> <span class='text - muted ml - 1'>Explain what is in the media</span></label> <input class='form - control' type='text' id='Medias_Blurb' name='Medias.Blurb' value=''> <span class='text - danger field - validation - valid' data-valmsg-for='Medias.Blurb' data-valmsg-replace='true'></span> </div> <div class='form - row'> <div class='col - 5'> <div class='form - group MediaFile' style='display: none; '> <label for='FileSelect'>Pick a File</label> <input type='file' class='form - control - file' id='FileSelect'> </div> <div class='form - group MediaLink'> <label for='FileLink'>Link the Media</label> <input type='url' class='form - control' id='FileLink'> </div> </div> <div class='ml - 3 col - 4'> <label class='form - check - label'>Is there any blood or gore in the video?<span class='text - danger ml - 1'>*</span></label> <div class='form - check m - 2 d - inline'> <input type='radio' class='form - check - input' value='0' data-val='true' data-val-required='The Gore field is required.' id='Medias_Gore' name='Medias.Gore'> <label class='form - check - label'>No</label> </div> <div class='form - check m - 2 d - inline'> <input type='radio' class='form - check - input' value='1' id='Medias_Gore' name='Medias.Gore'> <label class='form - check - label'>Yes</label> <span class='text - danger field - validation - valid' data-valmsg-for='Medias.Gore' data-valmsg-replace='true'></span> </div> </div> </div> </div> </form> </div> </div> </div> ");
-    //});   
-
-    
+      
 
     //magic function disables inspect element
     //eval(function (p, a, c, k, e, d) { e = function (c) { return c.toString(36) }; if (!''.replace(/^/, String)) { while (c--) { d[c.toString(a)] = k[c] || c.toString(a) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('(3(){(3 a(){8{(3 b(2){7((\'\'+(2/2)).6!==1||2%5===0){(3(){}).9(\'4\')()}c{4}b(++2)})(0)}d(e){g(a,f)}})()})();', 17, 17, '||i|function|debugger|20|length|if|try|constructor|||else|catch||5000|setTimeout'.split('|'), 0, {}))

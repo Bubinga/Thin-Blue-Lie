@@ -282,23 +282,52 @@
         //You don't need to use url, it is a post, it will find it.
     });*@
 
+    $(document).ready(function () { //enables popover
+        $('.flag').click(function () {
+            var id = $(this).parents(".dataCard").find(".eventId").html();
+
+            $('.submitFlag').click(function () {
+                $(this).parents(".flagPopover").find(".idTimelineInput").html(id);                
+                changeDiv = $(this).parents(".flagPopover");                
+                $.post('', $('form').serialize())
+                    .done(function (data) {                       
+                        if (data == true) {
+                            alert("if ran");
+                            changeDiv.html("Thank you for flagging");
+                            $(".flag").popover('update');
+                        }
+                        else {        
+                            changeDiv.html(data);
+                            $(".flag").popover('update');
+                        }
+                    });
+                //$('#VideoList').load('@@Url.Action("GetSimilar","Timeline")');
+
+                //$(".flag").attr('data-content', 'hello');
+                //var flagpopover = $(".flag").data('bs.popover');
+                //flagpopover.setContent();
+                //flagpopover.tip.addClass(popover.options.placement);
+
+            });
+        });
+    });
+
     $('.flag').click(function () {
         var id = $(this).parents(".dataCard").find(".eventId").html();
 
         $('.submitFlag').click(function () {
             $(this).parents(".flagPopover").find(".idTimelineInput").html(id);
            // $(this).parents(".flagPopover").find("form").submit();
-
+            alert('test');
             $.post('', $('form').serialize())
                 .done(function (data) {
-                    alert(data)
+                    console.log(data);
                     if (data == true) {
                         alert("Data Loaded: " + data);
                     }
                     else {
                         $(this).parents('flagPopover').html(data);
                     }
-
                });
             //$('#VideoList').load('@@Url.Action("GetSimilar","Timeline")');
 
