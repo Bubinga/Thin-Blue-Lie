@@ -37,9 +37,7 @@ namespace ThinBlueLie.Controllers
 
         [BindProperty(SupportsGet = true)]
         public string date { get; set; }
-        //public IList<Timelineinfo> Timelineinfo { get; set; }
-        //public Timelineinfo Timelineinfo { get; set; }
-       
+              
         [HttpGet]
         [Route("/Timeline")]
         public async Task<IActionResult> Timeline(TimelineModel model)
@@ -62,11 +60,7 @@ namespace ThinBlueLie.Controllers
             return View("Pages/Timeline.cshtml");
         }
               
-        public ActionResult GetFlagView()
-        {
-            return PartialView("Pages/Shared/_FlagPartial.cshtml");
-        }
-
+        
         [HttpPost]
         [Route("/Timeline")] //flagging
         public async Task<IActionResult> Flag(TimelineModel flagModel)
@@ -92,7 +86,7 @@ namespace ThinBlueLie.Controllers
 
         [HttpGet]
         [Route("/Submit")]
-        public IActionResult Submit()
+        public ViewResult Submit()
         {
             var model = new SubmitModel
             {
@@ -105,11 +99,12 @@ namespace ThinBlueLie.Controllers
         
         [HttpPost]
         [Route("/Submit")]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken] //Main form handler
         public async Task<IActionResult> Submit(SubmitModel model)
         {           
             if (ModelState.IsValid)
             {
+
                 //Add the checkboxes together and convert them to ints
                 var weaponsSum = model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
                 var misconductsSum = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
@@ -150,6 +145,19 @@ namespace ThinBlueLie.Controllers
             
             return View("Pages/Submit.cshtml", model);
         }
+
+        [HttpGet]
+        [Route("/Edit")]
+        public ActionResult Edit()
+        {
+            var model = new SubmitModel
+            {
+                AvailableWeapons = GetWeapons(),
+                AvailableMisconducts = GetMisconducts()
+            };
+            return View("Pages/Edit.cshtml", model);
+        }
+
 
 
         [Route("/Submit/CheckSignedIn")]

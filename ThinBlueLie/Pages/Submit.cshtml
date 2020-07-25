@@ -4,7 +4,7 @@
 @{   
     ViewBag.Title = "Submit";
 }
-
+    <script src="https://unpkg.com/feather-icons"></script>
 <div class="offset-lg-3 row container-fluid">
     <div class="col-lg-4 col-md-5 border-left border-right border-bottom">
         <div class="d-block mb-0 pt-3 border-bottom">
@@ -199,8 +199,8 @@
                     either a date, name, video, or some combination of the three
                 </p>
                 <hr />
-            </div>
-            <div id="VideoList"><partial name="_SimilarPartial" /></div>
+                <div id="VideoList"><partial name="_SimilarPartial" /></div>
+            </div>           
         </div>
         <div class="row">
             <div class="d-block border-top container-fluid">
@@ -215,13 +215,17 @@
             </div>
             <div>
                 <div class="container">
-                    <button class="btn btn-primary mx-auto" id="MoreMedia" data-placement="top" data-trigger="hover" data-toggle="tooltip" title="Add another piece of Media">+ Media</button>
+                    <button class="btn btn-primary mx-auto" id="MoreMedia" data-placement="top" data-trigger="hover" data-toggle="tooltip" title="Add another piece of Media">
+                        Media <i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <script>
+    feather.replace();
+
     $(function () {
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
@@ -231,16 +235,17 @@
     $(".SimFinder").change(function () {
         $('#VideoList').load('@Url.Action("GetSimilar","Timeline")', { TempDate: $("#DateInput").val() });
     });
-    
+    var attempt = 0;
     submitForms = function () {
         $.get('Submit/CheckSignedIn', function (data) {
-            if (data == false) {
+            if (data == false && attempt == 0) {
                 $('#submit').popover('show');
-                var attempt = 1;
+                attempt = 1;
                 alert("if ran");
             }
-            else if (attempt ==  1 | data == true) {
-                $('form').submit();
+            else if (attempt ==  1 || data == true) {
+              //  $('form').submit();
+                $('#submit').popover('hide');
                 alert("else if ran");
             }
         });         
