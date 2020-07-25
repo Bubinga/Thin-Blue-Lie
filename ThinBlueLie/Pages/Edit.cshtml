@@ -1,8 +1,10 @@
 ﻿@using ThinBlueLie.Models;
-@model ThinBlueLie.Pages.SubmitModel
+@model ThinBlueLie.Pages.EditModel
 
 @{
     ViewBag.Title = "Submit";
+    var media = ViewData["Media"] as IList<ThinBlue.Media>;
+    //var Event = ViewData["Timelineinfo"] as ThinBlue.Timelineinfo;
 }
 
 <div class="offset-lg-3 row container-fluid">
@@ -190,7 +192,7 @@
             </div>
         }
     </div>
-    <div class="col-lg-5 col-md-5">        
+    <div class="col-lg-5 col-md-5">
         <div class="row">
             <div class="d-block border-top container-fluid">
                 <h4 class="pt-2">Add Media</h4>
@@ -200,11 +202,17 @@
                 <hr />
             </div>
             <div id="MediaList">
-                <partial name="_MediaPartial" />
+                @foreach (var Media in media)
+                {
+                    <partial name="_MediaPartial" />
+                }
             </div>
             <div>
                 <div class="container">
-                    <button class="btn btn-primary mx-auto" id="MoreMedia" data-placement="top" data-trigger="hover" data-toggle="tooltip" title="Add another piece of Media">+ Media</button>
+                    <button class="btn btn-primary mx-auto" id="MoreMedia" data-placement="top" data-trigger="hover" data-toggle="tooltip" title="Add another piece of Media">
+                        Media
+                        <i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>
+                    </button>
                 </div>
             </div>
         </div>
