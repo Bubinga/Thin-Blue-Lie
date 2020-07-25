@@ -5,52 +5,177 @@
 }
 
 <style>
-    html {
-        scroll-behavior: smooth;
+    body {
+        font-size: .875rem;
     }
-    .sidenav {
-        max-width: 250px;
+
+    .feather {
+        width: 16px;
+        height: 16px;
+        vertical-align: text-bottom;
+    }
+
+    /*
+ * Sidebar
+ */
+
+    .sidebar {
         position: fixed;
-        z-index: 1;
-        top: 400px;
-        left: 50px;
-        background: #eee;
-        overflow-x: hidden;
-        padding: 8px 0;
+        top: 343px;
+        bottom: 0;
+        left: 0;
+        z-index: 100; /* Behind the navbar */
+        padding: 5px 0 0 25px; /* Height of navbar */
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        min-width:200px;
     }
-        .sidenav a {
-            padding: 6px 8px 6px 16px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #0091ff;
-            display: block;
+
+    .sidebar-sticky {
+        position: relative;
+        top: 0;
+        height: calc(100vh - 48px);
+        padding-top: .5rem;
+        overflow-x: hidden;
+        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    }
+
+    @@supports ((position: -webkit-sticky) or (position: sticky)) {
+        .sidebar-sticky {
+            position: -webkit-sticky;
+            position: sticky;
         }
-            .sidenav a:hover {
-                color: #064579;
+    }
+
+    .sidebar .nav-link {
+        font-size:1rem;
+        font-weight: 500;
+        color: #007bff;
+        padding-bottom: 3px;
+    }
+    .sidebar .nav-link:hover{
+        text-decoration: underline;
+    }
+
+        .sidebar .nav-link .feather {
+            margin-right: 4px;
+            color: #999;
+        }
+
+        .sidebar .nav-link.active {
+            border-right: 3px solid blue;
+        }
+
+            .sidebar .nav-link:hover .feather,
+            .sidebar .nav-link.active .feather {
+                color: inherit;
             }
+
+    .sidebar-heading {
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        margin-bottom: .6rem;
+    }
+
+    /*
+ * Content
+ */
+
+    [role="main"] {
+        padding-top: 48px; /* Space for fixed navbar */
+    }
+
+    /*
+ * Navbar
+ */
+
+    .navbar .form-control {
+        padding: .75rem 1rem;
+        border-width: 0;
+        border-radius: 0;
+    }
+
+    .form-control-dark {
+        color: #fff;
+        background-color: rgba(255, 255, 255, .1);
+        border-color: rgba(255, 255, 255, .1);
+    }
+        .form-control-dark:focus {
+            border-color: transparent;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+        }
+   
 </style>
-<div class="jumbotron home" style=" background-image: url(FlagAndFire.jpg) !important;">
+<div class="jumbotron home mb-0" style="background-image: url(FlagAndFire.jpg) !important;">
     <div class="ml-5 pl-5 container container-fluid">
         <h1 style="font-family: MillerItalic, Georgia, serif; font-size: 4em;" class="text-primary font-italic">Possible Solutions</h1>       
     </div>
 </div>
-<div class="sidenav">
-    <a href="#defund">Defund</a>
-    <a href="#reform">Reform/Training</a>
-    <a href="roles">Changed roles</a>
-    <a href="immunity">Ending Qualified Immunity</a>
-    <a href="demilitarization">Demilitarization</a>
-    <a href="reporting">Comprehensive Reporting</a>
-    <a href="reporting">Community Involvement</a>
-    <a href="reporting">End For-Profit Policing</a>
-    <a href="intervention">Intervention</a>
-</div>
-<div class="container">
-    <h4>Purpose</h4>
-    <p>Here you can read about possible solutions to the problem along with an array of other resources</p>
-    <hr class="blueline mt-0 pb-0 mb-0 pt-0" style="" />
-    <br />
+<div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li>
+                    <h3 class="sidebar-heading text-center border-bottom">Navigation Menu</h3>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#defund">Defund</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reform">Reform/Training</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#roles">Changed roles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#immunity">Ending Qualified Immunity</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#demilitarization">Demilitarization</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reporting">Comprehensive Reporting</a>
+                </li>
+                <li class="nav-item">
+                   <a class="nav-link" href="#community-involvement">Community Involvement</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#for-profit">End For-Profit Policing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#intervention">Intervention</a>
+                </li>
+            </ul>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span style="font-size:.7rem;">Click on a solution to go to it</span>                
+            </h6>           
+        </div>
+    </nav>  
+    <div class="offset-lg-2 offset-md-3 col-md-9 col-lg-8 px-4">
+        <div class="pt-3 pb-2 mb-3 bord">
+            <h4>Purpose</h4>
+            <p>Here you can read about possible solutions to the problem along with an array of other resources</p>
+            <hr class="blueline nogap"/>
+            <br />
+        </div>
+    </div>   
 </div>
 <script>
     document.getElementById("Solutions").classList.add("onpage");
+
+    $(document).ready(function () {
+
+        $("#sidebar").mCustomScrollbar({
+            theme: "minimal"
+        });
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+
+    });
+    $(".nav-link").click(function (e) {
+        e.preventDefault();
+        $(".nav-link").removeClass("active");
+        $(this).toggleClass("active");
+    });
 </script>
