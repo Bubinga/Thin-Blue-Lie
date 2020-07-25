@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ThinBlueLie.Pages
 {
-    public class EditModel : PageModel
+    public class EditModel 
     {
         public void OnGet()
         {
