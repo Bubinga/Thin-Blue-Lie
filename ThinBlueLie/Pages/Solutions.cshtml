@@ -164,18 +164,11 @@
 
     $(document).ready(function () {
 
-        $("#sidebar").mCustomScrollbar({
-            theme: "minimal"
-        });
-
-        $('#sidebarCollapse').on('click', function () {
-            $('#sidebar').toggleClass('active');
-        });
-
+      
     });
-    $(".nav-link").click(function (e) {
+    $(".sidebar .nav-link").click(function (e) {
         e.preventDefault();
-        $(".nav-link").removeClass("active");
+        $(".sidebar .nav-link").removeClass("active");
         $(this).toggleClass("active");
     });
 </script>
