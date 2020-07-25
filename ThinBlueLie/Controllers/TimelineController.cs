@@ -6,6 +6,7 @@ using System.Reflection.Metadata;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -137,7 +138,7 @@ namespace ThinBlueLie.Controllers
                 {
                     //add them in Log appropriately
                 }
-                model.Medias.IdTimelineinfo = model.Timelineinfo.IdTimelineInfo;
+                model.Medias.IdTimelineInfo = model.Timelineinfo.IdTimelineInfo;
                 model.Medias.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Media.Add(model.Medias);
                 await _context.SaveChangesAsync();
@@ -146,15 +147,37 @@ namespace ThinBlueLie.Controllers
             return View("Pages/Submit.cshtml", model);
         }
 
+        [BindProperty(SupportsGet = true)]
+        public string idString { get; set; }
+
         [HttpGet]
         [Route("/Edit")]
-        public ActionResult Edit()
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Edit()
         {
-            var model = new SubmitModel
+            var model = new EditModel
             {
                 AvailableWeapons = GetWeapons(),
                 AvailableMisconducts = GetMisconducts()
             };
+
+            idString = Request.Query["id"];
+            int id = Int32.Parse(idString);
+            //if (date == null | string.IsNullOrWhiteSpace(Request.Query["d"]))
+            //{
+            //    return NotFound();
+            //}
+
+            //query database using query string
+            // model.Timelineinfos = await _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{date}'").ToListAsync();
+            model.Timelineinfo = await _context.Timelineinfo.Where(i => i.IdTimelineInfo.Equals(id)).FirstOrDefaultAsync();
+            //var y = await _context.Timelineinfo.Where(t => t.Date.Equals(date)).ToListAsync();
+            model.Medias = await _context.Media.Where(d => d.IdTimelineInfo.Equals(id)).ToListAsync();
+
+            //load data into ViewData to be used in the Edit page
+            ViewData["Timelineinfo"] = model.Timelineinfo;
+            ViewData["Media"] = model.Medias;
+
             return View("Pages/Edit.cshtml", model);
         }
 

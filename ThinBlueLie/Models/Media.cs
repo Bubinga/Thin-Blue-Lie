@@ -12,7 +12,7 @@ namespace ThinBlue
         [Key]
         public int IdMedia { get; set; }
         public int MediaType { get; set; }
-        public int IdTimelineinfo { get; set; }
+        public int IdTimelineInfo { get; set; }
         public int SourceFrom { get; set; }
         public int Gore { get; set; }
         public string SourceFile { get; set; }

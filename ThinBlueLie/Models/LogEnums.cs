@@ -7,7 +7,7 @@ namespace ThinBlueLie.Models
 {
     public class LogEnums
     {
-        public enum LogTypeEnum
+        public enum ActionEnum
         {
             Post,           
             Edit,            
