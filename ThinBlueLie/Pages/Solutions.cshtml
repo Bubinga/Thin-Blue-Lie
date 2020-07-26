@@ -1,111 +1,11 @@
 ﻿@page
-@model SolutionModel
+@model ThinBlueLie.Pages.SolutionModel
 @{
     ViewData["Title"] = "Solutions";
 }
 
-<style>
-    body {
-        font-size: .875rem;
-    }
 
-    .feather {
-        width: 16px;
-        height: 16px;
-        vertical-align: text-bottom;
-    }
-
-    /*
- * Sidebar
- */
-
-    .sidebar {
-        position: fixed;
-        top: 343px;
-        bottom: 0;
-        left: 0;
-        z-index: 100; /* Behind the navbar */
-        padding: 5px 0 0 25px; /* Height of navbar */
-        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-        min-width:200px;
-    }
-
-    .sidebar-sticky {
-        position: relative;
-        top: 0;
-        height: calc(100vh - 48px);
-        padding-top: .5rem;
-        overflow-x: hidden;
-        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    }
-
-    @@supports ((position: -webkit-sticky) or (position: sticky)) {
-        .sidebar-sticky {
-            position: -webkit-sticky;
-            position: sticky;
-        }
-    }
-
-    .sidebar .nav-link {
-        font-size:1rem;
-        font-weight: 500;
-        color: #007bff;
-        padding-bottom: 3px;
-    }
-    .sidebar .nav-link:hover{
-        text-decoration: underline;
-    }
-
-        .sidebar .nav-link .feather {
-            margin-right: 4px;
-            color: #999;
-        }
-
-        .sidebar .nav-link.active {
-            border-right: 3px solid blue;
-        }
-
-            .sidebar .nav-link:hover .feather,
-            .sidebar .nav-link.active .feather {
-                color: inherit;
-            }
-
-    .sidebar-heading {
-        font-size: 1.1rem;
-        text-transform: uppercase;
-        margin-bottom: .6rem;
-    }
-
-    /*
- * Content
- */
-
-    [role="main"] {
-        padding-top: 48px; /* Space for fixed navbar */
-    }
-
-    /*
- * Navbar
- */
-
-    .navbar .form-control {
-        padding: .75rem 1rem;
-        border-width: 0;
-        border-radius: 0;
-    }
-
-    .form-control-dark {
-        color: #fff;
-        background-color: rgba(255, 255, 255, .1);
-        border-color: rgba(255, 255, 255, .1);
-    }
-        .form-control-dark:focus {
-            border-color: transparent;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
-        }
-   
-</style>
-<div class="jumbotron home mb-0" style="background-image: url(FlagAndFire.jpg) !important;">
+<div class="jumbotron home" style="background-image: url(FlagAndFire.jpg) !important;">
     <div class="ml-5 pl-5 container container-fluid">
         <h1 style="font-family: MillerItalic, Georgia, serif; font-size: 4em;" class="text-primary font-italic">Possible Solutions</h1>       
     </div>
@@ -150,8 +50,8 @@
             </h6>           
         </div>
     </nav>  
-    <div class="offset-lg-2 offset-md-3 col-md-9 col-lg-8 px-4">
-        <div class="pt-3 pb-2 mb-3 bord">
+    <div class="col-md-9 px-4" style="min-height:1500px;">
+        <div class="pt-3 pb-2 mb-3">
             <h4>Purpose</h4>
             <p>Here you can read about possible solutions to the problem along with an array of other resources</p>
             <hr class="blueline nogap"/>
@@ -161,11 +61,7 @@
 </div>
 <script>
     document.getElementById("Solutions").classList.add("onpage");
-
-    $(document).ready(function () {
-
-      
-    });
+    
     $(".sidebar .nav-link").click(function (e) {
         e.preventDefault();
         $(".sidebar .nav-link").removeClass("active");
