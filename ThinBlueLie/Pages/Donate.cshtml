@@ -6,11 +6,22 @@
 
 <style>
     .rightnav {
-        position: sticky;
-        top: 43px;
-        padding: 0px;
+        position: sticky;        
+        padding: 0px;        
+        top: 48px;
+        bottom: 0;
+        left: 0;
+        z-index: 100; /* Behind the navbar */
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        min-width: 200px;
     }
 
+    .rightnav-sticky {
+        position: sticky;
+        top: 48px;
+        height: calc(100vh - 48px);
+        padding-top: .5rem;
+    }
     .right p {
         padding: 6px 8px 6px 16px;
         text-decoration: none;
@@ -24,7 +35,7 @@
         }
 </style>
 <div class="jumbotron home" style="background-image: url(FlagAndFire.jpg) !important;">
-    <div class="ml-5 pl-5 container-fluid pr-0">
+    <div class="ml-5 pl-5 container-fluid">
         <h1 style="font-family: MillerItalic, Georgia, serif; font-size: 4em;" class="text-primary font-italic">DONATE</h1>
     </div>
 </div>
@@ -70,7 +81,7 @@
             </h6>
         </div>
     </nav>
-    <div class="col-md-8 pr-0">
+    <div class="col-md-8 pr-0" style="min-height:1500px;">
         <div class="pt-3 pb-2 mb-0 pl-2">
             <h4>Purpose</h4>
             <p>Here you can read about reputable charities to donate to help support the cause</p>
@@ -78,8 +89,8 @@
         <hr class="blueline nogap" />
         <br />
     </div>
-    <nav class="rightnav col-md-1 d-md-block">
-        <div class="border bg-light p-2" style="border-radius:2px;">
+    <nav class="rightnav col-md-2 d-md-block">
+        <div class="border bg-light p-2 rightnav-sticky" style="border-radius:2px;">
             <h5>Donate to Thin Blue Lie:</h5>
             <p>Thin Blue Lie is currently entirely managed by one person(me), for it to stay active and up-to-date I rely on donations. Even the smallest donations are appreciated greatly </p>
             <button class="btn btn-outline-success" onclick="window.location.href = 'https://www.buymeacoffee.com/ThinBlueLie'">Buy me a Coffee</button>
