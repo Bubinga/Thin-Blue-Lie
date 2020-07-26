@@ -171,7 +171,6 @@ namespace ThinBlueLie.Controllers
             //query database using query string
             // model.Timelineinfos = await _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{date}'").ToListAsync();
             model.Timelineinfo = await _context.Timelineinfo.Where(i => i.IdTimelineInfo.Equals(id)).FirstOrDefaultAsync();
-            //var y = await _context.Timelineinfo.Where(t => t.Date.Equals(date)).ToListAsync();
             model.Medias = await _context.Media.Where(d => d.IdTimelineInfo.Equals(id)).ToListAsync();
 
             //load data into ViewData to be used in the Edit page
