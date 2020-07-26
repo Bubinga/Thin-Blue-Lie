@@ -6,7 +6,11 @@
     var media = ViewData["Media"] as IList<ThinBlue.Media>;
     //var Event = ViewData["Timelineinfo"] as ThinBlue.Timelineinfo;
 }
-
+<style>
+    span a {
+        font-size:.9rem;
+    }
+</style>
 <div class="offset-lg-3 row container-fluid">
     <div class="col-lg-4 col-md-5 border-left border-right border-bottom">
         <div class="d-block mb-0 pt-3 border-bottom">
@@ -17,34 +21,48 @@
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div>
-                <div class="form-group">
-                    <label asp-for="Timelineinfo.Date" class="control-label">Date<span class="text-danger ml-1">*</span></label>
+                <div class="form-group form-field">
+                    <label asp-for="Timelineinfo.Date" class="control-label">Date
+                    <span class="text-danger ml-1">*</span>
+                    <span>[<a href="javascript:void(0);">Revert</a>]</span>
+                    </label>
                     <input id="DateInput" type="date" asp-for="Timelineinfo.Date" class="form-control SimFinder" placeholder="mm/dd/yyyy">
                     <span asp-validation-for="Timelineinfo.Date" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-row">
+            <div class="form-row form-field">
                 <div class="col-5 dropdown" style="position:relative;">
-                    <label style="position:absolute; bottom:38px;" class="control-label">State<span class="text-danger ml-1">*</span></label>
+                    <label style="position:absolute; bottom:38px;" class="control-label">State
+                    <span class="text-danger ml-1">*</span>
+                    <span>[<a href="javascript:void(0);">Revert</a>]</span>
+                    </label>
                     <select asp-for="Timelineinfo.State" asp-items="Html.GetEnumSelectList(typeof(TimelineinfoEnums.StateEnum))" style="position:absolute; bottom:0; width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false">
                         <option class="dropdown-item">State</option>
                     </select>
                     <span asp-validation-for="Timelineinfo.State" class="text-danger"></span>
                 </div>
-                <div class="col-7">
-                    <label asp-for="Timelineinfo.City" class="control-label">City<span class="text-danger ml-1">*</span></label>
+                <div class="col-7 form-field">
+                    <label asp-for="Timelineinfo.City" class="control-label">City
+                    <span class="text-danger ml-1">*</span>
+                    <span>[<a href="javascript:void(0)">Revert</a>]</span>
+                    </label>
                     <input asp-for="Timelineinfo.City" class="form-control" />
                     <span asp-validation-for="Timelineinfo.City" class="text-danger"></span>
                 </div>
             </div>
             <hr /> <h6>Fill out the following information for the Subject/Victim</h6>
-            <div class="form-group">
-                <label asp-for="Timelineinfo.SubjectName" class="control-label">Name <span class="text-muted ml-1">(First Last)</span></label>
+            <div class="form-group form-field">
+                <label asp-for="Timelineinfo.SubjectName" class="control-label">Name 
+                <span class="text-muted ml-1">(First Last)</span>
+                <span>[<a href="javascript:void(0);">Revert</a>]</span>
+                </label>
                 <input id="SNameInput" asp-for="Timelineinfo.SubjectName" class="form-control SimFinder" />
                 <span asp-validation-for="Timelineinfo.SubjectName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label class="form-check-label">Sex</label>
+            <div class="form-group form-field">
+                <label class="form-check-label">Sex
+                    <span>[<a href="javascript:void(0);">Revert</a>]</span>
+                </label>
                 <div class="form-check">
                     <input type="radio" asp-for="Timelineinfo.SubjectSex" class="form-check-input" value="0">
                     <label class="form-check-label">Male</label>
@@ -60,8 +78,10 @@
                     <span asp-validation-for="Timelineinfo.SubjectSex" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-check-label">Race</label>
+            <div class="form-group form-field">
+                <label class="form-check-label">Race
+                    <span>[<a href="javascript:void(0);">Revert</a>]</span>
+                </label>
                 <div class="form-check">
                     <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="0">
                     <label class="form-check-label">White</label>
@@ -87,8 +107,10 @@
                     <label class="form-check-label">Unclear</label>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-check-label">Were they armed?</label>
+            <div class="form-group form-field">
+                <label class="form-check-label">Were they armed?
+                    <span>[<a href="javascript:void(0);">Revert</a>]</span>
+                </label>
                 <div class="form-check">
                     <input id="ArmedNo" type="radio" asp-for="Timelineinfo.Armed" class="form-check-input" value="0">
                     <label class="form-check-label">No</label>
@@ -100,13 +122,17 @@
                 </div>
             </div>
             <hr /> <h6>Fill out the following information for the Officer</h6>
-            <div class="form-group">
-                <label asp-for="Timelineinfo.OfficerName" class="control-label">Name</label>
+            <div class="form-group form-field">
+                <label asp-for="Timelineinfo.OfficerName" class="control-label">Name
+                    <span>[<a href="javascript:void(0);">Revert</a>]</span>
+                </label>
                 <input id="ONameInput" asp-for="Timelineinfo.OfficerName" class="form-control SimFinder" />
                 <span asp-validation-for="Timelineinfo.OfficerName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label class="form-check-label">Sex</label>
+            <div class="form-group form-field">
+                <label class="form-check-label">Sex
+                    <span>[<a href="javascript:void(0);">Revert</a>]</span>
+                </label>
                 <div class="form-check">
                     <input type="radio" asp-for="Timelineinfo.OfficerSex" class="form-check-input" value="0">
                     <label class="form-check-label">Male</label>
@@ -122,8 +148,10 @@
                     <span asp-validation-for="Timelineinfo.OfficerSex" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-check-label">Race</label>
+            <div class="form-group form-field">
+                <label class="form-check-label">Race
+                    <span>[<a href="javascript:void(0);">Revert</a>]</span>
+                </label>
                 <div class="form-check">
                     <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="0">
                     <label class="form-check-label">White</label>
@@ -149,8 +177,10 @@
                     <label class="form-check-label">Unclear</label>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-check-label">Type of Misconduct</label>
+            <div class="form-group form-field">
+                <label class="form-check-label">Type of Misconduct
+                    <span>[<a href="javascript:void(0);">Revert</a>]</span>
+                </label>
                 @foreach (var item in Model.AvailableMisconducts)
                 {
                     <div class="checkbox">
@@ -165,8 +195,10 @@
                         </div>
                     }
             </div>
-            <div id="weaponDiv" class="form-group">
-                <label class="form-check-label">Type of Weapon</label>
+            <div id="weaponDiv" class="form-group form-field">
+                <label class="form-check-label">Type of Weapon
+                    <span>[<a href="javascript:void(0);">Revert</a>]</span>
+                </label>
                 @foreach (var item in Model.AvailableWeapons)
                 {
                     <div class="checkbox">
@@ -180,9 +212,11 @@
                     }
             </div>
             <hr />
-            <div class="form-group">
-                <label asp-for="Timelineinfo.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, if there were more people involved, if there was any followup to the event or coverage in the news, etc.</label>
-                <textarea asp-for="Timelineinfo.Context" class="form-control"></textarea>
+            <div class="form-group form-field">
+                <label asp-for="Timelineinfo.Context" class="control-label">
+                    Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, if there were more people involved, if there was any followup to the event or coverage in the news, etc.
+                    <span>[<a href="javascript:void(0);">Revert</a>]</span></label>
+                <textarea asp-for="Timelineinfo.Context" class="form-control" rows="10"></textarea>
                 <span asp-validation-for="Timelineinfo.Context" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -223,6 +257,21 @@
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
     })
+
+
+    //revert function
+    $('a').click(function () {
+        //console.log($(this).parents('.form-field').find('input'));    
+        if ($(this).parents('.form-field').find('input').attr('value') != null) {
+            var defaultValue = $(this).parents('.form-field').find('input').attr('value');
+            $(this).parents('.form-field').find('input').val(defaultValue);
+        }
+        else {            
+            var defaultValue = $(this).parents('.form-field').find('textarea').html();
+           // console.log(defaultValue)
+            $(this).parents('.form-field').find('textarea').val(defaultValue);
+        }        
+    });
 
     //From Submit-- If Date changes, run the getsimilar action in the Timeline Controller and load the partial view.
    // $(".SimFinder").change(function () {
