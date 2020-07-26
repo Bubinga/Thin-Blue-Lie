@@ -2,7 +2,7 @@
 @model ThinBlueLie.Pages.EditModel
 
 @{
-    ViewBag.Title = "Submit";
+    ViewBag.Title = "Edit";
     var media = ViewData["Media"] as IList<ThinBlue.Media>;
     //var Event = ViewData["Timelineinfo"] as ThinBlue.Timelineinfo;
 }
@@ -260,17 +260,21 @@
 
 
     //revert function
-    $('a').click(function () {
-        //console.log($(this).parents('.form-field').find('input'));    
-        if ($(this).parents('.form-field').find('input').attr('value') != null) {
-            var defaultValue = $(this).parents('.form-field').find('input').attr('value');
-            $(this).parents('.form-field').find('input').val(defaultValue);
+    $('a').click(function () {       
+        var field = $(this).parents('.form-field');
+        if (field.find('.form-control').length != 0) {  //for text input
+            var defaultValue = field.find('input').attr('value');
+            field.find('input').val(defaultValue);
         }
-        else {            
-            var defaultValue = $(this).parents('.form-field').find('textarea').html();
-           // console.log(defaultValue)
-            $(this).parents('.form-field').find('textarea').val(defaultValue);
-        }        
+        else if (field.find('.form-check-input').length != 0)// for radio button inputs    
+        {
+            field.find('.form-check-input').prop("checked", false);            
+            field.find("[checked = 'checked']").prop("checked", true);
+        }
+        else if (field.find('textarea').length != 0) { //for textarea
+            var defaultValue = field.find('textarea').html();            
+            field.find('textarea').val(defaultValue);
+        }
     });
 
     //From Submit-- If Date changes, run the getsimilar action in the Timeline Controller and load the partial view.
