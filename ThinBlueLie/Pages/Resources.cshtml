@@ -1,53 +1,98 @@
 ﻿@page
 @model ThinBlueLie.Pages.HistoryModel
 @{
-    ViewData["Title"] = "History";
+    ViewData["Title"] = "Resources";
 }
 
-<style>
-    html {
-        scroll-behavior: smooth;
-    }
-    .sidenav {
-        max-width: 250px;
-        position: fixed;
-        z-index: 1;
-        top: 400px;
-        left: 150px;
-        background: #eee;
-        overflow-x: hidden;
-        padding: 8px 0;
-    }
 
-        .sidenav a {
-            padding: 6px 8px 6px 16px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #0091ff;
-            display: block;
-        }
-
-            .sidenav a:hover {
-                color: #064579;
-            }
-</style>
-<div class="jumbotron home" style=" background-image: url(FlagAndFire.jpg) !important;">
+<div class="jumbotron home" style="background-image: url(FlagAndFire.jpg) !important;">
     <div class="ml-5 pl-5 container container-fluid">
         <h1 style="font-family: MillerItalic, Georgia, serif; font-size: 4em;" class="text-primary font-italic">Learn aboot das negros</h1>
     </div>
 </div>
-<div class="sidenav">
-    <a href="#books">Websites</a>
-    <a href="#books">Books</a>
-    <a href="#people">People</a>
-    <a href="#music">Music</a>
-</div>
-<div class="container">
-    <h4>Purpose</h4>
-    <p>Here you can read about possible solutions to the problem along with an array of other resources</p>
-    <hr class="blueline mt-0 pb-0 mb-0 pt-0" style="" />
-    <br />
+<div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li>
+                    <h3 class="sidebar-heading text-center border-bottom">Books</h3>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#defund">Defund</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reform">Reform/Training</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#roles">Changed roles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#immunity">Ending Qualified Immunity</a>
+                </li>
+            </ul>
+            <ul class="nav flex-column">
+                <li>
+                    <h3 class="sidebar-heading text-center border-bottom">Podcasts</h3>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#defund">Defund</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reform">Reform/Training</a>
+                </li>
+            </ul>
+            <ul class="nav flex-column">
+                <li>
+                    <h3 class="sidebar-heading text-center border-bottom">Public Figures</h3>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#defund">Defund</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reform">Reform/Training</a>
+                </li>
+            </ul>
+            <ul class="nav flex-column">
+                <li>
+                    <h3 class="sidebar-heading text-center border-bottom">Musicians</h3>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#defund">Defund</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reform">Reform/Training</a>
+                </li>
+            </ul>
+            <ul class="nav flex-column">
+                <li>
+                    <h3 class="sidebar-heading text-center border-bottom">Artists</h3>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#defund">Defund</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reform">Reform/Training</a>
+                </li>
+            </ul>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span style="font-size:.7rem;">Click on a resource to go to it</span>
+            </h6>
+        </div>
+    </nav>
+    <div class="col-md-9 px-4" style="min-height:1500px;">
+        <div class="pt-3 pb-2 mb-3">
+            <h4>Purpose</h4>
+            <p>Here you can read about possible solutions to the problem along with an array of other resources</p>
+            <hr class="blueline nogap" />
+            <br />
+        </div>
+    </div>
 </div>
 <script>
     document.getElementById("Resources").classList.add("onpage");
+    $(".sidebar .nav-link").click(function (e) {
+        e.preventDefault();
+        $(".sidebar .nav-link").removeClass("active");
+        $(this).toggleClass("active");
+    });
 </script>

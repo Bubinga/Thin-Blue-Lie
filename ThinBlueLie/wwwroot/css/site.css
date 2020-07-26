@@ -13,7 +13,7 @@ for details on configuring this project to bundle and minify static web assets. 
     text-indent: 3rem;
 }
 
-center {
+.center {
     margin: 0;
     position: absolute;
     top: 50%;
@@ -70,9 +70,9 @@ td {
 
 @media (min-width: 25em) {
 
-    html, body {
+   /* html, body {
         overflow-x: hidden;
-    }
+    }*/
 
     body {
         position: relative;
@@ -96,10 +96,12 @@ hr.blueline {
 }
 
 .home.jumbotron {
-    background-size: cover !important;
+    background-size: cover !important;   
+    width: 100%;
     border-radius: 0px !important;
     padding-top: 11rem !important;
     padding-bottom: 2rem !important;
+    margin-bottom: 0px;
     margin-top: 0px !important;
 }
 
@@ -244,29 +246,109 @@ card.header {
 }
 
 
-/*1150x wide or less */
-/*@media screen and (min-width: 1150px) {
-    #bottom-info {
-        display: none;
-    }
-    #side-info {
-        display: inline-block;
-    }        
+/*Side nav bars */
+
+.feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
 }
-@media screen and (max-width: 1149px) {
-    #side-info {
-        display: none;
+
+/*
+ * Sidebar
+*/
+
+.sidebar {
+    position: sticky;
+    top: 48px;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    padding: 0px 0 0 25px; /* Height of navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    min-width: 200px;
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 48px;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+    .sidebar-sticky {
+        position: -webkit-sticky;
+        position: sticky;
     }
-    #bottom-info{
-        display: inline-block;
+}
+
+.sidebar .nav-link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #007bff;
+    padding-bottom: 3px;
+}
+
+    .sidebar .nav-link:hover {
+        text-decoration: underline;
     }
-}*/
+
+    .sidebar .nav-link .feather {
+        margin-right: 4px;
+        color: #999;
+    }
+
+    .sidebar .nav-link.active {
+        border-right: 3px solid blue;
+    }
+
+        .sidebar .nav-link:hover .feather,
+        .sidebar .nav-link.active .feather {
+            color: inherit;
+        }
+
+.sidebar-heading {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    margin-top: .6rem;
+    margin-bottom: .3rem;
+}
+
+/*
+        * Content
+        */
+
+[role="main"] {
+    padding-top: 48px; /* Space for fixed navbar */
+}
+
+/*
+        * Navbar
+        */
+
+.navbar .form-control {
+    padding: .75rem 1rem;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.form-control-dark {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .1);
+}
+
+    .form-control-dark:focus {
+        border-color: transparent;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+    }
 
 
 
 /* Card settings */
 li p {
-    color: #2B3035;
+    color: black;
 }
 /* Scrollbar gone but functionality remaining */
 .noscrollbar::-webkit-scrollbar {
@@ -326,6 +408,7 @@ button.accept-policy {
 html {
     position: relative;
     min-height: 100%;
+    min-width: 100%;
     scroll-behavior: smooth;
 }
 
@@ -342,4 +425,11 @@ body {
     white-space: nowrap;
     line-height: 60px; /* Vertically center the text there */
 }
-
+/* For Debugging */
+/*
+* {
+    background: #000 !important;
+    color: #0f0 !important;
+    outline: solid #f00 1px !important;
+}
+*/
