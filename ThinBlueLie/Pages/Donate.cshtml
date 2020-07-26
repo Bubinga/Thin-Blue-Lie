@@ -5,71 +5,93 @@
 }
 
 <style>
-    .sidenav {
-        max-width: 250px;
-        position: fixed;
-        z-index: 1;
-        top: 400px;
-        left: 50px;
-        background: #eee;
-        overflow-x: hidden;
-        padding: 8px 0;
-    }
-
-        .sidenav a {
-            padding: 6px 8px 6px 16px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #0091ff;
-            display: block;
-        }
-
-            .sidenav a:hover {
-                color: #064579;
-            }
     .rightnav {
-        max-width: 250px;
-        position: fixed;
-        z-index: 1;
-        top: 400px;
-        left: 90%;       
-        background: #eee;
-        overflow-x: hidden;
-        padding: 8px 0;
+        position: sticky;
+        top: 43px;
+        padding: 0px;
     }
 
-        .right a {
-            padding: 6px 8px 6px 16px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #0091ff;
-            display: block;
-        }
+    .right p {
+        padding: 6px 8px 6px 16px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #0091ff;
+        display: block;
+    }
 
-            .right a:hover {
-                color: #064579;
-            }
+        .right a:hover {
+            color: #064579;
+        }
 </style>
-<div class="jumbotron home" style=" background-image: url(FlagAndFire.jpg) !important;">
-    <div class="ml-5 pl-5 container container-fluid">
+<div class="jumbotron home" style="background-image: url(FlagAndFire.jpg) !important;">
+    <div class="ml-5 pl-5 container-fluid pr-0">
         <h1 style="font-family: MillerItalic, Georgia, serif; font-size: 4em;" class="text-primary font-italic">DONATE</h1>
     </div>
 </div>
-<div class="sidenav">
-    <a href="#defund">Charity1</a>
-    <a href="#reform">Charity2</a>
-    <a href="roles">Charity3</a>
-    <a href="immunity">Charity4</a>   
-</div>
-<div class="rightnav">
-    <div>
-        <h5>Give ME money</h5>
-        <button class="btn btn-outline-success" onclick="window.location.href = 'https://www.buymeacoffee.com/ThinBlueLie'">Buy me a Coffee</button>
+<div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li>
+                    <h3 class="sidebar-heading text-center border-bottom">Navigation Menu</h3>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#defund">Defund</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reform">Reform/Training</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#roles">Changed roles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#immunity">Ending Qualified Immunity</a>
+                </li>
+            </ul>
+            <ul class="nav flex-column">
+                <li>
+                    <h3 class="sidebar-heading text-center border-bottom">Navigation Menu</h3>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#defund">Defund</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reform">Reform/Training</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#roles">Changed roles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#immunity">Ending Qualified Immunity</a>
+                </li>
+            </ul>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span style="font-size:.7rem;">Click on a charity to go to it</span>
+            </h6>
+        </div>
+    </nav>
+    <div class="col-md-8 pr-0">
+        <div class="pt-3 pb-2 mb-0 pl-2">
+            <h4>Purpose</h4>
+            <p>Here you can read about reputable charities to donate to help support the cause</p>
+        </div>
+        <hr class="blueline nogap" />
+        <br />
     </div>
+    <nav class="rightnav col-md-1 d-md-block">
+        <div class="border bg-light p-2" style="border-radius:2px;">
+            <h5>Donate to Thin Blue Lie:</h5>
+            <p>Thin Blue Lie is currently entirely managed by one person(me), for it to stay active and up-to-date I rely on donations. Even the smallest donations are appreciated greatly </p>
+            <button class="btn btn-outline-success" onclick="window.location.href = 'https://www.buymeacoffee.com/ThinBlueLie'">Buy me a Coffee</button>
+        </div>
+    </nav>
 </div>
-<div class="container">
-    <h4>Purpose</h4>
-    <p>Give these bitches some cash!</p>
-    <hr class="blueline mt-0 pb-0 mb-0 pt-0" style="" />
-    <br />
-</div>
+<script>
+    $(".sidebar .nav-link").click(function (e) {
+        e.preventDefault();
+        $(".sidebar .nav-link").removeClass("active");
+        $(this).toggleClass("active");
+    });
+</script>
+
+
