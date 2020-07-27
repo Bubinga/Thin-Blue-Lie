@@ -97,6 +97,10 @@
     .thick {
         height:31px !important;
     }
+    .popover {
+        top: -60px !important;        
+    }
+
 </style>
 <body onresize="loadTimes()">
     <div style="position:relative;" class="container-fluid mt-4 mb-1 text-center d-block">
@@ -121,7 +125,7 @@
                 <div id="divcalendartable"></div>
             </div>
         </div>  @*Timeline*@
-        <div class="row">
+        <div class="row fix">
             <div style="" id="timelineDiv" class="btn-group btn-group-toggle my-auto col-lg-9 ml-md-5 pl-md-5" data-toggle="buttons">
                 <div onclick="PrevWeek()" id="triangle-left"> <div class="empty"></div></div>
                 <label id="Timeline-label0" class="week btn thick">
@@ -194,7 +198,7 @@
     }
     @foreach (var Timelineinfo in Event)
     {
-        <div class="row">
+        <div class="row fix">
             @*Video*@
             <div style="vertical-align:top;" class="h-100 d-inline-block col-md-8 offset-md-1">
                 <div style="border-radius:3px; width:100%; border: 1px solid #000000 !important;" class="embed-responsive embed-responsive-2by1 d-inline-block">
@@ -285,6 +289,7 @@
     $(document).ready(function () { //enables popover
         $('.flag').click(function () {
             var id = $(this).parents(".dataCard").find(".eventId").html();
+            $(".flag").popover('update');
 
             $('.submitFlag').click(function () {
                 $(this).parents(".flagPopover").find(".idTimelineInput").html(id);                
@@ -301,44 +306,12 @@
                             $(".flag").popover('update');
                         }
                     });
-                //$('#VideoList').load('@@Url.Action("GetSimilar","Timeline")');
-
-                //$(".flag").attr('data-content', 'hello');
-                //var flagpopover = $(".flag").data('bs.popover');
-                //flagpopover.setContent();
-                //flagpopover.tip.addClass(popover.options.placement);
-
+                
             });
         });
     });
 
-    $('.flag').click(function () {
-        var id = $(this).parents(".dataCard").find(".eventId").html();
-
-        $('.submitFlag').click(function () {
-            $(this).parents(".flagPopover").find(".idTimelineInput").html(id);
-           // $(this).parents(".flagPopover").find("form").submit();
-            alert('test');
-            $.post('', $('form').serialize())
-                .done(function (data) {
-                    console.log(data);
-                    if (data == true) {
-                        alert("Data Loaded: " + data);
-                    }
-                    else {
-                        $(this).parents('flagPopover').html(data);
-                    }
-               });
-            //$('#VideoList').load('@@Url.Action("GetSimilar","Timeline")');
-
-            //$(".flag").attr('data-content', 'hello');
-            //var flagpopover = $(".flag").data('bs.popover');
-            //flagpopover.setContent();
-            //flagpopover.tip.addClass(popover.options.placement);
-
-        });
-    });
-
+  
 
 
     document.getElementById("Timeline").classList.add("onpage");

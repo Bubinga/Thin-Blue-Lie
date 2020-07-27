@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Edit";
     var media = ViewData["Media"] as IList<ThinBlue.Media>;
-    //var Event = ViewData["Timelineinfo"] as ThinBlue.Timelineinfo;
+    var Event = ViewData["Timelineinfo"] as ThinBlue.Timelineinfo;
 }
 <style>
     span a {
@@ -189,7 +189,8 @@
                                    name="SelectedMisconducts"
                                    value="@item.Value"
                                    id="@item.Value"
-                                   @if (Model.SelectedMisconducts.Contains(item.Value)) { <text> checked </text> } /> @item.Text
+                                   @*@if (Model.SelectedMisconducts.Contains(item.Value)) { <text> checked </text> }*@
+                                   @{ if ((Int32.Parse(item.Value) & Model.Timelineinfo.Misconduct) != 0) { <text> checked="checked" </text>  } } /> @item.Text
                             </label>
                             <span asp-validation-for="Timelineinfo.Misconduct" class="text-danger"></span>
                         </div>
@@ -206,7 +207,7 @@
                             <input type="checkbox"
                                    name="SelectedWeapons"
                                    value="@item.Value"
-                                   @if (Model.SelectedWeapons.Contains(item.Value)) { <text> checked </text> } /> @item.Text
+                                    @{ if ((Int32.Parse(item.Value) & Model.Timelineinfo.Weapon) != 0) { <text> checked="checked" </text>  } } /> @item.Text
                             </label>
                         </div>
                     }
@@ -227,7 +228,7 @@
         }
     </div>
     <div class="col-lg-5 col-md-5">
-        <div class="row">
+        <div class="row fix">
             <div class="d-block border-top container-fluid">
                 <h4 class="pt-2">Add Media</h4>
                 <p class="mb-0" style="font-size:1em">
@@ -257,7 +258,12 @@
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
     })
-
+    //show weapon if force loads as checked
+    $(document).ready(function () {
+        if ($('#1').attr('checked') == 'checked') {
+            $('#weaponDiv').css('display', 'block');
+        }
+    });
 
     //revert function
     $('a').click(function () {       
@@ -266,9 +272,9 @@
             var defaultValue = field.find('input').attr('value');
             field.find('input').val(defaultValue);
         }
-        else if (field.find('.form-check-input').length != 0)// for radio button inputs    
+        else if (field.find('.form-check-input, [type = "checkbox"]').length != 0)// for radio button inputs    
         {
-            field.find('.form-check-input').prop("checked", false);            
+            field.find('.form-check-input, [type = "checkbox"]').prop("checked", false);            
             field.find("[checked = 'checked']").prop("checked", true);
         }
         else if (field.find('textarea').length != 0) { //for textarea
@@ -348,24 +354,22 @@
     //magic function disables inspect element
     //eval(function (p, a, c, k, e, d) { e = function (c) { return c.toString(36) }; if (!''.replace(/^/, String)) { while (c--) { d[c.toString(a)] = k[c] || c.toString(a) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('(3(){(3 a(){8{(3 b(2){7((\'\'+(2/2)).6!==1||2%5===0){(3(){}).9(\'4\')()}c{4}b(++2)})(0)}d(e){g(a,f)}})()})();', 17, 17, '||i|function|debugger|20|length|if|try|constructor|||else|catch||5000|setTimeout'.split('|'), 0, {}))
 
-    document.getElementById("weaponDiv").style.display = "none";
-    var WeaponCheckState = 0;
+    document.getElementById("weaponDiv").style.display = "none";   
 
     //gets first box in misconduct and on click runs showWeapon
     document.getElementById("1").onclick = function () { showWeapon(); };
 
     function showWeapon() {
-        if (WeaponCheckState === 0) {
+        if (document.getElementById("weaponDiv").style.display == "none") {
             document.getElementById("weaponDiv").style.display = "block";
-            WeaponCheckState = 1;
+            $('#weaponDiv').find("[checked = 'checked']").prop("checked", true);  
         }
         else {
             $('input[name=SelectedWeapons]')
-                .val('')
-                .prop('checked', false)
-                .prop('selected', false);
-            document.getElementById("weaponDiv").style.display = "none";
-            WeaponCheckState = 0;
+               // .val('')
+                .prop("checked", false)
+                //.prop('selected', false);
+            document.getElementById("weaponDiv").style.display = "none";           
         }
     }
 </script>
