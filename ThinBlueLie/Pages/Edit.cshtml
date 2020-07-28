@@ -10,6 +10,12 @@
     span a {
         font-size:.9rem;
     }
+    .popover {
+        top: -60px !important;
+    }
+    body {
+        overflow-x: hidden;
+    } 
 </style>
 <div class="offset-lg-3 row container-fluid">
     <div class="col-lg-4 col-md-5 border-left border-right border-bottom">
@@ -190,7 +196,7 @@
                                    value="@item.Value"
                                    id="@item.Value"
                                    @*@if (Model.SelectedMisconducts.Contains(item.Value)) { <text> checked </text> }*@
-                                   @{ if ((Int32.Parse(item.Value) & Model.Timelineinfo.Misconduct) != 0) { <text> checked="checked" </text>  } } /> @item.Text
+                                   @{ if ((Int32.Parse(item.Value) & Model.Timelineinfo.Misconduct) != 0) { <text> checked="checked" </text> } } /> @item.Text
                             </label>
                             <span asp-validation-for="Timelineinfo.Misconduct" class="text-danger"></span>
                         </div>
@@ -228,7 +234,7 @@
         }
     </div>
     <div class="col-lg-5 col-md-5">
-        <div class="row fix">
+        <div class="row ">
             <div class="d-block border-top container-fluid">
                 <h4 class="pt-2">Add Media</h4>
                 <p class="mb-0" style="font-size:1em">
@@ -244,7 +250,7 @@
             </div>
             <div>
                 <div class="container">
-                    <button class="btn btn-primary mx-auto" id="MoreMedia" data-placement="top" data-trigger="hover" data-toggle="tooltip" title="Add another piece of Media">
+                    <button class="btn btn-primary mx-auto" id="MoreMedia">
                         Media
                         <i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>
                     </button>
@@ -268,25 +274,22 @@
     //revert function
     $('a').click(function () {       
         var field = $(this).parents('.form-field');
-        if (field.find('.form-control').length != 0) {  //for text input
+        if (field.find('textarea').length != 0) { //for textarea
+            var defaultValue = field.find('textarea').html();
+            field.find('textarea').val(defaultValue);
+        }
+        else if (field.find('.form-control').length != 0) {  //for text input
             var defaultValue = field.find('input').attr('value');
             field.find('input').val(defaultValue);
         }
-        else if (field.find('.form-check-input, [type = "checkbox"]').length != 0)// for radio button inputs    
+        else if (field.find('.form-check-input, [type = "checkbox"]').length != 0)// for radio button and checkbox inputs    
         {
-            field.find('.form-check-input, [type = "checkbox"]').prop("checked", false);            
+            field.find('.form-check-input, [type = "checkbox"]').prop("checked", false);
             field.find("[checked = 'checked']").prop("checked", true);
         }
-        else if (field.find('textarea').length != 0) { //for textarea
-            var defaultValue = field.find('textarea').html();            
-            field.find('textarea').val(defaultValue);
-        }
+
     });
 
-    //From Submit-- If Date changes, run the getsimilar action in the Timeline Controller and load the partial view.
-   // $(".SimFinder").change(function () {
-    //    $('#VideoList').load('@Url.Action("GetSimilar","Timeline")', { TempDate: $("#DateInput").val() });
-   // });
     var attempt = 0;
     submitForms = function () {
         $.get('Submit/CheckSignedIn', function (data) {
