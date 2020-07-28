@@ -4,7 +4,14 @@
 @{   
     ViewBag.Title = "Submit";
 }
-
+<style>
+    .popover {
+        top: -60px !important;
+    }
+    body {
+        overflow-x: hidden;
+    }    
+</style>
 <div class="offset-lg-3 row container-fluid">
     <div class="col-lg-4 col-md-5 border-left border-right border-bottom">
         <div class="d-block mb-0 pt-3 border-bottom">
@@ -215,7 +222,7 @@
             </div>
             <div>
                 <div class="container">
-                    <button class="btn btn-primary mx-auto" id="MoreMedia" data-placement="top" data-trigger="hover" data-toggle="tooltip" title="Add another piece of Media">
+                    <button class="btn btn-primary mx-auto" id="MoreMedia">
                         Media <i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>
                     </button>
                 </div>
