@@ -83,7 +83,13 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
-    <script>feather.replace();</script>
+    <script>feather.replace();
+        var x = $(location).attr('pathname');
+        x.indexOf(1);
+        x = x.split("/")[1];
+        console.log(x);
+        $('#'+x).addClass('onpage');
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 
