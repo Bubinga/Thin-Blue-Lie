@@ -411,8 +411,7 @@ button.accept-policy {
 html {
     position: relative;
     min-height: 100%;
-    min-width: 100%;
-    scroll-behavior: smooth;
+    min-width: 100%;   
 }
 
 
