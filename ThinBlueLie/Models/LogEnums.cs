@@ -9,11 +9,12 @@ namespace ThinBlueLie.Models
     {
         public enum ActionEnum
         {
-            Post,           
+            Submit,           
             Edit,            
             Flag,
             Login,
-            Logout
+            Logout,
+            Register
         }
     }
 }

@@ -82,10 +82,10 @@ namespace DataAccessLibrary.Migrations
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
                         .HasMaxLength(256);
 
-                    b.Property<bool>("EmailConfirmed")
+                    b.Property<ulong>("EmailConfirmed")
                         .HasColumnType("bit(1)");
 
-                    b.Property<bool>("LockoutEnabled")
+                    b.Property<ulong>("LockoutEnabled")
                         .HasColumnType("bit(1)");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
@@ -105,13 +105,13 @@ namespace DataAccessLibrary.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
+                    b.Property<ulong>("PhoneNumberConfirmed")
                         .HasColumnType("bit(1)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<bool>("TwoFactorEnabled")
+                    b.Property<ulong>("TwoFactorEnabled")
                         .HasColumnType("bit(1)");
 
                     b.Property<string>("UserName")
