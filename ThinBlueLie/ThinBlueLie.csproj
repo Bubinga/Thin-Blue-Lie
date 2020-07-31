@@ -21,6 +21,8 @@
     <Compile Remove="Migrations\20200708052416_Test-Migration.Designer.cs" />
     <Compile Remove="Migrations\20200721092930_AddLog.cs" />
     <Compile Remove="Migrations\20200721092930_AddLog.Designer.cs" />
+    <Compile Remove="Migrations\20200731052652_AddingEditTables.cs" />
+    <Compile Remove="Migrations\20200731052652_AddingEditTables.Designer.cs" />
     <Compile Remove="Models\Roles.cs" />
     <Compile Remove="Models\Userclaims.cs" />
     <Compile Remove="Models\Userlogins.cs" />
