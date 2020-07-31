@@ -23,6 +23,9 @@ namespace ThinBlue
         public virtual DbSet<Logins> Logins { get; set; }
         public virtual DbSet<Flagged> Flagged { get; set; }
         public virtual DbSet<Log> Log { get; set; }
+        public virtual DbSet<Timelineinfo> Edits { get; set; }
+        public virtual DbSet<Media> EditMedia{ get; set; }
+       
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

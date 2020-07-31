@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Pomelo.EntityFrameworkCore.MySql.Query.ExpressionVisitors.Internal;
 using ThinBlue;
+using ThinBlueLie.Models;
 using ThinBlueLie.Pages;
 
 
@@ -36,18 +37,18 @@ namespace ThinBlueLie.Controllers
             _signInManager = signInManager;
         }
 
-       // public Log log { get; set; }
-        public ActionResult Log(int action, int IdTimeline) {
+        public void Log(int action, int IdTimeline)
+        {
             var log = new Log { };
-            log.TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"); // yyyy-mm-dd hh-mm-ss
+            log.TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // yyyy-mm-dd hh-mm-ss
             log.Action = action;
             log.IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
             log.IdUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
             log.IdTimelineinfo = IdTimeline;
             _context.Log.Add(log);
-            return Ok(true);
+            //  return Ok(true);
         }
-                
+
 
         [BindProperty(SupportsGet = true)]
         public string date { get; set; }
@@ -90,7 +91,7 @@ namespace ThinBlueLie.Controllers
                     flagModel.Flags.IdUser = "null";
                 }
 
-                Log(3, flagModel.Flags.IdTimelineInfo);
+                Log((int)LogEnums.ActionEnum.Flag, flagModel.Flags.IdTimelineInfo);
                 _context.Flagged.Add(flagModel.Flags);
                 await _context.SaveChangesAsync();
 
@@ -128,8 +129,9 @@ namespace ThinBlueLie.Controllers
                 model.Timelineinfo.Misconduct = misconductsSum;
 
                 _context.Timelineinfo.Add(model.Timelineinfo);                
-                await _context.SaveChangesAsync();              
+                await _context.SaveChangesAsync();
 
+                Log((int)LogEnums.ActionEnum.Submit, model.Timelineinfo.IdTimelineInfo);
                 return RedirectToAction("Success");
             }
             model.AvailableWeapons = GetWeapons();
@@ -156,6 +158,7 @@ namespace ThinBlueLie.Controllers
                 model.Medias.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Media.Add(model.Medias);
                 await _context.SaveChangesAsync();
+                Log((int)LogEnums.ActionEnum.Submit, model.Timelineinfo.IdTimelineInfo);
             }
             
             return View("Pages/Submit.cshtml", model);
@@ -194,7 +197,7 @@ namespace ThinBlueLie.Controllers
             return View("Pages/Edit.cshtml", model);
         }
 
-
+        //http post edit
 
         [Route("/Submit/CheckSignedIn")]
         public ActionResult CheckSignedIn()
