@@ -27,14 +27,27 @@ namespace ThinBlueLie.Controllers
         private readonly ThinBlue.ThinbluelieContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-        public TimelineController(ThinBlue.ThinbluelieContext context, 
+        public TimelineController(ThinBlue.ThinbluelieContext context,
                                  UserManager<IdentityUser> userManager,
                                  SignInManager<IdentityUser> signInManager)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
-        }       
+        }
+
+       // public Log log { get; set; }
+        public ActionResult Log(int action, int IdTimeline) {
+            var log = new Log { };
+            log.TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"); // yyyy-mm-dd hh-mm-ss
+            log.Action = action;
+            log.IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            log.IdUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            log.IdTimelineinfo = IdTimeline;
+            _context.Log.Add(log);
+            return Ok(true);
+        }
+                
 
         [BindProperty(SupportsGet = true)]
         public string date { get; set; }
@@ -76,7 +89,8 @@ namespace ThinBlueLie.Controllers
                 {
                     flagModel.Flags.IdUser = "null";
                 }
-                             
+
+                Log(3, flagModel.Flags.IdTimelineInfo);
                 _context.Flagged.Add(flagModel.Flags);
                 await _context.SaveChangesAsync();
 
