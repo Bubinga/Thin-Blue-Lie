@@ -41,6 +41,7 @@ namespace ThinBlue
         public int Misconduct { get; set; }
         [Column(TypeName = "TINYINT")]
         public int Weapon { get; set; }
+        [Required]
         [Column(TypeName = "LONGTEXT")]
         public string Context { get; set; }
         //[Required]

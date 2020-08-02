@@ -264,7 +264,7 @@
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
     })
-    //show weapon if force loads as checked
+    //show weapon if force checkbox loads as checked
     $(document).ready(function () {
         if ($('#1').attr('checked') == 'checked') {
             $('#weaponDiv').css('display', 'block');
@@ -296,12 +296,12 @@
             if (data == false && attempt == 0) {
                 $('#submit').popover('show');
                 attempt = 1;
-                alert("if ran");
+                //alert("if ran");
             }
             else if (attempt ==  1 || data == true) {
-              //  $('form').submit();
+                $('form').submit();
                 $('#submit').popover('hide');
-                alert("else if ran");
+                //alert("else if ran");
             }
         });
     }
