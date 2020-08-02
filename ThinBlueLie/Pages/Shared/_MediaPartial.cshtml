@@ -5,11 +5,12 @@
     Layout = null;
 }
 
-<div class = "AddMedia">
-    <div class="card border-dark mb-3 ml-2">        
+<div class="AddMedia">
+    <div class="card border-dark mb-3 ml-2">
         <div class="card-body text-dark row pt-0">
             @using (Html.BeginForm("MediaAdd", "Timeline", FormMethod.Post))
             {
+                @*<form name="mediaAdd">*@
                 @Html.AntiForgeryToken()
                 <div class="container">
                     <div class="form-row position-relative">
@@ -40,11 +41,11 @@
                         <div class="col-5">
                             <div class="form-group MediaFile">
                                 <label for="FileSelect">Pick a File</label>
-                                <input type="file" class="form-control-file" id="FileSelect">
+                                <input asp-for="Medias.SourceFile" type="file" class="form-control-file" id="FileSelect">
                             </div>
                             <div class="form-group MediaLink">
                                 <label for="FileLink">Link the Media</label>
-                                <input type="url" class="form-control" id="FileLink">
+                                <input asp-for="Medias.SourceFile" type="url" class="form-control" id="FileLink">
                             </div>
                         </div>
                         <div class="ml-3 col-4">
@@ -62,7 +63,9 @@
                     </div>
                 </div>
             }
-            </div>        
+            @*</form>*@
+        </div>
     </div>
 </div>
+
 

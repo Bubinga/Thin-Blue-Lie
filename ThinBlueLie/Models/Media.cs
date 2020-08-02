@@ -14,8 +14,11 @@ namespace ThinBlue
         public int MediaType { get; set; }
         public int IdTimelineInfo { get; set; }
         public int SourceFrom { get; set; }
+        [Required]
         public int Gore { get; set; }
+        [Required]
         public string SourceFile { get; set; }
+        [Required]
         public string Blurb { get; set; }
         [Column(TypeName = "VARCHAR(50)")]
         public string SubmittedBy { get; set; }

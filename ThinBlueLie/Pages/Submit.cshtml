@@ -1,16 +1,17 @@
 ﻿@using ThinBlueLie.Models;
 @model ThinBlueLie.Pages.SubmitModel
 
-@{   
+@{
     ViewBag.Title = "Submit";
 }
 <style>
     .popover {
         top: -60px !important;
     }
+
     body {
         overflow-x: hidden;
-    }    
+    }
 </style>
 <div class="offset-lg-3 row container-fluid">
     <div class="col-lg-4 col-md-5 border-left border-right border-bottom">
@@ -18,7 +19,8 @@
             <h4 class="mb-0">Information Submission Form</h4>
         </div>
         @using (Html.BeginForm("Submit", "Timeline", FormMethod.Post))
-        {
+            {
+        @*<form id="mainForm">*@
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div>
@@ -189,13 +191,14 @@
                 <label asp-for="Timelineinfo.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, if there were more people involved, if there was any followup to the event or coverage in the news, etc.</label>
                 <textarea asp-for="Timelineinfo.Context" class="form-control"></textarea>
                 <span asp-validation-for="Timelineinfo.Context" class="text-danger"></span>
-            </div>            
+            </div>
             <div class="form-group">
                 <input id="submit" type="button" value="Submit" class="btn btn-primary" onclick="submitForms()" data-toggle="popover" data-trigger="manual" data-html="true" data-placement="top"
-                       data-content=' @await Html.PartialAsync("Shared/_PleaseLogin.cshtml") '/>
+                       data-content=' @await Html.PartialAsync("Shared/_PleaseLogin.cshtml") ' />
                 <a asp-page="/Index" style="float:right">Back to Home</a>
             </div>
-        }
+            }
+        @*</form>*@
     </div>
     <div class="col-lg-5 col-md-5">
         <div class="row">
@@ -207,7 +210,7 @@
                 </p>
                 <hr />
                 <div id="VideoList"><partial name="_SimilarPartial" /></div>
-            </div>           
+            </div>
         </div>
         <div class="row">
             <div class="d-block border-top container-fluid">
@@ -231,31 +234,32 @@
     </div>
 </div>
 <script>
-    feather.replace();
-
-    $(function () {
+    $(window).ready(function () { //enables popover
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
-    })
-    
+    });
+
     //If Date changes, run the getsimilar action in the Timeline Controller and load the partial view.
     $(".SimFinder").change(function () {
         $('#VideoList').load('@Url.Action("GetSimilar","Timeline")', { TempDate: $("#DateInput").val() });
     });
+
+
     var attempt = 0;
     submitForms = function () {
         $.get('Submit/CheckSignedIn', function (data) {
             if (data == false && attempt == 0) {
                 $('#submit').popover('show');
                 attempt = 1;
-                alert("if ran");
+                console.log("if ran");
             }
-            else if (attempt ==  1 || data == true) {
-              //  $('form').submit();
+            else if (attempt == 1 || data == true) {
+                $('form').submit();
+                //$.post('', $('form').serialize());               
                 $('#submit').popover('hide');
-                alert("else if ran");
+                console.log("else if ran");
             }
-        });         
+        });
     }
 
 
@@ -263,7 +267,7 @@
         //$("#MediaList").append("Submit/MoreMedia");
         var content;
         $.get('Submit/MoreMedia', function (data) { //load another Add media form
-            content = data;            
+            content = data;
             $("#MediaList").append(content);  //Add it to the media list
             $("#MediaList").last().find('.MediaFile').css('display', 'none'); //Set the last item in the list's mediaFile input to hidden
             //rerun event listeners
@@ -273,7 +277,7 @@
             $(".close").on('click', function (e) {
                 closeMedia(e, $(this).parents(".AddMedia"));
             });
-        });       
+        });
     });
 
     $(".close").on('click', function (e) {
@@ -281,16 +285,16 @@
     });
 
     function closeMedia(e, parent) {
-        parent.remove();        
+        parent.remove();
     }
 
     $('.MediaFile').css('display', 'none');
 
-    $('.AddMedia').on('change', 'select', function (e) {        
+    $('.AddMedia').on('change', 'select', function (e) {
         changeFile(e, $(this).parents(".AddMedia"));
     });
 
-    function changeFile(e, parent) {       
+    function changeFile(e, parent) {
         let el = e.target;
         var strUser = el.options[el.selectedIndex].text;
         //console.log(el, parent.find('.MediaFile'));
@@ -304,7 +308,7 @@
         }
     }
 
-      
+
 
     //magic function disables inspect element
     //eval(function (p, a, c, k, e, d) { e = function (c) { return c.toString(36) }; if (!''.replace(/^/, String)) { while (c--) { d[c.toString(a)] = k[c] || c.toString(a) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('(3(){(3 a(){8{(3 b(2){7((\'\'+(2/2)).6!==1||2%5===0){(3(){}).9(\'4\')()}c{4}b(++2)})(0)}d(e){g(a,f)}})()})();', 17, 17, '||i|function|debugger|20|length|if|try|constructor|||else|catch||5000|setTimeout'.split('|'), 0, {}))
@@ -313,7 +317,7 @@
     var WeaponCheckState = 0;
 
     //gets first box in misconduct and on click runs showWeapon
-    document.getElementById("1").onclick = function () { showWeapon(); }; 
+    document.getElementById("1").onclick = function () { showWeapon(); };
 
     function showWeapon() {
         if (WeaponCheckState === 0) {
