@@ -255,6 +255,9 @@
                                    Flag ⚐
                                 </a>                               
                             </div>
+                            <div>
+                                <button onclick="test()"></button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -277,8 +280,8 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 
-    @*$('.submit').click(function (e) {
-       
+       @*$('.submit').click(function (e) {
+
         //@Url.Action("Flag", "Timeline", new { id = Model.Flags.IdTimelineInfo });
 
         //You want to use event handlers to on form submit find the parent function's eventid and pass it to flag in controller.
@@ -291,26 +294,25 @@
             $(".flag").popover('update');
 
             $('.submitFlag').click(function () {
-                $(this).parents(".flagPopover").find(".idTimelineInput").html(id);                
-                changeDiv = $(this).parents(".flagPopover");                
+                $(this).parents(".flagPopover").find(".idTimelineInput").html(id);
+                changeDiv = $(this).parents(".flagPopover");
                 $.post('', $('form').serialize())
-                    .done(function (data) {                       
+                    .done(function (data) {
                         if (data == true) {
                             alert("if ran");
                             changeDiv.html("Thank you for flagging");
                             $(".flag").popover('update');
                         }
-                        else {        
+                        else {
                             changeDiv.html(data);
                             $(".flag").popover('update');
                         }
                     });
-                
+
             });
         });
     });
 
-  
 
     var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     //function loadDays() {

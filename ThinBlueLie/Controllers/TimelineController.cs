@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Security.Claims;
@@ -65,7 +66,6 @@ namespace ThinBlueLie.Controllers
                 Response.Redirect("/Timeline?d=" + (today));
                 date = today;
             }
-            
             //query database using query string
            // model.Timelineinfos = await _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{date}'").ToListAsync();
             model.Timelineinfos = await _context.Timelineinfo.Where(t => t.Date.Equals(date)).ToListAsync();
@@ -74,7 +74,40 @@ namespace ThinBlueLie.Controllers
 
             return View("Pages/Timeline.cshtml");
         }
-              
+        public DateTime dateT { get; set; }
+        public List<List<Timelineinfo>> dateData { get; set; }
+        [Route("Timeline/GetTimeline")]  
+        public async Task<IActionResult> GetTimeline()
+        {
+            string[] weekDays = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+            if (date == null | string.IsNullOrWhiteSpace(Request.Query["d"]))
+            {
+                var today = DateTime.Today.ToString("yyyy-MM-dd");
+               // Response.Redirect("/Timeline?d=" + (today));
+                date = today;
+            }
+            else
+            {
+                date = Request.Query["d"];
+            }
+            DateTime dateT = Convert.ToDateTime("2020-07-07"); //convert date from string to DateTime
+            DateTime[] dates = new DateTime[7];
+            var weekStart = dateT.AddDays(-(int)dateT.DayOfWeek); //week start date
+           // dates[0] = dateT.AddDays(-(int)dateT.DayOfWeek);
+            for (int i = 0; i < 7; i++) {
+                dates[i] = weekStart.AddDays(i);
+            }
+            var dateData = new List<List<Timelineinfo>>(new List<Timelineinfo>[7]);           
+            for (int i = 0; i < 7; i++)
+            {
+                Debug.WriteLine(i);
+                Debug.WriteLine(dateData.Count);
+                Debug.WriteLine(dates[i].ToString("yyyy-MM-dd"));               
+                dateData[i] = _context.Timelineinfo.Where(t => t.Date.Equals(dates[i].ToString("yyyy-MM-dd"))).ToList();
+            }                
+            ViewData["DateData"] = dateData;
+            return PartialView("_TimelinePartial");
+        }
         
         [HttpPost]
         [Route("/Timeline")] //flagging
@@ -82,12 +115,10 @@ namespace ThinBlueLie.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!_signInManager.IsSignedIn(User))
-                {
+                if (!_signInManager.IsSignedIn(User)){
                     flagModel.Flags.IdUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 }
-                else 
-                {
+                else{
                     flagModel.Flags.IdUser = "null";
                 }
 
@@ -102,7 +133,7 @@ namespace ThinBlueLie.Controllers
 
         [HttpGet]
         [Route("/Submit")]
-        public ViewResult Submit()
+        public ActionResult Submit()
         {
             var model = new SubmitModel
             {
@@ -112,22 +143,21 @@ namespace ThinBlueLie.Controllers
             GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
             return View("Pages/Submit.cshtml", model);
         }
-        
+
         [HttpPost]
-        [Route("/Submit")]
+        [Route("/Submit/Submit")]
         [ValidateAntiForgeryToken] //Main form handler
         public async Task<IActionResult> Submit(SubmitModel model)
         {           
             if (ModelState.IsValid)
             {
-
-                //Add the checkboxes together and convert them to ints
-                var weaponsSum = model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
-                var misconductsSum = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
+                //Add the checkboxes together and convert them to ints to put into the model
+                var weaponSum = model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
+                var misconductSum = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
                 //Put the sums from above into the Timeline model
-                model.Timelineinfo.Weapon = weaponsSum;
-                model.Timelineinfo.Misconduct = misconductsSum;
-
+                model.Timelineinfo.Weapon = weaponSum;
+                model.Timelineinfo.Misconduct = misconductSum;
+                model.Timelineinfo.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Timelineinfo.Add(model.Timelineinfo);                
                 await _context.SaveChangesAsync();
 
@@ -139,26 +169,20 @@ namespace ThinBlueLie.Controllers
             return View("Pages/Submit.cshtml", model);
         }
 
-        [HttpPost]
-        [Route("/Submit")]
+      
+        [Route("/Submit/MediaAdd")]
         [ValidateAntiForgeryToken] //Add media form handler
         public async Task<IActionResult> MediaAdd(SubmitModel model)
         {
             if (ModelState.IsValid)
             {
-                if (!_signInManager.IsSignedIn(User))
-                {
-                    //add them in Log appropriately
-                }
-                else 
-                {
-                    //add them in Log appropriately
-                }
-                model.Medias.IdTimelineInfo = model.Timelineinfo.IdTimelineInfo;
+              //  model.Medias.IdTimelineInfo = model.Timelineinfo.IdTimelineInfo;
                 model.Medias.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Media.Add(model.Medias);
                 await _context.SaveChangesAsync();
-                Log((int)LogEnums.ActionEnum.Submit, model.Timelineinfo.IdTimelineInfo);
+               // var x = 10;
+                //Log((int)LogEnums.ActionEnum.Submit, model.Timelineinfo.IdTimelineInfo);
+
             }
             
             return View("Pages/Submit.cshtml", model);
@@ -197,9 +221,15 @@ namespace ThinBlueLie.Controllers
             return View("Pages/Edit.cshtml", model);
         }
 
-        //http post edit
+        [HttpPost]
+        [Route("/Edit")]
+        public async Task<IActionResult> Edit(Edit model)
+        {
+            model.Verified = 1;
+            return Ok(true);
+        }
 
-        [Route("/Submit/CheckSignedIn")]
+            [Route("/Submit/CheckSignedIn")]
         public ActionResult CheckSignedIn()
         {
             return Ok(_signInManager.IsSignedIn(User));
