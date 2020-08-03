@@ -79,7 +79,7 @@ namespace ThinBlueLie.Controllers
         [Route("Timeline/GetTimeline")]  
         public async Task<IActionResult> GetTimeline()
         {
-            string[] weekDays = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+            //string[] weekDays = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
             if (date == null | string.IsNullOrWhiteSpace(Request.Query["d"]))
             {
                 var today = DateTime.Today.ToString("yyyy-MM-dd");
@@ -97,6 +97,7 @@ namespace ThinBlueLie.Controllers
             for (int i = 0; i < 7; i++) {
                 dates[i] = weekStart.AddDays(i);
             }
+            ViewData["Dates"] = dates;
             var dateData = new List<List<Timelineinfo>>(new List<Timelineinfo>[7]);           
             for (int i = 0; i < 7; i++)
             {
@@ -106,7 +107,7 @@ namespace ThinBlueLie.Controllers
                 dateData[i] = _context.Timelineinfo.Where(t => t.Date.Equals(dates[i].ToString("yyyy-MM-dd"))).ToList();
             }                
             ViewData["DateData"] = dateData;
-            return PartialView("_TimelinePartial");
+            return View("_TimelinePartial");
         }
         
         [HttpPost]
