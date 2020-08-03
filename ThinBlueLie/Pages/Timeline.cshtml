@@ -1,5 +1,5 @@
 ﻿@using static ThinBlueLie.Models.TimelineinfoEnums;
-@using static ThinBlueLie.Models.EnumExtensions; 
+@using static ThinBlueLie.Models.EnumExtensions;
 @model ThinBlueLie.Pages.TimelineModel
 @{
     ViewBag.Title = "Timeline";
@@ -7,12 +7,111 @@
 }
 
 <style>
+    .timeline-label {
+        position: absolute !important;
+        top: -25px !important;
+        text-align: center;
+        padding: 0px;
+        margin: 0px;
+        left: 0px;
+        width: 100%;
+        white-space: nowrap;
+    }
+
+    .week {
+        background-color: #dedede;
+        border: 0px;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        border-radius: 0px;
+        padding-top: 1px;
+        height: 31px;
+        cursor: pointer !important;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    .badge {
+        padding-left: 3px;
+    }
+
+    svg.badge {
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-bottom: 2px;
+        padding-top: 2px;
+        height: 30px;
+        width: 30px;
+    }
+
+    text {
+        font-size: 1rem;
+    }
+
+    .badge-bar {
+        position: absolute;
+    }
+
+    img {
+        width: 25px;
+        height: 25px;
+    }
+
+    #triangle-left {
+        width: 0;
+        height: 0;
+        border-top: 15px solid transparent;
+        border-right: 30px solid black;
+        border-bottom: 16px solid transparent;
+        margin-right: 0.4rem;
+        position: relative;
+        cursor: pointer;
+    }
+
+        #triangle-left .empty {
+            left: 10px;
+            width: 0;
+            height: 0;
+            border-top: 11px solid transparent;
+            border-right: 20px solid white;
+            border-bottom: 11px solid transparent;
+            left: 7px;
+            position: absolute;
+            top: -11px;
+            content: '';
+        }
+
+    #triangle-right {
+        width: 0;
+        height: 0;
+        border-top: 15px solid transparent;
+        border-left: 30px solid black;
+        border-bottom: 16px solid transparent;
+        margin-left: 0.4rem;
+        cursor: pointer;
+        position: relative;
+    }
+
+        #triangle-right .empty {
+            width: 0;
+            height: 0;
+            border-top: 11px solid transparent;
+            border-left: 20px solid white;
+            border-bottom: 11px solid transparent;
+            position: absolute;
+            left: -27px;
+            top: -11px;
+            content: '';
+        }
+
     .indent {
         text-indent: 4rem;
     }
+
     .context {
         font-size: 1.1rem;
     }
+
     .brokencard {
         border: none;
     }
@@ -29,63 +128,6 @@
         background-color: #314DB2; /* Modern Browsers */
     }
 
-    .timeline-label {
-        position: absolute !important;
-        top: -25px !important;
-        text-align: center;
-        padding: 0px;
-        margin: 0px;
-        left: 0px;
-        width: 100%;
-    }
-
-    #triangle-left {
-        width: 0;
-        height: 0;
-        border-top: 16px solid transparent;
-        border-right: 30px solid black;
-        border-bottom: 15px solid transparent;
-        margin-right: 0.4rem;
-        position: relative;
-        cursor: pointer;
-    }
-
-    #triangle-left .empty {
-        left: 10px;
-        width: 0;
-        height: 0;
-        border-top: 11px solid transparent;
-        border-right: 20px solid white;
-        border-bottom: 11px solid transparent;
-        left: 7px;
-        position: absolute;
-        top: -11px;
-        content: '';
-    }
-
-    #triangle-right {
-        width: 0;
-        height: 0;
-        border-top: 16px solid transparent;
-        border-left: 30px solid black;
-        border-bottom: 15px solid transparent;
-        margin-left: 0.4rem;
-        cursor: pointer;
-        position: relative;
-    }
-
-    #triangle-right .empty {
-        width: 0;
-        height: 0;
-        border-top: 11px solid transparent;
-        border-left: 20px solid white;
-        border-bottom: 11px solid transparent;
-        position: absolute;
-        left: -27px;
-        top: -11px;
-        content: '';
-    }    
-
     .btn.week.focus, .btn.week.active {
         box-shadow: none;
         outline: #919191 solid 3px;
@@ -94,14 +136,16 @@
     .btn {
         cursor: pointer;
     }
+
     .thick {
-        height:31px !important;
+        height: 31px !important;
     }
+
     .popover {
-        top: -60px !important;        
-    }   
+        top: -60px !important;
+    }
 </style>
-<body onresize="loadTimes()">
+<body>
     <div style="position:relative;" class="container-fluid mt-4 mb-1 text-center d-block">
         <!-- <div   This draws that "Timeline" idk man, it kinda looks better without it.
              id="imposedline" style="width:80%; border-top: 1px solid black;" class="pt-0 mt-0">
@@ -125,38 +169,42 @@
             </div>
         </div>  @*Timeline*@
         <div class="row fix">
-            <div style="" id="timelineDiv" class="btn-group btn-group-toggle my-auto col-lg-9 ml-md-5 pl-md-5" data-toggle="buttons">
-                <div onclick="PrevWeek()" id="triangle-left"> <div class="empty"></div></div>
-                <label id="Timeline-label0" class="week btn thick">
-                    <span id="Timeline-Day0" class="timeline-label"></span>
-                    <input type="radio" alt="Sunday" id="option1">
-                </label>
-                <label id="Timeline-label1" class="week btn thick">
-                    <span id="Timeline-Day1" class="timeline-label"></span>
-                    <input type="radio" name="options" alt="Monday" id="option2">
-                </label>
-                <label id="Timeline-label2" class="week btn thick">
-                    <span id="Timeline-Day2" class="timeline-label"></span>
-                    <input type="radio" name="options" alt="Tuesday" id="option3">
-                </label>
-                <label id="Timeline-label3" class="week btn thick">
-                    <span id="Timeline-Day3" class="timeline-label"></span>
-                    <input type="radio" name="options" alt="Wednesday" id="option4">
-                </label>
-                <label id="Timeline-label4" class="week btn thick">
-                    <span id="Timeline-Day4" class="timeline-label"></span>
-                    <input type="radio" name="options" alt="Thursday" id="option5">
-                </label>
-                <label id="Timeline-label5" class="week btn thick">
-                    <span id="Timeline-Day5" class="timeline-label"></span>
-                    <input type="radio" name="options" alt="Friday" id="option6">
-                </label>
-                <label id="Timeline-label6" class="week btn thick">
-                    <span id="Timeline-Day6" class="timeline-label"></span>
-                    <input type="radio" name="options" alt="Saturday" id="option7">
-                </label>
-                <div onclick="NextWeek()" id="triangle-right"><div class="empty"></div></div>
-            </div> @*Format Select*@
+            @*<div style="" id="timelineDiv" class="btn-group btn-group-toggle my-auto col-lg-9 ml-md-5 pl-md-5" data-toggle="buttons">
+                    <div onclick="PrevWeek()" id="triangle-left"> <div class="empty"></div></div>
+                    <label id="Timeline-label0" class="week btn thick">
+                        <span id="Timeline-Day0" class="timeline-label"></span>
+                        <input type="radio" alt="Sunday" id="option1">
+                    </label>
+                    <label id="Timeline-label1" class="week btn thick">
+                        <span id="Timeline-Day1" class="timeline-label"></span>
+                        <input type="radio" name="options" alt="Monday" id="option2">
+                    </label>
+                    <label id="Timeline-label2" class="week btn thick">
+                        <span id="Timeline-Day2" class="timeline-label"></span>
+                        <input type="radio" name="options" alt="Tuesday" id="option3">
+                    </label>
+                    <label id="Timeline-label3" class="week btn thick">
+                        <span id="Timeline-Day3" class="timeline-label"></span>
+                        <input type="radio" name="options" alt="Wednesday" id="option4">
+                    </label>
+                    <label id="Timeline-label4" class="week btn thick">
+                        <span id="Timeline-Day4" class="timeline-label"></span>
+                        <input type="radio" name="options" alt="Thursday" id="option5">
+                    </label>
+                    <label id="Timeline-label5" class="week btn thick">
+                        <span id="Timeline-Day5" class="timeline-label"></span>
+                        <input type="radio" name="options" alt="Friday" id="option6">
+                    </label>
+                    <label id="Timeline-label6" class="week btn thick">
+                        <span id="Timeline-Day6" class="timeline-label"></span>
+                        <input type="radio" name="options" alt="Saturday" id="option7">
+                    </label>
+                    <div onclick="NextWeek()" id="triangle-right"><div class="empty"></div></div>
+                </div>*@
+            <div id="timelineDiv" class="btn-group btn-group-toggle my-auto col-lg-9 ml-md-5 pl-md-5 w-100" data-toggle="buttons">
+                @await Html.PartialAsync("Shared/_TimelinePartial.cshtml")
+            </div>
+            @*Format Select*@
             <div style="" class="col-lg-2 col-6 d-inline-block container pl-0">
                 <div id="format-select" style="float:right;" class="input-group mb-1">
                     <div class="mx-auto mt-1">
@@ -185,16 +233,15 @@
         </div>
     }
     @*@if (Event.Count > 1)
-    {
-        <div class="container w-25">
-            <div class="btn-group mb-1" role="group" aria-label="Select Event">
-                <h5 class="mb-0 mr-1 mt-1">Event:</h5>
-                @foreach ((var value, Int32 i) in Event.Select((value, i) => (value, i+1))) {
-                <button onclick="ScrollToEvent()" type="button" class="btn btn-outline-primary px-3">@i</button>
-               }
-            </div>
-        </div>*@
-    }
+        {
+            <div class="container w-25">
+                <div class="btn-group mb-1" role="group" aria-label="Select Event">
+                    <h5 class="mb-0 mr-1 mt-1">Event:</h5>
+                    @foreach ((var value, Int32 i) in Event.Select((value, i) => (value, i+1))) {
+                    <button onclick="ScrollToEvent()" type="button" class="btn btn-outline-primary px-3">@i</button>
+                   }
+                </div>
+            </div>*@
     @foreach (var Timelineinfo in Event)
     {
         <div class="row fix">
@@ -237,7 +284,7 @@
                                 <p><strong>Name:</strong> @Timelineinfo.SubjectName</p>
                                 <p><strong>Sex:</strong> @Enum.GetName(typeof(SexEnum), Timelineinfo.SubjectSex)</p>
                                 <p><strong>Race:</strong> @Enum.GetName(typeof(RaceEnum), Timelineinfo.SubjectRace)</p>
-                                <p><strong>Armed:</strong> @Enum.GetName(typeof(ArmedEnum), Timelineinfo.Armed) </p>                                
+                                <p><strong>Armed:</strong> @Enum.GetName(typeof(ArmedEnum), Timelineinfo.Armed) </p>
                             </li>
                         </ul>
                     </div>
@@ -249,11 +296,11 @@
                                     Incorrect Info?
                                 </a>
                             </div>
-                            <div class="col-5 px-0">                                
+                            <div class="col-5 px-0">
                                 <a tabindex="0" class="btn btn-danger position-relative flag" data-placement="top" role="button" data-html="true" data-toggle="popover" data-trigger="click" title="Report"
                                    data-content='@await Html.PartialAsync("Shared/_FlagPartial.cshtml")'>
-                                   Flag ⚐
-                                </a>                               
+                                    Flag ⚐
+                                </a>
                             </div>
                             <div>
                                 <button onclick="test()"></button>
@@ -268,7 +315,7 @@
             <div class="border mb-3" style="min-height:100px;">
                 <p style="margin-left: 8rem; margin-right: 15rem;" class="context indent">@Timelineinfo.Context</p>
             </div>
-        </div>        
+        </div>
     }
 </body>
 <script>
@@ -314,106 +361,106 @@
     });
 
 
-    var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    //function loadDays() {
-    //var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+   // var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+   // //function loadDays() {
+   // //var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
-    if (window.matchMedia("(min-width: 768px)").matches) {
-        for (i = 0; i < 7; ++i)
-            document.getElementById("Timeline-Day" + i).innerHTML += weekDays[i] + " ";
-    }
+   // if (window.matchMedia("(min-width: 768px)").matches) {
+   //     for (i = 0; i < 7; ++i)
+   //         document.getElementById("Timeline-Day" + i).innerHTML += weekDays[i] + " ";
+   // }
 
-    var first = -0xFFFFFFFF;
-    var m = new Array(7);
-    var d = new Array(7);
-    var y = new Array(7);
-    var day = new Array(7);
+   // var first = -0xFFFFFFFF;
+   // var m = new Array(7);
+   // var d = new Array(7);
+   // var y = new Array(7);
+   // var day = new Array(7);
 
-   function PrevWeek() {
-        first = parseInt(first) - 7;
-        UpdateDays();
-    }
-    function NextWeek() {
-        first = parseInt(first) + 7;
-        UpdateDays();
-    }
-    function getCookie(cname) {
-        var name = cname + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
-    }
-    function RestoreDate() { //load cookie data into variable "first"
-        var x = parseInt(getCookie("savedFirst"));
-        if (Number.isNaN(x) == false) {
-            first = x;
-        }
-    }
-    RestoreDate();
+   //function PrevWeek() {
+   //     first = parseInt(first) - 7;
+   //     UpdateDays();
+   // }
+   // function NextWeek() {
+   //     first = parseInt(first) + 7;
+   //     UpdateDays();
+   // }
+   // function getCookie(cname) {
+   //     var name = cname + "=";
+   //     var decodedCookie = decodeURIComponent(document.cookie);
+   //     var ca = decodedCookie.split(';');
+   //     for (var i = 0; i < ca.length; i++) {
+   //         var c = ca[i];
+   //         while (c.charAt(0) == ' ') {
+   //             c = c.substring(1);
+   //         }
+   //         if (c.indexOf(name) == 0) {
+   //             return c.substring(name.length, c.length);
+   //         }
+   //     }
+   //     return "";
+   // }
+   // function RestoreDate() { //load cookie data into variable "first"
+   //     var x = parseInt(getCookie("savedFirst"));
+   //     if (Number.isNaN(x) == false) {
+   //         first = x;
+   //     }
+   // }
+   // RestoreDate();
 
-    function UpdateDays() {
-        var curr = new Date(); // get current date
-        if (first == -0xFFFFFFFF) { //if there is no value for first stored, make first the first day of the current week
-            first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-        }
-        var last = first + 6; // last day is the first day + 6
+   // function UpdateDays() {
+   //     var curr = new Date(); // get current date
+   //     if (first == -0xFFFFFFFF) { //if there is no value for first stored, make first the first day of the current week
+   //         first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+   //     }
+   //     var last = first + 6; // last day is the first day + 6
 
-        day[0] = new Date(curr.setDate(first));
-        for (i = 1; i < 7; i++) { //This for loop creates the time info for each day with the following loop pulls the month and date out of
-            day[i] = new Date(curr.setDate(curr.getDate() + 1));
-        }
+   //     day[0] = new Date(curr.setDate(first));
+   //     for (i = 1; i < 7; i++) { //This for loop creates the time info for each day with the following loop pulls the month and date out of
+   //         day[i] = new Date(curr.setDate(curr.getDate() + 1));
+   //     }
 
 
-        for (let i = 0; i < 7; i++) { //This for loop adds the date onto the end of the day using arrays
-            m[i] = day[i].getMonth() + 1;
-            d[i] = day[i].getDate();
-            y[i] = day[i].getYear() + 1900;
-            document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " " + m[i] + "/" + d[i];
+   //     for (let i = 0; i < 7; i++) { //This for loop adds the date onto the end of the day using arrays
+   //         m[i] = day[i].getMonth() + 1;
+   //         d[i] = day[i].getDate();
+   //         y[i] = day[i].getYear() + 1900;
+   //         document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " " + m[i] + "/" + d[i];
 
-            var current = new Date();
-            if (day[i] > current) {
-                document.getElementById("Timeline-label" + i).classList.add("disabled");
-                document.getElementById("Timeline-label" + i).style.pointerEvents = "none";
-                document.getElementById("Timeline-label" + i).style.color = "green";
-            }
-            else {
-                document.getElementById("Timeline-label" + i).classList.remove("disabled");
-                document.getElementById("Timeline-label" + i).style.pointerEvents = "auto";
-                document.getElementById("Timeline-label" + i).style.color = "blue";
-            }
+   //         var current = new Date();
+   //         if (day[i] > current) {
+   //             document.getElementById("Timeline-label" + i).classList.add("disabled");
+   //             document.getElementById("Timeline-label" + i).style.pointerEvents = "none";
+   //             document.getElementById("Timeline-label" + i).style.color = "green";
+   //         }
+   //         else {
+   //             document.getElementById("Timeline-label" + i).classList.remove("disabled");
+   //             document.getElementById("Timeline-label" + i).style.pointerEvents = "auto";
+   //             document.getElementById("Timeline-label" + i).style.color = "blue";
+   //         }
 
-            //Pad month and day to always be two places
-            if (m[i] <= 100) { m[i] = ("0" + m[i]).slice(-2) }
-            if (d[i] <= 100) { d[i] = ("0" + d[i]).slice(-2) }
-            //Change query string on button click
-            document.getElementById("Timeline-label" + i).onclick = function () { location.href = "?d=" + y[i] + "-" + m[i] + "-" + d[i]; };
-            document.cookie = "savedFirst=" + first
-        }
-    }
-    UpdateDays();
+   //         //Pad month and day to always be two places
+   //         if (m[i] <= 100) { m[i] = ("0" + m[i]).slice(-2) }
+   //         if (d[i] <= 100) { d[i] = ("0" + d[i]).slice(-2) }
+   //         //Change query string on button click
+   //         document.getElementById("Timeline-label" + i).onclick = function () { location.href = "?d=" + y[i] + "-" + m[i] + "-" + d[i]; };
+   //         document.cookie = "savedFirst=" + first
+   //     }
+   // }
+   // UpdateDays();
 
-    function loadTimes() {
-        for (i = 0; i < 7; i++) {
-            m[i] = day[i].getMonth() + 1;
-            d[i] = day[i].getDate();
-            y[i] = day[i].getYear() + 1900;
-            if (document.getElementById("Timeline-Day" + i).innerHTML == m[i] + "/" + d[i] && window.matchMedia("(min-width: 768px)").matches) {
-                document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " " + m[i] + "/" + d[i];
-            }
-            if (document.getElementById("Timeline-Day" + i).innerHTML == weekDays[i] + " " + m[i] + "/" + d[i] && window.matchMedia("(max-width: 767px)").matches) {
-                document.getElementById("Timeline-Day" + i).innerHTML = m[i] + "/" + d[i];
-            }
-        }
-    }
+   // function loadTimes() {
+   //     for (i = 0; i < 7; i++) {
+   //         m[i] = day[i].getMonth() + 1;
+   //         d[i] = day[i].getDate();
+   //         y[i] = day[i].getYear() + 1900;
+   //         if (document.getElementById("Timeline-Day" + i).innerHTML == m[i] + "/" + d[i] && window.matchMedia("(min-width: 768px)").matches) {
+   //             document.getElementById("Timeline-Day" + i).innerHTML = weekDays[i] + " " + m[i] + "/" + d[i];
+   //         }
+   //         if (document.getElementById("Timeline-Day" + i).innerHTML == weekDays[i] + " " + m[i] + "/" + d[i] && window.matchMedia("(max-width: 767px)").matches) {
+   //             document.getElementById("Timeline-Day" + i).innerHTML = m[i] + "/" + d[i];
+   //         }
+   //     }
+   // }
 
 
 </script>
@@ -500,7 +547,7 @@
         this.showCurrent();
     };
 
-    // 
+    //
     Calendar.prototype.previousYear = function () {
 
         this.CurrentYear = this.CurrentYear - 1;
@@ -508,7 +555,7 @@
         this.showCurrent();
     }
 
-    // 
+    //
     Calendar.prototype.nextYear = function () {
         console.log(" ");
 
