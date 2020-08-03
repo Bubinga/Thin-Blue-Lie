@@ -71,43 +71,47 @@ namespace ThinBlueLie.Controllers
             model.Timelineinfos = await _context.Timelineinfo.Where(t => t.Date.Equals(date)).ToListAsync();
             //load data into ViewData to be used in the Timeline page
             ViewData["Timelineinfo"] = model.Timelineinfos;
-
+            await GetTimeline(date, 0);
             return View("Pages/Timeline.cshtml");
         }
         public DateTime dateT { get; set; }
         public List<List<Timelineinfo>> dateData { get; set; }
         [Route("Timeline/GetTimeline")]  
-        public async Task<IActionResult> GetTimeline()
+        public async Task<IActionResult> GetTimeline(string? current, int? dateChange)
         {
             //string[] weekDays = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-            if (date == null | string.IsNullOrWhiteSpace(Request.Query["d"]))
+            if (current != null && dateChange != null)
             {
-                var today = DateTime.Today.ToString("yyyy-MM-dd");
-               // Response.Redirect("/Timeline?d=" + (today));
-                date = today;
+                date = Convert.ToDateTime(current).AddDays((double)dateChange).ToString("yyyy-MM-dd");
             }
+            else if (date == null | string.IsNullOrWhiteSpace(Request.Query["d"]))
+            {
+                date = DateTime.Today.ToString("yyyy-MM-dd");               
+            }            
             else
             {
                 date = Request.Query["d"];
             }
-            DateTime dateT = Convert.ToDateTime("2020-07-07"); //convert date from string to DateTime
+            DateTime dateT = Convert.ToDateTime(date); //convert date from string to DateTime
             DateTime[] dates = new DateTime[7];
             var weekStart = dateT.AddDays(-(int)dateT.DayOfWeek); //week start date
-           // dates[0] = dateT.AddDays(-(int)dateT.DayOfWeek);
-            for (int i = 0; i < 7; i++) {
-                dates[i] = weekStart.AddDays(i);
+            if (dateChange == null) {
+                dates[0] = dateT.AddDays(-(int)dateT.DayOfWeek);
             }
+            else {
+                dates[0] = dateT.AddDays(-(int)dateT.DayOfWeek);
+            }
+            for (int i = 1; i < 7; i++) {
+                dates[i] = weekStart.AddDays(i);
+            }          
             ViewData["Dates"] = dates;
             var dateData = new List<List<Timelineinfo>>(new List<Timelineinfo>[7]);           
             for (int i = 0; i < 7; i++)
-            {
-                Debug.WriteLine(i);
-                Debug.WriteLine(dateData.Count);
-                Debug.WriteLine(dates[i].ToString("yyyy-MM-dd"));               
+            {                       
                 dateData[i] = _context.Timelineinfo.Where(t => t.Date.Equals(dates[i].ToString("yyyy-MM-dd"))).ToList();
             }                
             ViewData["DateData"] = dateData;
-            return View("_TimelinePartial");
+            return PartialView("_TimelinePartial");
         }
         
         [HttpPost]
@@ -167,7 +171,7 @@ namespace ThinBlueLie.Controllers
             }
             model.AvailableWeapons = GetWeapons();
             model.AvailableMisconducts = GetMisconducts();
-            return View("Pages/Submit.cshtml", model);
+            return PartialView("Pages/Submit.cshtml", model);
         }
 
       

@@ -1,34 +1,11 @@
 ﻿@{
-    //Layout = null;
-    string[] weekDays = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+    Layout = null;    
     var Dates = ViewData["Dates"] as DateTime[];
     var Day = ViewData["DateData"] as List<List<Timelineinfo>>;    
 }
 
-<style>
-    .badge {
-        padding-left: 3px;
-    }
-    svg.badge {
-        padding-left: 0px;
-        padding-right: 0px;
-        padding-bottom:2px;
-        padding-top:2px;
-        height: 30px;
-        width: 30px;
-    }
-    text {
-        font-size: 1rem;
-    }
-    .badge-bar {
-        position: absolute;
-    }
-    img {       
-        width: 25px;
-        height: 25px;
-    }
-</style>
-<div id="timelineDiv" class="btn-group btn-group-toggle col-lg-9 mx-auto mt-5" data-toggle="buttons">
+
+
     <div onclick="PrevWeek()" id="triangle-left"> <div class="empty"></div></div>
     @foreach ((var day, Int32 i) in Day.Select((day, i) => (day, i)))
     {
@@ -47,12 +24,12 @@
         </div>
     }
     <div onclick="NextWeek()" id="triangle-right"><div class="empty"></div></div>
-</div>
+
 <script>
     function NextWeek() {
-         $("#timelineDiv").load('@Url.Action("GetTimeline", "Timeline")', {dateChange: +7})
+        $("#timelineDiv").load('@Url.Action("GetTimeline", "Timeline")', { current: '@Dates[0].Date.ToString("yyyy-MM-dd")', dateChange: 7 });
     }
     function PrevWeek() {
-          $("#timelineDiv").load('@Url.Action("GetTimeline", "Timeline")', {dateChange: -7})
+        $("#timelineDiv").load('@Url.Action("GetTimeline", "Timeline")', { current: '@Dates[0].Date.ToString("yyyy-MM-dd")' , dateChange: -7});
     }
 </script>
