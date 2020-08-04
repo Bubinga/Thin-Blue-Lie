@@ -178,7 +178,8 @@ namespace ThinBlueLie.Controllers
         }
 
         
-        public List<Media> MediaList { get; set; }        
+        public List<Media> MediaList { get; set; }     
+        [HttpPost]
         [Route("/Submit/MediaAdd")]
         [ValidateAntiForgeryToken] //Add media form handler
         public IActionResult MediaAdd(Media model, int count)
