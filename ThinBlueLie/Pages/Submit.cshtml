@@ -18,9 +18,9 @@
         <div class="d-block mb-0 pt-3 border-bottom">
             <h4 class="mb-0">Information Submission Form</h4>
         </div>
-        @using (Html.BeginForm("Submit", "Timeline", FormMethod.Post))
-            {
-        @*<form id="mainForm">*@
+        @*@using (Html.BeginForm("Submit", "Timeline", FormMethod.Post))
+            {*@
+        <form id="mainForm" method="post">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div>
@@ -197,8 +197,8 @@
                        data-content=' @await Html.PartialAsync("Shared/_PleaseLogin.cshtml") ' />
                 <a asp-page="/Index" style="float:right">Back to Home</a>
             </div>
-            }
-        @*</form>*@
+            @*}*@
+        </form>
     </div>
     <div class="col-lg-5 col-md-5">
         <div class="row">
@@ -254,12 +254,22 @@
                 console.log("if ran");
             }
             else if (attempt == 1 || data == true) {
-                $('form').submit();
+                $.post('', $('#mainForm').serialize()); 
+                SubmitMedia();
                 //$.post('', $('form').serialize());               
                 $('#submit').popover('hide');
                 console.log("else if ran");
             }
         });
+    }
+
+    function SubmitMedia () {
+        var count = $('#MediaList').children().length;        
+        for (var i = 0; i < count; i++) {           
+            $.post('/Submit/MediaAdd',
+                { model: $('.AddMedia:nth-child(' + i + ')').find('form').serialize(), count: count }, function () { }
+            );
+        }
     }
 
 
