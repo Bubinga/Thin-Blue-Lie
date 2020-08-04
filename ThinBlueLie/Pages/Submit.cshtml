@@ -1,4 +1,5 @@
 ﻿@using ThinBlueLie.Models;
+@using static ThinBlue.Media;
 @model ThinBlueLie.Pages.SubmitModel
 
 @{
@@ -221,7 +222,7 @@
                 <hr />
             </div>
             <div id="MediaList">
-                <partial name="_MediaPartial" />
+               
             </div>
             <div>
                 <div class="container">
@@ -254,24 +255,33 @@
                 console.log("if ran");
             }
             else if (attempt == 1 || data == true) {
-                $.post('', $('#mainForm').serialize()); 
-                SubmitMedia();
-                //$.post('', $('form').serialize());               
+                $.post('', $('#mainForm').serialize());
+                SubmitMedia();                
                 $('#submit').popover('hide');
                 console.log("else if ran");
             }
         });
     }
 
+  
     function SubmitMedia () {
-        var count = $('#MediaList').children().length;        
-        for (var i = 0; i < count; i++) {           
+        var count = $('#MediaList').children().length;
+        var token = $('input[name="__RequestVerificationToken"]').val();     
+        for (var i = 0; i < count; i++) {
+        var data = $('.AddMedia:nth-child(1)').find('form').serialize().split("&");
+        console.log(data);
+        var obj = {};
+        for (var key in data) {
+            console.log(data[key]);
+            obj[data[key].split("=")[0]] = data[key].split("=")[1];
+        }
+        console.log(obj);
             $.post('/Submit/MediaAdd',
-                { model: $('.AddMedia:nth-child(' + i + ')').find('form').serialize(), count: count }, function () { }
+                { __RequestVerificationToken: token, model: obj, count: count },
             );
         }
     }
-
+     
 
     $("#MoreMedia").click(function () {
         //$("#MediaList").append("Submit/MoreMedia");
@@ -289,6 +299,8 @@
             });
         });
     });
+    $("#MoreMedia").click();
+     //await Html.PartialAsync("Shared/_MediaPartial.cshtml")
 
     $(".close").on('click', function (e) {
         closeMedia(e, $(this).parents(".AddMedia"));
