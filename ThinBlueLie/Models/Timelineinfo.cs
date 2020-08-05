@@ -20,27 +20,27 @@ namespace ThinBlue
         [MaxLength(86)]
         [Column(TypeName = "VARCHAR(20)")]
         public string City { get; set; }
-        [MaxLength(60)]
-        [Column(TypeName = "VARCHAR(60)")]
-        public string SubjectName { get; set; }
-        [Required(ErrorMessage = "The Subject's Sex field is required")]
-        [Column(TypeName = "TINYINT")]
-        public int SubjectSex { get; set; }
-        [Required(ErrorMessage = "The Subject's Race field is required")]
-        [Column(TypeName = "TINYINT")]
-        public int SubjectRace { get; set; }
-        [Required]
-        [Column(TypeName = "TINYINT")]
-        public int Armed { get; set; }
-        [MaxLength(60)]
-        [Column(TypeName = "VARCHAR(60)")]
-        public string OfficerName { get; set; }
-        [Required(ErrorMessage = "The Officer's Sex field is required")]
-        [Column(TypeName = "TINYINT")]
-        public int OfficerSex { get; set; }
-        [Required(ErrorMessage = "The Officer's Race field is required")]
-        [Column(TypeName = "TINYINT")]
-        public int OfficerRace { get; set; }
+        //[MaxLength(60)]
+        //[Column(TypeName = "VARCHAR(60)")]
+        //public string SubjectName { get; set; }
+        //[Required(ErrorMessage = "The Subject's Sex field is required")]
+        //[Column(TypeName = "TINYINT")]
+        //public int SubjectSex { get; set; }
+        //[Required(ErrorMessage = "The Subject's Race field is required")]
+        //[Column(TypeName = "TINYINT")]
+        //public int SubjectRace { get; set; }
+        //[Required]
+        //[Column(TypeName = "TINYINT")]
+        //public int Armed { get; set; }
+        //[MaxLength(60)]
+        //[Column(TypeName = "VARCHAR(60)")]
+        //public string OfficerName { get; set; }
+        //[Required(ErrorMessage = "The Officer's Sex field is required")]
+        //[Column(TypeName = "TINYINT")]
+        //public int OfficerSex { get; set; }
+        //[Required(ErrorMessage = "The Officer's Race field is required")]
+        //[Column(TypeName = "TINYINT")]
+        //public int OfficerRace { get; set; }
         [Required]
         [Column(TypeName = "TINYINT")]
         public int Misconduct { get; set; }
@@ -48,17 +48,7 @@ namespace ThinBlue
         public int Weapon { get; set; }
         [Required]
         [Column(TypeName = "LONGTEXT")]
-        public string Context { get; set; }
-        //[Required]
-        //[Column(TypeName = "TINYINT")]
-        //public int Gore { get; set; }
-        //[Required]
-        //[Column(TypeName = "TINYINT")]
-        //public int Source { get; set; }
-        //[Column(TypeName = "VARCHAR(60)")]
-        //public string Credit { get; set; }
-        //[Column(TypeName = "VARCHAR(100)")]
-        //public string VidLink { get; set; }
+        public string Context { get; set; }       
         [Column(TypeName = "VARCHAR(50)")]
         public string SubmittedBy { get; set; }
         [Column(TypeName = "TINYINT")]
