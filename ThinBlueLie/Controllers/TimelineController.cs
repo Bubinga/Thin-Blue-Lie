@@ -145,7 +145,9 @@ namespace ThinBlueLie.Controllers
                 AvailableWeapons = GetWeapons(),
                 AvailableMisconducts = GetMisconducts()
             };
-            ViewBag.Count = 0;
+            ViewBag.MediaCount = 0;
+            ViewBag.SubjectCount = 0;
+            ViewBag.OfficerCount = 0;
             GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
             return View("Pages/Submit.cshtml", model);
         }
@@ -241,9 +243,22 @@ namespace ThinBlueLie.Controllers
         [Route("/Submit/MoreMedia")]
         public ActionResult GetMediaPartial(int data)
         {
-            ViewBag.Count = data;
+            ViewBag.MediaCount = data;
             return PartialView("_MediaPartial");
         }
+        [Route("/Submit/MoreSubjects")]
+        public ActionResult GetSubjectPartial(int data)
+        {
+            ViewBag.SubjectCount = data;
+            return PartialView("_SubjectPartial");
+        }
+        [Route("/Submit/MoreOfficers")]
+        public ActionResult GetOfficerPartial(int data)
+        {
+            ViewBag.OfficerCount = data;
+            return PartialView("_OfficerPartial");
+        }
+
 
         public ActionResult Success()
         {
