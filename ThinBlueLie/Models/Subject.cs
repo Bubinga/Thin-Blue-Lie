@@ -10,9 +10,13 @@ namespace ThinBlue
     {
         [Key]
         public int IdSubject { get; set; }
+       // [Required(ErrorMessage = "The Subject's Name field is required")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "The Subject's Race field is required")]
         public int Race { get; set; }
+        [Required(ErrorMessage = "The Subject's Sex field is required")]
         public int Sex { get; set; }
+        [Required]
         public int Armed { get; set; }
     }
 }
