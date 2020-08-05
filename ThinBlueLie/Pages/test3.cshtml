@@ -1,40 +1,11 @@
-﻿@using static ThinBlueLie.Models.MediaEnums;
+﻿@using static ThinBlueLie.Models.TimelineinfoEnums;
 @model ThinBlueLie.Pages.Test3Model
 @{
+    int i = ViewBag.Count;
     ViewBag.Title = "Test3";
 }
 
-
-<div id="MediaList">
-    <partial name="_MediaPartial" />
-</div>
-<button class="btn btn-primary mx-auto" formnovalidate="formnovalidate" id="MoreMedia">
-    Media
-    <i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>
-</button>
-<script>
-    var count = 1;
-    $("#MoreMedia").click(function () {
-      //  $("form").validate().settings.ignore = "*";
-        $.ajax({
-            url: '/Test3/MethodTest',
-            type: 'GET',
-            data: { data: count },
-            success: function (result) {
-                $("#MediaList").append(result);
-                count++;
-                //$.validator.unobtrusive.parse($("#MediaList").last().find('.MediaFile'));
-                //$("form").validate().settings.ignore = ":hidden";
-                $("#MediaList").last().find('.MediaFile').css('display', 'none'); //Set the last item in the list's mediaFile input to hidden
-                //rerun event listeners
-                $('.AddMedia').on('change', 'select', function (e) {
-                    changeFile(e, $(this).parents(".AddMedia"));
-                });
-                $(".close").on('click', function (e) {
-                    closeMedia(e, $(this).parents(".AddMedia"));
-                });
-
-            }
-        })
-    });
-</script>
+    <div class="container">
+        
+    </div>
+   

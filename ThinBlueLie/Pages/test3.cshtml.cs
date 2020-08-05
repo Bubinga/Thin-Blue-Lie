@@ -12,6 +12,7 @@ namespace ThinBlueLie.Pages
 {
     public class Test3Model
     {
+        public List<Subject> Subjects { get; set; }
         public Media Medias { get; set; }
 
     }

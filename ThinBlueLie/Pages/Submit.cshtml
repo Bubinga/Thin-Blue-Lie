@@ -54,8 +54,17 @@
                     <input asp-for="Timelineinfos.City" class="form-control" />
                 </div>
             </div>
-            <hr /> <h6>Fill out the following information for the Subject/Victim</h6>
-            <div class="form-group">
+            <hr /> <h6>
+                       Fill out the following information for the Subject/Victim
+                       <button class="btn btn-primary mx-auto" id="MoreSubjects">
+                          
+                          <i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>
+                       </button>
+                   </h6>
+            <div id="SubjectList">
+                <partial name="_SubjectPartial"/>
+            </div>
+            @*<div class="form-group">
                 <label asp-for="Timelineinfos.SubjectName" class="control-label">
                     Name <span class="text-muted ml-1">(First Last)</span>
                     <span asp-validation-for="Timelineinfos.SubjectName" class="text-danger"></span>
@@ -121,9 +130,18 @@
                     <input id="ArmedYes" type="radio" asp-for="Timelineinfos.Armed" class="form-check-input" value="1" />
                     <label class="form-check-label">Yes</label>
                 </div>
+            </div>*@
+            <hr /> <h6>
+                       Fill out the following information for the Officer
+                       <button class="btn btn-primary mx-auto" id="MoreOfficers">
+
+                           <i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>
+                       </button>
+                   </h6>
+            <div id="OfficerList">
+                <partial name="_OfficerPartial"/>
             </div>
-            <hr /> <h6>Fill out the following information for the Officer</h6>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="Timelineinfos.OfficerName" class="control-label">Name</label>
                 <input id="ONameInput" asp-for="Timelineinfos.OfficerName" class="form-control SimFinder" />
                 <span asp-validation-for="Timelineinfos.OfficerName" class="text-danger"></span>
@@ -193,7 +211,7 @@
                             </label>                           
                         </div>
                     }
-            </div>
+            </div>*@
             <div id="weaponDiv" class="form-group">
                 <label class="form-check-label">Type of Weapon</label>
                 @foreach (var item in Model.AvailableWeapons)
@@ -247,7 +265,7 @@
                 </div>
                 <div>
                     <div class="container">
-                        <button class="btn btn-primary mx-auto" formnovalidate="formnovalidate" id="MoreMedia">
+                        <button class="btn btn-primary mx-auto" id="MoreMedia">
                             Media 
                             <i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>
                         </button>
@@ -289,21 +307,61 @@
             });
       //  }
     })
-    
+    var SubjectCount = 1;
+    $("#MoreSubjects").click(function () {
+        //$("form").validate().options.ignore = "*";
+        $.ajax({
+            url: '/Submit/MoreSubjects',
+            method: 'get',
+            data: { data: SubjectCount },
+            success: function (result) {
+                $("#SubjectList").append(result);
+                SubjectCount++;
+                $.validator.unobtrusive.parse($("#SubjectList").last());
+                //$("form").validate().settings.ignore = ":hidden";
+
+                //rerun event listeners               
+                $(".close").on('click', function (e) {
+                    closeMedia(e, $(this).parents(".AddMedia, .AddSubject, .AddOfficer"));
+                });
+            }
+        })
+    });
+
+    var OfficerCount = 1;
+    $("#MoreOfficers").click(function () {
+        //$("form").validate().options.ignore = "*";
+        $.ajax({
+            url: '/Submit/MoreOfficers',
+            method: 'get',
+            data: { data: OfficerCount },
+            success: function (result) {
+                $("#OfficerList").append(result);
+                SubjectCount++;
+                $.validator.unobtrusive.parse($("#OfficerList").last());
+                //$("form").validate().settings.ignore = ":hidden";
+
+                //rerun event listeners               
+                $(".close").on('click', function (e) {
+                    closeMedia(e, $(this).parents(".AddMedia, .AddSubject, .AddOfficer"));
+                });
+            }
+        })
+    });
 
 
-    var count = 1;
+    var MediaCount = 1;
     $("#MoreMedia").click(function () {       
-        $("form").validate().settings.ignore = "*";
+        //$("form").validate().options.ignore = "*";
         $.ajax({
             url: '/Submit/MoreMedia',
             method: 'get',
-            data: { data: count },
+            data: { data: MediaCount },
             success: function (result) {
                 $("#MediaList").append(result);
-                count++;
-                $.validator.unobtrusive.parse($("#MediaList").last().find('.MediaFile'));
-                $("form").validate().settings.ignore = ":hidden";
+                MediaCount++;
+                $.validator.unobtrusive.parse($("#MediaList").last());
+                //$("form").validate().settings.ignore = ":hidden";
                 $("#MediaList").last().find('.MediaFile').css('display', 'none'); //Set the last item in the list's mediaFile input to hidden
                 //rerun event listeners
                 $('.AddMedia').on('change', 'select', function (e) {
@@ -312,13 +370,12 @@
                 $(".close").on('click', function (e) {
                     closeMedia(e, $(this).parents(".AddMedia"));
                 });
-
             }
         })
     });
  
     $(".close").on('click', function (e) {
-        closeMedia(e, $(this).parents(".AddMedia"));
+        closeMedia(e, $(this).parents(".AddMedia, .AddSubject, .AddOfficer"));
     });
 
     function closeMedia(e, parent) {
