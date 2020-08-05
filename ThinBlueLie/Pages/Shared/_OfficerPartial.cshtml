@@ -1,0 +1,40 @@
+﻿@using ThinBlueLie.Models;
+@using static ThinBlueLie.Models.TimelineinfoEnums;
+@model ThinBlueLie.Pages.SubmitModel
+@{
+    int i = ViewBag.OfficerCount;
+    Layout = null;
+}
+    <div class="AddOfficer">
+        <div class="card border-dark mb-3 mx-auto">
+            <div class="card-body text-dark pt-2">
+                <div class="form-row position-relative">
+                    <div class="col-10 ml-3 my-2">
+                        <label asp-for="Officers[i].Name" class="control-label">
+                            Name
+                            <span class="text-danger ml-1">*</span>
+                            <span class="text-muted ml-1">(First, Last)</span>
+                        </label>
+                        <input asp-for="Officers[i].Name" class="form-control w-100" />
+                        <span asp-validation-for="Officers[i].Name" class="text-danger"></span>
+                    </div>
+                    <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="form-row position-relative my-2">
+                    <div class="col-6">
+                        <label class="control-label">Race:<span class="text-danger ml-1">*</span></label>
+                        <select asp-for="Officers[i].Race" asp-items="Html.GetEnumSelectList(typeof(RaceEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
+                        <span asp-validation-for="Officers[i].Race" class="text-danger"></span>
+                    </div>
+                    <div class="col-6">
+                        <label class="control-label">Sex:<span class="text-danger ml-1">*</span></label>
+                        <select asp-for="Officers[i].Sex" asp-items="Html.GetEnumSelectList(typeof(SexEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
+                        <span asp-validation-for="Officers[i].Sex" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

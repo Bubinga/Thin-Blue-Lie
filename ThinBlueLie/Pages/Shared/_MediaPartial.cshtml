@@ -2,7 +2,7 @@
 @using static ThinBlueLie.Models.MediaEnums;
 @model ThinBlueLie.Pages.SubmitModel;
 @{
-    int i = ViewBag.Count;
+    int i = ViewBag.MediaCount;
     Layout = null;
 }
 
@@ -39,7 +39,7 @@
                         <div class="col-5">
                             <div class="form-group MediaFile">
                                 <label for="FileSelect">
-                                    Pick a File4
+                                    Pick a File
                                     <span asp-validation-for="Medias[i].SourceFile" class="text-danger"></span>
                                 </label>
                                 <input asp-for="Medias[i].SourceFile" type="file" accept="image/*" class="form-control-file" id="FileSelect">
