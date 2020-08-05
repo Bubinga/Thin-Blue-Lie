@@ -145,84 +145,52 @@ namespace ThinBlueLie.Controllers
                 AvailableWeapons = GetWeapons(),
                 AvailableMisconducts = GetMisconducts()
             };
+            ViewBag.Count = 0;
             GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
             return View("Pages/Submit.cshtml", model);
         }
 
-        public bool Running { get; set; }
-        public Timelineinfo MainForm { get; set; }
         [HttpPost]
         [Route("/Submit")]
-        [ValidateAntiForgeryToken] //Main form handler
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Submit(SubmitModel model)
         {           
             if (ModelState.IsValid)
             {
-                Running = true;                       
-
                 //Add the checkboxes together and convert them to ints to put into the model
-                model.Timelineinfo.Weapon = model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
-                model.Timelineinfo.Misconduct = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));                
-               
-                model.Timelineinfo.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                model.Timelineinfo = MainForm;
-                //_context.Timelineinfo.Add(model.Timelineinfo);                
-                //await _context.SaveChangesAsync();
+                if (model.SelectedWeapons.Count != 0){
+                    model.Timelineinfos.Weapon = model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
+                }
+                model.Timelineinfos.Misconduct = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
+                //Set SubmittedBy to current logged in user
+                model.Timelineinfos.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                _context.Timelineinfo.Add(model.Timelineinfos);
+                await _context.SaveChangesAsync();
+                var id = model.Timelineinfos.IdTimelineInfo;
+                foreach (var media in model.Medias)
+                {
+                    media.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    media.IdTimelineInfo = id;
+                    _context.Media.Add(media);
+                }
+                await _context.SaveChangesAsync();
 
-                Log((int)LogEnums.ActionEnum.Submit, model.Timelineinfo.IdTimelineInfo);
+                Log((int)LogEnums.ActionEnum.Submit, model.Timelineinfos.IdTimelineInfo);
                 return null;
             }
             model.AvailableWeapons = GetWeapons();
             model.AvailableMisconducts = GetMisconducts();
-            return PartialView("Pages/Submit.cshtml", model);
-        }
-
-        
-        public List<Media> MediaList { get; set; }     
-        [HttpPost]
-        [Route("/Submit/MediaAdd")]
-        [ValidateAntiForgeryToken] //Add media form handler
-        public IActionResult MediaAdd(Media model, int count)
-        {
-            if (ModelState.IsValid)
-            {
-              //  model.Medias.IdTimelineInfo = model.Timelineinfo.IdTimelineInfo;
-                model.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                MediaList.Add(model);
-                //_context.Media.Add(model.Medias);
-                //await _context.SaveChangesAsync();
-               // var x = 10;
-                //Log((int)LogEnums.ActionEnum.Submit, model.Timelineinfo.IdTimelineInfo);
-
+            if (model.Timelineinfos.Date == null){
+                GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
             }
-            if (MediaList.Count == count)
+            else
             {
-                SubmitFinal(MainForm, MediaList);
-            }
+                GetSimilar(model.Timelineinfos.Date);
+            }          
             return View("Pages/Submit.cshtml", model);
         }
+
         
-
-        public async void SubmitFinal(Timelineinfo MainForm, List<Media> MediaList)
-        {
-            _context.Timelineinfo.Add(MainForm);
-            await _context.SaveChangesAsync();
-            var id = MainForm.IdTimelineInfo;          
-            foreach (var media in MediaList)
-            {
-                media.IdTimelineInfo = id;
-                _context.Media.Add(media);              
-            }
-            await _context.SaveChangesAsync();
-            Running = false;
-            //Post main to database
-            //Get main Id
-            //Put id into medias and submit those
-        }
-
-
-
-
         [BindProperty(SupportsGet = true)]
         public string idString { get; set; }
 
@@ -264,15 +232,16 @@ namespace ThinBlueLie.Controllers
         //    return Ok(true);
         //}
 
-            [Route("/Submit/CheckSignedIn")]
+        [Route("/Submit/CheckSignedIn")]
         public ActionResult CheckSignedIn()
         {
             return Ok(_signInManager.IsSignedIn(User));
         }      
 
         [Route("/Submit/MoreMedia")]
-        public ActionResult GetMediaPartial()
+        public ActionResult GetMediaPartial(int data)
         {
+            ViewBag.Count = data;
             return PartialView("_MediaPartial");
         }
 

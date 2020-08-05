@@ -1,69 +1,73 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using static ThinBlueLie.Models.MediaEnums;
-@model ThinBlue.Media;
+@model ThinBlueLie.Pages.SubmitModel;
 @{
+    int i = ViewBag.Count;
     Layout = null;
 }
 
 <div class="AddMedia">
     <div class="card border-dark mb-3 ml-2">
-        <div class="card-body text-dark row pt-0">
-            @*@using (Html.BeginForm("MediaAdd", "Timeline", FormMethod.Post))
-                {*@
-            <form name="mediaAdd" method="post">
-                @Html.AntiForgeryToken()
+        <div class="card-body text-dark row pt-0">          
+            <div name="mediaAdd">
                 <div class="container">
                     <div class="form-row position-relative">
                         <div class="col-5 dropdown my-2 px-0">
                             <label class="control-label">Type of Media:<span class="text-danger ml-1">*</span></label>
-                            <select asp-for="MediaType" asp-items="Html.GetEnumSelectList(typeof(MediaTypeEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false">
+                            <select asp-for="Medias[i].MediaType" asp-items="Html.GetEnumSelectList(typeof(MediaTypeEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false">
                                 <option class="dropdown-item">Select</option>
                             </select>
-                            <span asp-validation-for="MediaType" class="text-danger"></span>
+                            <span asp-validation-for="Medias[i].MediaType" class="text-danger"></span>
                         </div>
                         <div class="col-6 dropdown my-2 px-0">
                             <label class="control-label">Source:<span class="text-danger ml-1">*</span></label>
-                            <select class="btn border-dark SourceFromSelect" asp-for="SourceFrom" asp-items="Html.GetEnumSelectList(typeof(SourceFromEnum))" style="width:85%;" type="button" aria-haspopup="true" aria-expanded="false">
+                            <select class="btn border-dark SourceFromSelect" asp-for="Medias[i].SourceFrom" asp-items="Html.GetEnumSelectList(typeof(SourceFromEnum))" style="width:85%;" type="button" aria-haspopup="true" aria-expanded="false">
                                 <option class="dropdown-item" selected>Select</option>
                             </select>
-                            <span asp-validation-for="SourceFrom" class="text-danger"></span>
+                            <span asp-validation-for="Medias[i].SourceFrom" class="text-danger"></span>
                         </div>
                         <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="form-row">
-                        <label asp-for="Blurb" class="control-label">Blurb<span class="text-danger ml-1">*</span> <span class="text-muted ml-1">Explain what is in the media</span></label>
-                        <input asp-for="Blurb" class="form-control" />
-                        <span asp-validation-for="Blurb" class="text-danger"></span>
+                        <label asp-for="Medias[i].Blurb" class="control-label">Blurb<span class="text-danger ml-1">*</span> <span class="text-muted ml-1">Explain what is in the media</span></label>
+                        <input asp-for="Medias[i].Blurb" class="form-control" />
+                        <span asp-validation-for="Medias[i].Blurb" class="text-danger"></span>
                     </div>
                     <div class="form-row">
                         <div class="col-5">
                             <div class="form-group MediaFile">
-                                <label for="FileSelect">Pick a File</label>
-                                <input asp-for="SourceFile" type="file" class="form-control-file" id="FileSelect">
+                                <label for="FileSelect">
+                                    Pick a File4
+                                    <span asp-validation-for="Medias[i].SourceFile" class="text-danger"></span>
+                                </label>
+                                <input asp-for="Medias[i].SourceFile" type="file" accept="image/*" class="form-control-file" id="FileSelect">
                             </div>
                             <div class="form-group MediaLink">
-                                <label for="FileLink">Link the Media</label>
-                                <input asp-for="SourceFile" type="url" class="form-control" id="FileLink">
+                                <label for="FileLink">Link the Media
+                                    <span asp-validation-for="Medias[i].SourceFile" class="text-danger"></span>
+                                </label>
+                                <input asp-for="Medias[i].SourceFile" type="url" class="form-control" id="FileLink">
                             </div>
                         </div>
-                        <div class="ml-3 col-4">
-                            <label class="form-check-label">Is there any blood or gore in the video?<span class="text-danger ml-1">*</span></label>
+                        <div class="ml-3 col-6">
+                            <label class="form-check-label">
+                                Is there any blood or gore in the video?<span class="text-danger ml-1">*</span>
+                                <span asp-validation-for="Medias[i].Gore" class="text-danger"></span>
+                            </label>
                             <div class="form-check m-2 d-inline">
-                                <input type="radio" asp-for="Gore" class="form-check-input" value="0">
+                                <input type="radio" asp-for="Medias[i].Gore" class="form-check-input" value="0">
                                 <label class="form-check-label">No</label>
                             </div>
                             <div class="form-check m-2 d-inline">
-                                <input type="radio" asp-for="Gore" class="form-check-input" value="1" />
+                                <input type="radio" asp-for="Medias[i].Gore" class="form-check-input" value="1" />
                                 <label class="form-check-label">Yes</label>
-                                <span asp-validation-for="Gore" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
-                </div>
-                @*}*@
-            </form>
+                </div>             
+            </div>
         </div>
     </div>
 </div>

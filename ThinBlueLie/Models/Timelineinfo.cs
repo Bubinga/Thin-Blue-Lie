@@ -11,7 +11,7 @@ namespace ThinBlue
         [Required]
         [Column(TypeName = "CHAR(10)")]
         [MaxLength(10)]
-        [DataType(DataType.Date)]
+        [DataType(DataType.Date)]        
         public string Date { get; set; }
         [Required]
         [Column(TypeName = "TINYINT")]
@@ -23,20 +23,25 @@ namespace ThinBlue
         [MaxLength(60)]
         [Column(TypeName = "VARCHAR(60)")]
         public string SubjectName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "The Subject's Sex field is required")]
         [Column(TypeName = "TINYINT")]
         public int SubjectSex { get; set; }
+        [Required(ErrorMessage = "The Subject's Race field is required")]
         [Column(TypeName = "TINYINT")]
         public int SubjectRace { get; set; }
+        [Required]
         [Column(TypeName = "TINYINT")]
         public int Armed { get; set; }
         [MaxLength(60)]
         [Column(TypeName = "VARCHAR(60)")]
         public string OfficerName { get; set; }
+        [Required(ErrorMessage = "The Officer's Sex field is required")]
         [Column(TypeName = "TINYINT")]
         public int OfficerSex { get; set; }
+        [Required(ErrorMessage = "The Officer's Race field is required")]
         [Column(TypeName = "TINYINT")]
         public int OfficerRace { get; set; }
+        [Required]
         [Column(TypeName = "TINYINT")]
         public int Misconduct { get; set; }
         [Column(TypeName = "TINYINT")]
