@@ -9,13 +9,14 @@ using ThinBlue;
 
 namespace ThinBlueLie.Pages
 {
-    public class EditModel 
+    public class EditModel
     {
         [BindProperty]
         public Timelineinfo Timelineinfo { get; set; }
         [BindProperty]
-        public IList<Media> Medias { get; set; }
-        public bool SignedIn { get; set; }
+        public List<Media> Medias { get; set; }
+        public List<Officer> Officers { get; set; }
+        public List<Subject> Subjects { get; set; }
 
         public IList<string> SelectedWeapons { get; set; }
         public IList<SelectListItem> AvailableWeapons { get; set; }

@@ -50,11 +50,11 @@ namespace ThinBlue
 
                 entity.Property(e => e.IdTimelineInfo).HasColumnName("idTimelineInfo");
 
-                entity.Property(e => e.Armed)
-                    .HasColumnName("Armed")
-                    .HasColumnType("TINYINT")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                //entity.Property(e => e.Armed)
+                //    .HasColumnName("Armed")
+                //    .HasColumnType("TINYINT")
+                //    .HasCharSet("utf8mb4")
+                //    .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.City)
                     .HasColumnType("varchar(20)")
@@ -77,20 +77,20 @@ namespace ThinBlue
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.Property(e => e.OfficerName)
-                    .HasColumnType("varchar(60)")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                //entity.Property(e => e.OfficerName)
+                //    .HasColumnType("varchar(60)")
+                //    .HasCharSet("utf8mb4")
+                //    .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.Property(e => e.OfficerRace)
-                    .HasColumnType("TINYINT")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                //entity.Property(e => e.OfficerRace)
+                //    .HasColumnType("TINYINT")
+                //    .HasCharSet("utf8mb4")
+                //    .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.Property(e => e.OfficerSex)
-                    .HasColumnType("TINYINT")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                //entity.Property(e => e.OfficerSex)
+                //    .HasColumnType("TINYINT")
+                //    .HasCharSet("utf8mb4")
+                //    .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.State)
                     .IsRequired()
@@ -98,20 +98,20 @@ namespace ThinBlue
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.Property(e => e.SubjectName)
-                    .HasColumnType("varchar(60)")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                //entity.Property(e => e.SubjectName)
+                //    .HasColumnType("varchar(60)")
+                //    .HasCharSet("utf8mb4")
+                //    .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.Property(e => e.SubjectRace)
-                    .HasColumnType("TINYINT")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                //entity.Property(e => e.SubjectRace)
+                //    .HasColumnType("TINYINT")
+                //    .HasCharSet("utf8mb4")
+                //    .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.Property(e => e.SubjectSex)
-                    .HasColumnType("TINYINT")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");              
+                //entity.Property(e => e.SubjectSex)
+                //    .HasColumnType("TINYINT")
+                //    .HasCharSet("utf8mb4")
+                //    .HasCollation("utf8mb4_0900_ai_ci");              
 
                 entity.Property(e => e.Weapon)
                     .HasColumnType("TINYINT")
