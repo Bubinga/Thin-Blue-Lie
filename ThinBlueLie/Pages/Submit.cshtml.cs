@@ -12,9 +12,9 @@ namespace ThinBlueLie.Pages
     public class SubmitModel
     { 
         [BindProperty]
-        public Timelineinfo Timelineinfo { get; set; }
+        public Timelineinfo Timelineinfos { get; set; }
         [BindProperty]
-        public Media Medias { get; set; }
+        public List<Media> Medias { get; set; }
         public bool SignedIn { get; set; }
 
         public IList<string> SelectedWeapons { get; set; }

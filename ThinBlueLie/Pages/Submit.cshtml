@@ -13,152 +13,174 @@
     body {
         overflow-x: hidden;
     }
+    form {
+        display: inherit;
+    }
 </style>
 <div class="offset-lg-3 row container-fluid">
-    <div class="col-lg-4 col-md-5 border-left border-right border-bottom">
-        <div class="d-block mb-0 pt-3 border-bottom">
-            <h4 class="mb-0">Information Submission Form</h4>
-        </div>
-        @*@using (Html.BeginForm("Submit", "Timeline", FormMethod.Post))
-            {*@
-        <form id="mainForm" method="post">
-            @Html.AntiForgeryToken()
+    @using (Html.BeginForm("Submit", "Timeline", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-lg-4 col-md-5 border-left border-right border-bottom">
+            <div class="d-block mb-0 pt-3 border-bottom">
+                <h4 class="mb-0">Information Submission Form</h4>
+            </div>
+            @*<form id="mainForm" method="post">*@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div>
                 <div class="form-group">
-                    <label asp-for="Timelineinfo.Date" class="control-label">Date<span class="text-danger ml-1">*</span></label>
-                    <input id="DateInput" type="date" asp-for="Timelineinfo.Date" class="form-control SimFinder" placeholder="mm/dd/yyyy">
-                    <span asp-validation-for="Timelineinfo.Date" class="text-danger"></span>
+                    <label asp-for="Timelineinfos.Date" class="control-label">
+                        Date<span class="text-danger ml-1">*</span>
+                        <span asp-validation-for="Timelineinfos.Date" class="text-danger"></span>
+                    </label>
+                    <input id="DateInput" type="date" asp-for="Timelineinfos.Date" class="form-control SimFinder" placeholder="mm/dd/yyyy">
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-5 dropdown" style="position:relative;">
-                    <label style="position:absolute; bottom:38px;" class="control-label">State<span class="text-danger ml-1">*</span></label>
-                    <select asp-for="Timelineinfo.State" asp-items="Html.GetEnumSelectList(typeof(TimelineinfoEnums.StateEnum))" style="position:absolute; bottom:0; width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false">
+                    <label style="position:absolute; bottom:38px;" class="control-label">
+                        State<span class="text-danger ml-1">*</span>
+                        <span asp-validation-for="Timelineinfos.State" class="text-danger"></span>
+                    </label>
+                    <select asp-for="Timelineinfos.State" asp-items="Html.GetEnumSelectList(typeof(TimelineinfoEnums.StateEnum))" style="position:absolute; bottom:0; width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false">
                         <option class="dropdown-item">State</option>
                     </select>
-                    <span asp-validation-for="Timelineinfo.State" class="text-danger"></span>
                 </div>
                 <div class="col-7">
-                    <label asp-for="Timelineinfo.City" class="control-label">City<span class="text-danger ml-1">*</span></label>
-                    <input asp-for="Timelineinfo.City" class="form-control" />
-                    <span asp-validation-for="Timelineinfo.City" class="text-danger"></span>
+                    <label asp-for="Timelineinfos.City" class="control-label">
+                        City<span class="text-danger ml-1">*</span>
+                        <span asp-validation-for="Timelineinfos.City" class="text-danger"></span>
+                    </label>
+                    <input asp-for="Timelineinfos.City" class="form-control" />
                 </div>
             </div>
             <hr /> <h6>Fill out the following information for the Subject/Victim</h6>
             <div class="form-group">
-                <label asp-for="Timelineinfo.SubjectName" class="control-label">Name <span class="text-muted ml-1">(First Last)</span></label>
-                <input id="SNameInput" asp-for="Timelineinfo.SubjectName" class="form-control SimFinder" />
-                <span asp-validation-for="Timelineinfo.SubjectName" class="text-danger"></span>
+                <label asp-for="Timelineinfos.SubjectName" class="control-label">
+                    Name <span class="text-muted ml-1">(First Last)</span>
+                    <span asp-validation-for="Timelineinfos.SubjectName" class="text-danger"></span>
+                </label>
+                <input id="SNameInput" asp-for="Timelineinfos.SubjectName" class="form-control SimFinder" />
             </div>
             <div class="form-group">
-                <label class="form-check-label">Sex</label>
+                <label class="form-check-label">Sex
+                    <span asp-validation-for="Timelineinfos.SubjectSex" class="text-danger"></span>
+                </label>
                 <div class="form-check">
-                    <input type="radio" asp-for="Timelineinfo.SubjectSex" class="form-check-input" value="0">
+                    <input type="radio" asp-for="Timelineinfos.SubjectSex" class="form-check-input" value="0">
                     <label class="form-check-label">Male</label>
                 </div>
                 <div class="form-check">
-                    <input type="radio" asp-for="Timelineinfo.SubjectSex" class="form-check-input" value="1" />
+                    <input type="radio" asp-for="Timelineinfos.SubjectSex" class="form-check-input" value="1" />
                     <label class="form-check-label">Female</label>
-                    <span asp-validation-for="Timelineinfo.SubjectSex" class="text-danger"></span>
                 </div>
                 <div class="form-check">
-                    <input type="radio" asp-for="Timelineinfo.SubjectSex" class="form-check-input" value="2" />
+                    <input type="radio" asp-for="Timelineinfos.SubjectSex" class="form-check-input" value="2" />
                     <label class="form-check-label">Unclear</label>
-                    <span asp-validation-for="Timelineinfo.SubjectSex" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-check-label">Race</label>
+                <label class="form-check-label">Race
+                    <span asp-validation-for="Timelineinfos.SubjectRace" class="text-danger"></span>
+                </label>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="0">
+                    <input class="form-check-input" asp-for="Timelineinfos.SubjectRace" type="radio" value="0">
                     <label class="form-check-label">White</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="1">
+                    <input class="form-check-input" asp-for="Timelineinfos.SubjectRace" type="radio" value="1">
                     <label class="form-check-label">Black</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="2">
+                    <input class="form-check-input" asp-for="Timelineinfos.SubjectRace" type="radio" value="2">
                     <label class="form-check-label">Hispanic</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="3">
+                    <input class="form-check-input" asp-for="Timelineinfos.SubjectRace" type="radio" value="3">
                     <label class="form-check-label">Asian</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="4">
+                    <input class="form-check-input" asp-for="Timelineinfos.SubjectRace" type="radio" value="4">
                     <label class="form-check-label">Native American or Pacific Islander</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.SubjectRace" type="radio" value="5">
+                    <input class="form-check-input" asp-for="Timelineinfos.SubjectRace" type="radio" value="5">
                     <label class="form-check-label">Unclear</label>
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-check-label">Were they armed?</label>
+                <label class="form-check-label">
+                    Were they armed?
+                    <span asp-validation-for="Timelineinfos.Armed" class="text-danger"></span>
+                </label>
                 <div class="form-check">
-                    <input id="ArmedNo" type="radio" asp-for="Timelineinfo.Armed" class="form-check-input" value="0">
+                    <input id="ArmedNo" type="radio" asp-for="Timelineinfos.Armed" class="form-check-input" value="0">
                     <label class="form-check-label">No</label>
                 </div>
                 <div class="form-check">
-                    <input id="ArmedYes" type="radio" asp-for="Timelineinfo.Armed" class="form-check-input" value="1" />
+                    <input id="ArmedYes" type="radio" asp-for="Timelineinfos.Armed" class="form-check-input" value="1" />
                     <label class="form-check-label">Yes</label>
-                    <span asp-validation-for="Timelineinfo.Armed" class="text-danger"></span>
                 </div>
             </div>
             <hr /> <h6>Fill out the following information for the Officer</h6>
             <div class="form-group">
-                <label asp-for="Timelineinfo.OfficerName" class="control-label">Name</label>
-                <input id="ONameInput" asp-for="Timelineinfo.OfficerName" class="form-control SimFinder" />
-                <span asp-validation-for="Timelineinfo.OfficerName" class="text-danger"></span>
+                <label asp-for="Timelineinfos.OfficerName" class="control-label">Name</label>
+                <input id="ONameInput" asp-for="Timelineinfos.OfficerName" class="form-control SimFinder" />
+                <span asp-validation-for="Timelineinfos.OfficerName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="form-check-label">Sex</label>
+                <label class="form-check-label">
+                    Sex
+                    <span asp-validation-for="Timelineinfos.OfficerSex" class="text-danger"></span>
+                </label>
                 <div class="form-check">
-                    <input type="radio" asp-for="Timelineinfo.OfficerSex" class="form-check-input" value="0">
+                    <input type="radio" asp-for="Timelineinfos.OfficerSex" class="form-check-input" value="0">
                     <label class="form-check-label">Male</label>
                 </div>
                 <div class="form-check">
-                    <input type="radio" asp-for="Timelineinfo.OfficerSex" class="form-check-input" value="1" />
+                    <input type="radio" asp-for="Timelineinfos.OfficerSex" class="form-check-input" value="1" />
                     <label class="form-check-label">Female</label>
-                    <span asp-validation-for="Timelineinfo.OfficerSex" class="text-danger"></span>
                 </div>
                 <div class="form-check">
-                    <input type="radio" asp-for="Timelineinfo.OfficerSex" class="form-check-input" value="2" />
+                    <input type="radio" asp-for="Timelineinfos.OfficerSex" class="form-check-input" value="2" />
                     <label class="form-check-label">Unclear</label>
-                    <span asp-validation-for="Timelineinfo.OfficerSex" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-check-label">Race</label>
+                <label class="form-check-label">
+                    Race
+                    <span asp-validation-for="Timelineinfos.OfficerRace" class="text-danger"></span>
+                </label>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="0">
+                    <input class="form-check-input" asp-for="Timelineinfos.OfficerRace" type="radio" value="0">
                     <label class="form-check-label">White</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="1">
+                    <input class="form-check-input" asp-for="Timelineinfos.OfficerRace" type="radio" value="1">
                     <label class="form-check-label">Black</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="2">
+                    <input class="form-check-input" asp-for="Timelineinfos.OfficerRace" type="radio" value="2">
                     <label class="form-check-label">Hispanic</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="3">
+                    <input class="form-check-input" asp-for="Timelineinfos.OfficerRace" type="radio" value="3">
                     <label class="form-check-label">Asian</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="4">
+                    <input class="form-check-input" asp-for="Timelineinfos.OfficerRace" type="radio" value="4">
                     <label class="form-check-label">Native American or Pacific Islander</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" asp-for="Timelineinfo.OfficerRace" type="radio" value="5">
+                    <input class="form-check-input" asp-for="Timelineinfos.OfficerRace" type="radio" value="5">
                     <label class="form-check-label">Unclear</label>
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-check-label">Type of Misconduct</label>
+                <label class="form-check-label">
+                    Type of Misconduct
+                    <span asp-validation-for="Timelineinfos.Misconduct" class="text-danger"></span>
+                </label>
                 @foreach (var item in Model.AvailableMisconducts)
                 {
                     <div class="checkbox">
@@ -168,8 +190,7 @@
                                    value="@item.Value"
                                    id="@item.Value"
                                    @if (Model.SelectedMisconducts.Contains(item.Value)) { <text> checked </text> } /> @item.Text
-                            </label>
-                            <span asp-validation-for="Timelineinfo.Misconduct" class="text-danger"></span>
+                            </label>                           
                         </div>
                     }
             </div>
@@ -189,53 +210,56 @@
             </div>
             <hr />
             <div class="form-group">
-                <label asp-for="Timelineinfo.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, if there were more people involved, if there was any followup to the event or coverage in the news, etc.</label>
-                <textarea asp-for="Timelineinfo.Context" class="form-control"></textarea>
-                <span asp-validation-for="Timelineinfo.Context" class="text-danger"></span>
+                <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, if there were more people involved, if there was any followup to the event or coverage in the news, etc.</label>
+                <textarea asp-for="Timelineinfos.Context" class="form-control"></textarea>
+                <span asp-validation-for="Timelineinfos.Context" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input id="submit" type="button" value="Submit" class="btn btn-primary" onclick="submitForms()" data-toggle="popover" data-trigger="manual" data-html="true" data-placement="top"
+                <input id="submit" type="button" value="Submit" class="btn btn-primary" data-toggle="popover" data-trigger="manual" data-html="true" data-placement="top"
                        data-content=' @await Html.PartialAsync("Shared/_PleaseLogin.cshtml") ' />
                 <a asp-page="/Index" style="float:right">Back to Home</a>
             </div>
-            @*}*@
-        </form>
-    </div>
-    <div class="col-lg-5 col-md-5">
-        <div class="row">
-            <div class="container-fluid d-block">
-                <h4 class="pt-2">Similar Videos</h4>
-                <p class="mb-0" style="font-size:1em">
-                    Here are similar pages that share some similarities with the information you are filling out,
-                    either a date, name, video, or some combination of the three
-                </p>
-                <hr />
-                <div id="VideoList"><partial name="_SimilarPartial" /></div>
-            </div>
+
+            @*</form>*@
         </div>
-        <div class="row">
-            <div class="d-block border-top container-fluid">
-                <h4 class="pt-2">Add Media</h4>
-                <p class="mb-0" style="font-size:1em">
-                    Add Media relavent to the event, such as videos, images, news articles, etc.
-                </p>
-                <hr />
+        <div class="col-lg-5 col-md-5">
+            <div class="row">
+                <div class="container-fluid d-block">
+                    <h4 class="pt-2">Similar Videos</h4>
+                    <p class="mb-0" style="font-size:1em">
+                        Here are similar pages that share some similarities with the information you are filling out,
+                        either a date, name, video, or some combination of the three
+                    </p>
+                    <hr />
+                    <div id="VideoList"><partial name="_SimilarPartial" /></div>
+                </div>
             </div>
-            <div id="MediaList">
-               
-            </div>
-            <div>
-                <div class="container">
-                    <button class="btn btn-primary mx-auto" id="MoreMedia">
-                        Media <i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>
-                    </button>
+            <div class="row">
+                <div class="d-block border-top container-fluid">
+                    <h4 class="pt-2">Add Media</h4>
+                    <p class="mb-0" style="font-size:1em">
+                        Add Media relavent to the event, such as videos, images, news articles, etc.
+                    </p>
+                    <hr />
+                </div>
+                <div id="MediaList">
+                    <partial name="_MediaPartial" />
+                </div>
+                <div>
+                    <div class="container">
+                        <button class="btn btn-primary mx-auto" formnovalidate="formnovalidate" id="MoreMedia">
+                            Media 
+                            <i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>
+                        </button>
+                        @*<input type="submit" value="submit" class="btn btn-primary" />*@
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 </div>
 <script>
-    $(window).ready(function () { //enables popover
+    $(document).ready(function () { //enables popover
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
     });
@@ -247,61 +271,52 @@
 
 
     var attempt = 0;
-    submitForms = function () {
-        $.get('Submit/CheckSignedIn', function (data) {
-            if (data == false && attempt == 0) {
-                $('#submit').popover('show');
-                attempt = 1;
-                console.log("if ran");
-            }
-            else if (attempt == 1 || data == true) {
-                $.post('', $('#mainForm').serialize());
-                SubmitMedia();                
-                $('#submit').popover('hide');
-                console.log("else if ran");
-            }
-        });
-    }
-
-  
-    function SubmitMedia () {
-        var count = $('#MediaList').children().length;
-        var token = $('input[name="__RequestVerificationToken"]').val();     
-        for (var i = 0; i < count; i++) {
-        var data = $('.AddMedia:nth-child(1)').find('form').serialize().split("&");
-        console.log(data);
-        var obj = {};
-        for (var key in data) {
-            console.log(data[key]);
-            obj[data[key].split("=")[0]] = data[key].split("=")[1];
-        }
-        console.log(obj);
-            $.post('/Submit/MediaAdd',
-                { __RequestVerificationToken: token, model: obj, count: count },
-            );
-        }
-    }
-     
-
-    $("#MoreMedia").click(function () {
-        //$("#MediaList").append("Submit/MoreMedia");
-        var content;
-        $.get('Submit/MoreMedia', function (data) { //load another Add media form
-            content = data;
-            $("#MediaList").append(content);  //Add it to the media list
-            $("#MediaList").last().find('.MediaFile').css('display', 'none'); //Set the last item in the list's mediaFile input to hidden
-            //rerun event listeners
-            $('.AddMedia').on('change', 'select', function (e) {
-                changeFile(e, $(this).parents(".AddMedia"));
+    $('#submit').on('click', function (e) {
+       // submitForms = function () {  
+        e.preventDefault();
+            $.get('Submit/CheckSignedIn', function (data) {
+                if (data == false && attempt == 0) {
+                    console.log("if ran");
+                    $('#submit').popover('show');
+                    attempt = 1;
+                }
+                else if (attempt == 1 || data == true) {
+                    console.log("else if ran");
+                    $('form').submit();
+                    // SubmitMedia();
+                    $('#submit').popover('hide');
+                }
             });
-            $(".close").on('click', function (e) {
-                closeMedia(e, $(this).parents(".AddMedia"));
-            });
-        });
+      //  }
+    })
+    
+
+
+    var count = 1;
+    $("#MoreMedia").click(function () {       
+        $("form").validate().settings.ignore = "*";
+        $.ajax({
+            url: '/Submit/MoreMedia',
+            method: 'get',
+            data: { data: count },
+            success: function (result) {
+                $("#MediaList").append(result);
+                count++;
+                $.validator.unobtrusive.parse($("#MediaList").last().find('.MediaFile'));
+                $("form").validate().settings.ignore = ":hidden";
+                $("#MediaList").last().find('.MediaFile').css('display', 'none'); //Set the last item in the list's mediaFile input to hidden
+                //rerun event listeners
+                $('.AddMedia').on('change', 'select', function (e) {
+                    changeFile(e, $(this).parents(".AddMedia"));
+                });
+                $(".close").on('click', function (e) {
+                    closeMedia(e, $(this).parents(".AddMedia"));
+                });
+
+            }
+        })
     });
-    $("#MoreMedia").click();
-     //await Html.PartialAsync("Shared/_MediaPartial.cshtml")
-
+ 
     $(".close").on('click', function (e) {
         closeMedia(e, $(this).parents(".AddMedia"));
     });
