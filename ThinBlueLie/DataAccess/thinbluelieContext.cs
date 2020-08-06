@@ -27,6 +27,8 @@ namespace ThinBlue
         public virtual DbSet<Media> EditMedia{ get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<Officer> Officers { get; set; }
+        public virtual DbSet<Junc_Timelineinfo_Subject> Junc_Timelineinfo_Subject { get; set; }
+        public virtual DbSet<Junc_Timelineinfo_Officer> Junc_Timelineinfo_Officer { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
