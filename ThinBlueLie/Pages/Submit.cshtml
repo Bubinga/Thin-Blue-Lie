@@ -75,6 +75,24 @@
             <div id="OfficerList">
                 <partial name="_OfficerPartial" />
             </div>
+            <div class="form-group form-field">
+                <label class="form-check-label">
+                    Type of Misconduct
+                </label>
+                @foreach (var item in Model.AvailableMisconducts)
+                {
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"
+                                   name="SelectedMisconducts"
+                                   value="@item.Value"
+                                   id="@item.Value"
+                                   @if (Model.SelectedMisconducts.Contains(item.Value)) { <text> checked </text> } /> @item.Text
+                            </label>
+                            <span asp-validation-for="Timelineinfos.Misconduct" class="text-danger"></span>
+                        </div>
+                    }
+            </div>
             <div id="weaponDiv" class="form-group">
                 <label class="form-check-label">Type of Weapon</label>
                 @foreach (var item in Model.AvailableWeapons)
@@ -112,7 +130,9 @@
                         either a date, name, video, or some combination of the three
                     </p>
                     <hr />
-                    <div id="VideoList"><partial name="_SimilarPartial" /></div>
+                    <div id="VideoList">
+                        <partial name="_SimilarPartial" />
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -139,6 +159,49 @@
         </div>
     }
 </div>
+<script>
+    var attempt = 0;
+    $('#submit').on('click', function (e) {
+        // submitForms = function () {
+        e.preventDefault();
+        $.get('Submit/CheckSignedIn', function (data) {
+            if (data == false && attempt == 0) {
+                console.log("if ran");
+                $('#submit').popover('show');
+                attempt = 1;
+            }
+            else if (attempt == 1 || data == true) {
+                console.log("else if ran");
+                $('form').submit();
+                // SubmitMedia();
+                $('#submit').popover('hide');
+            }
+        });
+        //  }
+    })
+    //gets first box in misconduct and on click runs showWeapon
+    $("#1").on('click', function (e) {
+
+    }); showWeapon();
+
+    function showWeapon() {
+        console.log("function");
+        var x = $("#1").prop("checked")
+        if (x == true) {
+            console.log("if");
+            $("#weaponDiv").css("display", "block");
+        }
+        else {
+            console.log("else");
+            $('input[name=SelectedWeapons]')
+                .val('')
+                .prop('checked', false)
+                .prop('selected', false);
+            $("#weaponDiv").css("display", "none");
+        }
+    }
+    showWeapon();
+</script>
 <script src="~/js/SubmitandEdit.js" asp-append-version="true"></script>
 
 @section Scripts {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ThinBlue
 {
-    public class LinkTimelineinfo_Officer
+    public class Junc_Timelineinfo_Officer
     {
         [Key]
         public int IdLinkTimelineinfo_Officer { get; set; }

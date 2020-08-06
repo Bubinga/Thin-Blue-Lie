@@ -5,29 +5,42 @@
 
 //If Date changes, run the getsimilar action in the Timeline Controller and load the partial view.
 $(".SimFinder").change(function () {
-    $('#VideoList').load('@Url.Action("GetSimilar","Timeline")', { TempDate: $("#DateInput").val() });
+    $('#VideoList').load('/Submit/GetSimilar', { TempDate: $("#DateInput").val() });
 });
 
+//Set maximum input to today
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth() + 1; //January is 0!
+var yyyy = today.getFullYear();
+if (dd < 10) {
+    dd = '0' + dd
+}
+if (mm < 10) {
+    mm = '0' + mm
+}
+today = yyyy + '-' + mm + '-' + dd;
+document.getElementById("DateInput").setAttribute("max", today);
 
-var attempt = 0;
-$('#submit').on('click', function (e) {
-    // submitForms = function () {  
-    e.preventDefault();
-    $.get('Submit/CheckSignedIn', function (data) {
-        if (data == false && attempt == 0) {
-            console.log("if ran");
-            $('#submit').popover('show');
-            attempt = 1;
-        }
-        else if (attempt == 1 || data == true) {
-            console.log("else if ran");
-            $('form').submit();
-            // SubmitMedia();
-            $('#submit').popover('hide');
-        }
-    });
-    //  }
-})
+//var attempt = 0;
+//$('#submit').on('click', function (e) {
+//    // submitForms = function () {  
+//    e.preventDefault();
+//    $.get('Submit/CheckSignedIn', function (data) {
+//        if (data == false && attempt == 0) {
+//            console.log("if ran");
+//            $('#submit').popover('show');
+//            attempt = 1;
+//        }
+//        else if (attempt == 1 || data == true) {
+//            console.log("else if ran");
+//            $('form').submit();
+//            // SubmitMedia();
+//            $('#submit').popover('hide');
+//        }
+//    });
+//    //  }
+//})
 var SubjectCount = 1;
 $("#MoreSubjects").click(function () {
     //$("form").validate().options.ignore = "*";
@@ -128,23 +141,3 @@ function changeFile(e, parent) {
 //magic function disables inspect element
 //eval(function (p, a, c, k, e, d) { e = function (c) { return c.toString(36) }; if (!''.replace(/^/, String)) { while (c--) { d[c.toString(a)] = k[c] || c.toString(a) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('(3(){(3 a(){8{(3 b(2){7((\'\'+(2/2)).6!==1||2%5===0){(3(){}).9(\'4\')()}c{4}b(++2)})(0)}d(e){g(a,f)}})()})();', 17, 17, '||i|function|debugger|20|length|if|try|constructor|||else|catch||5000|setTimeout'.split('|'), 0, {}))
 
-document.getElementById("weaponDiv").style.display = "none";
-var WeaponCheckState = 0;
-
-//gets first box in misconduct and on click runs showWeapon
-document.getElementById("1").onclick = function () { showWeapon(); };
-
-function showWeapon() {
-    if (WeaponCheckState === 0) {
-        document.getElementById("weaponDiv").style.display = "block";
-        WeaponCheckState = 1;
-    }
-    else {
-        $('input[name=SelectedWeapons]')
-            .val('')
-            .prop('checked', false)
-            .prop('selected', false);
-        document.getElementById("weaponDiv").style.display = "none";
-        WeaponCheckState = 0;
-    }
-}
