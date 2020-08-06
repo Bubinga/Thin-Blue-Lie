@@ -15,8 +15,6 @@ namespace ThinBlue
         [Required(ErrorMessage = "The Subject's Race field is required")]
         public int Race { get; set; }
         [Required(ErrorMessage = "The Subject's Sex field is required")]
-        public int Sex { get; set; }
-        [Required]
-        public int Armed { get; set; }
+        public int Sex { get; set; }       
     }
 }
