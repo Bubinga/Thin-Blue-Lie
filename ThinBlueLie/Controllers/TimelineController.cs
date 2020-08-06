@@ -201,38 +201,46 @@ namespace ThinBlueLie.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Edit()
         {
-            var model = new EditModel
+            if ((User != null) && User.Identity.IsAuthenticated)
             {
-                AvailableWeapons = GetWeapons(),
-                AvailableMisconducts = GetMisconducts()
-            };
+                idString = Request.Query["id"];               
+                if (date == null | string.IsNullOrWhiteSpace(Request.Query["d"]))
+                {
+                    return NotFound();
+                }
+                var model = new SubmitModel
+                {
+                    AvailableWeapons = GetWeapons(),
+                    AvailableMisconducts = GetMisconducts()
+                };
+                int id = Int32.Parse(idString);
+                model.Timelineinfos = await _context.Timelineinfo.Where(i => i.IdTimelineInfo.Equals(id)).FirstOrDefaultAsync();
+                model.Medias = await _context.Media.Where(d => d.IdTimelineInfo.Equals(id)).ToListAsync();
 
-            idString = Request.Query["id"];
-            int id = Int32.Parse(idString);
-            //if (date == null | string.IsNullOrWhiteSpace(Request.Query["d"]))
-            //{
-            //    return NotFound();
-            //}
+                //load data into ViewData to be used in the Edit page
+                ViewData["EditTimelineinfo"] = model.Timelineinfos;
+                ViewData["EditMedia"] = model.Medias;
+                ViewBag.MediaCount = 0;
+                ViewBag.SubjectCount = 0;
+                ViewBag.OfficerCount = 0;
+                GetSimilar(model.Timelineinfos.Date);
 
-            //query database using query string
-            // model.Timelineinfos = await _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{date}'").ToListAsync();
-            model.Timelineinfo = await _context.Timelineinfo.Where(i => i.IdTimelineInfo.Equals(id)).FirstOrDefaultAsync();
-            model.Medias = await _context.Media.Where(d => d.IdTimelineInfo.Equals(id)).ToListAsync();
-
-            //load data into ViewData to be used in the Edit page
-            ViewData["Timelineinfo"] = model.Timelineinfo;
-            ViewData["Media"] = model.Medias;
-
-            return View("Pages/Edit.cshtml", model);
+                return View("Pages/Edit.cshtml", model);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
-        //[HttpPost]
-        //[Route("/Edit")]
-        //public async Task<IActionResult> Edit(Edit model)
-        //{
-        //    model.Verified = 1;
-        //    return Ok(true);
-        //}
+        [HttpPost]
+        [Route("/Edit")]
+        public async Task<IActionResult> Edit(SubmitModel model)
+        {
+            var emodel = (Edit)model.Timelineinfos; //Convert the Timelineinfo data into the Edit class which has an additional Confirmed property.
+            emodel.Confirmed = 0;
+            return Ok(true);
+        }
 
         [Route("/Submit/CheckSignedIn")]
         public ActionResult CheckSignedIn()
