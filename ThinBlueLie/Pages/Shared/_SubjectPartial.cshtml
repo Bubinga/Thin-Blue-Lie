@@ -20,8 +20,8 @@
                 </div>
                 <div class="col-4">
                     <label class="control-label">Armed?:<span class="text-danger ml-1">*</span></label>
-                    <select asp-for="Subjects[i].Armed" asp-items="Html.GetEnumSelectList(typeof(ArmedEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
-                    <span asp-validation-for="Subjects[i].Armed" class="text-danger"></span>
+                    <select @*asp-for="Subjects[i].Armed"*@ asp-items="Html.GetEnumSelectList(typeof(ArmedEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
+                    <span @*asp-validation-for="Subjects[i].Armed"*@ class="text-danger"></span>
                 </div>
                 <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;">
                     <span aria-hidden="true">×</span>
