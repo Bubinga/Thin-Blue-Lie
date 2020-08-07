@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ThinBlue;
 using ThinBlueLie.Models;
+using static ThinBlueLie.Models.TimelineinfoEnums;
 
 namespace ThinBlueLie.Pages
 {
@@ -19,6 +20,7 @@ namespace ThinBlueLie.Pages
         public List<Officer> Officers { get; set; }
         [BindProperty]
         public List<Subject> Subjects { get; set; }
+        public List<bool> Armed { get; set; }
         public bool SignedIn { get; set; }
 
         public IList<string> SelectedWeapons { get; set; }
