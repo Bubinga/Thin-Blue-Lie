@@ -166,14 +166,45 @@ namespace ThinBlueLie.Controllers
                 model.Timelineinfos.Misconduct = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
                 //Set SubmittedBy to current logged in user
                 model.Timelineinfos.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                _context.Timelineinfo.Add(model.Timelineinfos);
+                _context.Timelineinfo.Add(model.Timelineinfos); //############
                 await _context.SaveChangesAsync();
                 var id = model.Timelineinfos.IdTimelineInfo;
+                //Add the Armed property onto the data
+                var subjectTemp = new List<SubjectTemp>();
+                foreach ((var subject, Int32 i) in model.Subjects.Select((value, i) => (value, i)))
+                {
+                    var asubject = (SubjectTemp)subject; 
+                    asubject.Armed = model.Armed[i];
+                    subjectTemp.Add(asubject); 
+                }
+                foreach (var subject in subjectTemp)
+                {
+                    _context.Subjects.Add(subject);         //############    //Combine these foreaches so that the prelimiary submits to get ids
+                    await _context.SaveChangesAsync();                        //all happen together and you don't have a bunch of SaveChangesAsync()
+                    var TSlink = new Junc_Timelineinfo_Subject()
+                    {
+                        IdTimelineinfo = id,
+                        IdSubject = subject.IdSubject,
+                        Armed = Convert.ToInt32(subject.Armed)
+                    };
+                    _context.Junc_Timelineinfo_Subject.Add(TSlink); //############
+                }
+                foreach (var officer in model.Officers)
+                {
+                    _context.Officers.Add(officer); //############
+                    await _context.SaveChangesAsync();
+                    var TOlink = new Junc_Timelineinfo_Officer()
+                    {
+                        IdTimelineinfo = id,
+                        IdOfficer = officer.IdOfficer,                       
+                    };
+                    _context.Junc_Timelineinfo_Officer.Add(TOlink); //############
+                }
                 foreach (var media in model.Medias)
                 {
                     media.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     media.IdTimelineInfo = id;
-                    _context.Media.Add(media);
+                    _context.Media.Add(media); //############
                 }
                 await _context.SaveChangesAsync();
 
@@ -237,9 +268,45 @@ namespace ThinBlueLie.Controllers
         [Route("/Edit")]
         public async Task<IActionResult> Edit(SubmitModel model)
         {
-            var emodel = (Edit)model.Timelineinfos; //Convert the Timelineinfo data into the Edit class which has an additional Confirmed property.
-            emodel.Confirmed = 0;
-            return Ok(true);
+            if (ModelState.IsValid)
+            {
+                //Add the checkboxes together and convert them to ints to put into the model
+                if (model.SelectedWeapons.Count != 0)
+                {
+                    model.Timelineinfos.Weapon = model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
+                }
+                model.Timelineinfos.Misconduct = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
+                //Set SubmittedBy to current logged in user
+                model.Timelineinfos.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var emodel = (Edit)model.Timelineinfos; //Convert the Timelineinfo data into the Edit class which has an additional Confirmed property.
+                emodel.Confirmed = 0;
+                _context.Edits.Add(emodel); //add to Edit Table
+                await _context.SaveChangesAsync();
+                var id = emodel.IdTimelineInfo; //To be put into media
+                foreach (var media in model.Medias)
+                {
+                    var editMedia = (EditMedia)media; //Convert the Timelineinfo data into the Edit class which has an additional Confirmed property.
+                    editMedia.Confirmed = 0;
+                    editMedia.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    editMedia.IdTimelineInfo = id;
+                    _context.EditMedia.Add(editMedia); //Add to edit Media table
+                }
+                await _context.SaveChangesAsync();
+
+                Log((int)LogEnums.ActionEnum.Submit, emodel.IdTimelineInfo);
+                return null;
+            }
+            model.AvailableWeapons = GetWeapons();
+            model.AvailableMisconducts = GetMisconducts();
+            if (model.Timelineinfos.Date == null)
+            {
+                GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
+            }
+            else
+            {
+                GetSimilar(model.Timelineinfos.Date);
+            }
+            return View("Pages/Submit.cshtml", model);     
         }
 
         [Route("/Submit/CheckSignedIn")]
