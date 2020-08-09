@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,13 +22,17 @@ namespace ThinBlueLie.Controllers
         private readonly ThinBlue.ThinbluelieContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IMapper _mapper;
+
         public TimelineController(ThinBlue.ThinbluelieContext context,
                                  UserManager<IdentityUser> userManager,
-                                 SignInManager<IdentityUser> signInManager)
+                                 SignInManager<IdentityUser> signInManager,
+                                 IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _mapper = mapper;
         }
 
         public void Log(int action, int IdTimeline)
@@ -287,22 +292,22 @@ namespace ThinBlueLie.Controllers
                 model.Timelineinfos.Misconduct = (byte)model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
                 //Set SubmittedBy to current logged in user
                 model.Timelineinfos.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var emodel = (Edits)model.Timelineinfos; //Convert the Timelineinfo data into the Edit class which has an additional Confirmed property.
-                emodel.Confirmed = 0;
-                _context.Edits.Add(emodel); //add to Edit Table
-                await _context.SaveChangesAsync();
-                var id = emodel.IdTimelineInfo; //To be put into media
-                foreach (var media in model.Medias)
-                {
-                    var editMedia = (EditMedia)media; //Convert the Timelineinfo data into the Edit class which has an additional Confirmed property.
-                    editMedia.Confirmed = 0;
-                    editMedia.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    editMedia.IdTimelineInfo = id;
-                    _context.EditMedia.Add(editMedia); //Add to edit Media table
-                }
-                await _context.SaveChangesAsync();
+                //var emodel = (Edits)model.Timelineinfos; //Convert the Timelineinfo data into the Edit class which has an additional Confirmed property.
+                //emodel.Confirmed = 0;
+                //_context.Edits.Add(emodel); //add to Edit Table
+                //await _context.SaveChangesAsync();
+                //var id = emodel.IdTimelineInfo; //To be put into media
+                //foreach (var media in model.Medias)
+                //{
+                //    var editMedia = (EditMedia)media; //Convert the Timelineinfo data into the Edit class which has an additional Confirmed property.
+                //    editMedia.Confirmed = 0;
+                //    editMedia.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                //   // editMedia.IdTimelineInfo = id;
+                //    _context.EditMedia.Add(editMedia); //Add to edit Media table
+                //}
+                //await _context.SaveChangesAsync();
 
-                Log((int)LogEnums.ActionEnum.Submit, emodel.IdTimelineInfo);
+                //Log((int)LogEnums.ActionEnum.Submit, emodel.IdTimelineInfo);
                 return null;
             }
             model.AvailableWeapons = GetWeapons();
