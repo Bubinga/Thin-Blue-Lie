@@ -12,6 +12,9 @@ namespace ThinBlue
         public int FlagType { get; set; }
         [Required]
         public string Message { get; set; }
-        public string IdUser { get; set; }
+        public string UserId { get; set; }
+
+        public virtual Timelineinfo IdTimelineInfoNavigation { get; set; }
+        public virtual Aspnetusers User { get; set; }
     }
 }

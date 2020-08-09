@@ -7,6 +7,12 @@ namespace ThinBlue
     {
         public Aspnetusers()
         {
+            EditMedia = new HashSet<EditMedia>();
+            Edits = new HashSet<Edits>();
+            Flagged = new HashSet<Flagged>();
+            Log = new HashSet<Log>();
+            Media = new HashSet<Media>();
+            Timelineinfo = new HashSet<Timelineinfo>();
             Aspnetuserclaims = new HashSet<Aspnetuserclaims>();
             Aspnetuserlogins = new HashSet<Aspnetuserlogins>();
             Aspnetuserroles = new HashSet<Aspnetuserroles>();
@@ -29,6 +35,12 @@ namespace ThinBlue
         public short LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
 
+        public virtual ICollection<EditMedia> EditMedia { get; set; }
+        public virtual ICollection<Edits> Edits { get; set; }
+        public virtual ICollection<Flagged> Flagged { get; set; }
+        public virtual ICollection<Log> Log { get; set; }
+        public virtual ICollection<Media> Media { get; set; }
+        public virtual ICollection<Timelineinfo> Timelineinfo { get; set; }
         public virtual ICollection<Aspnetuserclaims> Aspnetuserclaims { get; set; }
         public virtual ICollection<Aspnetuserlogins> Aspnetuserlogins { get; set; }
         public virtual ICollection<Aspnetuserroles> Aspnetuserroles { get; set; }

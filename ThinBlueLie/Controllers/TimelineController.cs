@@ -36,7 +36,7 @@ namespace ThinBlueLie.Controllers
             log.TimeStamp = DateTime.Now; // yyyy-mm-dd hh-mm-ss
             log.Action = action;
             log.IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-            log.IdUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            log.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             log.IdTimelineInfo = IdTimeline;
             _context.Log.Add(log);
             //  return Ok(true);
@@ -130,10 +130,10 @@ namespace ThinBlueLie.Controllers
             if (ModelState.IsValid)
             {
                 if (!_signInManager.IsSignedIn(User)){
-                    flagModel.Flags.IdUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    flagModel.Flags.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 }
                 else{
-                    flagModel.Flags.IdUser = "null";
+                    flagModel.Flags.UserId = "null";
                 }
 
                 Log((int)LogEnums.ActionEnum.Flag, flagModel.Flags.IdTimelineInfo);
