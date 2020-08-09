@@ -10,6 +10,7 @@ namespace ThinBlue
         public int IdTimelineInfo { get; set; }
         [Required]
         public byte MediaType { get; set; }
+        [Required]
         public string SourceFile { get; set; }
         [Required]
         public byte Gore { get; set; }
@@ -21,5 +22,6 @@ namespace ThinBlue
         public string SubmittedBy { get; set; }
 
         public virtual Timelineinfo IdTimelineinfoNavigation { get; set; }
+        public virtual Aspnetusers SubmittedByNavigation { get; set; }
     }
 }

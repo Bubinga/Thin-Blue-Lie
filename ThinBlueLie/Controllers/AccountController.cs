@@ -36,7 +36,7 @@ namespace ThinBlueLie.Controllers
             log.TimeStamp = DateTime.Now; // yyyy-mm-dd hh-mm-ss
             log.Action = action;
             log.IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-            log.IdUser = idUser;
+            log.UserId = idUser;
            // log.IdUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
            // log.IdTimelineinfo = 8;
             _context.Log.Add(log);

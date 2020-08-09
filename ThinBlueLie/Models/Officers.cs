@@ -10,12 +10,12 @@ namespace ThinBlue
         {
             TimelineinfoOfficer = new HashSet<TimelineinfoOfficer>();
         }
-        [Key]
+
         public int IdOfficer { get; set; }
         public string Name { get; set; }
-        [Required(ErrorMessage = "The Subject's Race field is required")]
+        [Required(ErrorMessage = "The Officer's Race field is required")]
         public byte Race { get; set; }
-        [Required(ErrorMessage = "The Subject's Sex field is required")]
+        [Required(ErrorMessage = "The Officer's Sex field is required")]
         public byte Sex { get; set; }
 
         public virtual ICollection<TimelineinfoOfficer> TimelineinfoOfficer { get; set; }
