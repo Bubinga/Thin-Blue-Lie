@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ThinBlue
 {
@@ -13,17 +11,8 @@ namespace ThinBlue
         }
 
         public int IdEdits { get; set; }
-        //[Required]
-        //[Column(TypeName = "CHAR(10)")]
-        //[MaxLength(10)]
-        //[DataType(DataType.Date)]
         //public string Date { get; set; }
-        //[Required]
-        //[Column(TypeName = "TINYINT")]
         //public byte State { get; set; }
-        //[Required]
-        //[MaxLength(86)]
-        //[Column(TypeName = "VARCHAR(20)")]
         //public string City { get; set; }
         //public byte Misconduct { get; set; }
         //public byte? Weapon { get; set; }
@@ -31,7 +20,10 @@ namespace ThinBlue
         //public byte Locked { get; set; }
         //public string SubmittedBy { get; set; }
         public byte Confirmed { get; set; }
+        //public int IdTimelineInfo { get; set; }
 
+        public virtual Timelineinfo IdTimelineInfoNavigation { get; set; }
+        public virtual new Aspnetusers SubmittedByNavigation { get; set; }
         public virtual ICollection<EditMedia> EditMedia { get; set; }
     }
 }

@@ -261,6 +261,9 @@ namespace ThinBlue
                 entity.HasIndex(e => e.IdEdits)
                     .HasName("FK_EditMedia_IdEdits_idx");
 
+                entity.HasIndex(e => e.SubmittedBy)
+                    .HasName("FK_EditMedia_UserId");
+
                 entity.Property(e => e.Blurb)
                     .IsRequired()
                     .HasColumnType("tinytext");
@@ -284,7 +287,13 @@ namespace ThinBlue
                     .WithMany(p => p.EditMedia)
                     .HasForeignKey(d => d.IdEdits)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EditMedia_IdEdits");
+                    .HasConstraintName("FK_EditMedia_IdEdit");
+
+                entity.HasOne(d => d.SubmittedByNavigation)
+                    .WithMany(p => p.EditMedia)
+                    .HasForeignKey(d => d.SubmittedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EditMedia_UserId");
             });
 
             modelBuilder.Entity<Edits>(entity =>
@@ -293,6 +302,12 @@ namespace ThinBlue
                     .HasName("PRIMARY");
 
                 entity.ToTable("edits");
+
+                entity.HasIndex(e => e.IdTimelineInfo)
+                    .HasName("FK_Edits_IdTimelineinfo_idx");
+
+                entity.HasIndex(e => e.SubmittedBy)
+                    .HasName("FK_Edits_UserId");
 
                 entity.Property(e => e.City)
                     .IsRequired()
@@ -308,7 +323,7 @@ namespace ThinBlue
                 entity.Property(e => e.Date)
                     .IsRequired()
                     .HasMaxLength(10)
-                    .IsFixedLength();               
+                    .IsFixedLength();
 
                 entity.Property(e => e.Locked).HasColumnType("tinyint unsigned");
 
@@ -319,7 +334,17 @@ namespace ThinBlue
                     .IsUnicode(false);
 
                 entity.Property(e => e.Weapon).HasColumnType("tinyint unsigned");
-               
+
+                entity.HasOne(d => d.IdTimelineInfoNavigation)
+                    .WithMany(p => p.Edits)
+                    .HasForeignKey(d => d.IdTimelineInfo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Edits_IdTimelineinfo");
+
+                entity.HasOne(d => d.SubmittedByNavigation)
+                    .WithMany(p => p.Edits)
+                    .HasForeignKey(d => d.SubmittedBy)
+                    .HasConstraintName("FK_Edits_UserId");
             });
 
             modelBuilder.Entity<Flagged>(entity =>
@@ -329,13 +354,28 @@ namespace ThinBlue
 
                 entity.ToTable("flagged");
 
+                entity.HasIndex(e => e.IdTimelineInfo)
+                    .HasName("FK_Flagged_IdTimelineInfo_idx");
+
+                entity.HasIndex(e => e.UserId)
+                    .HasName("FK_Flagged_UserId");
+
                 entity.Property(e => e.FlagType).HasColumnType("int unsigned");
 
-                entity.Property(e => e.IdTimelineInfo).HasColumnType("int unsigned");
-
-                entity.Property(e => e.IdUser)
-                    .HasMaxLength(50)
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.IdTimelineInfoNavigation)
+                    .WithMany(p => p.Flagged)
+                    .HasForeignKey(d => d.IdTimelineInfo)
+                    .HasConstraintName("FK_Flagged_IdTimelineInfo");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Flagged)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Flagged_UserId");
             });
 
             modelBuilder.Entity<Log>(entity =>
@@ -345,15 +385,33 @@ namespace ThinBlue
 
                 entity.ToTable("log");
 
+                entity.HasIndex(e => e.IdTimelineInfo)
+                    .HasName("FK_Log_IdTimelineInfo_idx");
+
+                entity.HasIndex(e => e.UserId)
+                    .HasName("FK_Log_UserId_idx");
+
                 entity.Property(e => e.Action).HasColumnType("int unsigned");
-
-                entity.Property(e => e.IdTimelineInfo).HasColumnType("int unsigned");
-
-                entity.Property(e => e.IdUser).HasColumnType("tinytext");
 
                 entity.Property(e => e.IpAddress)
                     .IsRequired()
                     .HasColumnType("tinytext");
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdTimelineInfoNavigation)
+                    .WithMany(p => p.Log)
+                    .HasForeignKey(d => d.IdTimelineInfo)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_Log_IdTimelineInfo");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Log)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_Log_UserId");
             });
 
             modelBuilder.Entity<Media>(entity =>
@@ -365,6 +423,9 @@ namespace ThinBlue
 
                 entity.HasIndex(e => e.IdTimelineInfo)
                     .HasName("FK_Media_IdTimelineinfo_idx");
+
+                entity.HasIndex(e => e.SubmittedBy)
+                    .HasName("FK_Media_UserId");
 
                 entity.Property(e => e.Blurb)
                     .IsRequired()
@@ -388,6 +449,12 @@ namespace ThinBlue
                     .HasForeignKey(d => d.IdTimelineInfo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Media_IdTimelineinfo");
+
+                entity.HasOne(d => d.SubmittedByNavigation)
+                    .WithMany(p => p.Media)
+                    .HasForeignKey(d => d.SubmittedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Media_UserId");
             });
 
             modelBuilder.Entity<Officers>(entity =>
@@ -429,6 +496,9 @@ namespace ThinBlue
 
                 entity.ToTable("timelineinfo");
 
+                entity.HasIndex(e => e.SubmittedBy)
+                    .HasName("FK_TimelineInfo_UserId");
+
                 entity.Property(e => e.City)
                     .IsRequired()
                     .HasMaxLength(20)
@@ -456,6 +526,12 @@ namespace ThinBlue
                 entity.Property(e => e.Verified).HasColumnType("tinyint unsigned");
 
                 entity.Property(e => e.Weapon).HasColumnType("tinyint unsigned");
+
+                entity.HasOne(d => d.SubmittedByNavigation)
+                    .WithMany(p => p.Timelineinfo)
+                    .HasForeignKey(d => d.SubmittedBy)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_TimelineInfo_UserId");
             });
 
             modelBuilder.Entity<TimelineinfoOfficer>(entity =>

@@ -10,7 +10,7 @@ namespace ThinBlue
         {
             TimelineinfoSubject = new HashSet<TimelineinfoSubject>();
         }
-        [Key]
+
         public int IdSubject { get; set; }
         public string Name { get; set; }
         [Required(ErrorMessage = "The Subject's Race field is required")]
