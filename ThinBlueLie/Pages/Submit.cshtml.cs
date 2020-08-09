@@ -17,9 +17,9 @@ namespace ThinBlueLie.Pages
         [BindProperty]
         public List<Media> Medias { get; set; }
         [BindProperty]
-        public List<Officer> Officers { get; set; }
+        public List<Officers> Officers { get; set; }
         [BindProperty]
-        public List<Subject> Subjects { get; set; }
+        public List<Subjects> Subjects { get; set; }
         public List<bool> Armed { get; set; }
         public bool SignedIn { get; set; }
 

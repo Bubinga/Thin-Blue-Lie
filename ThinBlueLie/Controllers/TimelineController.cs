@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Pomelo.EntityFrameworkCore.MySql.Query.ExpressionVisitors.Internal;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using ThinBlue;
 using ThinBlueLie.Models;
 using ThinBlueLie.Pages;
@@ -41,11 +33,11 @@ namespace ThinBlueLie.Controllers
         public void Log(int action, int IdTimeline)
         {
             var log = new Log { };
-            log.TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // yyyy-mm-dd hh-mm-ss
+            log.TimeStamp = DateTime.Now; // yyyy-mm-dd hh-mm-ss
             log.Action = action;
             log.IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
             log.IdUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            log.IdTimelineinfo = IdTimeline;
+            log.IdTimelineInfo = IdTimeline;
             _context.Log.Add(log);
             //  return Ok(true);
         }
@@ -69,13 +61,30 @@ namespace ThinBlueLie.Controllers
             //query database using query string
            // model.Timelineinfos = await _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{date}'").ToListAsync();
             model.Timelineinfos = await _context.Timelineinfo.Where(t => t.Date.Equals(date)).ToListAsync();
+            var events = new List<object>();
+            foreach (var Event in model.Timelineinfos)
+            {
+                using (var context = new ThinbluelieContext())
+                {
+                    
+                }
+                //Get list of subject/officer ids where Idtimeline is one in the date
+                var SubjectIds = await _context.TimelineinfoSubject.Where(id1 => id1.IdTimelineinfo.Equals(Event.IdTimelineInfo)).Select(s => s.IdSubject).ToListAsync();
+                var OfficerIds = await _context.TimelineinfoOfficer.Where(id2 => id2.IdTimelineinfo.Equals(Event.IdTimelineInfo)).Select(o => o.IdOfficer).ToListAsync();
+                var Subjects = await _context.Subjects.Where(s1 => s1.IdSubject.Equals(SubjectIds)).ToListAsync();
+                var Officers = await _context.Officers.Where(o1 => o1.IdOfficer.Equals(OfficerIds)).ToListAsync();
+                var Medias = await _context.Media.Where(m => m.IdTimelineInfo.Equals(Event.IdTimelineInfo)).ToListAsync();
+                events.Add(Subjects);
+                events.Add(Officers);
+                events.Add(Medias);
+                //var Events = await _context.Timelineinfo.Include(x => x.Subjects).Include(x => x.Officers).Where(t => t.Date.Equals(date)).ToListAsync();
+            }
             //load data into ViewData to be used in the Timeline page
             ViewData["Timelineinfo"] = model.Timelineinfos;
             await GetTimeline(date, 0);
             return View("Pages/Timeline.cshtml");
         }
-        public DateTime dateT { get; set; }
-        public List<List<Timelineinfo>> dateData { get; set; }
+
         [Route("Timeline/GetTimeline")]  
         public async Task<IActionResult> GetTimeline(string? current, int? dateChange)
         {
@@ -161,9 +170,9 @@ namespace ThinBlueLie.Controllers
             {
                 //Add the checkboxes together and convert them to ints to put into the model
                 if (model.SelectedWeapons.Count != 0){
-                    model.Timelineinfos.Weapon = model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
+                    model.Timelineinfos.Weapon = (byte?)model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
                 }
-                model.Timelineinfos.Misconduct = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
+                model.Timelineinfos.Misconduct = (byte)model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
                 //Set SubmittedBy to current logged in user
                 model.Timelineinfos.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Timelineinfo.Add(model.Timelineinfos); //############
@@ -181,24 +190,24 @@ namespace ThinBlueLie.Controllers
                 {
                     _context.Subjects.Add(subject);         //############    //Combine these foreaches so that the prelimiary submits to get ids
                     await _context.SaveChangesAsync();                        //all happen together and you don't have a bunch of SaveChangesAsync()
-                    var TSlink = new Junc_Timelineinfo_Subject()
+                    var TSlink = new TimelineinfoSubject()
                     {
                         IdTimelineinfo = id,
                         IdSubject = subject.IdSubject,
-                        Armed = Convert.ToInt32(subject.Armed)
+                        Armed = Convert.ToByte(subject.Armed)
                     };
-                    _context.Junc_Timelineinfo_Subject.Add(TSlink); //############
+                    _context.TimelineinfoSubject.Add(TSlink); //############
                 }
                 foreach (var officer in model.Officers)
                 {
                     _context.Officers.Add(officer); //############
                     await _context.SaveChangesAsync();
-                    var TOlink = new Junc_Timelineinfo_Officer()
+                    var TOlink = new TimelineinfoOfficer()
                     {
                         IdTimelineinfo = id,
                         IdOfficer = officer.IdOfficer,                       
                     };
-                    _context.Junc_Timelineinfo_Officer.Add(TOlink); //############
+                    _context.TimelineinfoOfficer.Add(TOlink); //############
                 }
                 foreach (var media in model.Medias)
                 {
@@ -273,12 +282,12 @@ namespace ThinBlueLie.Controllers
                 //Add the checkboxes together and convert them to ints to put into the model
                 if (model.SelectedWeapons.Count != 0)
                 {
-                    model.Timelineinfos.Weapon = model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
+                    model.Timelineinfos.Weapon = (byte?)model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
                 }
-                model.Timelineinfos.Misconduct = model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
+                model.Timelineinfos.Misconduct = (byte)model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
                 //Set SubmittedBy to current logged in user
                 model.Timelineinfos.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var emodel = (Edit)model.Timelineinfos; //Convert the Timelineinfo data into the Edit class which has an additional Confirmed property.
+                var emodel = (Edits)model.Timelineinfos; //Convert the Timelineinfo data into the Edit class which has an additional Confirmed property.
                 emodel.Confirmed = 0;
                 _context.Edits.Add(emodel); //add to Edit Table
                 await _context.SaveChangesAsync();
@@ -341,12 +350,6 @@ namespace ThinBlueLie.Controllers
             //display thank you banner
         }
 
-#nullable enable
-        public string TempDate { get; set; }
-#nullable enable
-        public string OName { get; set; }
-#nullable enable
-        public string Sname { get; set; }
 
         [Route("/Submit/GetSimilar")]        
         public PartialViewResult GetSimilar(string? TempDate)
@@ -356,7 +359,22 @@ namespace ThinBlueLie.Controllers
             ViewData["SimilarEvents"] = SimilarEvents;
             return PartialView("_SimilarPartial");
         }
-
+        [Route("/Submit/GetOfficer")]
+        public PartialViewResult GetOfficer(string? Name, int? State, int? Race, int? Sex)
+        {
+            //load events where date or officer/subject name is shared and load it into SimilarEvents.            
+            var SimilarOfficers = _context.Officers.Where(t => t.Name.Equals(Name)).ToList();
+            ViewData["SimilarOfficers"] = SimilarOfficers;
+            return PartialView("_SimilarPartial");
+        }
+        [Route("/Submit/GetSubject")]
+        public PartialViewResult GetSubject(string? Name, int? State, int? Race, int? Sex)
+        {
+            //load events where date or officer/subject name is shared and load it into SimilarEvents.            
+            var SimilarSubjects = _context.Subjects.Where(t => t.Name.Equals(Name)).ToList();
+            ViewData["SimilarSubjects"] = SimilarSubjects;
+            return PartialView("_SimilarPartial");
+        }
 
         private IList<SelectListItem> GetWeapons()
         {

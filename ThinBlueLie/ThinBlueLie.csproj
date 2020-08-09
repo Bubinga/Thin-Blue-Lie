@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="thin-blue-lie\**" />
+    <Content Remove="thin-blue-lie\**" />
+    <EmbeddedResource Remove="thin-blue-lie\**" />
+    <None Remove="thin-blue-lie\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="DataAccess\IdentityContext.cs" />
     <Compile Remove="Migrations\20200701015905_IdentityFix.cs" />
     <Compile Remove="Migrations\20200701015905_IdentityFix.Designer.cs" />
@@ -51,7 +58,7 @@
     <PackageReference Include="MySql.Data" Version="8.0.20" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.20" />
     <PackageReference Include="MySqlConnector" Version="0.69.6" />   
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />  
   </ItemGroup>
 
   <ItemGroup>
