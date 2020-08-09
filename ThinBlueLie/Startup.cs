@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Mvc;
 using Pomelo.EntityFrameworkCore.MySql.Internal;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
+using AutoMapper;
+using ThinBlueLie.Mappings;
 
 namespace ThinBlueLie
 {
@@ -41,7 +43,14 @@ namespace ThinBlueLie
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ThinbluelieContext>()
                 .AddDefaultTokenProviders();
-           
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddMvc();
             services.AddControllers();
             services.AddRazorPages()
@@ -76,16 +85,16 @@ namespace ThinBlueLie
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
-            });
-
-            //app.UseEndpoints(endpoints =>
-            //{               
-            //    endpoints.MapRazorPages();
-            //    endpoints.MapDefaultControllerRoute();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             //});
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
+            });
         }
     }
 }

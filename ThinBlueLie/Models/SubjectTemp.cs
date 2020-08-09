@@ -7,7 +7,7 @@ using static ThinBlueLie.Models.TimelineinfoEnums;
 
 namespace ThinBlue
 {
-    public class SubjectTemp :Subjects
+    public class SubjectTemp : Subjects
     {        
         public bool Armed { get; set; }
     }
