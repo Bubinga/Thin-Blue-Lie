@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ThinBlue
 {
-    public class Media
+    public partial class Media
     {
-        [Key]
         public int IdMedia { get; set; }
-        public int MediaType { get; set; }
         public int IdTimelineInfo { get; set; }
-        public int SourceFrom { get; set; }
         [Required]
-        public int Gore { get; set; }
-        [Required]
+        public byte MediaType { get; set; }
         public string SourceFile { get; set; }
         [Required]
+        public byte Gore { get; set; }
+        [Required]
+        public byte SourceFrom { get; set; }
+        [Required]
+        [MaxLength(250)]
         public string Blurb { get; set; }
-        [Column(TypeName = "VARCHAR(50)")]
         public string SubmittedBy { get; set; }
+
+        public virtual Timelineinfo IdTimelineinfoNavigation { get; set; }
     }
 }

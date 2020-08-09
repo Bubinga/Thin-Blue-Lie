@@ -12,13 +12,13 @@ namespace ThinBlueLie.Pages
     public class EditModel
     {
         [BindProperty]
-        public Edit Timelineinfo { get; set; }
+        public Edits Timelineinfo { get; set; }
         [BindProperty]
         public List<Media> Medias { get; set; }
         [BindProperty]
-        public List<Officer> Officers { get; set; }
+        public List<Officers> Officers { get; set; }
         [BindProperty]
-        public List<Subject> Subjects { get; set; }
+        public List<Subjects> Subjects { get; set; }
 
         public IList<string> SelectedWeapons { get; set; }
         public IList<SelectListItem> AvailableWeapons { get; set; }
