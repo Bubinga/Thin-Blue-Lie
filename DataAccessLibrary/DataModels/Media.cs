@@ -19,6 +19,7 @@ namespace DataAccessLibrary.DataModels
         public byte Gore { get; set; }
         public byte SourceFrom { get; set; }
         [Required]
+        [MaxLength(250)]
         [Column(TypeName = "tinytext")]
         public string Blurb { get; set; }
         [Column(TypeName = "varchar(255)")]

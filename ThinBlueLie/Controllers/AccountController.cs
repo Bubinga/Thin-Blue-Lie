@@ -1,36 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using DataAccessLibrary.DataAccess;
+using DataAccessLibrary.DataModels;
+using DataAccessLibrary.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using ThinBlue;
-using ThinBlueLie.Models;
 using ThinBlueLie.Pages;
 
 
 namespace ThinBlueLie.Controllers
 {
-    
+
     public class AccountController : Controller
     {
-        private readonly ThinBlue.ThinbluelieContext _context;
+        private readonly UserContext _usercontext;
+        private readonly DataContext _datacontext;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
-        public AccountController(ThinBlue.ThinbluelieContext context,
+        public AccountController(UserContext usercontext,
+                                 DataContext datacontext,
                                  UserManager<IdentityUser> userManager,
                                  SignInManager<IdentityUser> signInManager)
         {
-            _context = context;
+            _usercontext = usercontext;
+            _datacontext = datacontext;
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
-        public void Log(int action, string idUser)
+        public void Log(uint action, string idUser)
         {
             var log = new Log { };
             log.TimeStamp = DateTime.Now; // yyyy-mm-dd hh-mm-ss
@@ -39,8 +39,8 @@ namespace ThinBlueLie.Controllers
             log.UserId = idUser;
            // log.IdUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
            // log.IdTimelineinfo = 8;
-            _context.Log.Add(log);
-            _context.SaveChanges();
+            _datacontext.Log.Add(log);
+            _datacontext.SaveChanges();
             //  return Ok(true);
         }
 

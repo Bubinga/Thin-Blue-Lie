@@ -18,7 +18,6 @@ namespace DataAccessLibrary.DataAccess
 
         public virtual DbSet<EditMedia> EditMedia { get; set; }
         public virtual DbSet<Edits> Edits { get; set; }
-        public virtual DbSet<Efmigrationshistory> Efmigrationshistory { get; set; }
         public virtual DbSet<Flagged> Flagged { get; set; }
         public virtual DbSet<Log> Log { get; set; }
         public virtual DbSet<Media> Media { get; set; }
@@ -114,20 +113,6 @@ namespace DataAccessLibrary.DataAccess
                     .WithMany(p => p.Edits)
                     .HasForeignKey(d => d.SubmittedBy)
                     .HasConstraintName("FK_Edits_UserId");
-            });
-
-            modelBuilder.Entity<Efmigrationshistory>(entity =>
-            {
-                entity.HasKey(e => e.MigrationId)
-                    .HasName("PRIMARY");
-
-                entity.Property(e => e.MigrationId)
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
-
-                entity.Property(e => e.ProductVersion)
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
             });
 
             modelBuilder.Entity<Flagged>(entity =>
