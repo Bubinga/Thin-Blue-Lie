@@ -36,7 +36,12 @@ namespace ThinBlueLie
         {            
             services.AddDbContext<ThinbluelieContext>(options =>
             {
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), MySqlOptions => MySqlOptions
+                options.UseMySql(Configuration.GetConnectionString("DataDB"), MySqlOptions => MySqlOptions
+                .ServerVersion(new Version(8, 0, 18), ServerType.MySql));
+            });
+            services.AddDbContext<ThinbluelieContext>(options =>
+            {
+                options.UseMySql(Configuration.GetConnectionString("UserDB"), MySqlOptions => MySqlOptions
                 .ServerVersion(new Version(8, 0, 18), ServerType.MySql));
             });
 
