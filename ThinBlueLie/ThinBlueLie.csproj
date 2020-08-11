@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <Compile Remove="DataAccess\IdentityContext.cs" />
+    <Compile Remove="DataAccess\thinbluelieContext.cs" />
     <Compile Remove="Migrations\20200701015905_IdentityFix.cs" />
     <Compile Remove="Migrations\20200701015905_IdentityFix.Designer.cs" />
     <Compile Remove="Migrations\20200701052958_IdentityFix.cs" />
@@ -30,11 +31,11 @@
     <Compile Remove="Migrations\20200721092930_AddLog.Designer.cs" />
     <Compile Remove="Migrations\20200731052652_AddingEditTables.cs" />
     <Compile Remove="Migrations\20200731052652_AddingEditTables.Designer.cs" />
-    <Compile Remove="Models\Roles.cs" />
-    <Compile Remove="Models\Userclaims.cs" />
-    <Compile Remove="Models\Userlogins.cs" />
-    <Compile Remove="Models\Userroles.cs" />
-    <Compile Remove="Models\Users.cs" />
+    <Compile Remove="Extensions\Roles.cs" />
+    <Compile Remove="Extensions\Userclaims.cs" />
+    <Compile Remove="Extensions\Userlogins.cs" />
+    <Compile Remove="Extensions\Userroles.cs" />
+    <Compile Remove="Extensions\Users.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,6 +64,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DataAccess\" />
     <Folder Include="Pages\Test\" />
     <Folder Include="Views\" />
     <Folder Include="wwwroot\8CantWait\" />

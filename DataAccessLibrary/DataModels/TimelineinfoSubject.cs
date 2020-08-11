@@ -13,7 +13,7 @@ namespace DataAccessLibrary.DataModels
         public int IdTimelineinfoSubject { get; set; }
         public int IdTimelineinfo { get; set; }
         public int IdSubject { get; set; }
-        public sbyte Armed { get; set; }
+        public byte Armed { get; set; }
 
         [ForeignKey(nameof(IdSubject))]
         [InverseProperty(nameof(Subjects.TimelineinfoSubject))]

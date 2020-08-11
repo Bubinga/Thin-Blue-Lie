@@ -1,24 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Pomelo.EntityFrameworkCore.MySql;
-using MySql.Data;
 using Microsoft.EntityFrameworkCore;
-using ThinBlue;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Pomelo.EntityFrameworkCore.MySql.Internal;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
 using AutoMapper;
 using ThinBlueLie.Mappings;
+using DataAccessLibrary.DataAccess;
 
 namespace ThinBlueLie
 {
@@ -34,19 +26,19 @@ namespace ThinBlueLie
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {            
-            services.AddDbContext<ThinbluelieContext>(options =>
+            services.AddDbContext<DataContext>(options =>
             {
                 options.UseMySql(Configuration.GetConnectionString("DataDB"), MySqlOptions => MySqlOptions
                 .ServerVersion(new Version(8, 0, 18), ServerType.MySql));
             });
-            services.AddDbContext<ThinbluelieContext>(options =>
+            services.AddDbContext<UserContext>(options =>
             {
                 options.UseMySql(Configuration.GetConnectionString("UserDB"), MySqlOptions => MySqlOptions
                 .ServerVersion(new Version(8, 0, 18), ServerType.MySql));
             });
 
             services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<ThinbluelieContext>()
+                .AddEntityFrameworkStores<UserContext>()
                 .AddDefaultTokenProviders();
 
             var mapperConfig = new MapperConfiguration(mc =>
