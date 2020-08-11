@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using DataAccessLibrary.DataAccess;
+using DataAccessLibrary.DataModels;
+using DataAccessLibrary.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,33 +12,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ThinBlue;
-using ThinBlueLie.Models;
 using ThinBlueLie.Pages;
-
+using ThinBlueLie.ViewModels;
 
 namespace ThinBlueLie.Controllers
 {
     public class TimelineController : Controller
     {
 
-        private readonly ThinBlue.ThinbluelieContext _context;
+        private readonly DataContext _datacontext;
+        private readonly UserContext _usercontext;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IMapper _mapper;
 
-        public TimelineController(ThinBlue.ThinbluelieContext context,
+        public TimelineController(DataContext datacontext,
+                                 UserContext usercontext,
                                  UserManager<IdentityUser> userManager,
                                  SignInManager<IdentityUser> signInManager,
                                  IMapper mapper)
         {
-            _context = context;
+            _datacontext = datacontext;
+            _usercontext = usercontext;
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
         }
 
-        public void Log(int action, int IdTimeline)
+        public void Log(uint action, int IdTimeline)
         {
             var log = new Log { };
             log.TimeStamp = DateTime.Now; // yyyy-mm-dd hh-mm-ss
@@ -43,7 +47,7 @@ namespace ThinBlueLie.Controllers
             log.IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
             log.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             log.IdTimelineInfo = IdTimeline;
-            _context.Log.Add(log);
+            _datacontext.Log.Add(log);
             //  return Ok(true);
         }
 
@@ -65,20 +69,20 @@ namespace ThinBlueLie.Controllers
             }
             //query database using query string
            // model.Timelineinfos = await _context.Timelineinfo.FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{date}'").ToListAsync();
-            model.Timelineinfos = await _context.Timelineinfo.Where(t => t.Date.Equals(date)).ToListAsync();
+            model.Timelineinfos = await _datacontext.Timelineinfo.Where(t => t.Date.Equals(date)).ToListAsync();
             var events = new List<object>();
             foreach (var Event in model.Timelineinfos)
             {
-                using (var context = new ThinbluelieContext())
+                using (var context = new DataContext())
                 {
                     
                 }
                 //Get list of subject/officer ids where Idtimeline is one in the date
-                var SubjectIds = await _context.TimelineinfoSubject.Where(id1 => id1.IdTimelineinfo.Equals(Event.IdTimelineInfo)).Select(s => s.IdSubject).ToListAsync();
-                var OfficerIds = await _context.TimelineinfoOfficer.Where(id2 => id2.IdTimelineinfo.Equals(Event.IdTimelineInfo)).Select(o => o.IdOfficer).ToListAsync();
-                var Subjects = await _context.Subjects.Where(s1 => s1.IdSubject.Equals(SubjectIds)).ToListAsync();
-                var Officers = await _context.Officers.Where(o1 => o1.IdOfficer.Equals(OfficerIds)).ToListAsync();
-                var Medias = await _context.Media.Where(m => m.IdTimelineInfo.Equals(Event.IdTimelineInfo)).ToListAsync();
+                var SubjectIds = await _datacontext.TimelineinfoSubject.Where(id1 => id1.IdTimelineinfo.Equals(Event.IdTimelineInfo)).Select(s => s.IdSubject).ToListAsync();
+                var OfficerIds = await _datacontext.TimelineinfoOfficer.Where(id2 => id2.IdTimelineinfo.Equals(Event.IdTimelineInfo)).Select(o => o.IdOfficer).ToListAsync();
+                var Subjects = await _datacontext.Subjects.Where(s1 => s1.IdSubject.Equals(SubjectIds)).ToListAsync();
+                var Officers = await _datacontext.Officers.Where(o1 => o1.IdOfficer.Equals(OfficerIds)).ToListAsync();
+                var Medias = await _datacontext.Media.Where(m => m.IdTimelineinfo.Equals(Event.IdTimelineInfo)).ToListAsync();
                 events.Add(Subjects);
                 events.Add(Officers);
                 events.Add(Medias);
@@ -122,7 +126,7 @@ namespace ThinBlueLie.Controllers
             var dateData = new List<List<Timelineinfo>>(new List<Timelineinfo>[7]);           
             for (int i = 0; i < 7; i++)
             {                       
-                dateData[i] = await _context.Timelineinfo.Where(t => t.Date.Equals(dates[i].ToString("yyyy-MM-dd"))).ToListAsync();
+                dateData[i] = await _datacontext.Timelineinfo.Where(t => t.Date.Equals(dates[i].ToString("yyyy-MM-dd"))).ToListAsync();
             }                
             ViewData["DateData"] = dateData;
             return PartialView("_TimelinePartial");
@@ -142,8 +146,8 @@ namespace ThinBlueLie.Controllers
                 }
 
                 Log((int)LogEnums.ActionEnum.Flag, flagModel.Flags.IdTimelineInfo);
-                _context.Flagged.Add(flagModel.Flags);
-                await _context.SaveChangesAsync();
+                _datacontext.Flagged.Add(flagModel.Flags);
+                await _datacontext.SaveChangesAsync();
 
                 return Ok(true);
             }
@@ -180,47 +184,47 @@ namespace ThinBlueLie.Controllers
                 model.Timelineinfos.Misconduct = (byte)model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
                 //Set SubmittedBy to current logged in user
                 model.Timelineinfos.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                _context.Timelineinfo.Add(model.Timelineinfos); //############
-                await _context.SaveChangesAsync();
+                _datacontext.Timelineinfo.Add(model.Timelineinfos); //############
+                await _datacontext.SaveChangesAsync();
                 var id = model.Timelineinfos.IdTimelineInfo;
                 //Add the Armed property onto the data
-                var subjectTemp = new List<SubjectTemp>();
+                var subjectTemp = new List<ViewSubject>();
                 foreach ((var subject, Int32 i) in model.Subjects.Select((value, i) => (value, i)))
                 {
-                    var asubject = (SubjectTemp)subject; 
+                    var asubject = (ViewSubject)subject; 
                     asubject.Armed = model.Armed[i];
                     subjectTemp.Add(asubject); 
                 }
                 foreach (var subject in subjectTemp)
                 {
-                    _context.Subjects.Add(subject);         //############    //Combine these foreaches so that the prelimiary submits to get ids
-                    await _context.SaveChangesAsync();                        //all happen together and you don't have a bunch of SaveChangesAsync()
+                    _datacontext.Subjects.Add(subject);         //############    //Combine these foreaches so that the prelimiary submits to get ids
+                    await _datacontext.SaveChangesAsync();                        //all happen together and you don't have a bunch of SaveChangesAsync()
                     var TSlink = new TimelineinfoSubject()
                     {
                         IdTimelineinfo = id,
                         IdSubject = subject.IdSubject,
                         Armed = Convert.ToByte(subject.Armed)
                     };
-                    _context.TimelineinfoSubject.Add(TSlink); //############
+                    _datacontext.TimelineinfoSubject.Add(TSlink); //############
                 }
                 foreach (var officer in model.Officers)
                 {
-                    _context.Officers.Add(officer); //############
-                    await _context.SaveChangesAsync();
+                    _datacontext.Officers.Add(officer); //############
+                    await _datacontext.SaveChangesAsync();
                     var TOlink = new TimelineinfoOfficer()
                     {
                         IdTimelineinfo = id,
                         IdOfficer = officer.IdOfficer,                       
                     };
-                    _context.TimelineinfoOfficer.Add(TOlink); //############
+                    _datacontext.TimelineinfoOfficer.Add(TOlink); //############
                 }
                 foreach (var media in model.Medias)
                 {
                     media.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    media.IdTimelineInfo = id;
-                    _context.Media.Add(media); //############
+                    media.IdTimelineinfo = id;
+                    _datacontext.Media.Add(media); //############
                 }
-                await _context.SaveChangesAsync();
+                await _datacontext.SaveChangesAsync();
 
                 Log((int)LogEnums.ActionEnum.Submit, model.Timelineinfos.IdTimelineInfo);
                 return null;
@@ -259,8 +263,8 @@ namespace ThinBlueLie.Controllers
                     AvailableMisconducts = GetMisconducts()
                 };
                 int id = Int32.Parse(idString);
-                model.Timelineinfos = await _context.Timelineinfo.Where(i => i.IdTimelineInfo.Equals(id)).FirstOrDefaultAsync();
-                model.Medias = await _context.Media.Where(d => d.IdTimelineInfo.Equals(id)).ToListAsync();
+                model.Timelineinfos = await _datacontext.Timelineinfo.Where(i => i.IdTimelineInfo.Equals(id)).FirstOrDefaultAsync();
+                model.Medias = await _datacontext.Media.Where(d => d.IdTimelineinfo.Equals(id)).ToListAsync();
 
                 //load data into ViewData to be used in the Edit page
                 ViewData["EditTimelineinfo"] = model.Timelineinfos;
@@ -360,7 +364,7 @@ namespace ThinBlueLie.Controllers
         public PartialViewResult GetSimilar(string? TempDate)
         {
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
-            IList<Timelineinfo> SimilarEvents = _context.Timelineinfo.Where(t => t.Date.Equals(TempDate)).ToList();
+            IList<Timelineinfo> SimilarEvents = _datacontext.Timelineinfo.Where(t => t.Date.Equals(TempDate)).ToList();
             ViewData["SimilarEvents"] = SimilarEvents;
             return PartialView("_SimilarPartial");
         }
@@ -368,7 +372,7 @@ namespace ThinBlueLie.Controllers
         public PartialViewResult GetOfficer(string? Name, int? State, int? Race, int? Sex)
         {
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
-            var SimilarOfficers = _context.Officers.Where(t => t.Name.Equals(Name)).ToList();
+            var SimilarOfficers = _datacontext.Officers.Where(t => t.Name.Equals(Name)).ToList();
             ViewData["SimilarOfficers"] = SimilarOfficers;
             return PartialView("_SimilarPartial");
         }
@@ -376,7 +380,7 @@ namespace ThinBlueLie.Controllers
         public PartialViewResult GetSubject(string? Name, int? State, int? Race, int? Sex)
         {
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
-            var SimilarSubjects = _context.Subjects.Where(t => t.Name.Equals(Name)).ToList();
+            var SimilarSubjects = _datacontext.Subjects.Where(t => t.Name.Equals(Name)).ToList();
             ViewData["SimilarSubjects"] = SimilarSubjects;
             return PartialView("_SimilarPartial");
         }

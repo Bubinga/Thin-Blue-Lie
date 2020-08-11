@@ -23,7 +23,6 @@ namespace DataAccessLibrary.DataAccess
         public virtual DbSet<Aspnetuserroles> Aspnetuserroles { get; set; }
         public virtual DbSet<Aspnetusers> Aspnetusers { get; set; }
         public virtual DbSet<Aspnetusertokens> Aspnetusertokens { get; set; }
-        public virtual DbSet<Efmigrationshistory> Efmigrationshistory { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -236,20 +235,6 @@ namespace DataAccessLibrary.DataAccess
                     .WithMany(p => p.Aspnetusertokens)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_AspNetUserTokens_AspNetUsers_UserId");
-            });
-
-            modelBuilder.Entity<Efmigrationshistory>(entity =>
-            {
-                entity.HasKey(e => e.MigrationId)
-                    .HasName("PRIMARY");
-
-                entity.Property(e => e.MigrationId)
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
-
-                entity.Property(e => e.ProductVersion)
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
             });
 
             OnModelCreatingPartial(modelBuilder);

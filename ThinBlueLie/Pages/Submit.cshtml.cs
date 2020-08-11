@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using DataAccessLibrary.DataModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using ThinBlue;
-using ThinBlueLie.Models;
-using static ThinBlueLie.Models.TimelineinfoEnums;
 
 namespace ThinBlueLie.Pages
 {

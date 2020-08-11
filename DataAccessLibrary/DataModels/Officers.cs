@@ -17,7 +17,9 @@ namespace DataAccessLibrary.DataModels
         public int IdOfficer { get; set; }
         [Column(TypeName = "varchar(60)")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "The Officer's Race field is required")]
         public byte Race { get; set; }
+        [Required(ErrorMessage = "The Officer's Sex field is required")]
         public byte Sex { get; set; }
 
         [InverseProperty("IdOfficerNavigation")]

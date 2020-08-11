@@ -21,7 +21,9 @@ namespace DataAccessLibrary.DataModels
 
         [Key]
         public int IdTimelineInfo { get; set; }
-        [Required]
+        [Required]       
+        [MaxLength(10)]
+        [DataType(DataType.Date)]
         [Column(TypeName = "char(10)")]
         public string Date { get; set; }
         public byte State { get; set; }
