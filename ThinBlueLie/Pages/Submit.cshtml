@@ -1,5 +1,5 @@
 ﻿@using ThinBlueLie.Models;
-@using static ThinBlue.Media;
+@using DataAccessLibrary.Enums;
 @model ThinBlueLie.Pages.SubmitModel
 
 @{
@@ -19,7 +19,7 @@
     }
 </style>
 <div class="offset-lg-3 row container-fluid">
-    @using (Html.BeginForm("Submit", "Timeline", FormMethod.Post))
+    @using (Html.BeginForm("Submit", "Timeline", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         <div class="col-lg-4 col-md-5 border-left border-right border-bottom">
