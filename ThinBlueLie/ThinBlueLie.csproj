@@ -6,31 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
     <Compile Remove="thin-blue-lie\**" />
+    <Content Remove="Migrations\**" />
     <Content Remove="thin-blue-lie\**" />
+    <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="thin-blue-lie\**" />
+    <None Remove="Migrations\**" />
     <None Remove="thin-blue-lie\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="DataAccess\IdentityContext.cs" />
     <Compile Remove="DataAccess\thinbluelieContext.cs" />
-    <Compile Remove="Migrations\20200701015905_IdentityFix.cs" />
-    <Compile Remove="Migrations\20200701015905_IdentityFix.Designer.cs" />
-    <Compile Remove="Migrations\20200701052958_IdentityFix.cs" />
-    <Compile Remove="Migrations\20200701052958_IdentityFix.Designer.cs" />
-    <Compile Remove="Migrations\20200701053310_IdentityFix.cs" />
-    <Compile Remove="Migrations\20200701053310_IdentityFix.Designer.cs" />
-    <Compile Remove="Migrations\20200701053454_IdentityFix.cs" />
-    <Compile Remove="Migrations\20200701053454_IdentityFix.Designer.cs" />
-    <Compile Remove="Migrations\20200704092014_AddSourceAndCredit.cs" />
-    <Compile Remove="Migrations\20200704092014_AddSourceAndCredit.Designer.cs" />
-    <Compile Remove="Migrations\20200708052416_Test-Migration.cs" />
-    <Compile Remove="Migrations\20200708052416_Test-Migration.Designer.cs" />
-    <Compile Remove="Migrations\20200721092930_AddLog.cs" />
-    <Compile Remove="Migrations\20200721092930_AddLog.Designer.cs" />
-    <Compile Remove="Migrations\20200731052652_AddingEditTables.cs" />
-    <Compile Remove="Migrations\20200731052652_AddingEditTables.Designer.cs" />
     <Compile Remove="Extensions\Roles.cs" />
     <Compile Remove="Extensions\Userclaims.cs" />
     <Compile Remove="Extensions\Userlogins.cs" />
@@ -68,6 +56,7 @@
     <Folder Include="Pages\Test\" />
     <Folder Include="Views\" />
     <Folder Include="wwwroot\8CantWait\" />
+    <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
   <ItemGroup>
