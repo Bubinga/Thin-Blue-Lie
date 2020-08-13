@@ -15,7 +15,7 @@ namespace DataAccessLibrary.DataModels
         public byte MediaType { get; set; }
         [Required]
         [Column(TypeName = "text")]
-        public string SourceFile { get; set; }
+        public string SourcePath { get; set; }
         public byte Gore { get; set; }
         public byte SourceFrom { get; set; }
         [Required]

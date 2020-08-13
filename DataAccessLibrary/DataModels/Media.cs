@@ -15,7 +15,7 @@ namespace DataAccessLibrary.DataModels
         public byte MediaType { get; set; }
         [Required]
         [Column(TypeName = "text")]
-        public string SourceFile { get; set; }
+        public string SourcePath { get; set; } //Either the provided link or a pointer to the location where the uploaded file is stored
         public byte Gore { get; set; }
         public byte SourceFrom { get; set; }
         [Required]

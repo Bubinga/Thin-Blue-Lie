@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using ThinBlueLie.ViewModels;
 
 namespace ThinBlueLie.Pages
 {
@@ -10,11 +11,11 @@ namespace ThinBlueLie.Pages
         [BindProperty]
         public Timelineinfo Timelineinfos { get; set; }
         [BindProperty]
-        public List<Media> Medias { get; set; }
+        public List<ViewMedia> Medias { get; set; }
         [BindProperty]
-        public List<Officers> Officers { get; set; }
+        public List<ViewOfficer> Officers { get; set; }
         [BindProperty]
-        public List<Subjects> Subjects { get; set; }
+        public List<ViewSubject> Subjects { get; set; }
         public List<bool> Armed { get; set; }
         public bool SignedIn { get; set; }
 

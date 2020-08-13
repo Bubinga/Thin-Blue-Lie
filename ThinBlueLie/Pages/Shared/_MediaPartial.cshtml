@@ -1,5 +1,5 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@using static ThinBlueLie.Models.MediaEnums;
+@using static DataAccessLibrary.Enums.MediaEnums;
 @model ThinBlueLie.Pages.SubmitModel;
 @{
     int i = ViewBag.MediaCount;
@@ -40,15 +40,15 @@
                             <div class="form-group MediaFile">
                                 <label for="FileSelect">
                                     Pick a File
-                                    <span asp-validation-for="Medias[i].SourceFile" class="text-danger"></span>
+                                    <span asp-validation-for="Medias[i].Source" class="text-danger"></span>
                                 </label>
-                                <input asp-for="Medias[i].SourceFile" type="file" accept="image/*" class="form-control-file" id="FileSelect">
+                                <input asp-for="Medias[i].Source" type="file" accept="image/*" class="form-control-file" id="FileSelect">
                             </div>
                             <div class="form-group MediaLink">
                                 <label for="FileLink">Link the Media
-                                    <span asp-validation-for="Medias[i].SourceFile" class="text-danger"></span>
+                                    <span asp-validation-for="Medias[i].SourcePath" class="text-danger"></span>
                                 </label>
-                                <input asp-for="Medias[i].SourceFile" type="url" class="form-control" id="FileLink">
+                                <input asp-for="Medias[i].SourcePath" type="url" class="form-control" id="FileLink">
                             </div>
                         </div>
                         <div class="ml-3 col-6">
