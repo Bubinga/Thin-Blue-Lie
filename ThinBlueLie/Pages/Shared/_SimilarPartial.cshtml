@@ -1,7 +1,7 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@using static ThinBlueLie.Models.TimelineinfoEnums;
+@using DataAccessLibrary.Enums;
 @{
-    var Time = ViewData["SimilarEvents"] as List<ThinBlue.Timelineinfo>;
+    var Time = ViewData["SimilarEvents"] as List<DataAccessLibrary.DataModels.Timelineinfo>;
     Layout = null;
     string TruncateString(string str)
     {
@@ -16,7 +16,7 @@
     }
 }
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <style>
     p {
         margin-bottom: 2rem;
@@ -37,7 +37,7 @@
             <div class="card-header">@Similar.Date</div>
             <div class="card-body text-dark row">
                 <div class="col-6">
-                    <p><strong>Location:</strong> @Enum.GetName(typeof(StateEnum), Similar.State), @Similar.City</p>
+                    <p><strong>Location:</strong> @Enum.GetName(typeof(TimelineinfoEnums.StateEnum), Similar.State), @Similar.City</p>
                     <p><strong>Subject:</strong> @*@Similar.SubjectName*@</p>
                     <p><strong>Officer:</strong> @*@Similar.OfficerName*@</p>                    
                 </div>
