@@ -104,10 +104,14 @@ namespace ThinBlueLie.Controllers
                 }
 
                 //Add Officers to officers table and junction table
-                var officers= _mapper.Map<List<Officers>>(model.Officers);
-                foreach (var officer in officers)
+               
+                foreach (var officer in model.Officers)
                 {
-                    _datacontext.Officers.Add(officer); //############
+                    if (officer.SameAs == false)
+                    {
+                        var Officer = _mapper.Map<Officers>(officer);
+                        _datacontext.Officers.Add(Officer);
+                    }                  
                     await _datacontext.SaveChangesAsync();
                     var TOlink = new TimelineinfoOfficer()
                     {
