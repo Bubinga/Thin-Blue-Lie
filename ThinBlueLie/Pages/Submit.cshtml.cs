@@ -15,8 +15,7 @@ namespace ThinBlueLie.Pages
         [BindProperty]
         public List<ViewOfficer> Officers { get; set; }
         [BindProperty]
-        public List<ViewSubject> Subjects { get; set; }
-        public List<bool> Armed { get; set; }
+        public List<ViewSubject> Subjects { get; set; }     
         public bool SignedIn { get; set; }
 
         public IList<string> SelectedWeapons { get; set; }

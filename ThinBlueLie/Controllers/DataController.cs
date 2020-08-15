@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataAccessLibrary.DataAccess;
 using DataAccessLibrary.DataModels;
+using DataAccessLibrary.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -77,32 +78,34 @@ namespace ThinBlueLie.Controllers
                     model.Timelineinfos.Weapon = (byte?)model.SelectedWeapons.Sum(x => Convert.ToInt32(x));
                 }
                 model.Timelineinfos.Misconduct = (byte)model.SelectedMisconducts.Sum(x => Convert.ToInt32(x));
-                //Set SubmittedBy to current logged in user
-                model.Timelineinfos.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                _datacontext.Timelineinfo.Add(model.Timelineinfos); //############
+
+                //Fill out SubmittedBy and add to Database
+                var user = model.Timelineinfos.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                _datacontext.Timelineinfo.Add(model.Timelineinfos); //Add Timelineinfo to data database
                 await _datacontext.SaveChangesAsync();
                 var id = model.Timelineinfos.IdTimelineInfo;
-                //Add the Armed property onto the data
-                var subjectTemp = new List<ViewSubject>();
-                foreach ((var subject, Int32 i) in model.Subjects.Select((value, i) => (value, i)))
+
+                //Add Subjects to subjects table and junction table
+
+                foreach (var subject in model.Subjects)
                 {
-                    var asubject = (ViewSubject)subject;
-                    asubject.Armed = model.Armed[i];
-                    subjectTemp.Add(asubject);
-                }
-                foreach (var subject in subjectTemp)
-                {
-                    _datacontext.Subjects.Add(subject);         //############    //Combine these foreaches so that the prelimiary submits to get ids
+                    var armed = subject.Armed;
+                    var SameAs = subject.SameAs;
+                    var Subject = _mapper.Map<Subjects>(subject);
+                    _datacontext.Subjects.Add(Subject);         //############    //Combine these foreaches so that the prelimiary submits to get ids
                     await _datacontext.SaveChangesAsync();                        //all happen together and you don't have a bunch of SaveChangesAsync()
                     var TSlink = new TimelineinfoSubject()
                     {
                         IdTimelineinfo = id,
                         IdSubject = subject.IdSubject,
-                        Armed = Convert.ToByte(subject.Armed)
+                        Armed = Convert.ToByte(SameAs)
                     };
                     _datacontext.TimelineinfoSubject.Add(TSlink); //############
                 }
-                foreach (var officer in model.Officers)
+
+                //Add Officers to officers table and junction table
+                var officers= _mapper.Map<List<Officers>>(model.Officers);
+                foreach (var officer in officers)
                 {
                     _datacontext.Officers.Add(officer); //############
                     await _datacontext.SaveChangesAsync();
@@ -113,7 +116,10 @@ namespace ThinBlueLie.Controllers
                     };
                     _datacontext.TimelineinfoOfficer.Add(TOlink); //############
                 }
-                foreach (var media in model.Medias)
+
+                var medias = _mapper.Map<List<Media>>(model.Medias);
+                //Add Media to Media Table
+                foreach (var media in medias)
                 {
                     media.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     media.IdTimelineinfo = id;
@@ -161,7 +167,7 @@ namespace ThinBlueLie.Controllers
                 };
                 int id = Int32.Parse(idString);
                 model.Timelineinfos = await _datacontext.Timelineinfo.Where(i => i.IdTimelineInfo.Equals(id)).FirstOrDefaultAsync();
-                model.Medias = await _datacontext.Media.Where(d => d.IdTimelineinfo.Equals(id)).ToListAsync();
+                model.Medias = _mapper.Map<List<ViewMedia>>(await _datacontext.Media.Where(d => d.IdTimelineinfo.Equals(id)).ToListAsync());
 
                 //load data into ViewData to be used in the Edit page
                 ViewData["EditTimelineinfo"] = model.Timelineinfos;
