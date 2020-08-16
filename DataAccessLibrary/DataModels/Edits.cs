@@ -32,11 +32,11 @@ namespace DataAccessLibrary.DataModels
         [Column(TypeName = "varchar(255)")]
         public string SubmittedBy { get; set; }
         public byte Confirmed { get; set; }
-        public int IdTimelineInfo { get; set; }
+        public int IdTimelineinfo { get; set; }
 
-        [ForeignKey(nameof(IdTimelineInfo))]
+        [ForeignKey(nameof(IdTimelineinfo))]
         [InverseProperty(nameof(Timelineinfo.Edits))]
-        public virtual Timelineinfo IdTimelineInfoNavigation { get; set; }
+        public virtual Timelineinfo IdTimelineinfoNavigation { get; set; }
         [InverseProperty("IdEditsNavigation")]
         public virtual ICollection<EditMedia> EditMedia { get; set; }
         [ForeignKey(nameof(SubmittedBy))]

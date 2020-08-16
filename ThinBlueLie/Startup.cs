@@ -41,6 +41,7 @@ namespace ThinBlueLie
                 .AddEntityFrameworkStores<UserContext>()
                 .AddDefaultTokenProviders();
 
+
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());

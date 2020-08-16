@@ -1,40 +1,67 @@
 ﻿@using ThinBlueLie.Models;
-@using static ThinBlueLie.Models.TimelineinfoEnums;
+@using DataAccessLibrary.Enums
 @model ThinBlueLie.Pages.SubmitModel
 @{
     int i = ViewBag.OfficerCount;
     Layout = null;
 }
-    <div class="AddOfficer">
-        <div class="card border-dark mb-3 mx-auto">
-            <div class="card-body text-dark pt-2">
-                <div class="form-row position-relative">
-                    <div class="col-10 ml-3 my-2">
-                        <label asp-for="Officers[i].Name" class="control-label">
-                            Name
-                            <span class="text-danger ml-1">*</span>
-                            <span class="text-muted ml-1">(First, Last)</span>
-                        </label>
-                        <input asp-for="Officers[i].Name" class="form-control w-100" />
-                        <span asp-validation-for="Officers[i].Name" class="text-danger"></span>
-                    </div>
-                    <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;">
-                        <span aria-hidden="true">×</span>
-                    </button>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" integrity="sha512-yVvxUQV0QESBt1SyZbNJMAwyKvFTLMyXSyBHDO4BG5t7k/Lw34tyqlSDlKIrIENIzCl+RVUNjmCPG+V/GMesRw==" crossorigin="anonymous" />
+<div class="AddOfficer">
+    <div class="card border-dark mb-3 mx-auto">
+        <div class="card-body text-dark pt-2">
+            <div class="form-row position-relative">
+                <div class="col-10 ml-3 my-2">
+                    <label asp-for="Officers[i].Name" class="control-label">
+                        Name
+                        <span class="text-danger ml-1">*</span>
+                        <span class="text-muted ml-1">(First, Last)</span>
+                    </label>
+                    <input asp-for="Officers[i].Name" class="form-control w-100" />
+                    <span asp-validation-for="Officers[i].Name" class="text-danger"></span>
                 </div>
-                <div class="form-row position-relative my-2">
-                    <div class="col-6">
-                        <label class="control-label">Race:<span class="text-danger ml-1">*</span></label>
-                        <select asp-for="Officers[i].Race" asp-items="Html.GetEnumSelectList(typeof(RaceEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
-                        <span asp-validation-for="Officers[i].Race" class="text-danger"></span>
-                    </div>
-                    <div class="col-6">
-                        <label class="control-label">Sex:<span class="text-danger ml-1">*</span></label>
-                        <select asp-for="Officers[i].Sex" asp-items="Html.GetEnumSelectList(typeof(SexEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
-                        <span asp-validation-for="Officers[i].Sex" class="text-danger"></span>
-                    </div>
+                <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="form-row position-relative my-2">
+                <div class="col-6">
+                    <label class="control-label">Race:<span class="text-danger ml-1">*</span></label>
+                    <select asp-for="Officers[i].Race" asp-items="Html.GetEnumSelectList(typeof(TimelineinfoEnums.RaceEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
+                    <span asp-validation-for="Officers[i].Race" class="text-danger"></span>
+                </div>
+                <div class="col-6">
+                    <label class="control-label">Sex:<span class="text-danger ml-1">*</span></label>
+                    <select asp-for="Officers[i].Sex" asp-items="Html.GetEnumSelectList(typeof(TimelineinfoEnums.SexEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
+                    <span asp-validation-for="Officers[i].Sex" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-6 form-field">
+                    <label class="form-check-label">
+                        Type of Misconduct
+                    </label>
+                    <select data-placeholder="Select misconducts" class="chosen-select" multiple>
+                        @foreach (var item in Model.AvailableMisconducts)
+                        {
+                            <option type="checkbox" name="SelectedMisconducts" value="@item.Value"> @item.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-check-label">
+                    <label class="form-check-label">
+                        Type of Weapon
+                    </label>
+                    <select data-placeholder="Select weapons" class="chosen-select" multiple>
+                        @foreach (var item in Model.AvailableWeapons)
+                        {
+                            <option type="checkbox" name="SelectedWeapons" value="@item.Value"> @item.Text</option>
+                        }
+                    </select>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" integrity="sha512-rMGGF4wg1R73ehtnxXBt5mbUfN9JUJwbk21KMlnLZDJh7BkPmeovBuddZCENJddHYYMkCh9hPFnPmS9sspki8g==" crossorigin="anonymous"></script>
+
 

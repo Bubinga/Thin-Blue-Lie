@@ -8,10 +8,10 @@ namespace DataAccessLibrary.UserModels
     [Table("aspnetuserroles")]
     public partial class Aspnetuserroles
     {
-        [Key]
+      
         [Column(TypeName = "varchar(255)")]
         public string UserId { get; set; }
-        [Key]
+      
         [Column(TypeName = "varchar(255)")]
         public string RoleId { get; set; }
 

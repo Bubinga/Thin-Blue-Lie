@@ -1,4 +1,4 @@
-﻿@using static ThinBlueLie.Models.FlaggedEnums;
+﻿@using DataAccessLibrary.Enums;
 @model ThinBlueLie.Pages.TimelineModel;
 @{
     Layout = null;
@@ -11,7 +11,7 @@
                 <div class="form-group">
                     <div class="dropdown pl-0" style="position:relative;">
                         <label  class="control-label">Type<span class="text-danger ml-1">*</span></label>
-                        <select asp-for="Flags.FlagType" asp-items="Html.GetEnumSelectList<FlagTypeEnum>()" style="" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false">
+                        <select asp-for="Flags.FlagType" asp-items="Html.GetEnumSelectList<FlaggedEnums.FlagTypeEnum>()" style="" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false">
                             <option class="dropdown-item">Select</option>
                         </select>
                         <span asp-validation-for="Flags.FlagType" class="text-danger"></span>
@@ -22,7 +22,7 @@
                     <textarea asp-for="Flags.Message" class="form-control" rows="2"></textarea>
                     <span asp-validation-for="Flags.Message" class="text-danger"></span>
                 </div>
-                <textarea asp-for="Flags.IdTimelineInfo" class="idTimelineInput d-none"></textarea>
+                <textarea asp-for="Flags.IdTimelineinfo" class="idTimelineInput d-none"></textarea>
             </div>
         </form>
         <div>

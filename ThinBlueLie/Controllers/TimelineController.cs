@@ -46,7 +46,7 @@ namespace ThinBlueLie.Controllers
             log.Action = action;
             log.IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
             log.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            log.IdTimelineInfo = IdTimeline;
+            log.IdTimelineinfo = IdTimeline;
             _datacontext.Log.Add(log);
             //  return Ok(true);
         }
@@ -78,11 +78,11 @@ namespace ThinBlueLie.Controllers
                     
                 }
                 //Get list of subject/officer ids where Idtimeline is one in the date
-                var SubjectIds = await _datacontext.TimelineinfoSubject.Where(id1 => id1.IdTimelineinfo.Equals(Event.IdTimelineInfo)).Select(s => s.IdSubject).ToListAsync();
-                var OfficerIds = await _datacontext.TimelineinfoOfficer.Where(id2 => id2.IdTimelineinfo.Equals(Event.IdTimelineInfo)).Select(o => o.IdOfficer).ToListAsync();
+                var SubjectIds = await _datacontext.TimelineinfoSubject.Where(id1 => id1.IdTimelineinfo.Equals(Event.IdTimelineinfo)).Select(s => s.IdSubject).ToListAsync();
+                var OfficerIds = await _datacontext.TimelineinfoOfficer.Where(id2 => id2.IdTimelineinfo.Equals(Event.IdTimelineinfo)).Select(o => o.IdOfficer).ToListAsync();
                 var Subjects = await _datacontext.Subjects.Where(s1 => s1.IdSubject.Equals(SubjectIds)).ToListAsync();
                 var Officers = await _datacontext.Officers.Where(o1 => o1.IdOfficer.Equals(OfficerIds)).ToListAsync();
-                var Medias = await _datacontext.Media.Where(m => m.IdTimelineinfo.Equals(Event.IdTimelineInfo)).ToListAsync();
+                var Medias = await _datacontext.Media.Where(m => m.IdTimelineinfo.Equals(Event.IdTimelineinfo)).ToListAsync();
                 events.Add(Subjects);
                 events.Add(Officers);
                 events.Add(Medias);
@@ -145,7 +145,7 @@ namespace ThinBlueLie.Controllers
                     flagModel.Flags.UserId = "null";
                 }
 
-                Log((int)LogEnums.ActionEnum.Flag, flagModel.Flags.IdTimelineInfo);
+                Log((int)LogEnums.ActionEnum.Flag, flagModel.Flags.IdTimelineinfo);
                 _datacontext.Flagged.Add(flagModel.Flags);
                 await _datacontext.SaveChangesAsync();
 
