@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using DataAccessLibrary.UserModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DataAccessLibrary.DataAccess
 {
-    public partial class UserContext : DbContext
+    public partial class UserContext : IdentityDbContext
     {
         public UserContext()
         {
@@ -237,9 +238,8 @@ namespace DataAccessLibrary.DataAccess
                     .HasConstraintName("FK_AspNetUserTokens_AspNetUsers_UserId");
             });
 
-            OnModelCreatingPartial(modelBuilder);
+            OnModelCreatingPartial(modelBuilder);          
         }
-
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

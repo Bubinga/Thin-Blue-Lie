@@ -1,9 +1,9 @@
-﻿@using static ThinBlueLie.Models.TimelineinfoEnums;
+﻿@using DataAccessLibrary.Enums;
 @using static ThinBlueLie.Models.EnumExtensions;
 @model ThinBlueLie.Pages.TimelineModel
 @{
     ViewBag.Title = "Timeline";
-    var Event = ViewData["Timelineinfo"] as IList<ThinBlue.Timelineinfo>;
+    var Event = ViewData["Timelineinfo"] as IList<ViewModels.ViewEvent>;
 }
 
 <style>
@@ -229,10 +229,10 @@
                     <div class="card-body text-dark pb-0">
                         <h5 class="card-title mb-0">General Information</h5>
                         <hr class="mt-0 pb-0 mb-0 pt-0" />
-                        <span class="d-none eventId">@Timelineinfo.IdTimelineInfo</span>
+                        <span class="d-none eventId">@Timelineinfo.Data.IdTimelineinfo</span>
                         <ul class="list-group list-group-flush">
                             <li class="brokencard list-group-item">
-                                <p><strong>Location:</strong> @Timelineinfo.City, @GetEnumDisplayName((StateEnum)Timelineinfo.State)</p>
+                                <p><strong>Location:</strong> @Timelineinfo.Data.City, @GetEnumDisplayName((TimelineinfoEnums.StateEnum)Timelineinfo.Data.State)</p>
                                 <p><strong>Source:</strong></p>
                                 <p><strong>Credit:</strong></p>
                             </li>
@@ -260,7 +260,7 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-6 px-0 offset-1">
-                                <a class="btn btn-primary position-relative" href="/Edit?id=@Timelineinfo.IdTimelineInfo" data-placement="top"
+                                <a class="btn btn-primary position-relative" href="/Edit?id=@Timelineinfo.Data.IdTimelineinfo" data-placement="top"
                                    data-toggle="tooltip" title="Edit info">
                                     Incorrect Info?
                                 </a>
@@ -282,7 +282,7 @@
         <div href="#divider" id="event2">
             <h5 style="margin-left: 8rem; font-size:30px; font-family: Cambira;" class="mt-2 mb-0"> <strong>Context and Followup</strong></h5>
             <div class="border mb-3" style="min-height:100px;">
-                <p style="margin-left: 8rem; margin-right: 15rem;" class="context indent">@Timelineinfo.Context</p>
+                <p style="margin-left: 8rem; margin-right: 15rem;" class="context indent">@Timelineinfo.Data.Context</p>
             </div>
         </div>
     }

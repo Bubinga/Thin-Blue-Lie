@@ -61,17 +61,17 @@ namespace DataAccessLibrary.UserModels
         public virtual ICollection<Aspnetuserroles> Aspnetuserroles { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<Aspnetusertokens> Aspnetusertokens { get; set; }
-        [InverseProperty("User")]
+        [InverseProperty("SubmittedByNavigation")]
         public virtual ICollection<EditMedia> EditMedia { get; set; }
-        [InverseProperty("User")]
+        [InverseProperty("SubmittedByNavigation")]
         public virtual ICollection<Edits> Edits { get; set; }
-        [InverseProperty("User")]
+        [InverseProperty("UserIdNavigation")]
         public virtual ICollection<Flagged> Flagged { get; set; }
-        [InverseProperty("User")]
+        [InverseProperty("UserIdNavigation")]
         public virtual ICollection<Log> Log { get; set; }
-        [InverseProperty("User")]
+        [InverseProperty("SubmittedByNavigation")]
         public virtual ICollection<Media> Media { get; set; }
-        [InverseProperty("User")]
+        [InverseProperty("SubmittedByNavigation")]
         public virtual ICollection<Timelineinfo> Timelineinfo { get; set; }
     }
 }

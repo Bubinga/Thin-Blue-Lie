@@ -11,16 +11,16 @@ namespace DataAccessLibrary.DataModels
     {
         [Key]
         public int IdFlagged { get; set; }
-        public int IdTimelineInfo { get; set; }
+        public int IdTimelineinfo { get; set; }
         public uint FlagType { get; set; }
         [Column(TypeName = "text")]
         public string Message { get; set; }
         [Column(TypeName = "varchar(255)")]
         public string UserId { get; set; }
 
-        [ForeignKey(nameof(IdTimelineInfo))]
+        [ForeignKey(nameof(IdTimelineinfo))]
         [InverseProperty(nameof(Timelineinfo.Flagged))]
-        public virtual Timelineinfo IdTimelineInfoNavigation { get; set; }
+        public virtual Timelineinfo IdTimelineinfoNavigation { get; set; }
         [ForeignKey(nameof(UserId))]
         [InverseProperty(nameof(Aspnetusers.Flagged))]
         public virtual Aspnetusers UserIdNavigation { get; set; }

@@ -81,7 +81,7 @@ namespace DataAccessLibrary.DataAccess
                 entity.HasKey(e => e.IdEdits)
                     .HasName("PRIMARY");
 
-                entity.HasIndex(e => e.IdTimelineInfo)
+                entity.HasIndex(e => e.IdTimelineinfo)
                     .HasName("FK_Edits_IdTimelineinfo_idx");
 
                 entity.HasIndex(e => e.SubmittedBy)
@@ -103,9 +103,9 @@ namespace DataAccessLibrary.DataAccess
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.HasOne(d => d.IdTimelineInfoNavigation)
+                entity.HasOne(d => d.IdTimelineinfoNavigation)
                     .WithMany(p => p.Edits)
-                    .HasForeignKey(d => d.IdTimelineInfo)
+                    .HasForeignKey(d => d.IdTimelineinfo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Edits_IdTimelineinfo");
 
@@ -120,7 +120,7 @@ namespace DataAccessLibrary.DataAccess
                 entity.HasKey(e => e.IdFlagged)
                     .HasName("PRIMARY");
 
-                entity.HasIndex(e => e.IdTimelineInfo)
+                entity.HasIndex(e => e.IdTimelineinfo)
                     .HasName("FK_Flagged_IdTimelineInfo_idx");
 
                 entity.HasIndex(e => e.UserId)
@@ -134,9 +134,9 @@ namespace DataAccessLibrary.DataAccess
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.HasOne(d => d.IdTimelineInfoNavigation)
+                entity.HasOne(d => d.IdTimelineinfoNavigation)
                     .WithMany(p => p.Flagged)
-                    .HasForeignKey(d => d.IdTimelineInfo)
+                    .HasForeignKey(d => d.IdTimelineinfo)
                     .HasConstraintName("FK_Flagged_IdTimelineInfo");
 
                 entity.HasOne(d => d.UserIdNavigation)
@@ -150,7 +150,7 @@ namespace DataAccessLibrary.DataAccess
                 entity.HasKey(e => e.IdLog)
                     .HasName("PRIMARY");
 
-                entity.HasIndex(e => e.IdTimelineInfo)
+                entity.HasIndex(e => e.IdTimelineinfo)
                     .HasName("FK_Log_IdTimelineInfo_idx");
 
                 entity.HasIndex(e => e.UserId)
@@ -164,9 +164,9 @@ namespace DataAccessLibrary.DataAccess
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.HasOne(d => d.IdTimelineInfoNavigation)
+                entity.HasOne(d => d.IdTimelineinfoNavigation)
                     .WithMany(p => p.Log)
-                    .HasForeignKey(d => d.IdTimelineInfo)
+                    .HasForeignKey(d => d.IdTimelineinfo)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK_Log_IdTimelineInfo");
 
@@ -233,7 +233,7 @@ namespace DataAccessLibrary.DataAccess
 
             modelBuilder.Entity<Timelineinfo>(entity =>
             {
-                entity.HasKey(e => e.IdTimelineInfo)
+                entity.HasKey(e => e.IdTimelineinfo)
                     .HasName("PRIMARY");
 
                 entity.HasIndex(e => e.SubmittedBy)
