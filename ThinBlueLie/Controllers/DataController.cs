@@ -44,7 +44,7 @@ namespace ThinBlueLie.Controllers
             log.Action = action;
             log.IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
             log.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            log.IdTimelineInfo = IdTimeline;
+            log.IdTimelineinfo = IdTimeline;
             _datacontext.Log.Add(log);
             //  return Ok(true);
         }
@@ -83,7 +83,7 @@ namespace ThinBlueLie.Controllers
                 var user = model.Timelineinfos.SubmittedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _datacontext.Timelineinfo.Add(model.Timelineinfos); //Add Timelineinfo to data database
                 await _datacontext.SaveChangesAsync();
-                var id = model.Timelineinfos.IdTimelineInfo;
+                var id = model.Timelineinfos.IdTimelineinfo;
 
                 //Add Subjects to subjects table and junction table
 
@@ -131,7 +131,7 @@ namespace ThinBlueLie.Controllers
                 }
                 await _datacontext.SaveChangesAsync();
 
-                Log((int)LogEnums.ActionEnum.Submit, model.Timelineinfos.IdTimelineInfo);
+                Log((int)LogEnums.ActionEnum.Submit, model.Timelineinfos.IdTimelineinfo);
                 return null;
             }
             model.AvailableWeapons = GetWeapons();
@@ -170,7 +170,7 @@ namespace ThinBlueLie.Controllers
                     AvailableMisconducts = GetMisconducts()
                 };
                 int id = Int32.Parse(idString);
-                model.Timelineinfos = await _datacontext.Timelineinfo.Where(i => i.IdTimelineInfo.Equals(id)).FirstOrDefaultAsync();
+                model.Timelineinfos = await _datacontext.Timelineinfo.Where(i => i.IdTimelineinfo.Equals(id)).FirstOrDefaultAsync();
                 model.Medias = _mapper.Map<List<ViewMedia>>(await _datacontext.Media.Where(d => d.IdTimelineinfo.Equals(id)).ToListAsync());
 
                 //load data into ViewData to be used in the Edit page
@@ -271,25 +271,26 @@ namespace ThinBlueLie.Controllers
         public PartialViewResult GetSimilar(string? TempDate)
         {
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
-            IList<Timelineinfo> SimilarEvents = _datacontext.Timelineinfo.Where(t => t.Date.Equals(TempDate)).ToList();
-            ViewData["SimilarEvents"] = SimilarEvents;
+            // IList<Timelineinfo> SimilarEvents = _datacontext.Timelineinfo.Where(t => t.Date.Equals(TempDate)).ToList();
+            //ViewData["SimilarEvents"] = SimilarEvents;
+            ViewData["SimilarEvents"] = null;
             return PartialView("_SimilarPartial");
         }
         [Route("/Submit/GetOfficer")]
-        public PartialViewResult GetOfficer(string? Name, int? State, int? Race, int? Sex)
+        public PartialViewResult GetOfficer(string? Name)
         {
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
             var SimilarOfficers = _datacontext.Officers.Where(t => t.Name.Equals(Name)).ToList();
-            ViewData["SimilarOfficers"] = SimilarOfficers;
-            return PartialView("_SimilarPartial");
+            ViewData["SimilarPeople"] = SimilarOfficers;
+            return PartialView("_SimilarPersonPartial");
         }
         [Route("/Submit/GetSubject")]
-        public PartialViewResult GetSubject(string? Name, int? State, int? Race, int? Sex)
+        public PartialViewResult GetSubject(string? Name)
         {
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
             var SimilarSubjects = _datacontext.Subjects.Where(t => t.Name.Equals(Name)).ToList();
-            ViewData["SimilarSubjects"] = SimilarSubjects;
-            return PartialView("_SimilarPartial");
+            ViewData["SimilarPeople"] = SimilarSubjects;
+            return PartialView("_SimilarPersonPartial");
         }
 
         private IList<SelectListItem> GetWeapons()

@@ -19,11 +19,11 @@ namespace DataAccessLibrary.DataModels
         public string IpAddress { get; set; }
         [Column(TypeName = "varchar(255)")]
         public string UserId { get; set; }
-        public int? IdTimelineInfo { get; set; }
+        public int? IdTimelineinfo { get; set; }
 
-        [ForeignKey(nameof(IdTimelineInfo))]
+        [ForeignKey(nameof(IdTimelineinfo))]
         [InverseProperty(nameof(Timelineinfo.Log))]
-        public virtual Timelineinfo IdTimelineInfoNavigation { get; set; }
+        public virtual Timelineinfo IdTimelineinfoNavigation { get; set; }
         [ForeignKey(nameof(UserId))]
         [InverseProperty(nameof(Aspnetusers.Log))]
         public virtual Aspnetusers UserIdNavigation { get; set; }

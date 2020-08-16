@@ -1,5 +1,4 @@
-﻿@using ThinBlueLie.Models;
-@using static ThinBlueLie.Models.TimelineinfoEnums;
+﻿@using DataAccessLibrary.Enums;
 @model ThinBlueLie.Pages.SubmitModel
 @{
     int i = ViewBag.SubjectCount;
@@ -20,8 +19,8 @@
                 </div>
                 <div class="col-4">
                     <label class="control-label">Armed?:<span class="text-danger ml-1">*</span></label>
-                    <select asp-for="Armed[i]" asp-items="Html.GetEnumSelectList(typeof(ArmedEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
-                    <span asp-validation-for="Armed[i]" class="text-danger"></span>
+                    <select asp-for="Subjects[i].Armed" asp-items="Html.GetEnumSelectList(typeof(TimelineinfoEnums.ArmedEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
+                    <span asp-validation-for="Subjects[i].Armed" class="text-danger"></span>
                 </div>
                 <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;">
                     <span aria-hidden="true">×</span>
@@ -30,12 +29,12 @@
             <div class="form-row position-relative">
                 <div class="col-6">
                     <label class="control-label">Race:<span class="text-danger ml-1">*</span></label>
-                    <select asp-for="Subjects[i].Race" asp-items="Html.GetEnumSelectList(typeof(RaceEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
+                    <select asp-for="Subjects[i].Race" asp-items="Html.GetEnumSelectList(typeof(TimelineinfoEnums.RaceEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
                     <span asp-validation-for="Subjects[i].Race" class="text-danger"></span>
                 </div>
                 <div class="col-6">
                     <label class="control-label">Sex:<span class="text-danger ml-1">*</span></label>
-                    <select asp-for="Subjects[i].Sex" asp-items="Html.GetEnumSelectList(typeof(SexEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
+                    <select asp-for="Subjects[i].Sex" asp-items="Html.GetEnumSelectList(typeof(TimelineinfoEnums.SexEnum))" style="width:85%;" class="btn border-dark" type="button" aria-haspopup="true" aria-expanded="false"></select>
                     <span asp-validation-for="Subjects[i].Sex" class="text-danger"></span>
                 </div>
             </div>

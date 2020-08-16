@@ -20,7 +20,7 @@ namespace DataAccessLibrary.DataModels
         }
 
         [Key]
-        public int IdTimelineInfo { get; set; }
+        public int IdTimelineinfo { get; set; }
         [Required]       
         [MaxLength(10)]
         [DataType(DataType.Date)]
@@ -40,11 +40,11 @@ namespace DataAccessLibrary.DataModels
         public string SubmittedBy { get; set; }
         public byte Verified { get; set; }
 
-        [InverseProperty("IdTimelineInfoNavigation")]
+        [InverseProperty("IdTimelineinfoNavigation")]
         public virtual ICollection<Edits> Edits { get; set; }
-        [InverseProperty("IdTimelineInfoNavigation")]
+        [InverseProperty("IdTimelineinfoNavigation")]
         public virtual ICollection<Flagged> Flagged { get; set; }
-        [InverseProperty("IdTimelineInfoNavigation")]
+        [InverseProperty("IdTimelineinfoNavigation")]
         public virtual ICollection<Log> Log { get; set; }
         [InverseProperty("IdTimelineinfoNavigation")]
         public virtual ICollection<Media> Media { get; set; }
