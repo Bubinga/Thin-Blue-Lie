@@ -53,6 +53,7 @@
 
   <ItemGroup>
     <Folder Include="DataAccess\" />
+    <Folder Include="Components\" />
     <Folder Include="Pages\Test\" />
     <Folder Include="Views\" />
     <Folder Include="wwwroot\8CantWait\" />
