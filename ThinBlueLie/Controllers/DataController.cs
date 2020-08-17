@@ -272,8 +272,11 @@ namespace ThinBlueLie.Controllers
         {
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
             // IList<Timelineinfo> SimilarEvents = _datacontext.Timelineinfo.Where(t => t.Date.Equals(TempDate)).ToList();
-            //ViewData["SimilarEvents"] = SimilarEvents;
-            ViewData["SimilarEvents"] = null;
+            IList<Timelineinfo> SimilarEvents = _datacontext
+                                                .Timelineinfo
+                                                .FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{TempDate}'")
+                                                .ToList();
+            ViewData["SimilarEvents"] = SimilarEvents;
             return PartialView("_SimilarPartial");
         }
         [Route("/Submit/GetOfficer")]
