@@ -311,7 +311,7 @@ namespace DataAccessLibrary.DataAccess
 
             OnModelCreatingPartial(modelBuilder);
         }
-
+        
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

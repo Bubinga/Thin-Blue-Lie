@@ -49,6 +49,7 @@ namespace ThinBlueLie
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            services.AddServerSideBlazor();
             services.AddMvc();
             services.AddControllers();
             services.AddRazorPages()
@@ -92,6 +93,7 @@ namespace ThinBlueLie
             {
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
+                endpoints.MapBlazorHub();
             });
         }
     }
