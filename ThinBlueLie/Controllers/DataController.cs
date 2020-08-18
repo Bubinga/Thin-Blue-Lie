@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ThinBlueLie.Pages;
@@ -271,11 +273,23 @@ namespace ThinBlueLie.Controllers
         public PartialViewResult GetSimilar(string? TempDate)
         {
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
-            // IList<Timelineinfo> SimilarEvents = _datacontext.Timelineinfo.Where(t => t.Date.Equals(TempDate)).ToList();
-            IList<Timelineinfo> SimilarEvents = _datacontext
-                                                .Timelineinfo
-                                                .FromSqlRaw($"SELECT * FROM `thin-blue-lie`.timelineinfo WHERE Date = '{TempDate}'")
-                                                .ToList();
+            List<object> SimilarEvents = new List<object>();
+            var SimilarTimelineinfos = _datacontext.Timelineinfo.FromSqlRaw("SELECT t.Date, t.IdTimelineinfo, t.Context, t.State, t.City, t.Verified, t.SubmittedBy From timelineinfo t where t.date = {0};", TempDate).ToList();
+            foreach ((var Event, Int32 i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))
+            {
+                var id = Event.IdTimelineinfo;
+                var Officers = _datacontext.Officers.FromSqlRaw("SELECT o.Name, o.Race, o.Sex, o.IdOfficer FROM timelineinfo JOIN timelineinfo_officer ON timelineinfo.IdTimelineinfo = timelineinfo_officer.IdTimelineinfo JOIN officers o ON timelineinfo_officer.IdOfficer = o.IdOfficer WHERE timelineinfo.IdTimelineinfo = {0}",id).ToList();
+                var Subjects = _datacontext.Subjects.FromSqlRaw("SELECT o.Name, o.Race, o.Sex, o.IdSubject FROM timelineinfo JOIN timelineinfo_subject ON timelineinfo.IdTimelineinfo = timelineinfo_subject.IdTimelineinfo JOIN subjects o ON timelineinfo_subject.IdSubject = o.IdSubject WHERE timelineinfo.IdTimelineinfo = {0}", id).ToList();
+                var Media = _datacontext.Media.FromSqlRaw("Select * From media m Where(m.IdTimelineinfo = {0}); ",id).ToList();
+                //add timelineinfos, officers, subject, and media to list at end
+                var ListEvent = new List<object>();
+                SimilarEvents.AddRange(new List<object>() {Event, Officers, Subjects, Media });
+                //SimilarEvents.Add(Event);
+                //SimilarEvents.Add(Officers);
+                //SimilarEvents.Add(Subjects);
+                //SimilarEvents.Add(Media);
+            }
+            //IList<Timelineinfo> SimilarEvents = _datacontext.Timelineinfo.FromSqlRaw("GetStudents").ToList();
             ViewData["SimilarEvents"] = SimilarEvents;
             return PartialView("_SimilarPartial");
         }
