@@ -5,7 +5,7 @@ using DataAccessLibrary.DataModels;
 
 namespace DataAccessLibrary.DataAccess
 {
-    public partial class DataContext : DbContext
+    public partial class DataContext : UserContext
     {
         public DataContext()
         {
@@ -19,7 +19,7 @@ namespace DataAccessLibrary.DataAccess
         public virtual DbSet<EditMedia> EditMedia { get; set; }
         public virtual DbSet<Edits> Edits { get; set; }
         public virtual DbSet<Flagged> Flagged { get; set; }
-        public virtual DbSet<Log> Log { get; set; }
+        public virtual DbSet<Log> Log { get; set; }           
         public virtual DbSet<Media> Media { get; set; }
         public virtual DbSet<Officers> Officers { get; set; }
         public virtual DbSet<Subjects> Subjects { get; set; }

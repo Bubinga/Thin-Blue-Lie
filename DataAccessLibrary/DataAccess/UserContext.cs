@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DataAccessLibrary.DataAccess
 {
-    public partial class UserContext : IdentityDbContext
+    public partial class UserContext : DbContext
     {
         public UserContext()
         {
         }
 
-        public UserContext(DbContextOptions<UserContext> options)
+        public UserContext(DbContextOptions options)
             : base(options)
         {
         }

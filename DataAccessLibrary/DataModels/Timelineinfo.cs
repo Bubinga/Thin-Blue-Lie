@@ -30,14 +30,17 @@ namespace DataAccessLibrary.DataModels
         [Required]
         [Column(TypeName = "varchar(20)")]
         public string City { get; set; }
+        [NotMapped]
         public byte Misconduct { get; set; }
+        [NotMapped]
         public byte? Weapon { get; set; }
         [Required]
         [Column(TypeName = "mediumtext")]
         public string Context { get; set; }
+        [NotMapped]
         public byte Locked { get; set; }
-        [Column(TypeName = "varchar(255)")]
-        public string SubmittedBy { get; set; }
+        [NotMapped]
+        public string SubmittedBy { get; set; }        
         public byte Verified { get; set; }
 
         [InverseProperty("IdTimelineinfoNavigation")]

@@ -10,7 +10,9 @@ namespace DataAccessLibrary.DataModels
     public partial class Media
     {
         [Key]
+        [NotMapped]
         public int IdMedia { get; set; }
+        [NotMapped]
         public int IdTimelineinfo { get; set; }
         public byte MediaType { get; set; }
         [Required]
@@ -21,8 +23,10 @@ namespace DataAccessLibrary.DataModels
         [Required]
         [MaxLength(250)]
         [Column(TypeName = "tinytext")]
+        [NotMapped]
         public string Blurb { get; set; }
         [Column(TypeName = "varchar(255)")]
+        [NotMapped]
         public string SubmittedBy { get; set; }
 
         [ForeignKey(nameof(IdTimelineinfo))]
