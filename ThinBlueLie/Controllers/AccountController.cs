@@ -15,17 +15,14 @@ namespace ThinBlueLie.Controllers
     public class AccountController : Controller
     {
         private readonly UserContext _usercontext;
-        private readonly DataContext _datacontext;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
-        public AccountController(UserContext usercontext,
-                                 DataContext datacontext,
+        public AccountController(UserContext usercontext,                       
                                  UserManager<IdentityUser> userManager,
                                  SignInManager<IdentityUser> signInManager)
         {
-            _usercontext = usercontext;
-            _datacontext = datacontext;
+            _usercontext = usercontext;            
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -39,8 +36,8 @@ namespace ThinBlueLie.Controllers
             log.UserId = idUser;
            // log.IdUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
            // log.IdTimelineinfo = 8;
-            _datacontext.Log.Add(log);
-            _datacontext.SaveChanges();
+          //  _datacontext.Log.Add(log);
+           // _datacontext.SaveChanges();
             //  return Ok(true);
         }
 

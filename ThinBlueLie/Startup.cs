@@ -25,12 +25,7 @@ namespace ThinBlueLie
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {            
-            services.AddDbContext<DataContext>(options =>
-            {
-                options.UseMySql(Configuration.GetConnectionString("DataDB"), MySqlOptions => MySqlOptions
-                .ServerVersion(new Version(8, 0, 18), ServerType.MySql));
-            });
+        {
             services.AddDbContext<UserContext>(options =>
             {
                 options.UseMySql(Configuration.GetConnectionString("UserDB"), MySqlOptions => MySqlOptions
@@ -41,13 +36,15 @@ namespace ThinBlueLie
                 .AddEntityFrameworkStores<UserContext>()
                 .AddDefaultTokenProviders();
 
-
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
             });
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            services.AddSingleton<IUserAccess, UserAccess>();
+            services.AddSingleton<IDataAccess, DataAccess>();
 
             services.AddServerSideBlazor();
             services.AddMvc();
