@@ -21,19 +21,16 @@ namespace ThinBlueLie.Controllers
 {
     public class DataController : Controller
     {
-        private readonly DataContext _datacontext;
         private readonly UserContext _usercontext;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IMapper _mapper;
 
-        public DataController(DataContext datacontext,
-                                 UserContext usercontext,
+        public DataController(UserContext usercontext,
                                  UserManager<IdentityUser> userManager,
                                  SignInManager<IdentityUser> signInManager,
                                  IMapper mapper)
         {
-            _datacontext = datacontext;
             _usercontext = usercontext;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -47,7 +44,7 @@ namespace ThinBlueLie.Controllers
             log.IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
             log.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             log.IdTimelineinfo = IdTimeline;
-            _datacontext.Log.Add(log);
+            //_datacontext.Log.Add(log);
             //  return Ok(true);
         }
 
