@@ -14,6 +14,442 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
+.row.fix {
+    margin: auto !important;
+}
+
+.nogap {
+    margin: 0px;
+    padding: 0px;
+}
+
+.indent {
+    text-indent: 3rem;
+}
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+
+/* Month */
+table {
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Times, serif;
+}
+
+th {
+    border: 1px solid #A8A8A8;
+    vertical-align: top;
+}
+
+td {
+    height: 1.2em;
+    width: 10em;
+    padding: 8px;
+    border: 1px solid #A8A8A8;
+    vertical-align: top;
+}
+
+.divcalendar {
+    padding: 15px;
+    float: left;
+    /*background-color: #FFCC00;*/
+}
+
+/* Wrapper div. That makes the inner div into an inline element that can be centered with text-align.*/
+#calendaroverallcontrols {
+    text-align: center;
+}
+
+/* This is a fluid div as width will be changing */
+#calendarmonthcontrols {
+    display: inline-block;
+    /*background-color: #FF0000;*/
+}
+
+    #calendarmonthcontrols > div, #calendarmonthcontrols > a {
+        display: inline-block;
+    }
+
+#prevmonthdates, #nextmonthdates {
+    background-color: #808080;
+}
+
+
+@media (min-width: 25em) {
+
+    /* html, body {
+        overflow-x: hidden;
+    }*/
+
+    body {
+        position: relative;
+    }
+}
+
+hr.blueline {
+    border: none;
+    height: 2px;
+    /* Set the hr color */
+    color: #314DB2; /* old IE */
+    background-color: #314DB2; /* Modern Browsers */
+}
+
+
+
+/*Index page */
+.body {
+    padding: 70px;
+    margin: 0px;
+}
+
+.home.jumbotron {
+    background-size: cover !important;
+    background-color: #919191;
+    width: 100%;
+    border-radius: 0px !important;
+    padding-top: 11rem !important;
+    padding-bottom: 2rem !important;
+    margin-bottom: 0px;
+    margin-top: 0px !important;
+}
+
+@media (max-width: 480px) {
+    .home.jumbotron {
+        padding-bottom: 70px;
+    }
+}
+
+/*card columns */
+@media (min-width: 20em) {
+    .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+}
+
+@media (min-width: 48em) {
+    .card-columns {
+        -webkit-column-count: 3;
+        -moz-column-count: 3;
+        column-count: 3;
+    }
+}
+
+@media (min-width: 62em) {
+    .card-columns {
+        -webkit-column-count: 4;
+        -moz-column-count: 4;
+        column-count: 4;
+    }
+}
+
+@media (min-width: 75em) {
+    .card-columns {
+        -webkit-column-count: 4;
+        -moz-column-count: 4;
+        column-count: 4;
+    }
+}
+/*Navbar */
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+    background-size: contain;
+}
+
+.navbar-brand span {
+    vertical-align: middle;
+    padding: 0 0 0 15px;
+}
+
+/* changing color and underline on hover */
+.navbar-nav .nav-item.active .nav-link,
+.navbar-nav .nav-item:hover .nav-link {
+    text-decoration: underline !important;
+}
+
+/* depressing navbar link based on what page user is on */
+.onpage {
+    text-decoration: none;
+    background-color: #2B3035;
+    border-radius: 3px;
+}
+
+
+
+/* Fuck 12 */
+.fuck12.jumbotron {
+    background-color: transparent !important;
+    color: white;
+}
+/* Timeline Layout */
+.week {
+    background-color: #dedede;
+    border: 0px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-radius: 0px;
+    padding-top: 1px;
+    height: 31px;
+    cursor: pointer !important;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+#imposedline {
+    border-top: 1px solid black;
+    color: #dee2e6;
+    position: absolute;
+    z-index: 10;
+    top: 38px;
+    left: 10%;
+}
+
+.btn.active {
+    background-color: #919191;
+}
+
+.brokencard {
+    border: none;
+}
+
+card.header {
+    font-size: 1rem;
+}
+
+
+.timeline-label {
+    position: absolute !important;
+    top: -25px !important;
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+    left: 0px;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.btn.week.focus, .btn.week.active {
+    box-shadow: none;
+    outline: #919191 solid 3px;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+
+.embed-responsive-2by1::before {
+    padding-top: 50%;
+}
+
+@media (max-width: 30em) {
+    #format-select {
+        display: none;
+    }
+}
+
+.context {
+    font-size: 1.2rem;
+}
+
+
+/*Side nav bars */
+
+.feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+}
+
+/*
+ * Sidebar
+*/
+
+.sidebar {
+    position: sticky;
+    top: 48px;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    min-width: 200px;
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 48px;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+    .sidebar-sticky {
+        position: -webkit-sticky;
+        position: sticky;
+    }
+}
+
+.sidebar .nav-link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #007bff;
+    padding-bottom: 3px;
+}
+
+    .sidebar .nav-link:hover {
+        text-decoration: underline;
+    }
+
+    .sidebar .nav-link .feather {
+        margin-right: 4px;
+        color: #999;
+    }
+
+    .sidebar .nav-link.active {
+        border-right: 3px solid blue;
+    }
+
+        .sidebar .nav-link:hover .feather,
+        .sidebar .nav-link.active .feather {
+            color: inherit;
+        }
+
+.sidebar-heading {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    margin-top: .6rem;
+    margin-bottom: .3rem;
+}
+
+/*
+        * Content
+        */
+
+[role="main"] {
+    padding-top: 48px; /* Space for fixed navbar */
+}
+
+/*
+        * Navbar
+        */
+
+.navbar .form-control {
+    padding: .75rem 1rem;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.form-control-dark {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .1);
+}
+
+    .form-control-dark:focus {
+        border-color: transparent;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+    }
+
+
+
+/* Card settings */
+li p {
+    color: black;
+}
+/* Scrollbar gone but functionality remaining */
+.noscrollbar::-webkit-scrollbar {
+    display: none !important;
+}
+
+.noscrollbar {
+    -ms-overflow-style: none !important;
+}
+
+
+
+
+/* Provide sufficient contrast against white background */
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+    min-width: 100%;
+}
+
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+/* For Debugging */
+
+/** {
+    background: #000 !important;
+    color: #0f0 !important;
+    outline: solid #f00 1px !important;
+}*/
+
+
+
 app {
     position: relative;
     display: flex;
@@ -172,9 +608,9 @@ app {
         padding-right: 1.5rem !important;
     }
 
-    .navbar-toggler {
+    /*.navbar-toggler {
         display: none;
-    }
+    }*/
 
     .sidebar .collapse {
         /* Never collapse the sidebar for wide screens */

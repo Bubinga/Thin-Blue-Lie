@@ -7,12 +7,12 @@
 {
     <li class="nav-item dropdown">
         <form method="post">
-            <a class="nav-link dropdown-toggle text-white" id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle text-white" href="/Account/Profile" id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 @User.Identity.Name
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" asp-page="/Account/Manage">Manage</a>
-                <a class="dropdown-item" asp-action="logout" asp-controller="account">Log Out</a>
+                <a class="dropdown-item" href="/Account/Manage">Manage</a>
+                <button type="submit" action="/Account/LogOut" class="nav-link btn btn-link">Log out</button>
             </div>
         </form>
     </li>
@@ -25,8 +25,8 @@ else
                 Account
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" asp-action="login" asp-controller="account">Login</a>
-                <a class="dropdown-item" asp-action="register" asp-controller="account">Register</a>
+                <a class="dropdown-item" href="/Account/Login">Login</a>
+                <a class="dropdown-item" href="/Account/Register">Register</a>
             </div>
         </form>
     </li>
