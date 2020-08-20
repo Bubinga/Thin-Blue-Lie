@@ -1,12 +1,26 @@
 ﻿<AuthorizeView>
-    <Authorized>
-        <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
-        <form method="post" action="Identity/Account/LogOut">
-            <button type="submit" class="nav-link btn btn-link">Log out</button>
-        </form>
+    <Authorized>       
+        <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="/Account/Profile" id="Account" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @context.User.Identity.Name
+                </a>
+                <div class="dropdown-menu" aria-labelledby="AccountDropdown">
+                    <a class="dropdown-item" href="/Account/Manage">Manage</a>
+                    <button type="submit" action="/Account/LogOut" class="nav-link btn btn-link">Log out</button>
+                </div>
+        </div>
     </Authorized>
-    <NotAuthorized>
-        <a href="Identity/Account/Register">Register</a>
-        <a href="Identity/Account/Login">Log in</a>
+    <NotAuthorized>   
+        <NavLink>
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle text-white" id="Account" href="/Account/Profile" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Account
+                </a>
+                <div class="dropdown-menu" aria-labelledby="AccountDropdown">
+                    <a class="dropdown-item" href="/Account/Login">Login</a>
+                    <a class="dropdown-item" href="/Account/Register">Register</a>
+                </div>
+            </div>
+        </NavLink>       
     </NotAuthorized>
 </AuthorizeView>

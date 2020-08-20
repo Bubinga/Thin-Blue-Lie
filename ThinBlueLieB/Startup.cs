@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ThinBlueLieB.Areas.Identity;
+using ThinBlueLieB.Identity;
 using ThinBlueLieB.Data;
 using DataAccessLibrary.DataAccess;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
