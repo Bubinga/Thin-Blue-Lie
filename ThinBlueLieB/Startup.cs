@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ThinBlueLieB.Areas.Identity;
 using ThinBlueLieB.Data;
+using DataAccessLibrary.DataAccess;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace ThinBlueLieB
 {
@@ -31,11 +33,13 @@ namespace ThinBlueLieB
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<UserDbContext>(options =>
+                options.UseMySql(Configuration.GetConnectionString("UserDB"), MySqlOptions => MySqlOptions
+                .ServerVersion(new Version(8, 0, 18), ServerType.MySql)));
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<UserDbContext>();
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
@@ -49,6 +53,7 @@ namespace ThinBlueLieB
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                app.UseBrowserLink();
             }
             else
             {
