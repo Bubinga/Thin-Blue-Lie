@@ -1,29 +1,55 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">ThinBlueLieB</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
+﻿
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-    </ul>
-</div>
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-dark mb-3">
+    <div class="d-flex flex-grow-1 container-fluid pl-2">
+        <a class="navbar-brand text-white" href="/Index">
+            <img id="logo" alt="" src="/favicon.ico" width="35" height="35" class="d-inline-block">
+            <span style="white-space: nowrap;" class="d-inline-block">Thin Blue Lie</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse text-right d-lg-inline-flex flex-lg-row-reverse">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item" id="Timeline">
+                    <NavLink class="nav-link text-white text-responsive" ActiveClass="onpage" href="/Timeline?d=@DateTime.Today.ToString("yyyy-MM-dd")">Timeline</NavLink>
+                </li>
+                <li class="nav-item" id="Solutions">
+                    <NavLink class="nav-link text-white" href="/Solutions" ActiveClass="onpage">Solutions</NavLink>
+                </li>
+                <li class="nav-item" id="Resources">
+                    <NavLink class="nav-link text-white" href="/Resources" ActiveClass="onpage">Resources</NavLink>
+                </li>
+                <li class="nav-item" id="About">
+                    <NavLink class="nav-link text-white" href="/About" ActiveClass="onpage">About</NavLink>
+                </li>
+            </ul>
+        </div>
+        <div class="navbar-collapse collapse text-right d-lg-inline-flex flex-lg-row-reverse mr-lg-3">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <NavLink class="nav-link dropdown-toggle text-white" href="#" ActiveClass="onpage" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Feedback
+                    </NavLink>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Incorrect information?</a>
+                        <a class="dropdown-item" href="#">General Feedback</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Contact</a>
+                    </div>
+                </li>
+                <li class="nav-item" id="Submit">
+                    <NavLink class="btn btn-outline-success mr-lg-2 mb-lg-0 mb-2 text-nowrap" href="/Submit">Submit Info</NavLink>
+                </li>
+                <li class="nav-item" id="Donate">
+                    <NavLink class="btn btn-outline-primary text-nowrap" ActiveClass="onpage" href="/Donate">Donate</NavLink>
+                </li>
+                <LoginDisplay/>
+            </ul>
+        </div>
+    </div>
+</nav>
 
 @code {
     private bool collapseNavMenu = true;
