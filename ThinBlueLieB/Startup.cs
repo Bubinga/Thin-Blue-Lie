@@ -17,6 +17,7 @@ using ThinBlueLieB.Identity;
 using ThinBlueLieB.Data;
 using DataAccessLibrary.DataAccess;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Syncfusion.Blazor;
 
 namespace ThinBlueLieB
 {
@@ -44,11 +45,14 @@ namespace ThinBlueLieB
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
+            services.AddSyncfusionBlazor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzA2NDMyQDMxMzgyZTMyMmUzMFVGc2cvTmU0d0NMbWZiRjBkZEl2WGlzU3lHdnBIcTNYRHYzYk5OSHRFTDA9");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
