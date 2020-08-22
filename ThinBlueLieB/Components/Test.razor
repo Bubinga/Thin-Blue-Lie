@@ -1,0 +1,33 @@
+﻿@using Syncfusion.Blazor.DropDowns
+
+@if (MultiVal != null)
+{
+    @foreach (var SelectedValue in MultiVal)
+    {
+        <p>MultiSelect value is:<strong>@SelectedValue</strong></p>
+    }
+}
+
+<SfMultiSelect Placeholder="e.g. Australia" @bind-Value="@MultiVal" DataSource="@Country">
+    <MultiSelectFieldSettings Value="Name"></MultiSelectFieldSettings>
+</SfMultiSelect>
+
+@code {
+
+    public string[] MultiVal { get; set; } = new string[] { };
+
+    public class Countries
+    {
+        public string Name { get; set; }
+
+        public string Code { get; set; }
+    }
+
+    List<Countries> Country = new List<Countries>
+{
+        new Countries() { Name = "Australia", Code = "AU" },
+        new Countries() { Name = "Bermuda", Code = "BM" },
+        new Countries() { Name = "Canada", Code = "CA" },
+        new Countries() { Name = "Cameroon", Code = "CM" },
+    };
+}
