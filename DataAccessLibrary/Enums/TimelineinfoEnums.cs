@@ -35,27 +35,27 @@ namespace DataAccessLibrary.Enums
         }
 
         public enum RaceEnum : short
-        {
-            Unclear,
+        {            
             White,
             Black,
             Hispanic,
             Asian,
             Native,
-            Multiracial
+            Multiracial,
+            Unclear
         }
         [Flags]
         public enum MisconductEnum : short
         {
-            Force = 0b_0000_0001,
-            PetMurder = 0b_0000_0001,
-            Evidence = 0b_0000_1000,
-            Harassment = 0b_0010_0000,
-            Negligence = 0b_0100_0000,
-            Theft = 0b_0001_0000,
-            Search = 0b_0000_0001,
-            FalseArrest = 0b_0000_0100,
-            AbusePower = 0b_0000_0001,
+            Force = 1,
+            PetMurder = 2,
+            Evidence = 4,
+            Harassment = 8,
+            Negligence = 16,
+            Theft = 32,
+            Search = 64,
+            FalseArrest = 128,
+            AbusePower = 256,
         }
 
         [Flags]
