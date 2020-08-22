@@ -13,6 +13,8 @@ namespace DataAccessLibrary.DataModels
         public int IdTimelineinfoOfficer { get; set; }
         public int IdTimelineinfo { get; set; }
         public int IdOfficer { get; set; }
+        public int Misconduct { get; set; }
+        public int? Weapon { get; set; }
 
         [ForeignKey(nameof(IdOfficer))]
         [InverseProperty(nameof(Officers.TimelineinfoOfficer))]

@@ -30,10 +30,8 @@ namespace DataAccessLibrary.DataModels
         [Required]
         [Column(TypeName = "varchar(20)")]
         public string City { get; set; }
-        [NotMapped]
-        public byte Misconduct { get; set; }
-        [NotMapped]
-        public byte? Weapon { get; set; }
+        //public byte Misconduct { get; set; }
+        //public byte? Weapon { get; set; }
         [Required]
         [Column(TypeName = "mediumtext")]
         public string Context { get; set; }

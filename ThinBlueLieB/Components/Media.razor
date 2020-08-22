@@ -1,0 +1,90 @@
+﻿@using DataAccessLibrary.Enums;
+@using ThinBlueLieB.Models;
+@using Syncfusion.Blazor.DropDowns
+@using System.Linq
+@using DataAccessLibrary.DataModels
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+
+<style>
+    .e-file-select-wrap{
+        padding: 0.2rem;
+    }
+</style>
+
+<div class="AddMedia">
+    <div class="card border-dark mb-3 ml-2">
+        <div class="card-body text-dark row pt-0">
+            <div name="mediaAdd" class="container-fluid px-4">               
+                    <div class="form-row position-relative">
+                        <div class="col-6 dropdown my-2 pr-2">
+                            <SfDropDownList TItem="ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Type of Media" @bind-Value="@media.MediaType" DataSource="@MediaTypes">
+                                <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                        <div class="col-6 dropdown my-2 pl-2">
+                            <SfDropDownList TItem="ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Source Location" @bind-Value="@media.SourceFrom" DataSource="@SourceFromOptions">
+                                <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                        <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="form-row align-middle mb-2 pl-1">
+                        <SfTextBox CssClass="e-filled" Placeholder="Provide a brief description" FloatLabelType="@FloatLabelType.Auto" @bind-Value="media.Blurb"></SfTextBox>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-5">
+                            @if (media.SourceFrom == 6)
+                            {
+                                <div class="form-group MediaFile">
+                                    <SfUploader ID="UploadFiles"CssClass="e-filled mt-2" DropArea=".control-fluid">
+                                        <UploaderEvents OnRemove="OnFileRemove"></UploaderEvents>
+                                        <UploaderAsyncSettings SaveUrl="https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save" RemoveUrl="https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove"></UploaderAsyncSettings>
+                                    </SfUploader>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group MediaLink">
+                                    <SfTextBox CssClass="e-filled" Placeholder="Link your Media here" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
+                                </div>
+                            }
+                        </div>
+                        <div class="ml-3 col-6">
+                            <label class="form-check-label">
+                                Is there any blood or gore in the video?<span class="text-danger ml-1">*</span>                               
+                            </label>
+                            <div class="row">
+                                <div class="form-check m-2 d-inline">
+                                    <SfRadioButton Label="No" Name="Gore" Value="0" Checked="@media.Gore"></SfRadioButton>
+                                </div>
+                                <div class="form-check m-2 d-inline">
+                                    <SfRadioButton Label="Yes" Name="Gore" Value="1" Checked="@media.Gore"></SfRadioButton>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    public class ListItem
+    {
+        public int Value { get; set; }
+        public string Text { get; set; }
+    }
+    private ViewMedia media = new ViewMedia();
+
+    List<ListItem> MediaTypes = Enum.GetValues(typeof(MediaEnums.MediaTypeEnum)).Cast<MediaEnums.MediaTypeEnum>().Select(
+                           x => new ListItem { Text = x.ToString(), Value = (int)x }).ToList();
+    List<ListItem> SourceFromOptions = Enum.GetValues(typeof(MediaEnums.SourceFromEnum)).Cast<MediaEnums.SourceFromEnum>().Select(
+                           x => new ListItem { Text = x.ToString(), Value = (int)x }).ToList();
+
+    public void OnFileRemove(RemovingEventArgs args)
+    {
+        args.PostRawFile = false;
+    }
+}
