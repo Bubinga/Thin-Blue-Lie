@@ -1,0 +1,46 @@
+﻿@using ThinBlueLieB.Helper
+
+
+@if (People.Count == 0)
+{
+    <div class="container mt-2" style="min-height:100px;">
+        <h5>There are no similar People!</h5>
+    </div>
+}
+@foreach (var Person in People)
+{
+    <div id="likePeople">
+        <div class="card border-dark mb-3 px-0">
+            <div class="card-header d-flex container ">
+                <div>
+                    <span class="name">@Person.Name</span>
+                </div>
+                <div class="ml-auto">
+                    <span class="race">@Enum.GetName(typeof(TimelineinfoEnums.RaceEnum), Person.Race)</span>
+                    <span class="sex">@Enum.GetName(typeof(TimelineinfoEnums.SexEnum), Person.Sex)</span>
+                </div>
+            </div>
+            <div class="card-body text-dark mt-0 pb-1">
+                <ul class="container">
+                    @foreach (var item in Person.Events)
+                    {
+                        <li class="event">
+                            <a href="#">
+                                <span>@item.Date</span>
+                                <span>@item.City</span>
+                                <span>@Enum.GetName(typeof(TimelineinfoEnums.StateEnum), item.State)</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@code {  
+    [Parameter]
+    public string InputName { get; set; }
+    List<Person> People = Searches.SearchGroup("Test");
+        
+}
