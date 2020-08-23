@@ -54,6 +54,7 @@ namespace DataAccessLibrary.Enums
             Negligence = 16,
             Theft = 32,
             Search = 64,
+            [Display(Name = "False Arrest")]
             FalseArrest = 128,
             AbusePower = 256,
         }

@@ -45,6 +45,7 @@ namespace ThinBlueLieB
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<IDataAccess, DataAccess>();
             services.AddSyncfusionBlazor();
         }
 

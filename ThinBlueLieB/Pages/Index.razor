@@ -1,16 +1,24 @@
 ﻿@page "/"
-
+@using DataAccessLibrary.DataModels
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
 <div class="row">
     <div class="col-7">
-        <Media></Media>
+        <EditForm Model="test">
+            <InputText @bind-Value="test.Timelineinfos.City"></InputText>
+        </EditForm>
     </div>
 </div>
 <SurveyPrompt Title="How is Blazor working for you?" />
 
 
 @code {
-   
+    public testmodel test = new testmodel();
+
+    public class testmodel
+    {
+        public string Name { get; set; }
+        public Timelineinfo Timelineinfos { get; set; }
+    };
 }
