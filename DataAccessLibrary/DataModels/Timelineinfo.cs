@@ -25,7 +25,7 @@ namespace DataAccessLibrary.DataModels
         [MaxLength(10)]
         [DataType(DataType.Date)]
         [Column(TypeName = "char(10)")]
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public byte State { get; set; }
         [Required]
         [Column(TypeName = "varchar(20)")]

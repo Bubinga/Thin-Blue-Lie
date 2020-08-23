@@ -1,0 +1,156 @@
+﻿@page "/Submit"
+@inherits SubmitBase
+
+@using Microsoft.AspNetCore.Mvc;
+@using ThinBlueLieB.Models;
+@using Syncfusion.Blazor.DropDowns
+@using DataAccessLibrary.Enums
+@using System.Linq
+@using DataAccessLibrary.DataModels
+@using Syncfusion.Blazor.RichTextEditor
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    form {
+        display: inherit;
+    }
+</style>
+<div class="offset-lg-3 row container-fluid">
+    <EditForm Model="model" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="col-lg-4 col-md-5 border-left border-right border-bottom">
+            <div class="d-block mb-0 pt-3 border-bottom">
+                <h4 class="mb-0">Information Submission Form</h4>
+            </div>
+            <div>
+                <div class="form-group">
+                    <div id="datepicker-control">
+                        <SfDatePicker TValue="DateTime" @bind-Value="@model.Timelineinfos.Date" Min="@MinDate" Max="@Today"></SfDatePicker>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-5 dropdown" style="position:relative;">
+                    <SfDropDownList TItem="ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                        <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                </div>
+                <div class="col-7">
+                    <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.City"></SfTextBox>
+                </div>
+            </div>
+            <hr /> <h6>
+                Fill out the following information for the Subject/Victim
+                <button class="btn btn-primary mx-auto" id="MoreSubjects">
+
+                    @*<i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>*@
+                </button>
+            </h6>
+            <div id="SubjectList">
+                @*<Subject></Subject>*@
+            </div>
+            <hr /> <h6>
+                Fill out the following information for the Officer
+                <button class="btn btn-primary mx-auto" id="MoreOfficers">
+
+                    @*<i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>*@
+                </button>
+            </h6>
+            <div id="OfficerList">
+                @*<Officer></Officer>*@
+            </div>
+            <hr />
+            <div class="form-group">
+                <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, if there were more people involved, if there was any followup to the event or coverage in the news, etc.</label>
+                <SfRichTextEditor EditorMode="EditorMode.Markdown">
+                    <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
+
+                </SfRichTextEditor>
+            </div>
+            <div class="form-group">
+                <input id="submit" type="button" value="Submit" class="btn btn-primary" />
+                <a asp-page="/Index" style="float:right">Back to Home</a>
+            </div>
+        </div>
+    </EditForm>
+    <div class="col-lg-5 col-md-5">
+        <div class="row">
+            <div class="container-fluid d-block">
+                <h4 class="pt-2">Similar Videos</h4>
+                <p class="mb-0" style="font-size:1em">
+                    Here are similar pages that share some similarities with the information you are filling out,
+                    either a date, name, video, or some combination of the three
+                </p>
+                <hr />
+                <div id="VideoList">
+                    @*<partial name="_SimilarPartial" />*@
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-block border-top container-fluid">
+                <h4 class="pt-2">Add Media</h4>
+                <p class="mb-0" style="font-size:1em">
+                    Add Media relavent to the event, such as videos, images, news articles, etc.
+                </p>
+                <hr />
+            </div>
+            <div id="MediaList">
+                @*<partial name="_MediaPartial" />*@
+            </div>
+            <div>
+                <div class="container">
+                    <button class="btn btn-primary mx-auto" id="MoreMedia">
+                        Media
+                        @*<i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>*@
+                    </button>
+                    @*<input type="submit" value="submit" class="btn btn-primary" />*@
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+@code {
+    public SubmitModel model = new SubmitModel() {
+        Timelineinfos = new Timelineinfo(),
+        Medias = new List<ViewMedia>(),
+        Officers = new List<ViewOfficer>(),
+        Subjects = new List<ViewSubject>()
+    };
+
+    public object[] Tools = new object[]{
+        "Bold", "Italic", "Underline", "SubScript", "SuperScript", "StrikeThrough",
+        "FontName", "FontSize", "FontColor",
+        "LowerCase", "UpperCase", "|",
+        "Formats", "Alignments", "OrderedList", "UnorderedList",
+        "Outdent", "Indent", "|", "CreateTable",
+        "CreateLink", "|", "ClearFormat",
+        "SourceCode", "FullScreen", "|", "Undo", "Redo"
+    };
+
+    public class ListItem
+    {
+        public int Value { get; set; }
+        public string Text { get; set; }
+    }
+    List<ListItem> States = Enum.GetValues(typeof(TimelineinfoEnums.StateEnum)).Cast<TimelineinfoEnums.StateEnum>().Select(
+                     x => new ListItem { Text = EnumExtensions.GetEnumDisplayName((TimelineinfoEnums.StateEnum)x), Value = (int)x }).ToList();
+    public DateTime Today { get; set; } = new DateTime(DateTime.Today.Year, DateTime.Now.Month, DateTime.Today.Day);
+    public DateTime MinDate { get; set; } = new DateTime(1950, 1, 1);
+
+    protected async Task HandleValidSubmit()
+    {
+        throw new NotImplementedException();
+    }
+    //add login suggestion
+
+}
+
+
+
+
+
