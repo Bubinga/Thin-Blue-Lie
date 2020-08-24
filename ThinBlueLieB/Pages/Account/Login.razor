@@ -12,10 +12,9 @@
             Login
             <a class="float-right" href="/Account/Register">Register</a>
         </div>
-        <EditForm Model="@loginModel">
+        <EditForm Model="@loginModel" OnValidSubmit="HandleValidSubmit">
             <div class="card-body text-secondary">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
+                <DataAnnotationsValidator />                
                 <div class="form-group">
                     <label for="Email" class="control-label">Email</label>
                     <InputText @bind-Value="loginModel.Email" class="form-control" />
