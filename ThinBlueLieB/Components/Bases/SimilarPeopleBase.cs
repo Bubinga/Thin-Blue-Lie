@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ThinBlueLieB.Helper;
 using ThinBlueLieB.Models;
 
 
@@ -12,15 +13,14 @@ namespace ThinBlueLieB.Components.Bases
 {
     public class SimilarPeopleBase : ComponentBase
     {
-        private readonly IConfiguration _config;
-
-        public SimilarPeopleBase(IConfiguration configuration)
+        [Parameter]
+        public string InputName { get; set; }
+        public string Input = "test";
+        public List<SimilarPerson> People = new List<SimilarPerson>();
+        protected async Task<List<SimilarPerson>> GetPeople(string InputName)
         {
-            _config = configuration;
-        }
-        DataAccess data = new DataAccess();
-        string sql = "SELECT * FROM officers";
-        //List<Person> People = await data.LoadData<Person, dynamic>(sql, new { }, _config.GetConnectionString("DataDB"));
-       
+            People = await Searches.SearchOfficer(Input);
+            return People;
+        }         
     }
 }
