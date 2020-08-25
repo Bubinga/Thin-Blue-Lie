@@ -1,16 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Components;
 
-namespace ThinBlueLie.Models
+namespace ThinBlueLieB.Helper
 {
     public static class Extensions
     {
@@ -41,5 +36,18 @@ namespace ThinBlueLie.Models
             var q = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
             return q[parmName] ?? "";
         }
+        public class ListItem
+        {
+            public int Value { get; set; }
+            public string Text { get; set; }
+        }
+        public static class GetDropdownList<TEnum>
+         where TEnum : struct, Enum
+        {
+            private static readonly IReadOnlyList<ListItem> _items = Enum.GetValues(typeof(TEnum)).Cast<TEnum>().Select(e => new ListItem() { Text = e.ToString(), Value = Convert.ToInt32(e) }).ToList();
+
+            public static IReadOnlyList<ListItem> Items => _items;
+        }
+
     }
 }

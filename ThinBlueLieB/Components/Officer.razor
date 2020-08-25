@@ -4,7 +4,7 @@
 @using System.Linq
 @using DataAccessLibrary.DataModels 
 
-<div class="AddOfficer">
+<div class="AddOfficer mt-2">
     <div class="card border-dark mb-3 mx-auto">
         <div class="card-body text-dark pt-2">
             <div class="form-row position-relative">
@@ -34,15 +34,7 @@
                     </label>
                     <SfMultiSelect TValue="int[]" Mode="@VisualMode.Box" Placeholder="Miconducts" @bind-Value="@MisconductsVal" DataSource="@MisconductsList">
                         <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
-                    </SfMultiSelect>
-                    @if (MisconductsVal != null)
-                    {
-                        <strong>@MisconductsVal.Sum()</strong>
-                        @foreach (var SelectedValue in MisconductsVal)
-                        {
-                            <p>MultiSelect value is:<strong>@SelectedValue</strong></p>
-                        }
-                    }
+                    </SfMultiSelect>                    
                 </div>
                 <div class="col-6">
                     <label class="form-check-label">
@@ -50,15 +42,7 @@
                     </label>
                     <SfMultiSelect TValue="int[]" Mode="@VisualMode.Box" Placeholder="Weapons" @bind-Value="@WeaponsVal" DataSource="@WeaponsList">
                         <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
-                    </SfMultiSelect>
-                    @if (WeaponsVal != null)
-                    {
-                        <strong>@WeaponsVal.Sum()</strong>
-                        @foreach (var SelectedValue in WeaponsVal)
-                        {
-                            <p>MultiSelect value is:<strong>@SelectedValue</strong></p>
-                        }
-                    }
+                    </SfMultiSelect>                  
                 </div>
             </div>
         </div>

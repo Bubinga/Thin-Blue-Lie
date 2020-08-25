@@ -1,6 +1,5 @@
 ﻿using DataAccessLibrary.DataAccess;
-using Microsoft.Extensions.Configuration;
-using Syncfusion.Blazor.Charts;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,33 +8,39 @@ using static ThinBlueLieB.Helper.Algorithms;
 
 namespace ThinBlueLieB.Helper
 {
-    public static class Searches
+    public class Searches : ISearches
     {
-        private static readonly IConfiguration _config;
+        private readonly ConnectionStrings connectionStrings;
+        public Searches(IOptions<ConnectionStrings> options)
+        {
+            connectionStrings = options.Value;
+        }
 
-        //public Searches(IConfiguration configuration)
-        //{
-        //  //  _config = configuration;
-        //}
-        //static Searches()
-        //{
-        //
-        //}
-        
-
-        public static async Task<List<SimilarPerson>> SearchOfficer(string Input)
+        public async Task<List<SimilarPerson>> SearchOfficer(string Input)
         {
             //Get only First and Last Name
             var FirstName = Input.Split(' ').FirstOrDefault();
             var LastName = Input.Split(' ').Last();
             var NormalizedName = FirstName + " " + LastName;
-            //don't remove first name if it's something like J. Alexander Kueng
-            var MiddleCount = Input.Replace(LastName, "").Replace(FirstName, "").Split(' ').Count();
+            //TODO for names like: J. Alexander Kueng or make it into J. Kueng and Alexander Kueng and test both
+            var MiddleCount1 = Input.Replace(" " + LastName, "").Replace(FirstName, "");           
+            string[] MiddleCount2;
+            int MiddleCount;
+            if (MiddleCount1 != string.Empty)
+            {
+                MiddleCount2 = MiddleCount1.Split(' ');
+                MiddleCount = MiddleCount2.Count();
+            }
+            else
+            {
+                MiddleCount = 0;
+            }
+            
 
             //Load all OfficcerNames
             DataAccess data = new DataAccess();
             string sql = "SELECT IdOfficer, Name FROM officers";
-            List<FirstLoadOfficer> Names = await data.LoadData<FirstLoadOfficer, dynamic>(sql, new { }, _config.GetConnectionString("DataDB"));
+            List<FirstLoadOfficer> Names = await data.LoadData<FirstLoadOfficer, dynamic>(sql, new { }, connectionStrings.DataDB);
 
             List<NameScore> nameScores = new List<NameScore>();
             foreach (var name in Names)
@@ -43,26 +48,35 @@ namespace ThinBlueLieB.Helper
                 var first = name.Name.Split(' ').FirstOrDefault();
                 var last = name.Name.Split(' ').Last();
                 var normalizedName = first + " " + last;
-                var middlecount = name.Name.Replace(first, "").Replace(last, "").Split(' ').Count();
-                                
-                var score = JaroWinklerDistance.distance(normalizedName, NormalizedName);
-                score = score + Math.Abs(middlecount - MiddleCount) / 40; //40 is just a random number change it later
+                var middleCount1 = Input.Replace(" " + first, "").Replace(last, "");
+                string[] middleCount2;
+                int middleCount;
+                if (middleCount1 != string.Empty)
+                {
+                    middleCount2 = middleCount1.Split(' ');
+                    middleCount = middleCount2.Count();
+                }
+                else
+                {
+                    middleCount = 0;
+                }
+
+                var score = JaroWinklerDistance.proximity(normalizedName, NormalizedName);               
+                score = score + Math.Abs(middleCount - MiddleCount) / 40; //40 is just a random number change it later
                 var listitem = new NameScore()
                 {
                     Id = name.IdOfficer,
-                   // Name = normalizedName,
+                    Name = normalizedName,
                     Score = score,
                 };
                 nameScores.Add(listitem);
             }
-            var SortedNames = nameScores.OrderBy(o => o.Score).ToList();
-            var Ids = String.Join(",", SortedNames.GroupBy(x => x.Id));
-            string sql2 = "SELECT * FROM officers Where IdOfficer in (" + Ids + ") ORDER BY field(IdOfficer, " + Ids + ")";
-            List<SimilarPerson> similarPeople = await data.LoadData<SimilarPerson, dynamic>(sql2, new { }, _config.GetConnectionString("DataDB"));
-            return similarPeople;
-
-
             //return list of names in order of lowest to highest score
+            var SortedNames = nameScores.OrderByDescending(o => o.Score).ToList();
+            var Ids = String.Join(",", SortedNames.Where(s => s.Score > 0.7).Select(x => x.Id));
+            string sql2 = "SELECT * FROM officers Where IdOfficer in (" + Ids + ") ORDER BY field(IdOfficer, " + Ids + ")";
+            List<SimilarPerson> similarPeople = await data.LoadData<SimilarPerson, dynamic>(sql2, new { }, connectionStrings.DataDB);
+            return similarPeople;           
         }
     }
     public class FirstLoadOfficer
@@ -73,7 +87,7 @@ namespace ThinBlueLieB.Helper
     public class NameScore
     {
         public int Id { get; set; }
-        //public string Name { get; set; }
+        public string Name { get; set; }
         public double Score { get; set; }
         //public int MiddleNameCount { get; set; }
     }
