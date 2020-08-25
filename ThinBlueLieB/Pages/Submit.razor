@@ -1,13 +1,16 @@
 ﻿@page "/Submit"
 @inherits SubmitBase
+@inject ISearches searches
 
 @using Microsoft.AspNetCore.Mvc;
 @using ThinBlueLieB.Models;
 @using Syncfusion.Blazor.DropDowns
 @using DataAccessLibrary.Enums
+@using ThinBlueLieB.Helper
 @using System.Linq
 @using DataAccessLibrary.DataModels
 @using Syncfusion.Blazor.RichTextEditor
+@using Syncfusion.Blazor.Buttons
 <style>
     body {
         overflow-x: hidden;
@@ -16,19 +19,41 @@
     form {
         display: inherit;
     }
+
+    @@font-face {
+        font-family: 'button-icons';
+        src: url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .e-btn-sb-icons {
+        font-family: 'button-icons';
+        line-height: 1;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .e-add-icon::before {
+        content: '\e70a';
+    }
 </style>
 <div class="offset-lg-2 row container-fluid mr-0 pr-0">
     <div class="col-lg-5 col-md-6 border-left border-right border-bottom">
         <EditForm Model="model" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
             <ValidationSummary />
-            <div class="d-block mb-0 pt-3 border-bottom">
-                <h4 class="mb-0">Information Submission Form</h4>
+            <div class="d-block mb-0 pt-3 border-bottom mb-2">
+                <h4 class="mb-0 align-te">Information Submission Form</h4>
             </div>
             <div>
                 <div class="form-group">
                     <div id="datepicker-control">
-                        <SfDatePicker TValue="DateTime" @bind-Value="@model.Timelineinfos.Date" Min="@MinDate" Max="@Today"></SfDatePicker>
+                        <SfDatePicker TValue="DateTime?" @bind-Value="@DateValue" Min="@MinDate" Max="@Today"></SfDatePicker>
                     </div>
                 </div>
             </div>
@@ -42,40 +67,44 @@
                     <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.City"></SfTextBox>
                 </div>
             </div>
-            <hr /> <h6>
-                Fill out the following information for the Subject/Victim
-                <button class="btn btn-primary mx-auto" id="MoreSubjects">
-
-                    @*<i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>*@
-                </button>
-            </h6>
-            <div id="SubjectList">
-                @*<Subject></Subject>*@
+            <hr />
+            <div>
+                <h6 class="d-inline">
+                    Fill out the following information for the Subject
+                </h6>
+                <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="AddSubject" IsPrimary="true" IconPosition=@IconPosition.Right>
+                    Subject
+                </SfButton>
             </div>
-            <hr /> <h6>
-                Fill out the following information for the Officer
-                <button class="btn btn-primary mx-auto" id="MoreOfficers">
-
-                    @*<i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>*@
-                </button>
-            </h6>
+            <div id="SubjectList">
+                <Subject></Subject>
+            </div>
+            <hr />
+            <div>
+                <h6 class="d-inline">
+                    Fill out the following information for the Officer
+                </h6>
+                <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="AddOfficer" IsPrimary="true" IconPosition=@IconPosition.Right>
+                    Officer
+                </SfButton>
+            </div>
             <div id="OfficerList">
-                @*<Officer></Officer>*@
+                <Officer></Officer>
             </div>
             <hr />
             <div class="form-group">
                 <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, if there were more people involved, if there was any followup to the event or coverage in the news, etc.</label>
-                <SfRichTextEditor EditorMode="EditorMode.Markdown">
+                <SfRichTextEditor @bind-Value="@model.Timelineinfos.Context" EditorMode="EditorMode.Markdown" EnableHtmlSanitizer="true" ShowCharCount="true">
                     <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
-
                 </SfRichTextEditor>
+                <ValidationMessage For="@(() => model.Timelineinfos.Context)"></ValidationMessage>
             </div>
             <div class="form-group">
                 <input id="submit" type="button" value="Submit" class="btn btn-primary" />
                 <a asp-page="/Index" style="float:right">Back to Home</a>
             </div>
         </EditForm>
-    </div>   
+    </div>
     <div class="col-lg-5 col-md-6">
         <div class="row">
             <div class="container-fluid d-block">
@@ -83,7 +112,7 @@
                 <p class="mb-0 border-bottom" style="font-size:1em">
                     Here are similar pages that share some similarities with the information you are filling out,
                     either a date, name, video, or some combination of the three
-                </p>                
+                </p>
                 <div id="VideoList">
                     @*<partial name="_SimilarPartial" />*@
                 </div>
@@ -95,7 +124,11 @@
                 <h4 class="pt-2">Add Media</h4>
                 <p class="mb-0" style="font-size:1em">
                     Add Media relavent to the event, such as videos, images, news articles, etc.
-                </p>                
+                </p>
+                @foreach (var person in SimilarPeople)
+                    {
+                         <p>@person.Name</p>
+                    }
             </div>
             <div id="MediaList">
                 @*<partial name="_MediaPartial" />*@
@@ -113,37 +146,10 @@
     </div>
 </div>
 @code {
-    public SubmitModel model = new SubmitModel() {
-        Timelineinfos = new Timelineinfo(),
-        Medias = new List<ViewMedia>(),
-        Officers = new List<ViewOfficer>(),
-        Subjects = new List<ViewSubject>()
-    };
-
-    public object[] Tools = new object[]{
-        "Bold", "Italic", "Underline", "|",
-        "Formats", "Alignments", "OrderedList", "UnorderedList",
-        "Outdent", "Indent", "|", "CreateTable",
-        "CreateLink", "|", "ClearFormat",
-        "SourceCode", "|", "Undo", "Redo"
-    };
-
-    public class ListItem
+    protected override async Task OnInitializedAsync()
     {
-        public int Value { get; set; }
-        public string Text { get; set; }
+        SimilarPeople = await searches.SearchOfficer("Adrian Alaniz");
     }
-    List<ListItem> States = Enum.GetValues(typeof(TimelineinfoEnums.StateEnum)).Cast<TimelineinfoEnums.StateEnum>().Select(
-                     x => new ListItem { Text = EnumExtensions.GetEnumDisplayName((TimelineinfoEnums.StateEnum)x), Value = (int)x }).ToList();
-    public DateTime Today { get; set; } = new DateTime(DateTime.Today.Year, DateTime.Now.Month, DateTime.Today.Day);
-    public DateTime MinDate { get; set; } = new DateTime(1950, 1, 1);
-
-    protected Task HandleValidSubmit()
-    {
-        throw new NotImplementedException();
-    }
-    //add login suggestion
-
 }
 
 

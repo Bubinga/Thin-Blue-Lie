@@ -1,12 +1,7 @@
-﻿using DataAccessLibrary.DataAccess;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ThinBlueLieB.Helper;
-using ThinBlueLieB.Models;
 
 
 namespace ThinBlueLieB.Components.Bases
@@ -19,7 +14,7 @@ namespace ThinBlueLieB.Components.Bases
         public List<SimilarPerson> People = new List<SimilarPerson>();
         protected async Task<List<SimilarPerson>> GetPeople(string InputName)
         {
-            People = await Searches.SearchOfficer(Input);
+          //  People = await Searches.SearchOfficer(Input);
             return People;
         }         
     }
