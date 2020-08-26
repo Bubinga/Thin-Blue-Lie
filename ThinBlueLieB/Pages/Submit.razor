@@ -11,6 +11,7 @@
 @using DataAccessLibrary.DataModels
 @using Syncfusion.Blazor.RichTextEditor
 @using Syncfusion.Blazor.Buttons
+@using ThinBlueLieB.Components.Bases 
 <style>
     body {
         overflow-x: hidden;
@@ -41,8 +42,12 @@
     .e-add-icon::before {
         content: '\e70a';
     }
+
+    .e-richtexteditor .e-rte-content .e-content {
+        min-height: 150px;
+    }
 </style>
-<div class="offset-lg-2 row container-fluid mr-0 pr-0">
+<div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
     <div class="col-lg-5 col-md-6 border-left border-right border-bottom">
         <EditForm Model="model" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
@@ -54,6 +59,7 @@
                 <div class="form-group">
                     <div id="datepicker-control">
                         <SfDatePicker TValue="DateTime?" @bind-Value="@DateValue" Min="@MinDate" Max="@Today"></SfDatePicker>
+                        <DatePickerEvents TValue="DateTime?" ValueChange="@FindEvents"></DatePickerEvents>
                     </div>
                 </div>
             </div>
@@ -94,7 +100,7 @@
             <hr />
             <div class="form-group">
                 <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, if there were more people involved, if there was any followup to the event or coverage in the news, etc.</label>
-                <SfRichTextEditor @bind-Value="@model.Timelineinfos.Context" EditorMode="EditorMode.Markdown" EnableHtmlSanitizer="true" ShowCharCount="true">
+                <SfRichTextEditor CssClass="w-100" @bind-Value="@model.Timelineinfos.Context" EnableResize="true" EditorMode="EditorMode.Markdown" EnableHtmlSanitizer="true" ShowCharCount="true">
                     <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
                 </SfRichTextEditor>
                 <ValidationMessage For="@(() => model.Timelineinfos.Context)"></ValidationMessage>
@@ -124,14 +130,10 @@
                 <h4 class="pt-2">Add Media</h4>
                 <p class="mb-0" style="font-size:1em">
                     Add Media relavent to the event, such as videos, images, news articles, etc.
-                </p>
-                @foreach (var person in SimilarPeople)
-                    {
-                         <p>@person.Name</p>
-                    }
+                </p>               
             </div>
             <div id="MediaList">
-                @*<partial name="_MediaPartial" />*@
+               <MediaCard></MediaCard>
             </div>
             <div>
                 <div class="container">
@@ -146,9 +148,20 @@
     </div>
 </div>
 @code {
-    protected override async Task OnInitializedAsync()
+    protected async Task FindOfficers(string Name)
     {
-        SimilarPeople = await searches.SearchOfficer("Adrian Alaniz");
+        SimilarPeople = await searches.SearchOfficer(Name);
+    }
+    //protected async Task<List<ViewSimilar>> FindEvents(DateTime date)
+    //{     
+    //    SimilarEvents = await searches.GetSimilar(date.ToString("yyyy-MM-dd"));
+    //    return SimilarEvents;
+    //}
+    protected async void FindEvents(Syncfusion.Blazor.Calendars.ChangedEventArgs<DateTime?> args)
+    {
+        Console.WriteLine(args);
+        SimilarEvents = await searches.GetSimilar(args.Value.ToString());
+        //return SimilarEvents;
     }
 }
 

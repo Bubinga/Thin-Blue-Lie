@@ -14,6 +14,7 @@ namespace DataAccessLibrary.DataModels
         public int IdTimelineinfo { get; set; }
         public int IdSubject { get; set; }
         public byte Armed { get; set; }
+        public byte? Age { get; set; }
 
         [ForeignKey(nameof(IdSubject))]
         [InverseProperty(nameof(Subjects.TimelineinfoSubject))]

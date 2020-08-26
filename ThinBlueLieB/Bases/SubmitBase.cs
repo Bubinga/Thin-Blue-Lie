@@ -38,11 +38,9 @@ namespace ThinBlueLieB.Models
         public DateTime MinDate { get; set; } = new DateTime(1950, 1, 1);
         public DateTime? DateValue { get; set; } = null;
         public List<SimilarPerson> SimilarPeople { get; set; }
-        //protected async Task SearchTest()
-        //{
-        //    SimilarPeople = await Searches.SearchOfficer("Adam Wright");
-        //}
-       
+        public List<ViewSimilar> SimilarEvents { get; set; }
+
+
 
         protected Task HandleValidSubmit()
         {

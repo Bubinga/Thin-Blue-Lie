@@ -5,6 +5,7 @@
 @using DataAccessLibrary.DataModels
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
+@using ThinBlueLieB.Helper
 
 <style>
     .e-file-select-wrap{
@@ -18,12 +19,12 @@
             <div name="mediaAdd" class="container-fluid px-4">               
                     <div class="form-row position-relative">
                         <div class="col-6 dropdown my-2 pr-2">
-                            <SfDropDownList TItem="ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Type of Media" @bind-Value="@media.MediaType" DataSource="@MediaTypes">
+                            <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Type of Media" @bind-Value="@media.MediaType" DataSource="@MediaTypes">
                                 <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                             </SfDropDownList>
                         </div>
                         <div class="col-6 dropdown my-2 pl-2">
-                            <SfDropDownList TItem="ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Source Location" @bind-Value="@media.SourceFrom" DataSource="@SourceFromOptions">
+                            <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Source Location" @bind-Value="@media.SourceFrom" DataSource="@SourceFromOptions">
                                 <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                             </SfDropDownList>
                         </div>
@@ -36,7 +37,7 @@
                     </div>
                     <div class="form-row">
                         <div class="col-5">
-                            @if (media.SourceFrom == 6)
+                            @if (Enum.GetName(typeof(MediaEnums.MediaTypeEnum), media.SourceFrom) == "Device")
                             {
                                 <div class="form-group MediaFile">
                                     <SfUploader ID="UploadFiles"CssClass="e-filled mt-2" DropArea=".control-fluid">
@@ -70,18 +71,11 @@
         </div>
     </div>
 </div>
-@code {
-    public class ListItem
-    {
-        public int Value { get; set; }
-        public string Text { get; set; }
-    }
+@code {  
     private ViewMedia media = new ViewMedia();
 
-    List<ListItem> MediaTypes = Enum.GetValues(typeof(MediaEnums.MediaTypeEnum)).Cast<MediaEnums.MediaTypeEnum>().Select(
-                           x => new ListItem { Text = x.ToString(), Value = (int)x }).ToList();
-    List<ListItem> SourceFromOptions = Enum.GetValues(typeof(MediaEnums.SourceFromEnum)).Cast<MediaEnums.SourceFromEnum>().Select(
-                           x => new ListItem { Text = x.ToString(), Value = (int)x }).ToList();
+    IReadOnlyList<Extensions.ListItem> MediaTypes = Extensions.GetDropdownList<MediaEnums.MediaTypeEnum>.Items;
+    IReadOnlyList<Extensions.ListItem> SourceFromOptions = Extensions.GetDropdownList<MediaEnums.SourceFromEnum>.Items;    
 
     public void OnFileRemove(RemovingEventArgs args)
     {
