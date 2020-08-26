@@ -10,6 +10,7 @@ namespace ThinBlueLieB.Models
         public byte Race { get; set; }
         [Required(ErrorMessage = "The Officer's Sex field is required")]
         public byte Sex { get; set; }
+        public byte? Age { get; set; }
         public int Misconduct { get; set; }
         public int Weapon { get; set; }
         public bool SameAs { get; set; }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using DataAccessLibrary.Enums;
 using Microsoft.AspNetCore.Components;
+using static ThinBlueLieB.Models.ViewSimilar;
 
 namespace ThinBlueLieB.Helper
 {
@@ -48,6 +50,11 @@ namespace ThinBlueLieB.Helper
 
             public static IReadOnlyList<ListItem> Items => _items;
         }
-
+        internal static string GetPersonSummary(ViewSimilarPerson person)
+        {
+            var personSummary = person.Name + ", " + person.Age.ToString() + ", " + Enum.GetName(typeof(TimelineinfoEnums.RaceEnum), person.Race) 
+                                + " " + Enum.GetName(typeof(TimelineinfoEnums.SexEnum), person.Sex);
+            return personSummary;
+        }
     }
 }

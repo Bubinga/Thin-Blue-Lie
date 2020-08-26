@@ -1,10 +1,13 @@
 ﻿using DataAccessLibrary.DataAccess;
+using DataAccessLibrary.DataModels;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ThinBlueLieB.Models;
 using static ThinBlueLieB.Helper.Algorithms;
+using static ThinBlueLieB.Models.ViewSimilar;
 
 namespace ThinBlueLieB.Helper
 {
@@ -66,7 +69,7 @@ namespace ThinBlueLieB.Helper
                 var listitem = new NameScore()
                 {
                     Id = name.IdOfficer,
-                    Name = normalizedName,
+                    //Name = normalizedName,
                     Score = score,
                 };
                 nameScores.Add(listitem);
@@ -78,7 +81,73 @@ namespace ThinBlueLieB.Helper
             List<SimilarPerson> similarPeople = await data.LoadData<SimilarPerson, dynamic>(sql2, new { }, connectionStrings.DataDB);
             return similarPeople;           
         }
+
+        public async Task<List<ViewSimilar>> GetSimilar(string? TempDate)
+        {
+            //load events where date or officer/subject name is shared and load it into SimilarEvents.            
+            List<ViewSimilar> SimilarEvents = new List<ViewSimilar>();
+            DataAccess data = new DataAccess();
+            var query1 = "SELECT t.Date, t.IdTimelineinfo, t.Context, t.State, t.City, t.Verified, t.SubmittedBy From timelineinfo t where t.date = " + TempDate + ";";
+            var SimilarTimelineinfos = await data.LoadData<Timelineinfo, dynamic>(query1, new { }, connectionStrings.DataDB);
+            foreach ((var Event, Int32 i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))
+            {
+                var id = Event.IdTimelineinfo;
+                var officerQuery = "SELECT o.Name, o.Race, o.Sex, o.Age FROM timelineinfo JOIN timelineinfo_officer ON timelineinfo.IdTimelineinfo = timelineinfo_officer.IdTimelineinfo JOIN officers o ON timelineinfo_officer.IdOfficer = o.IdOfficer WHERE timelineinfo.IdTimelineinfo = " + id + ";";
+                var Officers = await data.LoadData<ViewSimilarPerson, dynamic>(officerQuery, new { }, connectionStrings.DataDB);
+                var subjectQuery = "SELECT o.Name, o.Race, o.Sex, o.Age FROM timelineinfo JOIN timelineinfo_subject ON timelineinfo.IdTimelineinfo = timelineinfo_subject.IdTimelineinfo JOIN subjects o ON timelineinfo_subject.IdSubject = o.IdSubject WHERE timelineinfo.IdTimelineinfo = " + id + ";";
+                var Subjects = await data.LoadData<ViewSimilarPerson, dynamic>(officerQuery, new { }, connectionStrings.DataDB);
+                var MediaQuery = "Select * From media m Where(m.IdTimelineinfo = " + id + ";";
+                var Media = await data.LoadData<Media, dynamic>(officerQuery, new { }, connectionStrings.DataDB);
+
+                //add timelineinfos, officers, subject, and media to list at end
+                ViewSimilar items = new ViewSimilar()
+                {
+                    Timelineinfo = Event,
+                    Officers = Officers,
+                    Subjects = Subjects,
+                    Media = Media.FirstOrDefault()
+                };
+                SimilarEvents.Add(items);
+            }
+            return SimilarEvents;
+        }
+
+        public async Task<List<List<Timelineinfo>>> GetTimeline(string? current, int? dateChange, string? date)
+        {
+            //string[] weekDays = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+            if (current != null && dateChange != null){
+                date = Convert.ToDateTime(current).AddDays((double)dateChange).ToString("yyyy-MM-dd");
+            }
+            else if (date == null | string.IsNullOrWhiteSpace(Extensions.GetQueryParm("d"))){
+                date = DateTime.Today.ToString("yyyy-MM-dd");
+            }
+            else{
+                date = Extensions.GetQueryParm("d");
+            }
+            DateTime dateT = Convert.ToDateTime(date); //convert date from string to DateTime
+            DateTime[] dates = new DateTime[7];
+            var weekStart = dateT.AddDays(-(int)dateT.DayOfWeek); //week start date
+            if (dateChange == null){
+                dates[0] = dateT.AddDays(-(int)dateT.DayOfWeek);
+            }
+            else {
+                dates[0] = dateT.AddDays(-(int)dateT.DayOfWeek);
+            }
+            for (int i = 1; i < 7; i++) {
+                dates[i] = weekStart.AddDays(i);
+            }
+            var dateData = new List<List<Timelineinfo>>(new List<Timelineinfo>[7]);
+            for (int i = 0; i < 7; i++)
+            {
+                //get data
+                DataAccess data = new DataAccess();
+                var query = "SELECT t.TimelineinfoId From timelineinfo t where t.date = " + dates[i].ToString("yyyy-MM-dd") + ";";
+                dateData[i] = await data.LoadData<Timelineinfo, dynamic>(query, new { }, connectionStrings.DataDB);
+            }
+            return dateData;
+        }
     }
+    
     public class FirstLoadOfficer
     {
         public int IdOfficer { get; set; }
@@ -87,7 +156,7 @@ namespace ThinBlueLieB.Helper
     public class NameScore
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        //public string Name { get; set; }
         public double Score { get; set; }
         //public int MiddleNameCount { get; set; }
     }

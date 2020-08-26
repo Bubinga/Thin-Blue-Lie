@@ -27,7 +27,8 @@ namespace DataAccessLibrary.DataModels
         public string Blurb { get; set; }
         [Column(TypeName = "varchar(255)")]
         [NotMapped]
-        public string SubmittedBy { get; set; }
+        public string? SubmittedBy { get; set; }
+        public short Rank { get; set; }
 
         [ForeignKey(nameof(IdTimelineinfo))]
         [InverseProperty(nameof(Timelineinfo.Media))]

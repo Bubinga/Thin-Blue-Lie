@@ -20,6 +20,10 @@
                     <SfTextBox CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="subject.Name"></SfTextBox>
                 </div>
                 <div class="ml-3">
+                    <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="byte?" Min="0" Max="130" Step="1"
+                    @bind-Value="subject.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
+                </div>
+                <div class="ml-3">
                     <SfCheckBox CssClass="armed-checkbox" @bind-Checked="@subject.Armed" Label="Armed"></SfCheckBox>
                 </div>
                 <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;">
