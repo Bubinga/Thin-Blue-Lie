@@ -1,7 +1,24 @@
 ﻿[*.cs]
 
-# IDE1006: Naming Styles
-dotnet_diagnostic.IDE1006.severity = silent
-
 # CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 dotnet_diagnostic.CS8632.severity = none
+
+[*.cs]
+
+# CS8669: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context. Auto-generated code requires an explicit '#nullable' directive in source.
+dotnet_diagnostic.CS8669.severity = none
+
+[*.cs]
+
+# CS8669: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context. Auto-generated code requires an explicit '#nullable' directive in source.
+dotnet_diagnostic.CS8669.severity = none
+
+[*.cs]
+
+# CS8669: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context. Auto-generated code requires an explicit '#nullable' directive in source.
+dotnet_diagnostic.CS8669.severity = silent
+
+[*.cs]
+
+# CS8669: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context. Auto-generated code requires an explicit '#nullable' directive in source.
+dotnet_diagnostic.CS8669.severity = none

@@ -1,15 +1,19 @@
-﻿@using ThinBlueLieB.Models;
-@using Syncfusion.Blazor.DropDowns
+﻿@using Syncfusion.Blazor.DropDowns
 @using DataAccessLibrary.Enums
 @using System.Linq
 @using DataAccessLibrary.DataModels 
+@using ThinBlueLieB.Helper 
 
 <div class="AddOfficer mt-2">
     <div class="card border-dark mb-3 mx-auto">
         <div class="card-body text-dark pt-2">
             <div class="form-row position-relative">
-                <div class="col-12 my-2">
+                <div class="my-2">
                     <SfTextBox CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="officer.Name"></SfTextBox>
+                </div>
+                <div class="ml-3">
+                    <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="byte?" Min="0" Max="130" Step="1" 
+                    @bind-Value="officer.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
                 </div>
                 <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;">
                     <span aria-hidden="true">×</span>
@@ -17,12 +21,12 @@
             </div>
             <div class="form-row position-relative my-2">
                 <div class="col-6">
-                    <SfDropDownList TItem="ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@officer.Race" DataSource="@Races">
+                    <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@officer.Race" DataSource="@Races">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                 </div>
                 <div class="col-6">
-                    <SfDropDownList TItem="ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="2" Placeholder="Sex" @bind-Value="@officer.Sex" DataSource="@Sexes">
+                    <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="2" Placeholder="Sex" @bind-Value="@officer.Sex" DataSource="@Sexes">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                 </div>
@@ -52,39 +56,13 @@
 @code {   
     private ViewOfficer officer = new ViewOfficer();
 
-    List<ListItem> Sexes = Enum.GetValues(typeof(TimelineinfoEnums.SexEnum)).Cast<TimelineinfoEnums.SexEnum>().Select(
-                           x => new ListItem { Text = x.ToString(), Value = (int)x }).ToList();
-    List<ListItem> Races = Enum.GetValues(typeof(TimelineinfoEnums.RaceEnum)).Cast<TimelineinfoEnums.RaceEnum>().Select(
-                       x => new ListItem { Text = x.ToString(), Value = (int)x }).ToList();
+    IReadOnlyList<Extensions.ListItem> Sexes = Extensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
+    IReadOnlyList<Extensions.ListItem> Races = Extensions.GetDropdownList<TimelineinfoEnums.RaceEnum>.Items;
 
     public int[] MisconductsVal { get; set; } = new int[] { };
     public int[] WeaponsVal { get; set; } = new int[] { };
 
-    public class ListItem
-    {
-        public int Value { get; set; }
-        public string Text { get; set; }
-    }
-    private List<ListItem> MisconductsList = new List<ListItem>()
-{
-        new ListItem(){Text = "Unnecessary use of Force",                   Value = 1},
-        new ListItem(){Text = "Killing of Pets",                            Value = 2},
-        new ListItem(){Text = "Evidence Tampering",                         Value = 4},
-        new ListItem(){Text = "Non-Violent Harassment/Intimidation",        Value = 8},
-        new ListItem(){Text = "Negligence",                                 Value = 16},
-        new ListItem(){Text = "Unwarranted Suizure of Property/Theft",      Value = 32},
-        new ListItem(){Text = "Unwarranted Search",                         Value = 64},
-        new ListItem(){Text = "False Arrest/Detention",                     Value = 128},
-        new ListItem(){Text = "Abuse of Authority for Personal Gain",       Value = 256},
-    };
-    private List<ListItem> WeaponsList = new List<ListItem>()
-{
-        new ListItem(){Text = "Body",       Value = 1},
-        new ListItem(){Text = "Projectile", Value = 2},
-        new ListItem(){Text = "Taser",      Value = 4},
-        new ListItem(){Text = "Tear Gas",   Value = 8},
-        new ListItem(){Text = "Vehicle",    Value = 16},
-        new ListItem(){Text = "Gun",        Value = 32},
-    };
+    IReadOnlyList<Extensions.ListItem> MisconductsList = Extensions.GetDropdownList<TimelineinfoEnums.MisconductEnum>.Items;
+    IReadOnlyList<Extensions.ListItem> WeaponsList = Extensions.GetDropdownList<TimelineinfoEnums.WeaponEnum>.Items;
 
 }

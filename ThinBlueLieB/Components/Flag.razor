@@ -5,13 +5,14 @@
 @using DataAccessLibrary.DataModels
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
+@using ThinBlueLieB.Helper
 
 <div class="flagPopover">
     <form>
         <div style="width:200px; min-height:150px;">
             <div class="form-group">
                 <div class="dropdown pl-0" style="position:relative;">
-                    <SfDropDownList TItem="ListItem" TValue="uint" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@flagged.FlagType" DataSource="@FlagTypes">
+                    <SfDropDownList TItem="Extensions.ListItem" TValue="uint" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@flagged.FlagType" DataSource="@FlagTypes">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                 </div>
@@ -30,11 +31,5 @@
 @code {
     Flagged flagged = new Flagged();
 
-    public class ListItem
-    {
-        public int Value { get; set; }
-        public string Text { get; set; }
-    }
-    List<ListItem> FlagTypes = Enum.GetValues(typeof(FlaggedEnums.FlagTypeEnum)).Cast<FlaggedEnums.FlagTypeEnum>().Select(
-                 x => new ListItem { Text = x.ToString(), Value = (int)x }).ToList();
+    IReadOnlyList<Extensions.ListItem> FlagTypes = Extensions.GetDropdownList<FlaggedEnums.FlagTypeEnum>.Items;
 }

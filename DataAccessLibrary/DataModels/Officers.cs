@@ -21,6 +21,7 @@ namespace DataAccessLibrary.DataModels
         public byte Race { get; set; }
         [Required(ErrorMessage = "The Officer's Sex field is required")]
         public byte Sex { get; set; }
+        public byte Employed { get; set; }
 
         [InverseProperty("IdOfficerNavigation")]
         public virtual ICollection<TimelineinfoOfficer> TimelineinfoOfficer { get; set; }
