@@ -59,10 +59,10 @@
                             </label>
                             <div class="row">
                                 <div class="form-check m-2 d-inline">
-                                    <SfRadioButton Label="No" Name="Gore" Value="0" Checked="@media.Gore"></SfRadioButton>
+                                    <SfRadioButton Label="No" Name="@(Guid1)" Value="0" Checked="@media.Gore"></SfRadioButton>
                                 </div>
                                 <div class="form-check m-2 d-inline">
-                                    <SfRadioButton Label="Yes" Name="Gore" Value="1" Checked="@media.Gore"></SfRadioButton>
+                                    <SfRadioButton Label="Yes" Name="@(Guid1)" Value="1" Checked="@media.Gore"></SfRadioButton>
                                 </div>
                             </div>
                         </div>
@@ -73,9 +73,17 @@
 </div>
 @code {  
     private ViewMedia media = new ViewMedia();
+    [Parameter]
+    public int ListCount { get; set; }
+    protected override void OnInitialized()
+    {
+        Guid g = Guid.NewGuid();
+        Guid1 = g.ToString();        
+    }
+    public string Guid1 { get; set; }
 
     IReadOnlyList<Extensions.ListItem> MediaTypes = Extensions.GetDropdownList<MediaEnums.MediaTypeEnum>.Items;
-    IReadOnlyList<Extensions.ListItem> SourceFromOptions = Extensions.GetDropdownList<MediaEnums.SourceFromEnum>.Items;    
+    IReadOnlyList<Extensions.ListItem> SourceFromOptions = Extensions.GetDropdownList<MediaEnums.SourceFromEnum>.Items;
 
     public void OnFileRemove(RemovingEventArgs args)
     {

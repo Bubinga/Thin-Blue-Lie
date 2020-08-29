@@ -1,49 +1,61 @@
-﻿@page "/test" 
+﻿@page "/test"
 @using Syncfusion.Blazor.Buttons
 
-    <div class="ml-5 mt-5">
-        <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-round" IsPrimary="true"></SfButton>
-    </div>
-    
+@using Syncfusion.Blazor.DropDowns
+
+<div class="container px-5">
+    <SfButton @onclick="addMedia">Add Media</SfButton>
+    <SfButton @onclick="removeMedia">Remove Media</SfButton>
+    <SfListBox TValue="List<ViewMedia>" DataSource="@Data" TItem="ViewMedia" AllowDragAndDrop="true" @ref="MediaListBoxObj">
+        <ListBoxFieldSettings></ListBoxFieldSettings>
+        <ListBoxTemplates TItem="ViewMedia">
+            <ItemTemplate>
+                <MediaCard ListCount="1"></MediaCard>
+            </ItemTemplate>
+        </ListBoxTemplates>
+        <ListBoxSelectionSettings Mode="SelectionMode.Single"></ListBoxSelectionSettings>
+    </SfListBox>
+</div>
 <style>
-      
-    @@font-face {
-        font-family: 'button-icons';
-        src: url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAAKAIAAAwAgT1MvMj1uSf8AAAEoAAAAVmNtYXDOXM6wAAABtAAAAFRnbHlmcV/SKgAAAiQAAAJAaGVhZBNt0QcAAADQAAAANmhoZWEIUQQOAAAArAAAACRobXR4NAAAAAAAAYAAAAA0bG9jYQNWA+AAAAIIAAAAHG1heHABGQAZAAABCAAAACBuYW1lASvfhQAABGQAAAJhcG9zdFAouWkAAAbIAAAA2AABAAAEAAAAAFwEAAAAAAAD9AABAAAAAAAAAAAAAAAAAAAADQABAAAAAQAAYD3WXF8PPPUACwQAAAAAANgtxgsAAAAA2C3GCwAAAAAD9AP0AAAACAACAAAAAAAAAAEAAAANAA0AAgAAAAAAAgAAAAoACgAAAP8AAAAAAAAAAQQAAZAABQAAAokCzAAAAI8CiQLMAAAB6wAyAQgAAAIABQMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUGZFZABA5wHnDQQAAAAAXAQAAAAAAAABAAAAAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAAAAAIAAAADAAAAFAADAAEAAAAUAAQAQAAAAAYABAABAALnCOcN//8AAOcB5wr//wAAAAAAAQAGABQAAAABAAMABAAHAAIACgAJAAgABQAGAAsADAAAAAAADgAkAEQAWgByAIoApgDAAOAA+AEMASAAAQAAAAADYQP0AAIAADcJAZ4CxP08DAH0AfQAAAIAAAAAA9QD9AADAAcAACUhESEBIREhAm4BZv6a/b4BZv6aDAPo/BgD6AAAAgAAAAADpwP0AAMADAAANyE1ISUBBwkBJwERI1kDTvyyAYH+4y4BeQGANv7UTAxNlwEIPf6eAWI9/ukDEwAAAAIAAAAAA/QDngADAAcAADchNSETAyEBDAPo/Bj6+gPo/gxipgFy/t0CRwAAAQAAAAAD9AP0AAsAAAEhFSERMxEhNSERIwHC/koBtnwBtv5KfAI+fP5KAbZ8AbYAAQAAAAAD9AP0AAsAAAEhFSERMxEhNSERIwHh/isB1T4B1f4rPgIfPv4rAdU+AdUAAgAAAAAD9AOlAAMADAAANyE1ISUnBxc3JwcRIwwD6PwYAcWjLO7uLKI/Wj+hoSvs6iyhAm0AAAABAAAAAAP0A/QACwAAAREhFSERMxEhNSERAeH+KwHVPgHV/isD9P4rPv4rAdU+AdUAAAAAAgAAAAADdwP0AAMADAAANyE1ISUBBwkBJwERI4kC7v0SAVj+0SkBdgF4Kf7RPgw+rQEJL/64AUgv/vgC/AAAAAEAAAAAA/QD9AALAAABIRUhETMRITUhESMB2v4yAc5MAc7+MkwCJkz+MgHOTAHOAAIAAAAAA/QDzQADAAcAADchNSE1KQEBDAPo/BgB9AH0/gwzpZUCYAACAAAAAAP0A80AAwAHAAA3ITUhNSkBAQwD6PwYAfQB9P4MM6WVAmAAAAASAN4AAQAAAAAAAAABAAAAAQAAAAAAAQAMAAEAAQAAAAAAAgAHAA0AAQAAAAAAAwAMABQAAQAAAAAABAAMACAAAQAAAAAABQALACwAAQAAAAAABgAMADcAAQAAAAAACgAsAEMAAQAAAAAACwASAG8AAwABBAkAAAACAIEAAwABBAkAAQAYAIMAAwABBAkAAgAOAJsAAwABBAkAAwAYAKkAAwABBAkABAAYAMEAAwABBAkABQAWANkAAwABBAkABgAYAO8AAwABBAkACgBYAQcAAwABBAkACwAkAV8gYnV0dG9uLWljb25zUmVndWxhcmJ1dHRvbi1pY29uc2J1dHRvbi1pY29uc1ZlcnNpb24gMS4wYnV0dG9uLWljb25zRm9udCBnZW5lcmF0ZWQgdXNpbmcgU3luY2Z1c2lvbiBNZXRybyBTdHVkaW93d3cuc3luY2Z1c2lvbi5jb20AIABiAHUAdAB0AG8AbgAtAGkAYwBvAG4AcwBSAGUAZwB1AGwAYQByAGIAdQB0AHQAbwBuAC0AaQBjAG8AbgBzAGIAdQB0AHQAbwBuAC0AaQBjAG8AbgBzAFYAZQByAHMAaQBvAG4AIAAxAC4AMABiAHUAdAB0AG8AbgAtAGkAYwBvAG4AcwBGAG8AbgB0ACAAZwBlAG4AZQByAGEAdABlAGQAIAB1AHMAaQBuAGcAIABTAHkAbgBjAGYAdQBzAGkAbwBuACAATQBlAHQAcgBvACAAUwB0AHUAZABpAG8AdwB3AHcALgBzAHkAbgBjAGYAdQBzAGkAbwBuAC4AYwBvAG0AAAAAAgAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANAQIBAwEEAQUBBgEHAQgBCQEKAQsBDAENAQ4ACm1lZGlhLXBsYXkLbWVkaWEtcGF1c2UQLWRvd25sb2FkLTAyLXdmLQltZWRpYS1lbmQHYWRkLW5ldwtuZXctbWFpbC13ZhB1c2VyLWRvd25sb2FkLXdmDGV4cGFuZC0wMy13Zg5kb3dubG9hZC0wMi13ZgphZGQtbmV3XzAxC21lZGlhLWVqZWN0Dm1lZGlhLWVqZWN0LTAxAAA=) format('truetype');
-        font-weight: normal;
-        font-style: normal;
+    .e-listbox-wrapper.e-wrapper{
+        min-height: 280px;
+    }
+    .e-listbox-wrapper:not(.e-list-template) .e-list-item,
+    .e-listbox-wrapper .e-list-nrt,
+    .e-listbox-wrapper .e-selectall-parent {
+         height: auto !important;        
+    }
+    .e-listbox-wrapper .e-list-item.e-selected {
+         background-color: #f6efef !important;         
     }
 
-    .e-btn-sb-icons {
-        font-family: 'button-icons';
-        line-height: 1;
-        font-style: normal;
-        font-weight: normal;
-        font-variant: normal;
-        text-transform: none;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-    .e-add-icon::before {
-        content: '\e70a';
-    }
 </style>
 @code {
-    //SfButton ToggleButton;
-    //public string Content = "Play";
-    //public string IconCss = "e-btn-sb-icons e-play-icon";
-    //public void OnToggleClick(MouseEventArgs args)
+    // public ListData Model = new ListData();
+    SfListBox<List<ViewMedia>, ViewMedia> MediaListBoxObj;
+    public List<ViewMedia> Data = new List<ViewMedia>
+    {
+        new ViewMedia{}
+    };
+
+    public List<ViewMedia> NewMedia = new List<ViewMedia>
+    {
+        new ViewMedia{}
+    };
+    private int cardNumber { get; set; } = 0;
+    private void addMedia()
+    {
+        MediaListBoxObj.AddItems(NewMedia);
+    }
+    private void removeMedia()
+    {
+        MediaListBoxObj.RemoveItems(MediaListBoxObj.Value[cardNumber]);
+    }
+
+    //public class ListData
     //{
-    //    if (ToggleButton.Content == "Play")
-    //    {
-    //        this.Content = "Pause";
-    //        this.IconCss = "e-btn-sb-icons e-pause-icon";
-    //    }
-    //    else
-    //    {
-    //        this.Content = "Play";
-    //        this.IconCss = "e-btn-sb-icons e-play-icon";
-    //    }
+    //    public string Text { get; set; }
+    //    public string Pic { get; set; }
+    //    public string Description { get; set; }
     //}
 }
