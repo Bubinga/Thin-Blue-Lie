@@ -24,8 +24,10 @@
 <div @onclick="NextWeek" id="triangle-right"><div class="empty"></div></div>
 
 @code {
+#nullable enable
     [Parameter]
     public string? current { get; set; }
+#nullable enable
     [Parameter]
     public string? date { get; set; }
 
