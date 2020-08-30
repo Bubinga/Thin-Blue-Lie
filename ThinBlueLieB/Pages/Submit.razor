@@ -59,13 +59,13 @@
                 <div class="form-group">
                     <div id="datepicker-control">
                         <SfDatePicker TValue="DateTime?" @bind-Value="@DateValue" Min="@MinDate" Max="@Today"></SfDatePicker>
-                        <DatePickerEvents TValue="DateTime?" ValueChange="@FindEvents"></DatePickerEvents>
+                        @*<DatePickerEvents TValue="DateTime?" ValueChange="@FindEvents"></DatePickerEvents> this is causing a nullrefexception*@
                     </div>
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-5 dropdown" style="position:relative;">
-                    <SfDropDownList TItem="ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                    <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                 </div>
@@ -120,7 +120,7 @@
                     either a date, name, video, or some combination of the three
                 </p>
                 <div id="VideoList">
-                    @*<partial name="_SimilarPartial" />*@
+                    @*<SimilarEvents></SimilarEvents>*@
                 </div>
                 <br />
             </div>
@@ -130,6 +130,9 @@
                 <h4 class="pt-2">Add Media</h4>
                 <p class="mb-0" style="font-size:1em">
                     Add Media relavent to the event, such as videos, images, news articles, etc.
+                    <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="AddMedia" IsPrimary="true" IconPosition=@IconPosition.Right>
+                       Media
+                    </SfButton>
                 </p>               
             </div>
             <div id="MediaList">

@@ -26,19 +26,13 @@ namespace ThinBlueLieB.Models
         "CreateLink", "|", "ClearFormat",
         "SourceCode", "|", "Undo", "Redo"
          };
-
-        public class ListItem
-        {
-            public int Value { get; set; }
-            public string Text { get; set; }
-        }
-        internal List<ListItem> States = Enum.GetValues(typeof(TimelineinfoEnums.StateEnum)).Cast<TimelineinfoEnums.StateEnum>().Select(
-                         x => new ListItem { Text = EnumExtensions.GetEnumDisplayName((TimelineinfoEnums.StateEnum)x), Value = (int)x }).ToList();
+       
+        internal IReadOnlyList<Extensions.ListItem> States = Extensions.GetDropdownList<TimelineinfoEnums.StateEnum>.Items;
         public DateTime Today { get; set; } = new DateTime(DateTime.Today.Year, DateTime.Now.Month, DateTime.Today.Day);
         public DateTime MinDate { get; set; } = new DateTime(1950, 1, 1);
-        public DateTime? DateValue { get; set; } = null;
-        public List<SimilarPerson> SimilarPeople { get; set; }
-        public List<ViewSimilar> SimilarEvents { get; set; }
+        public DateTime? DateValue { get; set; } = new DateTime(DateTime.Today.Year, DateTime.Now.Month, DateTime.Today.Day);
+        public List<SimilarPerson>? SimilarPeople { get; set; }
+        public List<ViewSimilar>? SimilarEvents { get; set; }
 
 
 
@@ -52,6 +46,10 @@ namespace ThinBlueLieB.Models
             throw new NotImplementedException();
         }
         protected Task AddOfficer()
+        {
+            throw new NotImplementedException();
+        }
+        protected Task AddMedia()
         {
             throw new NotImplementedException();
         }
