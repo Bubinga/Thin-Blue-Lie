@@ -16,11 +16,11 @@
     <div class="card border-dark mb-3 mx-auto">
         <div class="card-body text-dark pt-2">
             <div class="form-row position-relative">
-                <div class="my-2 w-75 ml-1">
+                <div class="my-2 ml-1" style="width:48%">
                     <SfTextBox CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="subject.Name"></SfTextBox>
                 </div>
-                <div class="ml-3">
-                    <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="byte?" Min="0" Max="130" Step="1"
+                <div class="my-2" style="margin-left:10px;">
+                    <SfNumericTextBox Width="8rem" Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1
                     @bind-Value="subject.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
                 </div>
                 <div class="ml-3">

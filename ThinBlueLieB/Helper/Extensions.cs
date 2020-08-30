@@ -46,9 +46,8 @@ namespace ThinBlueLieB.Helper
         public static class GetDropdownList<TEnum>
          where TEnum : struct, Enum
         {
-            private static readonly IReadOnlyList<ListItem> _items = Enum.GetValues(typeof(TEnum)).Cast<TEnum>().Select(e => new ListItem() { Text = e.ToString(), Value = Convert.ToInt32(e) }).ToList();
-
-            public static IReadOnlyList<ListItem> Items => _items;
+            public static IReadOnlyList<ListItem> Items { get; } = Enum.GetValues(typeof(TEnum)).Cast<TEnum>()
+                            .Select(e => new ListItem() { Text = GetEnumDisplayName(e), Value = Convert.ToInt32(e) }).ToList();
         }
         internal static string GetPersonSummary(ViewSimilarPerson person)
         {
