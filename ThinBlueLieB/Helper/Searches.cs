@@ -65,7 +65,7 @@ namespace ThinBlueLieB.Helper
                 }
 
                 var score = JaroWinklerDistance.proximity(normalizedName, NormalizedName);               
-                score = score + Math.Abs(middleCount - MiddleCount) / 40; //40 is just a random number change it later
+                score += Math.Abs(middleCount - MiddleCount) / 40; //40 is just a random number change it later
                 var listitem = new NameScore()
                 {
                     Id = name.IdOfficer,
