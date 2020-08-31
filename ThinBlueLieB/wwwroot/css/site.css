@@ -65,19 +65,19 @@ hr.blueline {
     margin: 0px;
 }
 
-.home.jumbotron {
+.header-image {
     background-size: cover !important;
     background-color: #919191;
     width: 100%;
     border-radius: 0px !important;
-    padding-top: 11rem !important;
-    padding-bottom: 2rem !important;
+    padding-top: 7rem !important;
+    padding-bottom: 6rem !important;
     margin-bottom: 0px;
     margin-top: 0px !important;
 }
 
 @media (max-width: 480px) {
-    .home.jumbotron {
+    .header-image {
         padding-bottom: 70px;
     }
 }
@@ -287,17 +287,13 @@ card.header {
     margin-bottom: .3rem;
 }
 
-/*
-        * Content
-        */
+/* Content */
 
 [role="main"] {
     padding-top: 48px; /* Space for fixed navbar */
 }
 
-/*
-        * Navbar
-        */
+/* Navbar */
 
 .navbar .form-control {
     padding: .75rem 1rem;
@@ -433,10 +429,10 @@ app {
             margin-left: 1.5rem;
         }
 
-.main .top-row a:first-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+        .main .top-row a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
 .sidebar {
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
@@ -490,7 +486,7 @@ app {
             }
 
 .content {
-    padding-top: 1.1rem;
+  /*  padding-top: 1.1rem;*/
 }
 
 .navbar-toggler {
@@ -521,12 +517,12 @@ app {
     z-index: 1000;
 }
 
-#blazor-error-ui .dismiss {
-    cursor: pointer;
-    position: absolute;
-    right: 0.75rem;
-    top: 0.5rem;
-}
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
 
 @media (max-width: 767.98px) {
     .main .top-row:not(.auth) {
