@@ -1,0 +1,126 @@
+﻿@page "/About"
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap" rel="stylesheet">
+<div class="about-header-image" style="background-image: url(Assets/Protests-Wallpaper.jpg) !important;">
+    <div class="my-auto text-center">
+        <img alt="Thin Blue Lie" src="/favicon.ico" width="70" height="70" class="d-inline-block align-top mt-1 mr-1">
+        <h1 style="font-family: 'Crimson Text', serif; font-size: 4em;" class="text-white d-inline-block">
+            Thin Blue Lie
+        </h1>
+    </div>
+</div>
+<div>
+    <div class="aboutnav d-md-inline-block offset-lg-1 col-2 d-none">
+        <h5>About Us</h5>
+        <ul>
+            <li>
+                <NavLink class="nav-link" href="/About#purpose" >Purpose</NavLink>
+            </li>
+            <li>
+                <NavLink class="nav-link" href="/About#founding" >Founding</NavLink>
+            </li>
+            <li>
+                <NavLink class="nav-link" href="/About#future" >Future</NavLink>
+            </li>
+            <li>
+                <NavLink class="nav-link" href="/About#contributors" >Contributors</NavLink>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-7 d-inline-block about">
+        <div id="purpose">
+            <h4 class="mb-0">Purpose</h4> <hr class="nogap" />
+             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        <div id="founding">
+            <h4 class="mb-0">Founding</h4> <hr class="nogap" />
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </div>
+        <div id="future">
+            <h4 class="mb-0">Future</h4> <hr class="nogap" />
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </div>
+        <div id="contributors">
+            <h4 class="mb-0">Contributors</h4> <hr class="nogap" />
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </div>
+    </div>
+</div>
+<style>
+    .about{
+        margin-top: 50px;       
+    }
+    h4{
+        padding-left:.3rem;
+    }
+    .about-header-image {
+        background-size: cover !important;
+        background-color: #919191;
+        width: 100%;
+        border-radius: 0px !important;
+        padding-top: 3rem !important;
+        padding-bottom: 2rem !important;
+        margin-bottom: 0px;
+        margin-top: 0px !important;
+    }
+    .aboutnav ul {
+        list-style-type: none;   
+        padding-left: 10px;
+    }
+    .aboutnav {
+        position: sticky;
+        margin-top: 25px;
+        padding: 0px;
+        bottom: 100%;
+        z-index: 100; /* Behind the navbar */
+        /* box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);*/
+        width: 150px;
+        margin-right: 100px;
+    }
+    .aboutnav h5 {
+       text-decoration: underline;
+    }
+    .aboutnav .nav-link:hover {
+        text-decoration: underline;
+    }
+    .aboutnav .nav-link.active {
+        border-right: 3px solid blue;
+        
+    }
+    /*.aboutnav p {
+        padding: 6px 8px 6px 16px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #0091ff;
+        display: block;
+    }*/
+        .aboutnav a {
+            padding-top:5px;
+            padding-bottom:5px;
+            padding-left: 0px;
+        }
+            .aboutnav a:hover {
+                color: #064579;
+            }
+</style>
+
+@code {
+
+}
