@@ -9,9 +9,10 @@
 @using ThinBlueLieB.Helper
 
 <style>
-    .e-file-select-wrap{
+    .e-file-select-wrap {
         padding: 0.2rem;
-    }    
+    }
+
     @@font-face {
         font-family: 'button-icons';
         src: url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype');
@@ -29,6 +30,7 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
+
     .e-close-icon:before {
         content: '\e745';
     }
@@ -44,7 +46,8 @@
     .e-chevron-down-icon:before {
         content: '\e705';
     }
-    .borderbodywhite{
+
+    .borderbodywhite {
         background-color: white !important;
         border-color: white !important;
     }
@@ -53,75 +56,76 @@
 <div class="AddMedia">
     <div class="card border-dark mt-3 ml-2">
         <div class="card-body text-dark row pt-0">
-            <div name="mediaAdd" class="container-fluid px-4">               
-                    <div class="form-row position-relative">
-                        <div class="col-6 dropdown my-2 pr-2">
-                            <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Type of Media" @bind-Value="@media.MediaType" DataSource="@MediaTypes">
-                                <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
-                            </SfDropDownList>
-                        </div>
-                        <div class="col-6 dropdown my-2 pl-2">
-                            <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Source Location" @bind-Value="@media.SourceFrom" DataSource="@SourceFromOptions">
-                                <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
-                            </SfDropDownList>
-                        </div>
-                        <div class="position-absolute d-inline-flex" style="left: 86%;">
-                            <SfButton IconCss="e-icons e-chevron-up-icon" IsPrimary="true" CssClass="e-flat borderbodywhite"></SfButton>
-                            <SfButton IconCss="e-icons e-chevron-down-icon" IsPrimary="true" CssClass="e-flat ml-1 borderbodywhite"></SfButton>
-                            <SfButton IconCss="e-icons e-double-arrow-up-icon" IsPrimary="true" CssClass="e-flat ml-1 mr-3 borderbodywhite"></SfButton>
-                            <SfButton IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat borderbodywhite"></SfButton>
-                        </div>
+            <div name="mediaAdd" class="container-fluid px-4">
+                <div class="position-absolute d-inline-flex" style="right: 5px; z-index:1000;">
+                    <SfButton @onclick="@(() => MoveMediaUp.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-up-icon" IsPrimary="true" CssClass="e-flat borderbodywhite"></SfButton>
+                    <SfButton @onclick="@(() => MoveMediaDown.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-down-icon" IsPrimary="true" CssClass="e-flat ml-1 borderbodywhite"></SfButton>
+                    <SfButton @onclick="@(() => MoveMediaTop.InvokeAsync(media.ListIndex))" IconCss="e-icons e-double-arrow-up-icon" IsPrimary="true" CssClass="e-flat ml-1 mr-3 borderbodywhite"></SfButton>
+                    <SfButton @onclick="@(() => DeleteMedia.InvokeAsync(media.ListIndex))" IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat borderbodywhite"></SfButton>
+                </div>
+                <div class="form-row position-relative">
+                    <div class="col-6 dropdown my-2 pr-2">
+                        <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Type of Media" @bind-Value="@media.MediaType" DataSource="@MediaTypes">
+                            <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                        </SfDropDownList>
                     </div>
-                    <div class="form-row align-middle mb-2 pl-1">
-                        <SfTextBox CssClass="e-filled" Placeholder="Provide a brief description" FloatLabelType="@FloatLabelType.Auto" @bind-Value="media.Blurb"></SfTextBox>
+                    <div class="col-6 dropdown my-2 pl-2">
+                        <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Source Location" @bind-Value="@media.SourceFrom" DataSource="@SourceFromOptions">
+                            <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                        </SfDropDownList>
                     </div>
-                    <div class="form-row">
-                        <div class="col-5">
-                            @*@if (Enum.GetName(typeof(MediaEnums.MediaTypeEnum), media.SourceFrom) == "Device")*@
-                            @if(media.SourceFrom == 6)
-                            {
-                                <div class="form-group MediaFile">
-                                    <SfUploader ID="UploadFiles"CssClass="e-filled mt-2" DropArea=".control-fluid">
-                                        <UploaderEvents OnRemove="OnFileRemove"></UploaderEvents>
-                                        <UploaderAsyncSettings SaveUrl="https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save" RemoveUrl="https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove"></UploaderAsyncSettings>
-                                    </SfUploader>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="form-group MediaLink">
-                                    <SfTextBox CssClass="e-filled" Placeholder="Link your Media here" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
-                                </div>
-                            }
-                        </div>
-                        <div class="ml-3 col-6">
-                            <label class="form-check-label">
-                                Is there any blood or gore in the video?<span class="text-danger ml-1">*</span>                               
-                            </label>
-                            <div class="row">
-                                <div class="form-check m-2 d-inline">
-                                    <SfRadioButton Label="No" Name="@(Guid1)" Value="0" Checked="@media.Gore"></SfRadioButton>
-                                </div>
-                                <div class="form-check m-2 d-inline">
-                                    <SfRadioButton Label="Yes" Name="@(Guid1)" Value="1" Checked="@media.Gore"></SfRadioButton>
-                                </div>
+                </div>
+                <div class="form-row align-middle mb-2 pl-1">
+                    <SfTextBox CssClass="e-filled" Placeholder="Provide a brief description" FloatLabelType="@FloatLabelType.Auto" @bind-Value="media.Blurb"></SfTextBox>
+                </div>
+                <div class="form-row">
+                    <div class="col-5">
+                        @*@if (Enum.GetName(typeof(MediaEnums.MediaTypeEnum), media.SourceFrom) == "Device")*@
+                        @if (media.SourceFrom == 6)
+                        {
+                            <div class="form-group MediaFile">
+                                <SfUploader ID="UploadFiles" CssClass="e-filled mt-2" DropArea=".control-fluid">
+                                    <UploaderEvents OnRemove="OnFileRemove"></UploaderEvents>
+                                    <UploaderAsyncSettings SaveUrl="https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save" RemoveUrl="https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove"></UploaderAsyncSettings>
+                                </SfUploader>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group MediaLink">
+                                <SfTextBox CssClass="e-filled" Placeholder="Link your Media here" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
+                            </div>
+                        }
+                    </div>
+                    <div class="ml-3 col-6">
+                        <label class="form-check-label">
+                            Is there any blood or gore in the video?<span class="text-danger ml-1">*</span>
+                        </label>
+                        <div class="row">
+                            <div class="form-check m-2 d-inline">
+                                <SfRadioButton Label="No" Name="@media.ListIndex.ToString()" Value="0" Checked="@media.Gore"></SfRadioButton>
+                            </div>
+                            <div class="form-check m-2 d-inline">
+                                <SfRadioButton Label="Yes" Name="@media.ListIndex.ToString()" Value="1" Checked="@media.Gore"></SfRadioButton>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
-    </div>
+    </div>    
 </div>
 @code {  
-    private ViewMedia media = new ViewMedia();
+    public ViewMedia media { get; set; } = new ViewMedia();
+
     [Parameter]
-    public int ListCount { get; set; }
-    protected override void OnInitialized()
-    {
-        Guid g = Guid.NewGuid();
-        Guid1 = g.ToString();        
-    }
-    public string Guid1 { get; set; }
+    public EventCallback<int> MoveMediaUp { get; set; }
+    [Parameter]
+    public EventCallback<int> MoveMediaDown { get; set; }
+    [Parameter]
+    public EventCallback<int> MoveMediaTop { get; set; }
+    [Parameter]
+    public EventCallback<int> DeleteMedia { get; set; }
 
     IReadOnlyList<Extensions.ListItem> MediaTypes = Extensions.GetDropdownList<MediaEnums.MediaTypeEnum>.Items;
     IReadOnlyList<Extensions.ListItem> SourceFromOptions = Extensions.GetDropdownList<MediaEnums.SourceFromEnum>.Items;
