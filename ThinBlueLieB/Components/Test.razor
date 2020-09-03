@@ -4,17 +4,21 @@
 @using Syncfusion.Blazor.DropDowns
 
 <div class="container px-5">
-    <SfButton @onclick="addMedia">Add Media</SfButton>
-    <SfButton @onclick="removeMedia">Remove Media</SfButton>
-    <SfListBox TValue="List<ViewMedia>" DataSource="@Data" TItem="ViewMedia" AllowDragAndDrop="true" @ref="MediaListBoxObj">
+    <SfButton @onclick="AddMedia">Add Media</SfButton>
+    <SfListBox TValue="int[]" DataSource="@Data" TItem="ViewMedia" @ref="MediaListBoxObj">
         <ListBoxFieldSettings></ListBoxFieldSettings>
         <ListBoxTemplates TItem="ViewMedia">
             <ItemTemplate>
-                <MediaCard ListCount="1"></MediaCard>
+                <MediaCard MoveMediaDown="MoveMediaDown" MoveMediaUp="MoveMediaUp" MoveMediaTop="MoveMediaTop" DeleteMedia="DeleteMedia"></MediaCard>
             </ItemTemplate>
         </ListBoxTemplates>
         <ListBoxSelectionSettings Mode="SelectionMode.Single"></ListBoxSelectionSettings>
     </SfListBox>
+    <div>
+        <p>
+            @message
+        </p>
+    </div>
 </div>
 <style>   
     .e-listbox-wrapper.e-wrapper{
@@ -30,26 +34,45 @@
     }
 
 </style>
-@code {
+@code { 
     // public ListData Model = new ListData();
-    SfListBox<List<ViewMedia>, ViewMedia> MediaListBoxObj;
+    SfListBox<int[], ViewMedia> MediaListBoxObj;
     public List<ViewMedia> Data = new List<ViewMedia>
     {
-        new ViewMedia{}
+        new ViewMedia{ ListIndex = 0}
     };
-
-    public List<ViewMedia> NewMedia = new List<ViewMedia>
+    string message = "placeholder";
+    int MediaCount = 0;
+    public List<ViewMedia> NewMediaItem { get; set; } = new List<ViewMedia>();
+    public List<ViewMedia> NewMedia()
     {
-        new ViewMedia{}
-    };
-    private int cardNumber { get; set; } = 0;
-    private void addMedia()
-    {
-        MediaListBoxObj.AddItems(NewMedia);
+        NewMediaItem.Add(new ViewMedia { ListIndex = MediaCount});
+        return NewMediaItem;
     }
-    private void removeMedia()
+    private void AddMedia()
     {
-        MediaListBoxObj.RemoveItems(MediaListBoxObj.Value[cardNumber]);
+        var newMediaItem = NewMedia();
+        MediaListBoxObj.AddItems(newMediaItem);
+        MediaCount++;
+        message = MediaCount.ToString() + MediaListBoxObj.ToString();
+        NewMediaItem.Clear();
+    }
+    private void MoveMediaUp(int Index)
+    {
+        message = "move media up" + Index;
+        MediaListBoxObj.MoveUp(Index);
+    }
+    private void MoveMediaDown(int removeIndex)
+    {
+        throw new NotImplementedException();
+    }
+    private void MoveMediaTop(int removeIndex)
+    {
+        throw new NotImplementedException();
+    }
+    private void DeleteMedia(int removeIndex)
+    {
+        throw new NotImplementedException();
     }
 
     //public class ListData

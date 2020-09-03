@@ -25,6 +25,7 @@ namespace DataAccessLibrary.DataModels
         [Column(TypeName = "tinytext")]
         [NotMapped]
         public string Blurb { get; set; }
+        public string Credit { get; set; }
         [Column(TypeName = "varchar(255)")]
         [NotMapped]
         public string? SubmittedBy { get; set; }

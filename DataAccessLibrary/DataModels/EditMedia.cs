@@ -21,6 +21,7 @@ namespace DataAccessLibrary.DataModels
         [Required]
         [Column(TypeName = "tinytext")]
         public string Blurb { get; set; }
+        public string Credit { get; set; }
         [Required]
         [Column(TypeName = "varchar(255)")]
         public string SubmittedBy { get; set; }
