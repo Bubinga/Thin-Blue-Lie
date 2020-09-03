@@ -7,6 +7,7 @@ namespace ThinBlueLieB.Models
     {
         public int IdMedia { get; set; }
         public int IdTimelineinfo { get; set; }
+        public int ListIndex { get; set; }
         public byte MediaType { get; set; }
         public string SourcePath { get; set; } //For linked image 
         public IFormFile Source { get; set; } //For uploaded image file
