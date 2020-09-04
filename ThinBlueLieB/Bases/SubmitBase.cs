@@ -35,24 +35,11 @@ namespace ThinBlueLieB.Models
         public List<ViewSimilar>? SimilarEvents { get; set; }
 
 
-
         protected Task HandleValidSubmit()
         {
             throw new NotImplementedException();
-        }
-
-        protected Task AddSubject()
-        {
-            throw new NotImplementedException();
-        }
-        protected Task AddOfficer()
-        {
-            throw new NotImplementedException();
-        }
-        protected Task AddMedia()
-        {
-            throw new NotImplementedException();
-        }
+        }       
+       
         //add login suggestion
 
     }

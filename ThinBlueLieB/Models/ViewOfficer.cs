@@ -5,6 +5,7 @@ namespace ThinBlueLieB.Models
     public class ViewOfficer
     {
         public int IdOfficer { get; set; }
+        public int ListIndex { get; set; }
         public string Name { get; set; }
         [Required(ErrorMessage = "The Officer's Race field is required")]
         public byte Race { get; set; }
