@@ -1,19 +1,20 @@
 ﻿@using Syncfusion.Blazor.DropDowns
-@using DataAccessLibrary.Enums
-@using System.Linq
-@using DataAccessLibrary.DataModels 
-@using ThinBlueLieB.Helper 
+@using Syncfusion.Blazor.Buttons
+@using ThinBlueLieB.Helper
 
 <div class="AddOfficer mt-2">
     <div class="card border-dark mb-3 mx-auto">
         <div class="card-body text-dark pt-2">
+            <div @onclick="@(() => DeleteOfficer.InvokeAsync(officer.ListIndex))" @onclick:stopPropagation="false" @onclick:preventDefault class="position-absolute d-inline-flex" style="right: 5px; top:0px; z-index:1000;">
+                <SfButton IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
+            </div>
             <div class="form-row position-relative">
                 <div class="my-2 ml-1" style="width:71%">
                     <SfTextBox CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="officer.Name"></SfTextBox>
                 </div>
                 <div class="ml-2 my-2 w-25">
-                    <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1 
-                    @bind-Value="officer.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
+                    <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1
+                                      @bind-Value="officer.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
                 </div>
                 <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;">
                     <span aria-hidden="true">×</span>
@@ -38,7 +39,7 @@
                     </label>
                     <SfMultiSelect TValue="int[]" Mode="@VisualMode.Box" Placeholder="Miconducts" @bind-Value="@MisconductsVal" DataSource="@MisconductsList">
                         <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
-                    </SfMultiSelect>                    
+                    </SfMultiSelect>
                 </div>
                 <div class="col-6">
                     <label class="form-check-label">
@@ -46,15 +47,19 @@
                     </label>
                     <SfMultiSelect TValue="int[]" Mode="@VisualMode.Box" Placeholder="Weapons" @bind-Value="@WeaponsVal" DataSource="@WeaponsList">
                         <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
-                    </SfMultiSelect>                  
+                    </SfMultiSelect>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-@code {   
-    private ViewOfficer officer = new ViewOfficer();
+@code {
+    [Parameter]
+    public ViewOfficer officer { get; set; }
+
+    [Parameter]
+    public EventCallback<int> DeleteOfficer { get; set; }
 
     IReadOnlyList<Extensions.ListItem> Sexes = Extensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
     IReadOnlyList<Extensions.ListItem> Races = Extensions.GetDropdownList<TimelineinfoEnums.RaceEnum>.Items;

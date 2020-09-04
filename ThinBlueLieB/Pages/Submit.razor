@@ -2,16 +2,11 @@
 @inherits SubmitBase
 @inject ISearches searches
 
-@using Microsoft.AspNetCore.Mvc;
 @using ThinBlueLieB.Models;
 @using Syncfusion.Blazor.DropDowns
-@using DataAccessLibrary.Enums
 @using ThinBlueLieB.Helper
-@using System.Linq
-@using DataAccessLibrary.DataModels
 @using Syncfusion.Blazor.RichTextEditor
 @using Syncfusion.Blazor.Buttons
-@using ThinBlueLieB.Components.Bases 
 <style>
     body {
         overflow-x: hidden;
@@ -46,6 +41,37 @@
     .e-richtexteditor .e-rte-content .e-content {
         min-height: 150px;
     }
+
+    .e-file-select-wrap {
+        padding: 0.2rem;
+    }
+
+    .e-close-icon:before {
+        content: '\e745';
+    }
+
+    .e-double-arrow-up-icon:before {
+        content: '\e7c5';
+    }
+
+    .e-chevron-up-icon:before {
+        content: '\e734';
+    }
+
+    .e-chevron-down-icon:before {
+        content: '\e705';
+    }
+
+    .e-custom {
+        color: #221e1e !important;
+        background-color: white !important;
+        border-color: white !important;
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+        .e-custom:hover {
+            color: #314DB2 !important;
+        }
 </style>
 <div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
     <div class="col-lg-5 col-md-6 border-left border-right border-bottom">
@@ -78,28 +104,38 @@
                 <h6 class="d-inline">
                     Fill out the following information for the Subject
                 </h6>
-                <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="AddSubject" IsPrimary="true" IconPosition=@IconPosition.Right>
-                    Subject
-                </SfButton>
+                <span @onclick="AddSubject" @onclick:stopPropagation="false" @onclick:preventDefault>
+                    <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
+                        Subject
+                    </SfButton>
+                </span>
             </div>
             <div id="SubjectList">
-                <Subject></Subject>
+                @foreach (var subject in SubjectList)
+                {
+                    <Subject subject="subject" DeleteSubject="DeleteSubject"></Subject>
+                }
             </div>
             <hr />
             <div>
                 <h6 class="d-inline">
                     Fill out the following information for the Officer
                 </h6>
-                <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="AddOfficer" IsPrimary="true" IconPosition=@IconPosition.Right>
-                    Officer
-                </SfButton>
+                <span @onclick="AddOfficer" @onclick:stopPropagation="false" @onclick:preventDefault>
+                    <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
+                        Officer
+                    </SfButton>
+                </span>
             </div>
             <div id="OfficerList">
-                <Officer></Officer>
+                @foreach (var officer in OfficerList)
+                {
+                    <Officer officer="officer" DeleteOfficer="DeleteOfficer"></Officer>
+                }
             </div>
             <hr />
             <div class="form-group">
-                <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, if there were more people involved, if there was any followup to the event or coverage in the news, etc.</label>
+                <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, and anything related to the event that happened off-screen.</label>
                 <SfRichTextEditor CssClass="w-100" @bind-Value="@model.Timelineinfos.Context" EnableResize="true" EditorMode="EditorMode.Markdown" EnableHtmlSanitizer="true" ShowCharCount="true">
                     <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
                 </SfRichTextEditor>
@@ -116,8 +152,7 @@
             <div class="container-fluid d-block">
                 <h4 class="pt-2">Similar Videos</h4>
                 <p class="mb-0 border-bottom" style="font-size:1em">
-                    Here are similar pages that share some similarities with the information you are filling out,
-                    either a date, name, video, or some combination of the three
+                    Here are Events that share the a date with the information you are filling out, please check to see if your event is a duplicate.
                 </p>
                 <div id="VideoList">
                     @*<SimilarEvents></SimilarEvents>*@
@@ -135,18 +170,21 @@
                     </SfButton>
                 </p>               
             </div>
-            <div id="MediaList">
-               <MediaCard></MediaCard>
+            <div id="MediaList" class="container-fluid">
+                @foreach (var media in MediaList)
+                {
+                    <MediaCard media="media" MoveMediaDown="MoveMediaDown" MoveMediaUp="MoveMediaUp" MoveMediaTop="MoveMediaTop" DeleteMedia="DeleteMedia"></MediaCard>
+                }
             </div>
-            <div>
+            <!--<div>
                 <div class="container">
                     <button class="btn btn-primary mx-auto" id="MoreMedia">
-                        Media
+                        Media-->
                         @*<i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>*@
-                    </button>
+                    <!--</button>-->
                     @*<input type="submit" value="submit" class="btn btn-primary" />*@
-                </div>
-            </div>
+                <!--</div>
+            </div>-->
         </div>
     </div>
 </div>
@@ -165,6 +203,103 @@
         Console.WriteLine(args);
         SimilarEvents = await searches.GetSimilar(args.Value.ToString());
         //return SimilarEvents;
+    }
+
+    public List<ViewMedia> MediaList { get; set; } = new List<ViewMedia>
+    {
+         new ViewMedia{ ListIndex = 0} //Intialize page with one card
+    };
+    public List<ViewSubject> SubjectList { get; set; } = new List<ViewSubject>
+    {
+        new ViewSubject { ListIndex = 0}
+    };
+    public List<ViewOfficer> OfficerList { get; set; } = new List<ViewOfficer>
+    {
+        new ViewOfficer { ListIndex = 0}
+    };
+
+    private void AddMedia()
+    {
+        var newMediaItem = new ViewMedia { ListIndex = MediaList.Count };
+        MediaList.Add(newMediaItem);
+    }
+
+    private void AddSubject()
+    {
+        var newSubjectItem = new ViewSubject { ListIndex = SubjectList.Count };
+        SubjectList.Add(newSubjectItem);
+    }
+    private void AddOfficer()
+    {
+        var newOfficerItem = new ViewOfficer { ListIndex = OfficerList.Count };
+        OfficerList.Add(newOfficerItem);
+    }
+
+    private void MoveMediaUp(int Index)
+    {
+        if (Index != 0)
+        {
+            var item = MediaList[Index]; //Get Card
+            MediaList.RemoveAt(Index); //Remove Card
+            MediaList.Insert(Index - 1, item); //Put Card in place above where it was
+            MediaList[Index].ListIndex = Index; //Set ListIndex to fit it's position
+            MediaList[Index - 1].ListIndex = Index - 1; //do above to item above
+        }
+    }
+
+    private void MoveMediaDown(int Index)
+    {
+        if (Index != MediaList.Count - 1)
+        {
+            var item = MediaList[Index]; //Get Card
+            MediaList.RemoveAt(Index); //Remove Card
+            MediaList.Insert(Index + 1, item); //Put Card in place below where it was
+            MediaList[Index].ListIndex = Index; //Set ListIndex to fit it's position
+            MediaList[Index + 1].ListIndex = Index + 1; //do above to item below
+        }
+    }
+
+    private void MoveMediaTop(int Index)
+    {
+        if (Index != 0)
+        {
+            var item = MediaList[Index]; //Get Card                                  
+            MediaList.RemoveAt(Index); //Remove Card
+            MediaList.Insert(0, item); //Put Card at Top
+            MediaList[Index].ListIndex = 0; //Set ListIndex to fit it's position
+            for (int i = 0; i < MediaList.Count; i++)
+            {
+                MediaList[i].ListIndex = i;
+            }
+        }
+    }
+
+    private void DeleteMedia(int Index)
+    {
+        MediaList.RemoveAt(Index);
+        for (int i = 0; i < MediaList.Count; i++)
+        {
+            MediaList[i].ListIndex = i;
+        }
+    }
+
+    private void DeleteSubject(int Index)
+    {
+        SubjectList.RemoveAt(Index);
+        for (int i = 0; i < SubjectList.Count; i++)
+        {
+            SubjectList[i].ListIndex = i;
+        }
+
+    }
+
+    private void DeleteOfficer(int Index)
+    {
+        OfficerList.RemoveAt(Index);
+        for (int i = 0; i < OfficerList.Count; i++)
+        {
+            OfficerList[i].ListIndex = i;
+        }
     }
 }
 
