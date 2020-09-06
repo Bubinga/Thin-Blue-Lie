@@ -1,6 +1,5 @@
 ﻿@page "/Submit"
 @inherits SubmitBase
-@inject ISearches searches
 
 @using ThinBlueLieB.Models;
 @using Syncfusion.Blazor.DropDowns
@@ -189,21 +188,21 @@
     </div>
 </div>
 @code {
-    protected async Task FindOfficers(string Name)
-    {
-        SimilarPeople = await searches.SearchOfficer(Name);
-    }
+    //protected async Task FindOfficers(string Name)
+    //{
+    //    SimilarPeople = await searches.SearchOfficer(Name);
+    //}
     //protected async Task<List<ViewSimilar>> FindEvents(DateTime date)
     //{     
     //    SimilarEvents = await searches.GetSimilar(date.ToString("yyyy-MM-dd"));
     //    return SimilarEvents;
     //}
-    protected async void FindEvents(Syncfusion.Blazor.Calendars.ChangedEventArgs<DateTime?> args)
-    {
-        Console.WriteLine(args);
-        SimilarEvents = await searches.GetSimilar(args.Value.ToString());
-        //return SimilarEvents;
-    }
+    //protected async void FindEvents(Syncfusion.Blazor.Calendars.ChangedEventArgs<DateTime?> args)
+    //{
+    //    Console.WriteLine(args);
+    //    SimilarEvents = await searches.GetSimilar(args.Value.ToString());
+    //    //return SimilarEvents;
+    //}
 
     public List<ViewMedia> MediaList { get; set; } = new List<ViewMedia>
     {
