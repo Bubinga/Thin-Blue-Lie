@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ThinBlueLieB.Helper;
+using static ThinBlueLieB.Searches.SearchClasses;
 
 namespace ThinBlueLieB.Models
 {
