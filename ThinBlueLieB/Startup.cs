@@ -37,8 +37,9 @@ namespace ThinBlueLieB
                 .AddEntityFrameworkStores<UserDbContext>();
 
             services.AddOptions();
-            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
-            services.AddScoped<ISearches, Searches>();
+            services.Configure<ConnectionStringService>(Configuration.GetSection("ConnectionStrings"));
+            services.AddScoped<ConnectionStringService>();
+            //services.AddScoped<ISearches, Searches>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();

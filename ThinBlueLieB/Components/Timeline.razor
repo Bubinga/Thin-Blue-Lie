@@ -1,8 +1,10 @@
-﻿@using DataAccessLibrary.DataModels;
+﻿@page "/Timeline"
+@using DataAccessLibrary.DataModels;
 @using static ThinBlueLieB.Helper.Extensions
 @using ThinBlueLieB.Helper
+@using ThinBlueLieB.Searches
 @inject NavigationManager MyNavigationManager
-@inject ISearches searches
+@*@inject ISearchesTimeline searches*@
 
 <div @onclick="PrevWeek" id="triangle-left"> <div class="empty"></div></div>
 @*@foreach ((var day, Int32 i) in Day.Select((day, i) => (day, i)))
@@ -24,6 +26,8 @@
 <div @onclick="NextWeek" id="triangle-right"><div class="empty"></div></div>
 
 @code {
+    SearchesTimeline searches = new Searches.SearchesTimeline();
+
 #nullable enable
     [Parameter]
     public string? current { get; set; }
