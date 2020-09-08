@@ -1,8 +1,13 @@
 ﻿@using ThinBlueLieB.Helper
 @using static ThinBlueLieB.Searches.SearchClasses
+@using static ThinBlueLieB.Helper.Extensions;
 @inherits SimilarPeopleBase
 
-
+<style>
+    .event {
+        list-style-type: none;
+    }
+</style>
 @if (People.Count == 0)
 {
     <div class="container mt-2" style="min-height:100px;">
@@ -28,9 +33,9 @@
                     {
                         <li class="event">
                             <a href="#">
-                                <span>@item.Date</span>
-                                <span>@item.City</span>
-                                <span>@Enum.GetName(typeof(TimelineinfoEnums.StateEnum), item.State)</span>
+                                <span class="ml-md-1">@item.Date.ToString("yyyy, MMMM dd") ---</span>
+                                <span>@item.City,</span>
+                                <span>@GetEnumDisplayName((TimelineinfoEnums.StateEnum)item.State)</span>
                             </a>
                         </li>
                     }
@@ -40,7 +45,7 @@
     </div>
 }
 
-@code {  
+@code {
     [Parameter]
     public List<SimilarPerson> People { get; set; } = null;
 }

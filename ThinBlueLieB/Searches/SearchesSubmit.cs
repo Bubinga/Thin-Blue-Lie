@@ -15,9 +15,14 @@ namespace ThinBlueLieB.Helper
 {
     public class SearchesSubmit
     {
-        [Inject]
-        private ConnectionStringService connectionStrings { get;}
-       
+        //[Inject]
+        //private ConnectionStringService ConnectionStrings { get;}
+        private readonly ConnectionStringService ConnectionStrings;
+        public SearchesSubmit(IOptions<ConnectionStringService> options)
+        {
+            ConnectionStrings = options.Value;
+        }
+
         public async Task<List<SimilarPerson>> SearchOfficer(string Input)
         {
             //Get only First and Last Name
@@ -42,7 +47,7 @@ namespace ThinBlueLieB.Helper
             //Load all OfficcerNames
             DataAccess data = new DataAccess();
             string sql = "SELECT IdOfficer, Name FROM officers";
-            List<FirstLoadOfficer> Names = await data.LoadData<FirstLoadOfficer, dynamic>(sql, new { }, connectionStrings.DataDB);
+            List<FirstLoadOfficer> Names = await data.LoadData<FirstLoadOfficer, dynamic>(sql, new { }, ConnectionStrings.DataDB);
 
             List<NameScore> nameScores = new List<NameScore>();
             foreach (var name in Names)
@@ -75,9 +80,26 @@ namespace ThinBlueLieB.Helper
             }
             //return list of names in order of lowest to highest score
             var SortedNames = nameScores.OrderByDescending(o => o.Score).ToList();
-            var Ids = String.Join(",", SortedNames.Where(s => s.Score > 0.7).Select(x => x.Id));
-            string sql2 = "SELECT * FROM officers Where IdOfficer in (" + Ids + ") ORDER BY field(IdOfficer, " + Ids + ")";
-            List<SimilarPerson> similarPeople = await data.LoadData<SimilarPerson, dynamic>(sql2, new { }, connectionStrings.DataDB);
+            var Ids = String.Join(",", SortedNames.Where(s => s.Score > 0.7).Select(x => x.Id));            
+            List<SimilarPerson> similarPeople;
+            if (!string.IsNullOrWhiteSpace(Ids))
+            {
+                var sql2 = "SELECT o.Name, o.Race, o.Sex FROM officers o Where IdOfficer in (" + Ids + ") ORDER BY field(IdOfficer, " + Ids + ")";
+                similarPeople = await data.LoadData<SimilarPerson, dynamic>(sql2, new { }, ConnectionStrings.DataDB);
+                for (int i = 0; i < Ids.Length; i++)
+                {
+                    var sql3 = "SELECT t.Date, t.City, t.State " +
+                                "FROM timelineinfo t " +
+                                "JOIN timelineinfo_officer ON t.IdTimelineinfo = timelineinfo_officer.IdTimelineinfo " +
+                                "JOIN officers o ON timelineinfo_officer.IdOfficer = o.IdOfficer " +
+                                "WHERE o.IdOfficer = " + Ids[i] + ";";
+                    similarPeople[i].Events = await data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3, new { }, ConnectionStrings.DataDB);
+                }                          
+            }
+            else
+            {
+                similarPeople = new List<SimilarPerson>();
+            }
             return similarPeople;           
         }
 
@@ -105,7 +127,7 @@ namespace ThinBlueLieB.Helper
             //Load all OfficcerNames
             DataAccess data = new DataAccess();
             string sql = "SELECT IdSubject, Name FROM subjects";
-            List<FirstLoadSubject> Names = await data.LoadData<FirstLoadSubject, dynamic>(sql, new { }, connectionStrings.DataDB);
+            List<FirstLoadSubject> Names = await data.LoadData<FirstLoadSubject, dynamic>(sql, new { }, ConnectionStrings.DataDB);
 
             List<NameScore> nameScores = new List<NameScore>();
             foreach (var name in Names)
@@ -138,9 +160,26 @@ namespace ThinBlueLieB.Helper
             }
             //return list of names in order of lowest to highest score
             var SortedNames = nameScores.OrderByDescending(o => o.Score).ToList();
-            var Ids = String.Join(",", SortedNames.Where(s => s.Score > 0.7).Select(x => x.Id));
-            string sql2 = "SELECT * FROM subjects Where IdSubject in (" + Ids + ") ORDER BY field(IdSubject, " + Ids + ")";
-            List<SimilarPerson> similarPeople = await data.LoadData<SimilarPerson, dynamic>(sql2, new { }, connectionStrings.DataDB);
+            var Ids = String.Join(",", SortedNames.Where(s => s.Score > 0.7).Select(x => x.Id));           
+            List<SimilarPerson> similarPeople;
+            if (!string.IsNullOrWhiteSpace(Ids))
+            {
+                var sql2 = "SELECT * FROM subjects Where IdSubject in (" + Ids + ") ORDER BY field(IdSubject, " + Ids + ")";
+                similarPeople = await data.LoadData<SimilarPerson, dynamic>(sql2, new { }, ConnectionStrings.DataDB);
+                for (int i = 0; i < Ids.Length; i++)
+                {
+                    var sql3 = "SELECT t.Date, t.City, t.State " +
+                                "FROM timelineinfo t " +
+                                "JOIN timelineinfo_subject ON t.IdTimelineinfo = timelineinfo_subject.IdTimelineinfo " +
+                                "JOIN subjects s ON timelineinfo_subject.IdSubject = s.IdSubject " +
+                                "WHERE s.IdSubject = " + Ids[i] + ";";
+                    similarPeople[i].Events = await data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3, new { }, ConnectionStrings.DataDB);
+                }
+            }
+            else
+            {
+                similarPeople = new List<SimilarPerson>();
+            } 
             return similarPeople;
         }
 
@@ -150,16 +189,16 @@ namespace ThinBlueLieB.Helper
             List<ViewSimilar> SimilarEvents = new List<ViewSimilar>();
             DataAccess data = new DataAccess();
             var query1 = "SELECT t.Date, t.IdTimelineinfo, t.Context, t.State, t.City, t.Verified, t.SubmittedBy From timelineinfo t where t.date = " + TempDate + ";";
-            var SimilarTimelineinfos = await data.LoadData<Timelineinfo, dynamic>(query1, new { }, connectionStrings.DataDB);
+            var SimilarTimelineinfos = await data.LoadData<Timelineinfo, dynamic>(query1, new { }, ConnectionStrings.DataDB);
             foreach ((var Event, Int32 i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))
             {
                 var id = Event.IdTimelineinfo;
                 var officerQuery = "SELECT o.Name, o.Race, o.Sex, o.Age FROM timelineinfo JOIN timelineinfo_officer ON timelineinfo.IdTimelineinfo = timelineinfo_officer.IdTimelineinfo JOIN officers o ON timelineinfo_officer.IdOfficer = o.IdOfficer WHERE timelineinfo.IdTimelineinfo = " + id + ";";
-                var Officers = await data.LoadData<ViewSimilarPerson, dynamic>(officerQuery, new { }, connectionStrings.DataDB);
+                var Officers = await data.LoadData<ViewSimilarPerson, dynamic>(officerQuery, new { }, ConnectionStrings.DataDB);
                 var subjectQuery = "SELECT o.Name, o.Race, o.Sex, o.Age FROM timelineinfo JOIN timelineinfo_subject ON timelineinfo.IdTimelineinfo = timelineinfo_subject.IdTimelineinfo JOIN subjects o ON timelineinfo_subject.IdSubject = o.IdSubject WHERE timelineinfo.IdTimelineinfo = " + id + ";";
-                var Subjects = await data.LoadData<ViewSimilarPerson, dynamic>(officerQuery, new { }, connectionStrings.DataDB);
+                var Subjects = await data.LoadData<ViewSimilarPerson, dynamic>(officerQuery, new { }, ConnectionStrings.DataDB);
                 var MediaQuery = "Select * From media m Where(m.IdTimelineinfo = " + id + ";";
-                var Media = await data.LoadData<Media, dynamic>(officerQuery, new { }, connectionStrings.DataDB);
+                var Media = await data.LoadData<Media, dynamic>(officerQuery, new { }, ConnectionStrings.DataDB);
 
                 //add timelineinfos, officers, subject, and media to list at end
                 ViewSimilar items = new ViewSimilar()

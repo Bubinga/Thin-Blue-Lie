@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAccessLibrary.DataAccess
+namespace ThinBlueLieB.Helper
 {
     public class ConnectionStringService
     {
