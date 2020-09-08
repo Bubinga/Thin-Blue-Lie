@@ -113,17 +113,15 @@
                 </span>
             </div>
             <div id="SubjectList">
-                @foreach (var subject in SubjectList)
+                @foreach ((var subject, Int32 i) in SubjectList.Select((subject, i) => (subject, i)))
                 {
                     <Subject subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></Subject>
+                    if (SimilarOfficers.Count != 0 && SimilarOfficers.Count > i)
+                    {
+                        <SimilarPeople People="SimilarSubjects[i]"></SimilarPeople>
+                    }
                 }
-            </div>
-            <div>
-                @if (SimilarSubjects != null)
-                {
-                    <SimilarPeople People="SimilarSubjects"></SimilarPeople>
-                }
-            </div>
+            </div>           
             <hr />
             <div>
                 <h6 class="d-inline">
@@ -136,17 +134,15 @@
                 </span>
             </div>
             <div id="OfficerList">
-                @foreach (var officer in OfficerList)
+                @foreach ((var officer, Int32 i) in OfficerList.Select((officer, i) => (officer, i)))
                 {
                     <Officer officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
+                    if (SimilarOfficers.Count != 0 && SimilarOfficers.Count > i)
+	                {	                	
+                           <SimilarPeople People="SimilarOfficers[i]"></SimilarPeople>                         
+	                }   
                 }
-            </div>
-            <div>
-                @if (SimilarOfficers != null)
-                {
-                    <SimilarPeople People="SimilarOfficers"></SimilarPeople>
-                }
-            </div>
+            </div>            
             <hr />
             <div class="form-group">
                 <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, and anything related to the event that happened off-screen.</label>
@@ -202,11 +198,7 @@
         </div>
     </div>
 </div>
-@code {
-    //protected async Task FindOfficers(string Name)
-    //{
-    //    SimilarPeople = await searches.SearchOfficer(Name);
-    //}
+@code {    
     //protected async Task<List<ViewSimilar>> FindEvents(DateTime date)
     //{
     //    SimilarEvents = await searches.GetSimilar(date.ToString("yyyy-MM-dd"));
@@ -237,7 +229,7 @@
         var newMediaItem = new ViewMedia { ListIndex = MediaList.Count };
         MediaList.Add(newMediaItem);
     }
-    1
+
     private void AddSubject()
     {
         var newSubjectItem = new ViewSubject { ListIndex = SubjectList.Count };
@@ -249,23 +241,39 @@
         OfficerList.Add(newOfficerItem);
     }
 
-    public List<SimilarPerson> SimilarSubjects { get; set; }
-    private async void SuggestSubjects(string inputName)
+    public List<List<SimilarPerson>> SimilarSubjects { get; set; } = new List<List<SimilarPerson>>();
+    private async void SuggestSubjects(SimilarPersonCallback personCallback)
     {
-        await Task.Delay(1 * 1000); //wait a second
+        // await Task.Delay(1 * 1000); //wait a second
         SearchesSubmit searchesSubmit = new SearchesSubmit(searchess);
         //TODO don't do suggest if name is too short or something
-        SimilarSubjects = await searchesSubmit.SearchSubject(inputName);
+        var similarSubject = await searchesSubmit.SearchSubject(personCallback.Name);
+        if (SimilarSubjects.Count > personCallback.Index)
+        {
+            SimilarSubjects[personCallback.Index] = similarSubject;
+        }
+        else
+        {
+            SimilarSubjects.Insert(personCallback.Index, similarSubject);
+        }
         this.StateHasChanged();
     }
 
-    public List<SimilarPerson> SimilarOfficers { get; set; }
-    private async void SuggestOfficers(string inputName)
+    public List<List<SimilarPerson>> SimilarOfficers { get; set; } = new List<List<SimilarPerson>>();
+    private async void SuggestOfficers(SimilarPersonCallback personCallback)
     {
-        await Task.Delay(1 * 1000); //wait a second
+        // await Task.Delay(1 * 1000); //wait a second
         SearchesSubmit searchesSubmit = new SearchesSubmit(searchess);
         //TODO don't do suggest if name is too short or something
-        SimilarOfficers = await searchesSubmit.SearchOfficer(inputName);
+        var similarOfficer = await searchesSubmit.SearchOfficer(personCallback.Name);
+        if (SimilarOfficers.Count > personCallback.Index)
+        {
+            SimilarOfficers[personCallback.Index] = similarOfficer;
+        }
+        else
+        {
+            SimilarOfficers.Insert(personCallback.Index, similarOfficer);
+        }
         this.StateHasChanged();
     }
 
@@ -320,6 +328,7 @@
     private void DeleteSubject(int Index)
     {
         SubjectList.RemoveAt(Index);
+        SimilarSubjects.RemoveAt(Index);
         for (int i = 0; i < SubjectList.Count; i++)
         {
             SubjectList[i].ListIndex = i;
@@ -330,6 +339,7 @@
     private void DeleteOfficer(int Index)
     {
         OfficerList.RemoveAt(Index);
+        SimilarOfficers.RemoveAt(Index);
         for (int i = 0; i < OfficerList.Count; i++)
         {
             OfficerList[i].ListIndex = i;
