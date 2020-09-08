@@ -13,6 +13,7 @@ using DataAccessLibrary.DataAccess;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Syncfusion.Blazor;
 using ThinBlueLieB.Helper;
+using ThinBlueLieB.Searches;
 
 namespace ThinBlueLieB
 {
@@ -38,7 +39,8 @@ namespace ThinBlueLieB
 
             services.AddOptions();
             services.Configure<ConnectionStringService>(Configuration.GetSection("ConnectionStrings"));
-            services.AddScoped<ConnectionStringService>();
+            //services.AddSingleton<SearchesTimeline>();
+            //services.AddSingleton<ConnectionStringService>();
             //services.AddScoped<ISearches, Searches>();
 
             services.AddRazorPages();

@@ -15,8 +15,8 @@
             </div>
             <div class="form-row position-relative">
                 <div class="my-2 ml-1" style="width:48%">
-                    <SfTextBox CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="subject.Name"></SfTextBox>
-                </div>
+                    <SfTextBox CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="subject.Name" @onchange="(()=> SuggestSubjects.InvokeAsync(subject.Name))" ></SfTextBox>
+                </div>                                                                                                                             @*e => SuggestSubjects.InvokeAsync(e.Value.ToString())*@
                 <div class="my-2" style="margin-left:10px;">
                     <SfNumericTextBox Width="8rem" Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1
                                       @bind-Value="subject.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
@@ -50,6 +50,8 @@
 
     [Parameter]
     public EventCallback<int> DeleteSubject { get; set; }
+    [Parameter]
+    public EventCallback<string> SuggestSubjects { get; set; }
 
     IReadOnlyList<Extensions.ListItem> Sexes = Extensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
     IReadOnlyList<Extensions.ListItem> Races = Extensions.GetDropdownList<TimelineinfoEnums.RaceEnum>.Items;

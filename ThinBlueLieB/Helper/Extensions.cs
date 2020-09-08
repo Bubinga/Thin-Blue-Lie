@@ -9,8 +9,9 @@ using static ThinBlueLieB.Models.ViewSimilar;
 
 namespace ThinBlueLieB.Helper
 {
-    public static class Extensions
+    public class Extensions
     {
+        
         public static string GetEnumDisplayName<T>(T value) where T : Enum
         {
             var fieldName = Enum.GetName(typeof(T), value);
@@ -26,18 +27,20 @@ namespace ThinBlueLieB.Helper
             if (name.Length > MaxLength)
             {
                 name = name.Substring(0, MaxLength);
-                name = name + "...";
+                name += "...";
             }
             return name;
         }
+
         [Inject]
-        public static NavigationManager MyNavigationManager { get; set; }
-        public static string GetQueryParm(string parmName)
+        public NavigationManager MyNavigationManager { get; set; }
+        public string GetQueryParm(string parmName)
         {
             var uriBuilder = new UriBuilder(MyNavigationManager.Uri);
             var q = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
             return q[parmName] ?? "";
         }
+
         public class ListItem
         {
             public int Value { get; set; }

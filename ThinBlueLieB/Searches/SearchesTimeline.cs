@@ -11,28 +11,30 @@ namespace ThinBlueLieB.Searches
 {
     public class SearchesTimeline
     {
-        [Inject]
-        private ConnectionStringService connectionStrings { get; }
-        //private readonly ConnectionStringService connectionStrings;
-        //public SearchesTimeline(IOptions<ConnectionStringService> options)
-        //{
-        //    connectionStrings = options.Value;
-        //}
-
-        public async Task<List<List<Timelineinfo>>> GetTimeline(string? current, int? dateChange, string? date)
+        //[Inject]
+        //protected IOptions<ConnectionStringService> ConnectionStrings { get; set; }
+        private readonly ConnectionStringService ConnectionStrings;
+        public SearchesTimeline(IOptions<ConnectionStringService> options)
         {
+            ConnectionStrings = options.Value;
+        }
+
+
+        public async Task<Tuple<List<List<Timelineinfo>>, DateTime[]>> GetTimeline(string? current, int? dateChange, string? date)
+        {
+            Extensions extensions = new Extensions();
             //string[] weekDays = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
             if (current != null && dateChange != null)
             {
                 date = Convert.ToDateTime(current).AddDays((double)dateChange).ToString("yyyy-MM-dd");
             }
-            else if (date == null | string.IsNullOrWhiteSpace(Extensions.GetQueryParm("d")))
+            else if (date == null || string.IsNullOrWhiteSpace(extensions.GetQueryParm("d")))
             {
                 date = DateTime.Today.ToString("yyyy-MM-dd");
             }
             else
             {
-                date = Extensions.GetQueryParm("d");
+                date = extensions.GetQueryParm("d");
             }
             DateTime dateT = Convert.ToDateTime(date); //convert date from string to DateTime
             DateTime[] dates = new DateTime[7];
@@ -54,10 +56,10 @@ namespace ThinBlueLieB.Searches
             {
                 //get data
                 DataAccess data = new DataAccess();
-                var query = "SELECT t.TimelineinfoId From timelineinfo t where t.date = " + dates[i].ToString("yyyy-MM-dd") + ";";
-                dateData[i] = await data.LoadData<Timelineinfo, dynamic>(query, new { }, connectionStrings.DataDB);
+                var query = "SELECT t.IdTimelineinfo From timelineinfo t where t.date = " + "'" + dates[i].ToString("yyyy-MM-dd") + "';";
+                dateData[i] = await data.LoadData<Timelineinfo, dynamic>(query, new { }, ConnectionStrings.DataDB);
             }
-            return dateData;
+            return Tuple.Create(dateData, dates);
         }
     }
 }

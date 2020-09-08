@@ -1,11 +1,13 @@
 ﻿@page "/Submit"
 @inherits SubmitBase
+@inject Microsoft.Extensions.Options.IOptions<ConnectionStringService> searchess
 
 @using ThinBlueLieB.Models;
 @using Syncfusion.Blazor.DropDowns
 @using ThinBlueLieB.Helper
 @using Syncfusion.Blazor.RichTextEditor
 @using Syncfusion.Blazor.Buttons
+@using static ThinBlueLieB.Searches.SearchClasses;
 <style>
     body {
         overflow-x: hidden;
@@ -68,6 +70,7 @@
         padding-right: 0px;
         padding-left: 0px;
     }
+
         .e-custom:hover {
             color: #314DB2 !important;
         }
@@ -112,7 +115,13 @@
             <div id="SubjectList">
                 @foreach (var subject in SubjectList)
                 {
-                    <Subject subject="subject" DeleteSubject="DeleteSubject"></Subject>
+                    <Subject subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></Subject>
+                }
+            </div>
+            <div>
+                @if (SimilarSubjects != null)
+                {
+                    <SimilarPeople People="SimilarSubjects"></SimilarPeople>
                 }
             </div>
             <hr />
@@ -129,7 +138,13 @@
             <div id="OfficerList">
                 @foreach (var officer in OfficerList)
                 {
-                    <Officer officer="officer" DeleteOfficer="DeleteOfficer"></Officer>
+                    <Officer officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
+                }
+            </div>
+            <div>
+                @if (SimilarOfficers != null)
+                {
+                    <SimilarPeople People="SimilarOfficers"></SimilarPeople>
                 }
             </div>
             <hr />
@@ -165,9 +180,9 @@
                 <p class="mb-0" style="font-size:1em">
                     Add Media relavent to the event, such as videos, images, news articles, etc.
                     <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="AddMedia" IsPrimary="true" IconPosition=@IconPosition.Right>
-                       Media
+                        Media
                     </SfButton>
-                </p>               
+                </p>
             </div>
             <div id="MediaList" class="container-fluid">
                 @foreach (var media in MediaList)
@@ -179,10 +194,10 @@
                 <div class="container">
                     <button class="btn btn-primary mx-auto" id="MoreMedia">
                         Media-->
-                        @*<i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>*@
-                    <!--</button>-->
-                    @*<input type="submit" value="submit" class="btn btn-primary" />*@
-                <!--</div>
+            @*<i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>*@
+            <!--</button>-->
+            @*<input type="submit" value="submit" class="btn btn-primary" />*@
+            <!--</div>
             </div>-->
         </div>
     </div>
@@ -193,7 +208,7 @@
     //    SimilarPeople = await searches.SearchOfficer(Name);
     //}
     //protected async Task<List<ViewSimilar>> FindEvents(DateTime date)
-    //{     
+    //{
     //    SimilarEvents = await searches.GetSimilar(date.ToString("yyyy-MM-dd"));
     //    return SimilarEvents;
     //}
@@ -205,15 +220,15 @@
     //}
 
     public List<ViewMedia> MediaList { get; set; } = new List<ViewMedia>
-    {
+{
          new ViewMedia{ ListIndex = 0} //Intialize page with one card
     };
     public List<ViewSubject> SubjectList { get; set; } = new List<ViewSubject>
-    {
+{
         new ViewSubject { ListIndex = 0}
     };
     public List<ViewOfficer> OfficerList { get; set; } = new List<ViewOfficer>
-    {
+{
         new ViewOfficer { ListIndex = 0}
     };
 
@@ -222,7 +237,7 @@
         var newMediaItem = new ViewMedia { ListIndex = MediaList.Count };
         MediaList.Add(newMediaItem);
     }
-
+    1
     private void AddSubject()
     {
         var newSubjectItem = new ViewSubject { ListIndex = SubjectList.Count };
@@ -232,6 +247,26 @@
     {
         var newOfficerItem = new ViewOfficer { ListIndex = OfficerList.Count };
         OfficerList.Add(newOfficerItem);
+    }
+
+    public List<SimilarPerson> SimilarSubjects { get; set; }
+    private async void SuggestSubjects(string inputName)
+    {
+        await Task.Delay(1 * 1000); //wait a second
+        SearchesSubmit searchesSubmit = new SearchesSubmit(searchess);
+        //TODO don't do suggest if name is too short or something
+        SimilarSubjects = await searchesSubmit.SearchSubject(inputName);
+        this.StateHasChanged();
+    }
+
+    public List<SimilarPerson> SimilarOfficers { get; set; }
+    private async void SuggestOfficers(string inputName)
+    {
+        await Task.Delay(1 * 1000); //wait a second
+        SearchesSubmit searchesSubmit = new SearchesSubmit(searchess);
+        //TODO don't do suggest if name is too short or something
+        SimilarOfficers = await searchesSubmit.SearchOfficer(inputName);
+        this.StateHasChanged();
     }
 
     private void MoveMediaUp(int Index)
@@ -262,7 +297,7 @@
     {
         if (Index != 0)
         {
-            var item = MediaList[Index]; //Get Card                                  
+            var item = MediaList[Index]; //Get Card
             MediaList.RemoveAt(Index); //Remove Card
             MediaList.Insert(0, item); //Put Card at Top
             MediaList[Index].ListIndex = 0; //Set ListIndex to fit it's position
