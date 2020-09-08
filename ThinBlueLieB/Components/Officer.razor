@@ -10,7 +10,7 @@
             </div>
             <div class="form-row position-relative">
                 <div class="my-2 ml-1" style="width:71%">
-                    <SfTextBox CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="officer.Name"></SfTextBox>
+                    <SfTextBox CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="officer.Name" @onchange="(()=> SuggestOfficers.InvokeAsync(officer.Name))" ></SfTextBox>
                 </div>
                 <div class="ml-2 my-2 w-25">
                     <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1
@@ -60,6 +60,8 @@
 
     [Parameter]
     public EventCallback<int> DeleteOfficer { get; set; }
+    [Parameter]
+    public EventCallback<string> SuggestOfficers { get; set; }
 
     IReadOnlyList<Extensions.ListItem> Sexes = Extensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
     IReadOnlyList<Extensions.ListItem> Races = Extensions.GetDropdownList<TimelineinfoEnums.RaceEnum>.Items;

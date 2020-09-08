@@ -4,10 +4,11 @@
 @using ThinBlueLieB.Helper
 @using ThinBlueLieB.Searches
 @inject NavigationManager MyNavigationManager
-@*@inject ISearchesTimeline searches*@
+@*@inject Microsoft.Extensions.Options.IOptions<DataAccessLibrary.DataAccess.ConnectionStringService> searchess*@
+@inject Microsoft.Extensions.Options.IOptions<ConnectionStringService> searchess
 
 <div @onclick="PrevWeek" id="triangle-left"> <div class="empty"></div></div>
-@*@foreach ((var day, Int32 i) in Day.Select((day, i) => (day, i)))
+@foreach ((var day, Int32 i) in Day.Select((day, i) => (day, i)))
     {
         <div class="week btn" onclick='location.href = "?d=@Dates[i].Year-@Dates[i].Month.ToString().PadLeft(2, '0')-@Dates[i].Day.ToString().PadLeft(2, '0')"'>
             <div class="timeline-label">
@@ -22,11 +23,15 @@
             </div>
             <input type="radio">
         </div>
-    }*@
+    }
 <div @onclick="NextWeek" id="triangle-right"><div class="empty"></div></div>
-
+<p>
+    @*@searchess.Value.DataDB.ToString()*@
+</p>
 @code {
-    SearchesTimeline searches = new Searches.SearchesTimeline();
+    DateTime[] Dates;
+    List<List<Timelineinfo>> Day { get; set; }
+    SearchesTimeline searches;
 
 #nullable enable
     [Parameter]
@@ -37,15 +42,22 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await searches.GetTimeline(current, 0, date);
+        searches = new Searches.SearchesTimeline(searchess);
+        var Result = await searches.GetTimeline(current, 0, date);
+        Day = Result.Item1;
+        Dates = Result.Item2;
     }
     public async Task NextWeek()
     {
-        await searches.GetTimeline(current, +7, date);
+        var Result = await searches.GetTimeline(current, +7, date);
+        Day = Result.Item1;
+        Dates = Result.Item2;
     }
     public async Task PrevWeek()
     {
-        await searches.GetTimeline(current, +7, date);
+        var Result = await searches.GetTimeline(current, +7, date);
+        Day = Result.Item1;
+        Dates = Result.Item2;
     }
 
 }
