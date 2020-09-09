@@ -116,7 +116,7 @@
                 @foreach ((var subject, Int32 i) in SubjectList.Select((subject, i) => (subject, i)))
                 {
                     <Subject subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></Subject>
-                    if (SimilarOfficers.Count != 0 && SimilarOfficers.Count > i)
+                    if (SimilarSubjects[i] != null)
                     {
                         <SimilarPeople People="SimilarSubjects[i]"></SimilarPeople>
                     }
@@ -137,7 +137,7 @@
                 @foreach ((var officer, Int32 i) in OfficerList.Select((officer, i) => (officer, i)))
                 {
                     <Officer officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
-                    if (SimilarOfficers.Count != 0 && SimilarOfficers.Count > i)
+                    if (SimilarOfficers[i] != null)
 	                {	                	
                            <SimilarPeople People="SimilarOfficers[i]"></SimilarPeople>                         
 	                }   
@@ -211,6 +211,12 @@
     //    //return SimilarEvents;
     //}
 
+    protected override void OnInitialized()
+    {
+        SimilarOfficers.Add(new List<SimilarPerson> { });
+        SimilarSubjects.Add(new List<SimilarPerson> { });
+    }
+
     public List<ViewMedia> MediaList { get; set; } = new List<ViewMedia>
 {
          new ViewMedia{ ListIndex = 0} //Intialize page with one card
@@ -234,11 +240,13 @@
     {
         var newSubjectItem = new ViewSubject { ListIndex = SubjectList.Count };
         SubjectList.Add(newSubjectItem);
+        SimilarSubjects.Add(new List<SimilarPerson> { });
     }
     private void AddOfficer()
     {
         var newOfficerItem = new ViewOfficer { ListIndex = OfficerList.Count };
         OfficerList.Add(newOfficerItem);
+        SimilarOfficers.Add(new List<SimilarPerson> { });
     }
 
     public List<List<SimilarPerson>> SimilarSubjects { get; set; } = new List<List<SimilarPerson>>();
@@ -247,15 +255,8 @@
         // await Task.Delay(1 * 1000); //wait a second
         SearchesSubmit searchesSubmit = new SearchesSubmit(searchess);
         //TODO don't do suggest if name is too short or something
-        var similarSubject = await searchesSubmit.SearchSubject(personCallback.Name);
-        if (SimilarSubjects.Count > personCallback.Index)
-        {
-            SimilarSubjects[personCallback.Index] = similarSubject;
-        }
-        else
-        {
-            SimilarSubjects.Insert(personCallback.Index, similarSubject);
-        }
+        var similarSubject = await searchesSubmit.SearchSubject(personCallback.Name);      
+        SimilarSubjects[personCallback.Index] = similarSubject;        
         this.StateHasChanged();
     }
 
@@ -265,15 +266,8 @@
         // await Task.Delay(1 * 1000); //wait a second
         SearchesSubmit searchesSubmit = new SearchesSubmit(searchess);
         //TODO don't do suggest if name is too short or something
-        var similarOfficer = await searchesSubmit.SearchOfficer(personCallback.Name);
-        if (SimilarOfficers.Count > personCallback.Index)
-        {
-            SimilarOfficers[personCallback.Index] = similarOfficer;
-        }
-        else
-        {
-            SimilarOfficers.Insert(personCallback.Index, similarOfficer);
-        }
+        var similarOfficer = await searchesSubmit.SearchOfficer(personCallback.Name);       
+        SimilarOfficers[personCallback.Index] = similarOfficer;    
         this.StateHasChanged();
     }
 
@@ -329,6 +323,7 @@
     {
         SubjectList.RemoveAt(Index);
         SimilarSubjects.RemoveAt(Index);
+        //Resetting List Indexes
         for (int i = 0; i < SubjectList.Count; i++)
         {
             SubjectList[i].ListIndex = i;
@@ -340,6 +335,7 @@
     {
         OfficerList.RemoveAt(Index);
         SimilarOfficers.RemoveAt(Index);
+        //Resetting List Indexes
         for (int i = 0; i < OfficerList.Count; i++)
         {
             OfficerList[i].ListIndex = i;
