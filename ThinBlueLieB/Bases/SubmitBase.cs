@@ -29,13 +29,7 @@ namespace ThinBlueLieB.Models
          };
        
         internal IReadOnlyList<Extensions.ListItem> States = Extensions.GetDropdownList<TimelineinfoEnums.StateEnum>.Items;
-        public DateTime Today { get; set; } = new DateTime(DateTime.Today.Year, DateTime.Now.Month, DateTime.Today.Day);
-        public DateTime MinDate { get; set; } = new DateTime(1950, 1, 1);
-        public DateTime? DateValue { get; set; } = new DateTime(DateTime.Today.Year, DateTime.Now.Month, DateTime.Today.Day);
-        public List<SimilarPerson>? SimilarPeople { get; set; }
-        public List<ViewSimilar>? SimilarEvents { get; set; }
-
-
+        
         protected Task HandleValidSubmit()
         {
             throw new NotImplementedException();
