@@ -1,42 +1,39 @@
-﻿@using ThinBlueLieB.Models; 
+﻿@using ThinBlueLieB.Models;
 @using DataAccessLibrary.Enums;
 @using ThinBlueLieB.Helper;
 
-
-
 <style>
-    p {
-        margin-bottom: 2rem;
+    .location {
+        text-decoration: underline;
     }
 </style>
-@*<div id="div_Loader" class="mt-3">
-        <img src="/Assets/Loading.gif" style="width: 150px; height: 150px;" alt="loader" />
-    </div>*@
-@if (Time == null)
+
+@if (Event == null)
 {
     <div class="container mt-2" style="min-height:100px;">
         <h5>There are no similar or duplicate Events!</h5>
     </div>
 }
-@if (Time != null)
+@if (Event != null)
 {
-    @foreach (var Similar in Time)
+    @foreach (var Similar in Event)
     {
         <div id="likeVideos">
             <div class="card border-dark mb-3 ml-1">
-                <div class="card-header">@Similar.Timelineinfo.Date</div>
+                <div class="card-header">@Similar.Timelineinfo.Date.ToString("MMMM dd, yyyy")</div>
                 <div class="card-body text-dark row">
-                    <div class="col-6">
-                        <p><strong>Location:</strong> @Enum.GetName(typeof(TimelineinfoEnums.StateEnum), Similar.Timelineinfo.State), @Similar.Timelineinfo.City</p>
-                        <p><strong>Subject:</strong> @foreach (var subject in Similar.Subjects)
-                        {  Extensions.GetPersonSummary(subject);}
+                    <div class="d-inline-block">
+                        <p class="location">@Enum.GetName(typeof(TimelineinfoEnums.StateEnum), Similar.Timelineinfo.State), @Similar.Timelineinfo.City</p>
+                        <p>
+                            <strong>Subject:</strong> @foreach (var subject in Similar.Subjects)
+                            { Extensions.GetPersonSummary(subject); }
                         </p>
                         <p>
                             <strong>Officer:</strong>@foreach (var officer in Similar.Officers)
                             { Extensions.GetPersonSummary(officer); }
                         </p>
                     </div>
-                    <div class="col-6">
+                    <div class="d-inline-block">
                         <div style="border-radius:3px; width:100%;" class="embed-responsive embed-responsive-2by1">
                             <iframe class="embed-responsive-item border"
                                     src="https://www.youtube.com/embed/WNKF8rbl2uA" allowfullscreen>
@@ -44,7 +41,7 @@
                         </div>
                     </div>
                     <div>
-                        <p class="px-4 mb-0" style="text-indent:-.5rem;"><strong>Context:</strong> @Extensions.TruncateString(Similar.Timelineinfo.Context)</p>
+                        <p class="mb-0"><strong>Context:</strong> @Extensions.TruncateString(Similar.Timelineinfo.Context)</p>
                     </div>
                 </div>
             </div>
@@ -53,5 +50,6 @@
 }
 
 @code {
-    public List<ViewSimilar> Time { get; set; }
+    [Parameter]
+    public List<ViewSimilar> Event { get; set; }
 }

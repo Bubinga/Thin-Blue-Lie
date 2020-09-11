@@ -188,7 +188,7 @@ namespace ThinBlueLieB.Helper
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
             List<ViewSimilar> SimilarEvents = new List<ViewSimilar>();
             DataAccess data = new DataAccess();
-            var query1 = "SELECT t.Date, t.IdTimelineinfo, t.Context, t.State, t.City, t.Verified, t.SubmittedBy From timelineinfo t where t.date = " + TempDate + ";";
+            var query1 = "SELECT t.Date, t.IdTimelineinfo, t.Context, t.State, t.City, t.Verified, t.SubmittedBy From timelineinfo t where t.date = " + "'" + TempDate + "'" + ";";
             var SimilarTimelineinfos = await data.LoadData<Timelineinfo, dynamic>(query1, new { }, ConnectionStrings.DataDB);
             foreach ((var Event, Int32 i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))
             {
