@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using DataAccessLibrary.Enums;
 using Microsoft.AspNetCore.Components;
 using static ThinBlueLieB.Models.ViewSimilar;
@@ -54,9 +55,61 @@ namespace ThinBlueLieB.Helper
         }
         internal static string GetPersonSummary(ViewSimilarPerson person)
         {
-            var personSummary = person.Name + ", " + person.Age.ToString() + ", " + Enum.GetName(typeof(TimelineinfoEnums.RaceEnum), person.Race) 
-                                + " " + Enum.GetName(typeof(TimelineinfoEnums.SexEnum), person.Sex);
+            var personSummary = person.Name;
+
+            if (person.Age != null)
+            {
+                personSummary += ", " + person.Age.ToString();
+            }
+            personSummary += ", " + Enum.GetName(typeof(TimelineinfoEnums.RaceEnum), person.Race)
+                               + " " + Enum.GetName(typeof(TimelineinfoEnums.SexEnum), person.Sex);
             return personSummary;
         }
+
+        public static string CommaQuibbling(IEnumerable<string> items)
+        {
+            StringBuilder sb = new StringBuilder();
+            using (var iter = items.GetEnumerator())
+            {
+                if (iter.MoveNext())
+                { // first item can be appended directly
+                    sb.Append(iter.Current);
+                    if (iter.MoveNext())
+                    { // more than one; only add each
+                      // term when we know there is another
+                        string lastItem = iter.Current;
+                        while (iter.MoveNext())
+                        { // middle term; use ", "
+                            sb.Append(", ").Append(lastItem);
+                            lastItem = iter.Current;
+                        }
+                        // add the final term; since we are on at least the
+                        // second term, always use " and "
+                        sb.Append(", and ").Append(lastItem);
+                    }
+                }
+            }
+            return sb.ToString();
+        }
+
+        public static string GetDaySuffix(int day)
+        {
+            switch (day)
+            {
+                case 1:
+                case 21:
+                case 31:
+                    return "st";
+                case 2:
+                case 22:
+                    return "nd";
+                case 3:
+                case 23:
+                    return "rd";
+                default:
+                    return "th";
+            }
+        }
+
     }
 }
