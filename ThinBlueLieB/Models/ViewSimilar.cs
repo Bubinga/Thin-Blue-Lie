@@ -14,7 +14,7 @@ namespace ThinBlueLieB.Models
         {
             public string Name { get; set; }
             public byte Race { get; set; }
-            public byte Age { get; set; }
+            public byte? Age { get; set; }
             public byte Sex { get; set; }
         }
         internal Timelineinfo Timelineinfo { get; set; }

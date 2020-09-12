@@ -188,16 +188,16 @@ namespace ThinBlueLieB.Helper
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
             List<ViewSimilar> SimilarEvents = new List<ViewSimilar>();
             DataAccess data = new DataAccess();
-            var query1 = "SELECT t.Date, t.IdTimelineinfo, t.Context, t.State, t.City, t.Verified, t.SubmittedBy From timelineinfo t where t.date = " + "'" + TempDate + "'" + ";";
+            var query1 = "SELECT t.Date, t.IdTimelineinfo, t.Context, t.State, t.City, t.Verified From timelineinfo t where t.date = " + "'" + TempDate + "'" + ";";
             var SimilarTimelineinfos = await data.LoadData<Timelineinfo, dynamic>(query1, new { }, ConnectionStrings.DataDB);
             foreach ((var Event, Int32 i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))
             {
                 var id = Event.IdTimelineinfo;
-                var officerQuery = "SELECT o.Name, o.Race, o.Sex, o.Age FROM timelineinfo JOIN timelineinfo_officer ON timelineinfo.IdTimelineinfo = timelineinfo_officer.IdTimelineinfo JOIN officers o ON timelineinfo_officer.IdOfficer = o.IdOfficer WHERE timelineinfo.IdTimelineinfo = " + id + ";";
+                var officerQuery = "SELECT o.Name, o.Race, o.Sex, tio.Age FROM timelineinfo t JOIN timelineinfo_officer tio ON t.IdTimelineinfo = tio.IdTimelineinfo JOIN officers o ON tio.IdOfficer = o.IdOfficer WHERE t.IdTimelineinfo = " + id + ";";
                 var Officers = await data.LoadData<ViewSimilarPerson, dynamic>(officerQuery, new { }, ConnectionStrings.DataDB);
-                var subjectQuery = "SELECT o.Name, o.Race, o.Sex, o.Age FROM timelineinfo JOIN timelineinfo_subject ON timelineinfo.IdTimelineinfo = timelineinfo_subject.IdTimelineinfo JOIN subjects o ON timelineinfo_subject.IdSubject = o.IdSubject WHERE timelineinfo.IdTimelineinfo = " + id + ";";
-                var Subjects = await data.LoadData<ViewSimilarPerson, dynamic>(officerQuery, new { }, ConnectionStrings.DataDB);
-                var MediaQuery = "Select * From media m Where(m.IdTimelineinfo = " + id + ";";
+                var subjectQuery = "SELECT s.Name, s.Race, s.Sex, ts.Age FROM timelineinfo t JOIN timelineinfo_subject ts ON t.IdTimelineinfo = ts.IdTimelineinfo JOIN subjects s ON ts.IdSubject = s.IdSubject WHERE t.IdTimelineinfo = " + id + ";";
+                var Subjects = await data.LoadData<ViewSimilarPerson, dynamic>(subjectQuery, new { }, ConnectionStrings.DataDB);
+                var MediaQuery = "Select * From media m Where(m.IdTimelineinfo = " + id + ");";
                 var Media = await data.LoadData<Media, dynamic>(officerQuery, new { }, ConnectionStrings.DataDB);
 
                 //add timelineinfos, officers, subject, and media to list at end
