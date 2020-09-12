@@ -165,10 +165,22 @@
                 <p class="mb-0 border-bottom" style="font-size:1em">
                     Here are Events that share the a date with the information you are filling out, please check to see if your event is a duplicate.
                 </p>
-                <div id="VideoList">                   
-                       <SimilarEvents Event="SimilarEvents"></SimilarEvents>                   
+                <div id="VideoList">
+                    @if (SimilarEvents.Count == 0)
+                    {
+                        <div class="container mt-2" style="min-height:100px;">
+                            <h5>There are no similar or duplicate Events!</h5>
+                        </div>
+                    }
+                    else
+                    {
+                        foreach (var Event in SimilarEvents)
+                        {
+                            <SimilarEvents Event="Event"></SimilarEvents>
+                        }
+                    }
                 </div>
-                <br />
+                @*<br />*@
             </div>
         </div>
         <div class="row">
@@ -218,8 +230,10 @@
     public DateTime MinDate { get; set; }
     public DateTime? DateValue { get; set; } //model.Timelineinfos.Date
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        SearchesSubmit searchesSubmit = new SearchesSubmit(searchess);
+        SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
         SimilarOfficers.Add(new List<SimilarPerson> { });
         SimilarSubjects.Add(new List<SimilarPerson> { });
         Today = DateTime.Today;
