@@ -16,7 +16,7 @@ namespace ThinBlueLieB.Models
             public List<ViewOfficer> Officers { get; set; }
             [BindProperty]
             public List<ViewSubject> Subjects { get; set; }
-            public bool SignedIn { get; set; }
+            public bool SignedIn { get; set; }            
             public int Misconducts { get; set; }
             public int Weapons { get; set; }
         }
