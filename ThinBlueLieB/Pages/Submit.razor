@@ -1,6 +1,7 @@
 ﻿@page "/Submit"
 @inherits SubmitBase
-@inject Microsoft.Extensions.Options.IOptions<ConnectionStringService> searchess
+@inject Microsoft.Extensions.Options.IOptions<ConnectionStringService> connString
+@inject NavigationManager NavManager
 
 @using ThinBlueLieB.Models;
 @using Syncfusion.Blazor.DropDowns
@@ -77,7 +78,7 @@
 </style>
 <div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
     <div class="col-lg-5 col-md-6 border-left border-right border-bottom">
-        <EditForm Model="model" OnValidSubmit="HandleValidSubmit">
+        <EditForm Model="model" OnValidSubmit="HandleValidSubmitAsync">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="d-block mb-0 pt-3 border-bottom mb-2">
@@ -122,7 +123,7 @@
                         <SimilarPeople People="SimilarSubjects[i]"></SimilarPeople>
                     }
                 }
-            </div>           
+            </div>
             <hr />
             <div>
                 <h6 class="d-inline">
@@ -139,11 +140,11 @@
                 {
                     <Officer officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
                     if (SimilarOfficers[i] != null)
-	                {	                	
-                           <SimilarPeople People="SimilarOfficers[i]"></SimilarPeople>                         
-	                }   
+                    {
+                        <SimilarPeople People="SimilarOfficers[i]"></SimilarPeople>
+                    }
                 }
-            </div>            
+            </div>
             <hr />
             <div class="form-group">
                 <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, and anything related to the event that happened off-screen.</label>
@@ -199,28 +200,48 @@
                     <MediaCard media="media" MoveMediaDown="MoveMediaDown" MoveMediaUp="MoveMediaUp" MoveMediaTop="MoveMediaTop" DeleteMedia="DeleteMedia"></MediaCard>
                 }
             </div>
-            <!--<div>
-                <div class="container">
-                    <button class="btn btn-primary mx-auto" id="MoreMedia">
-                        Media-->
-            @*<i class="align-bottom" style="height:1.2rem; width:1.2rem; margin-bottom:.2rem;" data-feather="plus-circle"></i>*@
-            <!--</button>-->
-            @*<input type="submit" value="submit" class="btn btn-primary" />*@
-            <!--</div>
-            </div>-->
         </div>
     </div>
 </div>
-@code {    
-    //protected async Task<List<ViewSimilar>> FindEvents(DateTime date)
-    //{
-    //    SimilarEvents = await searches.GetSimilar(date.ToString("yyyy-MM-dd"));
-    //    return SimilarEvents;
-    //}
+@code {
+    protected async Task HandleValidSubmitAsync()
+    {
+        //display loading gif while doing the processing
+        //fill out model with all values         
+
+        // Tables:
+        //   Timelineinfo
+        //     --DateValue
+        //     --Locked
+        //     --SubmittedBy      
+        //     --Verified 
+        //   Media
+        //     --SourceFrom
+        //     --IdTimelineinfo
+        //     --File Upload
+        //   Officers
+        //     --Same As
+        //   Subjects
+        //     --Same As
+        //   Timelineinfo_Subject
+        //     --Armed
+        //     --Age
+        //   Timelineinfo_Officer
+        //     --Age
+        //     --Weapons
+        //     --Misconducts
+
+        //Save date to correct tables
+        if (true) //if sucessful submit
+        {
+            NavManager.NavigateTo("/Index");
+        }
+    }
+
     public List<ViewSimilar>? SimilarEvents { get; set; } = new List<ViewSimilar>();
     protected async void FindEvents(ChangedEventArgs<DateTime?> args)
     {
-        SearchesSubmit searchesSubmit = new SearchesSubmit(searchess);
+        SearchesSubmit searchesSubmit = new SearchesSubmit(connString);
         SimilarEvents = await searchesSubmit.GetSimilar(args.Value?.ToString("yyyy-MM-dd"));
         this.StateHasChanged();
         //SimilarEvents = await searchesSubmit.GetSimilar(DateValue?.ToString("yyyy-MM-dd"));
@@ -232,7 +253,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        SearchesSubmit searchesSubmit = new SearchesSubmit(searchess);
+        SearchesSubmit searchesSubmit = new SearchesSubmit(connString);
         SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
         SimilarOfficers.Add(new List<SimilarPerson> { });
         SimilarSubjects.Add(new List<SimilarPerson> { });
@@ -278,7 +299,7 @@
     private async void SuggestSubjects(SimilarPersonCallback personCallback)
     {
         // await Task.Delay(1 * 1000); //wait a second
-        SearchesSubmit searchesSubmit = new SearchesSubmit(searchess);
+        SearchesSubmit searchesSubmit = new SearchesSubmit(connString);
         //TODO don't do suggest if name is too short or something
         var similarSubject = await searchesSubmit.SearchSubject(personCallback.Name);
         SimilarSubjects[personCallback.Index] = similarSubject;
@@ -289,7 +310,7 @@
     private async void SuggestOfficers(SimilarPersonCallback personCallback)
     {
         // await Task.Delay(1 * 1000); //wait a second
-        SearchesSubmit searchesSubmit = new SearchesSubmit(searchess);
+        SearchesSubmit searchesSubmit = new SearchesSubmit(connString);
         //TODO don't do suggest if name is too short or something
         var similarOfficer = await searchesSubmit.SearchOfficer(personCallback.Name);
         SimilarOfficers[personCallback.Index] = similarOfficer;
@@ -367,8 +388,3 @@
         }
     }
 }
-
-
-
-
-

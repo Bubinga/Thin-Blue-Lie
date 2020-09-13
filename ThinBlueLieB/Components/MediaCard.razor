@@ -26,7 +26,12 @@
                     </div>
                 </div>
                 <div class="form-row align-middle mb-2 pl-1">
-                    <SfTextBox CssClass="e-filled" Placeholder="Provide a brief description" FloatLabelType="@FloatLabelType.Auto" @bind-Value="media.Blurb"></SfTextBox>
+                    <div class="col-6">
+                        <SfTextBox CssClass="e-filled" Placeholder="Provide a brief description" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.Blurb"></SfTextBox>
+                    </div>
+                    <div class="col-6">
+                        <SfTextBox CssClass="e-filled" Placeholder="Credit" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.Credit"></SfTextBox>
+                    </div>
                 </div>
                 <div class="form-row">
                     <div class="col-5">
