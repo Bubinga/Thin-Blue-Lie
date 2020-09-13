@@ -28,12 +28,8 @@ namespace ThinBlueLieB.Models
         "SourceCode", "|", "Undo", "Redo"
          };
        
-        internal IReadOnlyList<Extensions.ListItem> States = Extensions.GetDropdownList<TimelineinfoEnums.StateEnum>.Items;
-        
-        protected Task HandleValidSubmit()
-        {
-            throw new NotImplementedException();
-        }       
+        internal IReadOnlyList<Extensions.ListItem> States = Extensions.GetDropdownList<TimelineinfoEnums.StateEnum>.Items;        
+           
        
         //add login suggestion
 
