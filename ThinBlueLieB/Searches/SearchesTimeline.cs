@@ -6,20 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ThinBlueLieB.Helper;
+using static ThinBlueLieB.Helper.ConnectionStringHelper;
 
 namespace ThinBlueLieB.Searches
 {
     public class SearchesTimeline
-    {
-        //[Inject]
-        //protected IOptions<ConnectionStringService> ConnectionStrings { get; set; }
-        private readonly ConnectionStringService ConnectionStrings;
-        public SearchesTimeline(IOptions<ConnectionStringService> options)
-        {
-            ConnectionStrings = options.Value;
-        }
-
-
+    {      
         public async Task<Tuple<List<List<Timelineinfo>>, DateTime[]>> GetTimeline(string? current, int? dateChange, string? date)
         {
             Extensions extensions = new Extensions();
@@ -57,7 +49,7 @@ namespace ThinBlueLieB.Searches
                 //get data
                 DataAccess data = new DataAccess();
                 var query = "SELECT t.IdTimelineinfo From timelineinfo t where t.date = " + "'" + dates[i].ToString("yyyy-MM-dd") + "';";
-                dateData[i] = await data.LoadData<Timelineinfo, dynamic>(query, new { }, ConnectionStrings.DataDB);
+                dateData[i] = await data.LoadData<Timelineinfo, dynamic>(query, new { }, GetConnectionString());
             }
             return Tuple.Create(dateData, dates);
         }

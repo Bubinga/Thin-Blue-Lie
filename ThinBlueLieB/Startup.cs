@@ -23,7 +23,7 @@ namespace ThinBlueLieB
         {
             Configuration = configuration;
         }
-
+        public static string ConnectionString { get; private set; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -37,11 +37,7 @@ namespace ThinBlueLieB
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<UserDbContext>();
 
-            services.AddOptions();
-            services.Configure<ConnectionStringService>(Configuration.GetSection("ConnectionStrings"));
-            //services.AddSingleton<SearchesTimeline>();
-            //services.AddSingleton<ConnectionStringService>();
-            //services.AddScoped<ISearches, Searches>();
+            services.AddOptions();           
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -56,6 +52,7 @@ namespace ThinBlueLieB
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzA2NDMyQDMxMzgyZTMyMmUzMFVGc2cvTmU0d0NMbWZiRjBkZEl2WGlzU3lHdnBIcTNYRHYzYk5OSHRFTDA9");
+            ConnectionString = Configuration["ConnectionStrings:DataDB"];
 
             if (env.IsDevelopment())
             {

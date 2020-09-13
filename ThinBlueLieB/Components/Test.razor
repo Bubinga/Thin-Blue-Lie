@@ -4,83 +4,12 @@
 @using Syncfusion.Blazor.DropDowns
 
 <div class="container px-5">
-    <SfButton @onclick="AddMedia">Add Media</SfButton>   
-    @foreach (var media in Data)
-    {
-        <MediaCard media="media" MoveMediaDown="MoveMediaDown" MoveMediaUp="MoveMediaUp" MoveMediaTop="MoveMediaTop" DeleteMedia="DeleteMedia"></MediaCard>
-    }   
+   @ConString
 </div>
-<style>   
-    .e-listbox-wrapper.e-wrapper{
-        min-height: 280px;
-    }
-    .e-listbox-wrapper:not(.e-list-template) .e-list-item,
-    .e-listbox-wrapper .e-list-nrt,
-    .e-listbox-wrapper .e-selectall-parent {
-         height: auto !important;        
-    }
-    .e-listbox-wrapper .e-list-item.e-selected {
-         background-color: #f6efef !important;         
-    }
-
-</style>
 @code { 
-    public List<ViewMedia> Data { get; set; } = new List<ViewMedia>
+    string ConString = Startup.ConnectionString;
+    public static string GetConnectionString()
     {
-         new ViewMedia{ ListIndex = 0} //Intialize page with one card
-    };    
-    
-    private void AddMedia()
-    {
-        var newMediaItem = new ViewMedia { ListIndex = Data.Count };
-        Data.Add(newMediaItem);        
-    }
-
-    private void MoveMediaUp(int Index)
-    {
-        if (Index != 0)
-        {
-            var item = Data[Index]; //Get Card
-            Data.RemoveAt(Index); //Remove Card
-            Data.Insert(Index -1, item); //Put Card in place above where it was
-            Data[Index].ListIndex = Index; //Set ListIndex to fit it's position
-            Data[Index - 1].ListIndex = Index - 1; //do above to item above
-        }
-    }
-
-    private void MoveMediaDown(int Index)
-    {
-        if (Index != Data.Count - 1)
-        {
-            var item = Data[Index]; //Get Card
-            Data.RemoveAt(Index); //Remove Card
-            Data.Insert(Index + 1, item); //Put Card in place below where it was
-            Data[Index].ListIndex = Index; //Set ListIndex to fit it's position
-            Data[Index + 1].ListIndex = Index + 1; //do above to item below
-        }
-    }
-
-    private void MoveMediaTop(int Index)
-    {
-        if (Index != 0)
-        {
-            var item = Data[Index]; //Get Card                                  
-            Data.RemoveAt(Index); //Remove Card
-            Data.Insert(0, item); //Put Card at Top
-            Data[Index].ListIndex = 0; //Set ListIndex to fit it's position
-            for (int i = 0; i < Data.Count; i++)
-            {
-                Data[i].ListIndex = i;
-            }
-        }
-    }
-
-    private void DeleteMedia(int Index)
-    {
-        Data.RemoveAt(Index);
-        for (int i = 0; i < Data.Count; i++)
-        {
-            Data[i].ListIndex = i;
-        }
+        return Startup.ConnectionString;
     }
 }
