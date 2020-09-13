@@ -1,6 +1,5 @@
 ﻿@page "/Submit"
 @inherits SubmitBase
-@inject Microsoft.Extensions.Options.IOptions<ConnectionStringService> connString
 @inject NavigationManager NavManager
 
 @using ThinBlueLieB.Models;
@@ -241,7 +240,7 @@
     public List<ViewSimilar>? SimilarEvents { get; set; } = new List<ViewSimilar>();
     protected async void FindEvents(ChangedEventArgs<DateTime?> args)
     {
-        SearchesSubmit searchesSubmit = new SearchesSubmit(connString);
+        SearchesSubmit searchesSubmit = new SearchesSubmit();
         SimilarEvents = await searchesSubmit.GetSimilar(args.Value?.ToString("yyyy-MM-dd"));
         this.StateHasChanged();
         //SimilarEvents = await searchesSubmit.GetSimilar(DateValue?.ToString("yyyy-MM-dd"));
@@ -253,7 +252,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        SearchesSubmit searchesSubmit = new SearchesSubmit(connString);
+        SearchesSubmit searchesSubmit = new SearchesSubmit();
         SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
         SimilarOfficers.Add(new List<SimilarPerson> { });
         SimilarSubjects.Add(new List<SimilarPerson> { });
@@ -299,7 +298,7 @@
     private async void SuggestSubjects(SimilarPersonCallback personCallback)
     {
         // await Task.Delay(1 * 1000); //wait a second
-        SearchesSubmit searchesSubmit = new SearchesSubmit(connString);
+        SearchesSubmit searchesSubmit = new SearchesSubmit();
         //TODO don't do suggest if name is too short or something
         var similarSubject = await searchesSubmit.SearchSubject(personCallback.Name);
         SimilarSubjects[personCallback.Index] = similarSubject;
@@ -310,7 +309,7 @@
     private async void SuggestOfficers(SimilarPersonCallback personCallback)
     {
         // await Task.Delay(1 * 1000); //wait a second
-        SearchesSubmit searchesSubmit = new SearchesSubmit(connString);
+        SearchesSubmit searchesSubmit = new SearchesSubmit();
         //TODO don't do suggest if name is too short or something
         var similarOfficer = await searchesSubmit.SearchOfficer(personCallback.Name);
         SimilarOfficers[personCallback.Index] = similarOfficer;

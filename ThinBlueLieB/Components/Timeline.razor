@@ -4,8 +4,6 @@
 @using ThinBlueLieB.Helper
 @using ThinBlueLieB.Searches
 @inject NavigationManager MyNavigationManager
-@*@inject Microsoft.Extensions.Options.IOptions<DataAccessLibrary.DataAccess.ConnectionStringService> searchess*@
-@inject Microsoft.Extensions.Options.IOptions<ConnectionStringService> searchess
 
 <div @onclick="PrevWeek" id="triangle-left"> <div class="empty"></div></div>
 @foreach ((var day, Int32 i) in Day.Select((day, i) => (day, i)))
@@ -42,7 +40,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        searches = new Searches.SearchesTimeline(searchess);
+        searches = new Searches.SearchesTimeline();
         var Result = await searches.GetTimeline(current, 0, date);
         Day = Result.Item1;
         Dates = Result.Item2;
