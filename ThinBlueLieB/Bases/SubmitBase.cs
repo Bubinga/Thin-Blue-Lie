@@ -14,10 +14,10 @@ namespace ThinBlueLieB.Models
     {        
         public SubmitModel model = new SubmitModel()
         {
-            Timelineinfos = new Timelineinfo(),
-            Medias = new List<ViewMedia>(),
-            Officers = new List<ViewOfficer>(),
-            Subjects = new List<ViewSubject>()
+            Timelineinfos = new ViewTimelineinfo(),
+            Medias = new List<ViewMedia> { new ViewMedia { ListIndex = 0 } },
+            Officers = new List<ViewOfficer> { new ViewOfficer { ListIndex = 0 } },
+            Subjects = new List<ViewSubject> { new ViewSubject { ListIndex = 0 } }
         };
 
         public object[] Tools = new object[]{

@@ -1,6 +1,7 @@
 ﻿@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Buttons
 @using ThinBlueLieB.Helper
+
 <style>
     .armed-checkbox {
         position: absolute;
@@ -14,30 +15,33 @@
                 <SfButton IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
             </div>
             <div class="form-row position-relative">
-                <div class="my-2 ml-1" style="width:48%">
-                    <SfTextBox CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="subject.Name" @onchange="(()=> SuggestSubjects.InvokeAsync(new SimilarPersonCallback { Name = subject.Name, Index = subject.ListIndex }))" ></SfTextBox>
-                </div>                                                                                                                             @*e => SuggestSubjects.InvokeAsync(e.Value.ToString())*@
-                <div class="my-2" style="margin-left:10px;">
-                    <SfNumericTextBox Width="8rem" Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1
-                                      @bind-Value="subject.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
+                <div class="my-2 ml-1 col-lg-6">
+                    <SfTextBox CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="subject.Name" @onchange="(()=> SuggestSubjects.InvokeAsync(new SimilarPersonCallback { Name = subject.Name, Index = subject.ListIndex }))"></SfTextBox>
+                    <ValidationMessage For="@(() => subject.Name)"></ValidationMessage>
                 </div>
-                <div class="ml-3">
-                    <SfCheckBox CssClass="armed-checkbox" @bind-Checked="@subject.Armed" Label="Armed"></SfCheckBox>
-                </div>
-                <button type="button" class="close position-absolute" aria-label="Close" style="left: 98%;">
-                    <span aria-hidden="true">×</span>
-                </button>
+                <div>
+                    <div class="my-2 d-inline-block" style="margin-left:10px;">
+                        <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1
+                                          @bind-Value="subject.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
+                        <ValidationMessage For="@(() => subject.Age)"></ValidationMessage>
+                    </div>
+                    <div class="ml-3 d-inline-block" style="width:6rem;">
+                        <SfCheckBox CssClass="armed-checkbox" @bind-Checked="@subject.Armed" Label="Armed"></SfCheckBox>
+                    </div>
+                </div>              
             </div>
             <div class="form-row position-relative my-2">
                 <div class="col-6">
                     <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@subject.Race" DataSource="@Races">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
+                    <ValidationMessage For="@(() => subject.Race)"></ValidationMessage>
                 </div>
                 <div class="col-6">
                     <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="2" Placeholder="Sex" @bind-Value="@subject.Sex" DataSource="@Sexes">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
+                    <ValidationMessage For="@(() => subject.Race)"></ValidationMessage>
                 </div>
             </div>
         </div>
@@ -46,7 +50,7 @@
 
 @code {
     [Parameter]
-    public ViewSubject subject { get; set; }    
+    public ViewSubject subject { get; set; }
     [Parameter]
     public EventCallback<int> DeleteSubject { get; set; }
     [Parameter]

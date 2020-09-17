@@ -2,7 +2,6 @@
 @using Syncfusion.Blazor.Buttons
 @using ThinBlueLieB.Helper
 
-
 <div class="AddMedia">
     <div class="card border-dark mt-3">
         <div class="card-body text-dark row pt-0">
@@ -26,10 +25,11 @@
                     </div>
                 </div>
                 <div class="form-row align-middle mb-2 pl-1">
-                    <div class="col-6">
+                    <div class="col-8">
                         <SfTextBox CssClass="e-filled" Placeholder="Provide a brief description" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.Blurb"></SfTextBox>
+                        <ValidationMessage For="@(() => media.Blurb)"></ValidationMessage>
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <SfTextBox CssClass="e-filled" Placeholder="Credit" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.Credit"></SfTextBox>
                     </div>
                 </div>
@@ -47,14 +47,16 @@
                         }
                         else
                         {
-                            <div class="form-group MediaLink">
-                                <SfTextBox CssClass="e-filled" Placeholder="Link your Media here" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
-                            </div>
+                    <div class="form-group MediaLink">
+                        <SfTextBox CssClass="e-filled" Placeholder="Link your Media here" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
+                        <ValidationMessage For="@(() => media.SourcePath)"></ValidationMessage>
+                    </div>
                         }
                     </div>
                     <div class="ml-3 col-6">
                         <label class="form-check-label">
                             Is there any blood or gore in the video?<span class="text-danger ml-1">*</span>
+                            <ValidationMessage For="@(() => media.Gore)"></ValidationMessage>
                         </label>
                         <div class="row">
                             <div class="form-check m-2 d-inline">

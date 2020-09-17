@@ -47,27 +47,37 @@ namespace DataAccessLibrary.Enums
         [Flags]
         public enum MisconductEnum : short
         {
+            [Display(Name = "Unnecessary Use of Force")]
             Force = 1,
+            [Display(Name = "Murder of Pet")]
             PetMurder = 2,
+            [Display(Name = "Evidence Tampering")]
             Evidence = 4,
+            [Display(Name = "Non-Violent Harassment")]
             Harassment = 8,
             Negligence = 16,
+            [Display(Name = "Unlawful Seizure")]
             Theft = 32,
+            [Display(Name = "Unlawful Search")]
             Search = 64,
             [Display(Name = "False Arrest")]
             FalseArrest = 128,
+            [Display(Name = "Abuse of Power")]
             AbusePower = 256,
         }
 
         [Flags]
         public enum WeaponEnum : short
         {
-            Body = 0b_0000_0001,
-            Projectile = 0b_0000_0010,
-            Taser = 0b_0000_0100,
-            TearGas = 0b_0000_1000,
-            Vehicle = 0b_0001_0000,
-            Gun = 0b_0010_0000
+            Body = 1,
+            [Display(Name = "Handheld Weapon")]
+            HandWeapon = 2,
+            Projectile = 4,
+            Taser = 8,
+            [Display(Name ="Tear Gas")]
+            TearGas = 16,
+            Vehicle = 32,
+            Gun = 64
         }
 
     }
