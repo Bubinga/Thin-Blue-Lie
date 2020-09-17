@@ -1,6 +1,7 @@
 ﻿using DataAccessLibrary.DataModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ThinBlueLieB.Models
 {
@@ -9,12 +10,12 @@ namespace ThinBlueLieB.Models
         public class SubmitModel
         {
             [BindProperty]
-            public Timelineinfo Timelineinfos { get; set; }
-            [BindProperty]
+            public ViewTimelineinfo Timelineinfos { get; set; }
+            [BindProperty]           
             public List<ViewMedia> Medias { get; set; }
-            [BindProperty]
+            [BindProperty]         
             public List<ViewOfficer> Officers { get; set; }
-            [BindProperty]
+            [BindProperty]           
             public List<ViewSubject> Subjects { get; set; }
             public bool SignedIn { get; set; }            
             public int Misconducts { get; set; }

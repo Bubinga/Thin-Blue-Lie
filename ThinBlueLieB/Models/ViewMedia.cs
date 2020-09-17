@@ -10,6 +10,7 @@ namespace ThinBlueLieB.Models
         public int ListIndex { get; set; } //becomes Rank
         [Required]
         public byte MediaType { get; set; }
+        [DataType(DataType.Url)]
         public string SourcePath { get; set; } //For linked image 
         public IFormFile Source { get; set; } //For uploaded image file
         [Required]
