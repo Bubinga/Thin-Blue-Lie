@@ -1,15 +1,41 @@
 ﻿@page "/test"
 @using Syncfusion.Blazor.Buttons
+@using System.ComponentModel.DataAnnotations;
+@using Microsoft.AspNetCore.Mvc
 
 @using Syncfusion.Blazor.DropDowns
 
 <div class="container px-5">
-   @ConString
+    <EditForm Model="model">
+        <ObjectGraphDataAnnotationsValidator />
+        <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Officers[0].Name"></SfTextBox>
+        <ValidationMessage For="@(() => model.Officers[0].Name)"></ValidationMessage>
+        <MediaCard media="model.Medias[0]"></MediaCard>
+        <Subject subject="model.Subjects[0]"></Subject>
+        <Officer officer="model.Officers[0]"></Officer>
+    </EditForm>
 </div>
-@code { 
-    string ConString = Startup.ConnectionString;
-    public static string GetConnectionString()
+@code {
+    public SubmitModel model = new SubmitModel()
     {
-        return Startup.ConnectionString;
+        Timelineinfos = new Timelineinfo(),
+        Medias = new List<ViewMedia> { new ViewMedia { ListIndex = 0 } },
+        Officers = new List<ViewOfficer> { new ViewOfficer { ListIndex = 0 } },
+        Subjects = new List<ViewSubject> { new ViewSubject { ListIndex = 0 } }
+    };
+
+    public class SubmitModel
+    {
+        [BindProperty]
+        public Timelineinfo Timelineinfos { get; set; }
+        [BindProperty]
+        public List<ViewMedia> Medias { get; set; }
+        [BindProperty]
+        public List<ViewOfficer> Officers { get; set; }
+        [BindProperty]
+        public List<ViewSubject> Subjects { get; set; }
+        public bool SignedIn { get; set; }
+        public int Misconducts { get; set; }
+        public int Weapons { get; set; }
     }
 }
