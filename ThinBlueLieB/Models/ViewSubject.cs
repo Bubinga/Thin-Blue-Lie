@@ -15,7 +15,7 @@ namespace ThinBlueLieB.Models
         [Range(0, 130,
         ErrorMessage = "Age must be between {1} and {2}.")]
         public int? Age { get; set; }
-        public bool SameAs { get; set; }
+        public int? SameAsId { get; set; }
         public bool Armed { get; set; }
     }
 }
