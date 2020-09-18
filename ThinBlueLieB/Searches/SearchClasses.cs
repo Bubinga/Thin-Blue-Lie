@@ -30,12 +30,26 @@ namespace ThinBlueLieB.Searches
                 public DateTime Date { get; set; }
                 public byte State { get; set; }
                 public string City { get; set; }
-            }
+            }           
             public string Name { get; set; }
             public byte Race { get; set; }
             public byte Sex { get; set; }
             public List<SimilarPersonEvents> Events { get; set; }
 
         }
+        public class SimilarOfficer : SimilarPerson
+        {
+            public int IdOfficer { get; set; }
+        }
+        public class SimilarSubject : SimilarPerson
+        {
+            public int IdSubject { get; set; }
+        }
+
+        public class SimilarPersonGeneral : SimilarPerson
+        {
+            public int IdPerson { get; set; }
+        }
+
     }
 }
