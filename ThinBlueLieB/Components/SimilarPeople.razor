@@ -1,6 +1,7 @@
 ﻿@using ThinBlueLieB.Helper
 @using static ThinBlueLieB.Searches.SearchClasses
 @using static ThinBlueLieB.Helper.Extensions;
+@using Syncfusion.Blazor.Buttons;
 @inherits SimilarPeopleBase
 
 <style>
@@ -23,6 +24,11 @@
                 <div class="card-header d-flex container ">
                     <div>
                         <span class="name">@Person.Name</span>
+                    </div>
+                    <div @onclick="@(() => SetSameAs.InvokeAsync(new Tuple<int,int>(Person.IdPerson, PersonListIndex)))" @onclick:stopPropagation="false" @onclick:preventDefault class="d-inline-flex ml-2">
+                        <SfButton CssClass="e-small e-flat float-right" IsPrimary="true">
+                            Same Person
+                        </SfButton>
                     </div>
                     <div class="ml-auto">
                         <span class="race">@Enum.GetName(typeof(TimelineinfoEnums.RaceEnum), Person.Race)</span>
@@ -49,5 +55,10 @@
 }
 @code {
     [Parameter]
-    public List<SimilarPerson> People { get; set; } = null;
+    public List<SimilarPersonGeneral> People { get; set; } = null;
+
+    [Parameter]
+    public int PersonListIndex { get; set; }
+    [Parameter]
+    public EventCallback<Tuple<int, int>> SetSameAs { get; set; }
 }

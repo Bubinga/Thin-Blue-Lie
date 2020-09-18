@@ -6,7 +6,7 @@
     <div class="card border-dark mt-3">
         <div class="card-body text-dark row pt-0">
             <div name="mediaAdd" class="container-fluid px-4">
-                <div class="position-absolute d-inline-flex" style="right: 5px; z-index:1000;">
+                <div class="position-absolute d-inline-flex" style="right: 5px; z-index:1000;" @onclick:stopPropagation="false" @onclick:preventDefault>
                     <SfButton @onclick="@(() => MoveMediaUp.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-up-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
                     <SfButton @onclick="@(() => MoveMediaDown.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-down-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
                     <SfButton @onclick="@(() => MoveMediaTop.InvokeAsync(media.ListIndex))" IconCss="e-icons e-double-arrow-up-icon" IsPrimary="true" CssClass="e-flat mr-lg-3 mr-2 e-custom"></SfButton>

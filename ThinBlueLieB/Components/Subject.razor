@@ -3,10 +3,10 @@
 @using ThinBlueLieB.Helper
 
 <style>
-    .armed-checkbox {
+   /* .armed-checkbox {
         position: absolute;
         bottom: 16px;
-    }
+    }*/
 </style>
 <div class="AddOfficer mt-2">
     <div class="card border-dark mb-3 mx-auto">
@@ -15,35 +15,33 @@
                 <SfButton IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
             </div>
             <div class="form-row position-relative">
-                <div class="my-2 ml-1 col-lg-6">
-                    <SfTextBox CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="subject.Name" @onchange="(()=> SuggestSubjects.InvokeAsync(new SimilarPersonCallback { Name = subject.Name, Index = subject.ListIndex }))"></SfTextBox>
+                <div class="my-2 ml-1" style="width:71%">
+                    <SfTextBox Enabled="@(subject.SameAsId != null? false: true)" CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="subject.Name" @onchange="(()=> SuggestSubjects.InvokeAsync(new SimilarPersonCallback { Name = subject.Name, Index = subject.ListIndex }))"></SfTextBox>
                     <ValidationMessage For="@(() => subject.Name)"></ValidationMessage>
                 </div>
-                <div>
-                    <div class="my-2 d-inline-block" style="margin-left:10px;">
-                        <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1
-                                          @bind-Value="subject.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
-                        <ValidationMessage For="@(() => subject.Age)"></ValidationMessage>
-                    </div>
-                    <div class="ml-3 d-inline-block" style="width:6rem;">
-                        <SfCheckBox CssClass="armed-checkbox" @bind-Checked="@subject.Armed" Label="Armed"></SfCheckBox>
-                    </div>
-                </div>              
+                <div class="my-2 ml-2 w-25">
+                    <SfNumericTextBox Enabled="@(subject.SameAsId != null? false: true)" Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1
+                                      @bind-Value="subject.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
+                    <ValidationMessage For="@(() => subject.Age)"></ValidationMessage>
+                </div>
             </div>
             <div class="form-row position-relative my-2">
                 <div class="col-6">
-                    <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@subject.Race" DataSource="@Races">
+                    <SfDropDownList Enabled="@(subject.SameAsId != null? false: true)" TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@subject.Race" DataSource="@Races">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => subject.Race)"></ValidationMessage>
                 </div>
                 <div class="col-6">
-                    <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="2" Placeholder="Sex" @bind-Value="@subject.Sex" DataSource="@Sexes">
+                    <SfDropDownList Enabled="@(subject.SameAsId != null? false: true)" TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="2" Placeholder="Sex" @bind-Value="@subject.Sex" DataSource="@Sexes">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => subject.Race)"></ValidationMessage>
                 </div>
             </div>
+            <div class="ml-3 d-inline-block" style="width:6rem;">
+                <SfCheckBox CssClass="armed-checkbox" @bind-Checked="@subject.Armed" Label="Armed"></SfCheckBox>
+            </div>            
         </div>
     </div>
 </div>
@@ -51,6 +49,9 @@
 @code {
     [Parameter]
     public ViewSubject subject { get; set; }
+
+
+
     [Parameter]
     public EventCallback<int> DeleteSubject { get; set; }
     [Parameter]

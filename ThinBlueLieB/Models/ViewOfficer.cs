@@ -17,6 +17,6 @@ namespace ThinBlueLieB.Models
         public int? Age { get; set; }
         public int[]? Misconduct { get; set; }
         public int[]? Weapon { get; set; }
-        public bool SameAs { get; set; }
+        public int? SameAsId { get; set; }
     }
 }

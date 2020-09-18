@@ -119,7 +119,7 @@
                     <Subject subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></Subject>
                     if (SimilarSubjects[i] != null)
                     {
-                        <SimilarPeople People="SimilarSubjects[i]"></SimilarPeople>
+                        <SimilarPeople PersonListIndex="i" SetSameAs="SetSameAsSubject" People="SimilarSubjects[i]"></SimilarPeople>
                     }
                 }
             </div>
@@ -140,7 +140,7 @@
                     <Officer officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
                     if (SimilarOfficers[i] != null)
                     {
-                        <SimilarPeople People="SimilarOfficers[i]"></SimilarPeople>
+                        <SimilarPeople PersonListIndex="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>
                     }
                 }
             </div>
@@ -184,7 +184,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="d-block border-top container-fluid border-bottom">
+                <div class="d-block border-top container-fluid border-bottom" @onclick:stopPropagation="false" @onclick:preventDefault>
                     <h4 class="pt-2">Add Media</h4>
                     <p class="mb-0" style="font-size:1em">
                         Add Media relavent to the event, such as videos, images, news articles, etc.
@@ -257,12 +257,23 @@
     {
         SearchesSubmit searchesSubmit = new SearchesSubmit();
         SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
-        SimilarOfficers.Add(new List<SimilarPerson> { });
-        SimilarSubjects.Add(new List<SimilarPerson> { });
+        SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
+        SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
         Today = DateTime.Today;
         MinDate = new DateTime(1950, 1, 1);
         DateValue = DateTime.Today;
         // DateValue = new DateTime(DateTime.Today.Year, DateTime.Now.Month, DateTime.Today.Day);
+    }
+
+    private void SetSameAsSubject(Tuple<int,int> tuple)
+    {
+        model.Subjects[tuple.Item2].SameAsId = tuple.Item1;
+        SimilarSubjects[tuple.Item2] = new List<SimilarPersonGeneral>();
+    }
+    private void SetSameAsOfficer(Tuple<int, int> tuple)
+    {
+        model.Officers[tuple.Item2].SameAsId = tuple.Item1;
+        SimilarOfficers[tuple.Item2] = new List<SimilarPersonGeneral>();
     }
 
     private void AddMedia()
@@ -275,16 +286,16 @@
     {
         var newSubjectItem = new ViewSubject { ListIndex = model.Subjects.Count };
         model.Subjects.Add(newSubjectItem);
-        SimilarSubjects.Add(new List<SimilarPerson> { });
+        SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
     }
     private void AddOfficer()
     {
         var newOfficerItem = new ViewOfficer { ListIndex = model.Officers.Count };
         model.Officers.Add(newOfficerItem);
-        SimilarOfficers.Add(new List<SimilarPerson> { });
+        SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
     }
 
-    public List<List<SimilarPerson>> SimilarSubjects { get; set; } = new List<List<SimilarPerson>>();
+    public List<List<SimilarPersonGeneral>> SimilarSubjects { get; set; } = new List<List<SimilarPersonGeneral>>();
     private async void SuggestSubjects(SimilarPersonCallback personCallback)
     {
         SearchesSubmit searchesSubmit = new SearchesSubmit();
@@ -294,7 +305,7 @@
         this.StateHasChanged();
     }
 
-    public List<List<SimilarPerson>> SimilarOfficers { get; set; } = new List<List<SimilarPerson>>();
+    public List<List<SimilarPersonGeneral>> SimilarOfficers { get; set; } = new List<List<SimilarPersonGeneral>>();
     private async void SuggestOfficers(SimilarPersonCallback personCallback)
     {
         SearchesSubmit searchesSubmit = new SearchesSubmit();
