@@ -16,14 +16,14 @@ namespace ThinBlueLieB.Helper
 {
     public class SearchesSubmit
     {      
-        public async Task<List<SimilarPersonGeneral>> SearchOfficer(string Input)
+
+        private Tuple<int, string> GetNameInfo(string Input)
         {
-            //Get only First and Last Name
             var FirstName = Input.Split(' ').FirstOrDefault();
             var LastName = Input.Split(' ').Last();
             var NormalizedName = FirstName + " " + LastName;
             //TODO for names like: J. Alexander Kueng or make it into J. Kueng and Alexander Kueng and test both
-            var MiddleCount1 = Input.Replace(" " + LastName, "").Replace(FirstName, "");           
+            var MiddleCount1 = Input.Replace(" " + LastName, "").Replace(FirstName, "");
             string[] MiddleCount2;
             int MiddleCount;
             if (MiddleCount1 != string.Empty)
@@ -35,7 +35,13 @@ namespace ThinBlueLieB.Helper
             {
                 MiddleCount = 0;
             }
-            
+            return new Tuple<int, string>(MiddleCount, NormalizedName);
+        }
+        public async Task<List<SimilarPersonGeneral>> SearchOfficer(string Input)
+        {
+            var NameInfo = GetNameInfo(Input);            
+            var NormalizedName = NameInfo.Item2;          
+            int MiddleCount = NameInfo.Item1;     
 
             //Load all OfficcerNames
             DataAccess data = new DataAccess();
@@ -45,28 +51,15 @@ namespace ThinBlueLieB.Helper
             List<NameScore> nameScores = new List<NameScore>();
             foreach (var name in Names)
             {
-                var first = name.Name.Split(' ').FirstOrDefault();
-                var last = name.Name.Split(' ').Last();
-                var normalizedName = first + " " + last;
-                var middleCount1 = Input.Replace(" " + first, "").Replace(last, "");
-                string[] middleCount2;
-                int middleCount;
-                if (middleCount1 != string.Empty)
-                {
-                    middleCount2 = middleCount1.Split(' ');
-                    middleCount = middleCount2.Count();
-                }
-                else
-                {
-                    middleCount = 0;
-                }
+                var nameInfo = GetNameInfo(name.Name);
+                var normalizedName = nameInfo.Item2;
+                int middleCount = nameInfo.Item1;                
 
                 var score = JaroWinklerDistance.proximity(normalizedName, NormalizedName);               
                 score += Math.Abs(middleCount - MiddleCount) / 40; //40 is just a random number change it later
                 var listitem = new NameScore()
                 {
-                    Id = name.IdOfficer,
-                    //Name = normalizedName,
+                    Id = name.IdOfficer,                 
                     Score = score,
                 };
                 nameScores.Add(listitem);
@@ -111,26 +104,11 @@ namespace ThinBlueLieB.Helper
 
         public async Task<List<SimilarPersonGeneral>> SearchSubject(string Input)
         {
-            //Get only First and Last Name
-            var FirstName = Input.Split(' ').FirstOrDefault();
-            var LastName = Input.Split(' ').Last();
-            var NormalizedName = FirstName + " " + LastName;
-            //TODO for names like: J. Alexander Kueng or make it into J. Kueng and Alexander Kueng and test both
-            var MiddleCount1 = Input.Replace(" " + LastName, "").Replace(FirstName, "");
-            string[] MiddleCount2;
-            int MiddleCount;
-            if (MiddleCount1 != string.Empty)
-            {
-                MiddleCount2 = MiddleCount1.Split(' ');
-                MiddleCount = MiddleCount2.Count();
-            }
-            else
-            {
-                MiddleCount = 0;
-            }
+            var NameInfo = GetNameInfo(Input);
+            var NormalizedName = NameInfo.Item2;
+            int MiddleCount = NameInfo.Item1;
 
-
-            //Load all OfficcerNames
+            //Load all SubjectNames
             DataAccess data = new DataAccess();
             string sql = "SELECT IdSubject, Name FROM subjects";
             List<FirstLoadSubject> Names = await data.LoadData<FirstLoadSubject, dynamic>(sql, new { }, GetConnectionString());
@@ -138,21 +116,9 @@ namespace ThinBlueLieB.Helper
             List<NameScore> nameScores = new List<NameScore>();
             foreach (var name in Names)
             {
-                var first = name.Name.Split(' ').FirstOrDefault();
-                var last = name.Name.Split(' ').Last();
-                var normalizedName = first + " " + last;
-                var middleCount1 = Input.Replace(" " + first, "").Replace(last, "");
-                string[] middleCount2;
-                int middleCount;
-                if (middleCount1 != string.Empty)
-                {
-                    middleCount2 = middleCount1.Split(' ');
-                    middleCount = middleCount2.Count();
-                }
-                else
-                {
-                    middleCount = 0;
-                }
+                var nameInfo = GetNameInfo(name.Name);
+                var normalizedName = nameInfo.Item2;
+                int middleCount = nameInfo.Item1;
 
                 var score = JaroWinklerDistance.proximity(normalizedName, NormalizedName);
                 score += Math.Abs(middleCount - MiddleCount) / 40; //40 is just a random number change it later
