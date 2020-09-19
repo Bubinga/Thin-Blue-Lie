@@ -39,7 +39,7 @@
                         @if (media.SourceFrom == 6)
                         {
                             <div class="form-group MediaFile">
-                                <SfUploader ID="UploadFiles" CssClass="e-filled mt-2" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
+                                <SfUploader ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
                                     <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>                                  
                                 </SfUploader>
                             </div>
