@@ -39,9 +39,8 @@
                         @if (media.SourceFrom == 6)
                         {
                             <div class="form-group MediaFile">
-                                <SfUploader ID="UploadFiles" CssClass="e-filled mt-2" DropArea=".control-fluid">
-                                    <UploaderEvents OnRemove="OnFileRemove"></UploaderEvents>
-                                    <UploaderAsyncSettings SaveUrl="https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save" RemoveUrl="https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove"></UploaderAsyncSettings>
+                                <SfUploader ID="UploadFiles" CssClass="e-filled mt-2" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
+                                    <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>                                  
                                 </SfUploader>
                             </div>
                         }
@@ -91,5 +90,10 @@
     public void OnFileRemove(RemovingEventArgs args)
     {
         args.PostRawFile = false;
+    }
+
+    public void OnFileChange(UploadChangeEventArgs args)
+    {
+        Console.WriteLine(args.Files[0].FileInfo.Name);
     }
 }
