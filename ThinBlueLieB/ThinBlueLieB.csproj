@@ -35,4 +35,8 @@
     <None Include="wwwroot\favicon.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Uploads\" />
+  </ItemGroup>
+
 </Project>
