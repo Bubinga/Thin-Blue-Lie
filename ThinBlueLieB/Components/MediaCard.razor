@@ -1,6 +1,7 @@
 ﻿@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Buttons
 @using ThinBlueLieB.Helper
+@using System.IO
 
 <div class="AddMedia">
     <div class="card border-dark mt-3">
@@ -39,7 +40,7 @@
                         @if (media.SourceFrom == 6)
                         {
                             <div class="form-group MediaFile">
-                                <SfUploader ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
+                                <SfUploader Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
                                     <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>                                  
                                 </SfUploader>
                             </div>
@@ -87,13 +88,25 @@
     IReadOnlyList<Extensions.ListItem> MediaTypes = Extensions.GetDropdownList<MediaEnums.MediaTypeEnum>.Items;
     IReadOnlyList<Extensions.ListItem> SourceFromOptions = Extensions.GetDropdownList<MediaEnums.SourceFromEnum>.Items;
 
-    public void OnFileRemove(RemovingEventArgs args)
-    {
-        args.PostRawFile = false;
-    }
+    //public void OnFileRemove(RemovingEventArgs args)
+    //{
+    //    args.PostRawFile = false;
+    //}
 
     public void OnFileChange(UploadChangeEventArgs args)
     {
-        Console.WriteLine(args.Files[0].FileInfo.Name);
+       // Console.WriteLine(args.Files[0].FileInfo.Name);
+        media.Source = args.Files[0];        
+    }
+
+    private void OnFileRemove(RemovingEventArgs args)
+    {
+        //foreach (var removeFile in args.FilesData)
+        //{
+        //    if (File.Exists(Path.Combine(@"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\", removeFile.Name)))
+        //    {
+        //        File.Delete(Path.Combine(@"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\", removeFile.Name));
+        //    }
+        //}
     }
 }
