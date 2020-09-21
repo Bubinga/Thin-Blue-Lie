@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Syncfusion.Blazor.Inputs;
 using System.ComponentModel.DataAnnotations;
+using Syncfusion.Blazor.Inputs.Internal;
 
 namespace ThinBlueLieB.Models
 {
@@ -12,7 +14,7 @@ namespace ThinBlueLieB.Models
         public byte MediaType { get; set; }
         [DataType(DataType.Url)]
         public string SourcePath { get; set; } //For linked image 
-        public IFormFile Source { get; set; } //For uploaded image file
+        public UploadFiles Source { get; set; } //For uploaded image file         
         [Required]
         public byte Gore { get; set; }
         [Required]

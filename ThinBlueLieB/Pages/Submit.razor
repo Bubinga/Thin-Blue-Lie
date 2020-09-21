@@ -212,13 +212,22 @@
         // Tables:
         //   Timelineinfo
         //     --DateValue = model.Timelineinfo.Date
-        //     --Locked default to 0
+        //     --Locked default to 0ogl
         //     --SubmittedBy
         //     --Verified 0 unless user is past certain point
         //   Media
         //     --SourceFrom
         //     --IdTimelineinfo
-        //     --File Upload
+
+        //     --File Upload for filename use GUID
+        //foreach(var file in args.Files)
+        //  {
+        //      var path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + file.FileInfo.Name;
+        //      FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
+        //      file.Stream.WriteTo(filestream);
+        //      filestream.Close();
+        //      file.Stream.Close();
+        //  }
 
         //   Officers
         //     --Same As If true fill out information only in Junction table
@@ -226,10 +235,10 @@
         //     --Same As
 
         //   Timelineinfo_Subject
-        //     --Armed
-        //     --Age
+        //     --Armed subject.armed
+        //     --Age  subject.Age
         //   Timelineinfo_Officer
-        //     --Age
+        //     --Age officer.Age
         //     --Weapons Add together values in int[]
         //     --Misconducts Add together values in int[]
 
