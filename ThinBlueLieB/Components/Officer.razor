@@ -38,7 +38,7 @@
                     <label class="form-check-label">
                         Type of Misconduct
                     </label>
-                    <SfMultiSelect Enabled="@(officer.SameAsId != null? false: true)" Mode="@VisualMode.Box" Placeholder="Miconducts" @bind-Value="@officer.Misconduct" DataSource="@MisconductsList">
+                    <SfMultiSelect Mode="@VisualMode.Box" Placeholder="Miconducts" @bind-Value="@officer.Misconduct" DataSource="@MisconductsList">
                         <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
                     </SfMultiSelect>
                 </div>
@@ -46,7 +46,7 @@
                     <label class="form-check-label">
                         Type of Weapon
                     </label>
-                    <SfMultiSelect Mode="@VisualMode.Box" Enabled="@(officer.SameAsId != null? false: officer.Misconduct != null? officer.Misconduct.Contains(1)? true : false : false)" Placeholder="Weapons" @bind-Value="@officer.Weapon" DataSource="@WeaponsList">
+                    <SfMultiSelect Mode="@VisualMode.Box" Enabled="@(officer.Misconduct != null? officer.Misconduct.Contains(1)? true : false : false)" Placeholder="Weapons" @bind-Value="@officer.Weapon" DataSource="@WeaponsList">
                         <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
                     </SfMultiSelect>
                 </div>

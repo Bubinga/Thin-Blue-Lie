@@ -15,7 +15,6 @@ namespace ThinBlueLieB.Searches
         public async Task<Tuple<List<List<Timelineinfo>>, DateTime[]>> GetTimeline(string? current, int? dateChange, string? date)
         {
             Extensions extensions = new Extensions();
-            //string[] weekDays = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
             if (current != null && dateChange != null)
             {
                 date = Convert.ToDateTime(current).AddDays((double)dateChange).ToString("yyyy-MM-dd");
@@ -48,8 +47,8 @@ namespace ThinBlueLieB.Searches
             {
                 //get data
                 DataAccess data = new DataAccess();
-                var query = "SELECT t.IdTimelineinfo From timelineinfo t where t.date = " + "'" + dates[i].ToString("yyyy-MM-dd") + "';";
-                dateData[i] = await data.LoadData<Timelineinfo, dynamic>(query, new { }, GetConnectionString());
+                var query = "SELECT t.IdTimelineinfo From timelineinfo t where t.date = @date;";
+                dateData[i] = await data.LoadData<Timelineinfo, dynamic>(query, new {date = dates[i].ToString("yyyy-MM-dd") }, GetConnectionString());
             }
             return Tuple.Create(dateData, dates);
         }
