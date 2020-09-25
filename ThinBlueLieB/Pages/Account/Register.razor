@@ -11,7 +11,7 @@
             Register
             <a class="float-right" href="/Account/Login">Login</a>
         </div>
-        <EditForm Model="@registerModel">
+        <EditForm Model="@registerModel" OnValidSubmit="HandleValidSubmit">
             <div class="card-body text-secondary">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
