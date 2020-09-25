@@ -8,10 +8,10 @@ namespace DataAccessLibrary.DataModels
     [Table("officers")]
     public partial class Officers
     {
-        public Officers()
-        {
-            TimelineinfoOfficer = new HashSet<TimelineinfoOfficer>();
-        }
+        //public Officers()
+        //{
+        //    TimelineinfoOfficer = new HashSet<TimelineinfoOfficer>();
+        //}
 
         [Key]
         public int IdOfficer { get; set; }
@@ -21,9 +21,9 @@ namespace DataAccessLibrary.DataModels
         public byte Race { get; set; }
         [Required(ErrorMessage = "The Officer's Sex field is required")]
         public byte Sex { get; set; }
-        public byte Employed { get; set; }
+        //public byte Employed { get; set; }
 
-        [InverseProperty("IdOfficerNavigation")]
-        public virtual ICollection<TimelineinfoOfficer> TimelineinfoOfficer { get; set; }
+        //[InverseProperty("IdOfficerNavigation")]
+        //public virtual ICollection<TimelineinfoOfficer> TimelineinfoOfficer { get; set; }
     }
 }
