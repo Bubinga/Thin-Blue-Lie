@@ -1,5 +1,7 @@
-﻿using Dapper;
-using MySql.Data.MySqlClient;
+﻿extern alias MySqlConnectorAlias;
+
+using Dapper;
+using MySqlConnectorAlias::MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;

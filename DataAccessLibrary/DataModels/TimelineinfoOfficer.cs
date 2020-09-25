@@ -16,13 +16,13 @@ namespace DataAccessLibrary.DataModels
         public int Misconduct { get; set; }
         public int? Weapon { get; set; }
         public byte? Age { get; set; }
-        public ushort? Discipline { get; set; }
+        //public ushort? Discipline { get; set; }
 
-        [ForeignKey(nameof(IdOfficer))]
-        [InverseProperty(nameof(Officers.TimelineinfoOfficer))]
-        public virtual Officers IdOfficerNavigation { get; set; }
-        [ForeignKey(nameof(IdTimelineinfo))]
-        [InverseProperty(nameof(Timelineinfo.TimelineinfoOfficer))]
-        public virtual Timelineinfo IdTimelineinfoNavigation { get; set; }
+        //[ForeignKey(nameof(IdOfficer))]
+        //[InverseProperty(nameof(Officers.TimelineinfoOfficer))]
+        //public virtual Officers IdOfficerNavigation { get; set; }
+        //[ForeignKey(nameof(IdTimelineinfo))]
+        //[InverseProperty(nameof(Timelineinfo.TimelineinfoOfficer))]
+        //public virtual Timelineinfo IdTimelineinfoNavigation { get; set; }
     }
 }

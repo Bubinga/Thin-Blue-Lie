@@ -14,6 +14,7 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Syncfusion.Blazor;
 using ThinBlueLieB.Helper;
 using ThinBlueLieB.Searches;
+using AutoMapper;
 
 namespace ThinBlueLieB
 {
@@ -34,10 +35,19 @@ namespace ThinBlueLieB
                 options.UseMySql(Configuration.GetConnectionString("UserDB"), MySqlOptions => MySqlOptions
                 .ServerVersion(new Version(8, 0, 18), ServerType.MySql)));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.Password.RequireNonAlphanumeric = false)
                 .AddEntityFrameworkStores<UserDbContext>();
 
-            services.AddOptions();           
+            services.AddOptions();
+
+            // Auto Mapper Configurations
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddRazorPages();
             services.AddServerSideBlazor();

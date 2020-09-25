@@ -1,13 +1,21 @@
 ﻿@page "/Submit"
 @inherits SubmitBase
 @inject NavigationManager NavManager
+@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> userManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject AutoMapper.IMapper mapper
 
-@using ThinBlueLieB.Models;
+@using Dapper
+@using MySql.Data.MySqlClient
+@using Microsoft.AspNetCore.Identity;
 @using Syncfusion.Blazor.DropDowns
 @using ThinBlueLieB.Helper
 @using Syncfusion.Blazor.RichTextEditor
 @using Syncfusion.Blazor.Buttons
 @using static ThinBlueLieB.Searches.SearchClasses;
+@using System.IO
+@using Syncfusion.Blazor.Calendars
 
 <style>
     body {
@@ -148,7 +156,7 @@
             <div class="form-group">
                 <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, and anything related to the event that happened off-screen.</label>
                 <SfRichTextEditor CssClass="w-100" @bind-Value="@model.Timelineinfos.Context" EnableResize="true" EditorMode="EditorMode.Markdown" EnableHtmlSanitizer="true" ShowCharCount="true">
-                   <RichTextEditorPasteCleanupSettings PlainText="true"></RichTextEditorPasteCleanupSettings>
+                    <RichTextEditorPasteCleanupSettings PlainText="true"></RichTextEditorPasteCleanupSettings>
                     <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
                 </SfRichTextEditor>
                 <ValidationMessage For="@(() => model.Timelineinfos.Context)"></ValidationMessage>
@@ -204,46 +212,180 @@
     </EditForm>
 </div>
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> _authState { get; set; }
+    private AuthenticationState userState;
     protected async Task HandleValidSubmitAsync()
     {
         //display loading gif in modal while doing the processing
         //fill out model with all values
+        //convert from viewModels to Models.
 
         // Tables:
         //   Timelineinfo
         //     --DateValue = model.Timelineinfo.Date
-        //     --Locked default to 0ogl
+        //     --Locked default to 0
         //     --SubmittedBy
         //     --Verified 0 unless user is past certain point
-        //   Media
-        //     --SourceFrom
-        //     --IdTimelineinfo
 
-        //     --File Upload for filename use GUID
-        //foreach(var file in args.Files)
-        //  {
-        //      var path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + file.FileInfo.Name;
-        //      FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
-        //      file.Stream.WriteTo(filestream);
-        //      filestream.Close();
-        //      file.Stream.Close();
-        //  }
+        model.Timelineinfos.Date = (DateTime)DateValue;
+        model.Timelineinfos.Locked = 0;
+        if (signInManager.IsSignedIn(userState.User))
+        {
+            var UserId = userManager.GetUserId(userState.User);
+            model.Timelineinfos.SubmittedBy = UserId;
+        }
+        //model.Timelineinfos.SubmittedBy = "null"; not 'null' but nothing
+        model.Timelineinfos.Verified = 1;
+        int IdTimelineinfo;
+        using (var connection = new MySqlConnection(ConnectionStringHelper.GetConnectionString()))
+        {
+            var timelineSave = "INSERT INTO timelineinfo (`Date`, `State`, `City`, `Context`, `Locked`, `SubmittedBy`, `Verified`)" +
+                               "VALUES (@date, @state, @city, @context, @locked, @submittedby, @verified);" +
+                               "SELECT LAST_INSERT_ID();";
+            IdTimelineinfo = connection.QuerySingle<int>(timelineSave, new
+            {
+                date = model.Timelineinfos.Date,
+                state = model.Timelineinfos.State,
+                city = model.Timelineinfos.City,
+                context = model.Timelineinfos.Context,
+                locked = model.Timelineinfos.Locked,
+                submittedby = model.Timelineinfos.SubmittedBy,
+                verified = model.Timelineinfos.Verified
+            });
+        }
 
-        //   Officers
-        //     --Same As If true fill out information only in Junction table
-        //   Subjects
-        //     --Same As
+        foreach (var media in model.Medias)
+        {
+            string path;
+            //if there is a file for the media save it to disk
+            if (media.Source.FileInfo.Name != null & media.SourceFrom == 6)
+            {
+                var rand = Extensions.RandomString(5);
+                path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + media.Source.FileInfo.Name + "-" + rand;
+                FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
+                media.Source.Stream.WriteTo(filestream);
+                filestream.Close();
+                media.Source.Stream.Close();
+            }
+            else
+            {
+                path = media.SourcePath;
+            }
+            string mediaSql = "INSERT INTO media (`IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`)" +
+                              "VALUES (@idtimelineinfo, @mediatype, @sourcepath, @gore, @sourcefrom, @blurb, @credit, @submittedby, @rank);";
 
-        //   Timelineinfo_Subject
-        //     --Armed subject.armed
-        //     --Age  subject.Age
-        //   Timelineinfo_Officer
-        //     --Age officer.Age
-        //     --Weapons Add together values in int[]
-        //     --Misconducts Add together values in int[]
+            DataAccessLibrary.DataAccess.DataAccess dataAccess = new DataAccessLibrary.DataAccess.DataAccess();
+            await dataAccess.SaveData(mediaSql, new
+            {
+                idtimelineinfo = IdTimelineinfo,
+                sourcepath = path,
+                gore = media.Gore,
+                sourcefrom = media.SourceFrom,
+                blurb = media.Blurb,
+                credit = media.Credit,
+                submittedby = "test-user-id",//TODO change to actual user id
+                rank = media.ListIndex
+            }
+            , ConnectionStringHelper.GetConnectionString());
 
-        //Save date to correct tables
-        if (true) //if sucessful submit
+        }
+
+        //Subject Table
+        foreach (var subject in model.Subjects)
+        {
+            using (var connection = new MySqlConnection(ConnectionStringHelper.GetConnectionString()))
+            {
+
+                if (subject.SameAsId == null)
+                {
+                    var subjectSql = "INSERT INTO subjects (`Name`, `Race`, `Sex`)" +
+                                 "VALUES (@name, @race, @sex);" +
+                                 "SELECT LAST_INSERT_ID();";
+                    //Add to subjects table and return id
+                    var IdSubject = connection.QuerySingle<int>(subjectSql, new
+                    {
+                        name = subject.Name,
+                        race = subject.Race,
+                        sex = subject.Sex
+                    });
+
+                    //Add to junction table
+                    var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
+                                      "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
+                    connection.Execute(junctionSql, new
+                    {
+                        idtimelineinfo = IdTimelineinfo,
+                        idsubject = IdSubject,
+                        armed = Convert.ToByte(subject.Armed),
+                        age = subject.Age
+                    });
+                }
+                else
+                {
+                    var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
+                                     "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
+                    connection.Execute(junctionSql, new
+                    {
+                        idtimelineinfo = IdTimelineinfo,
+                        idsubject = subject.SameAsId,
+                        armed = Convert.ToByte(subject.Armed),
+                        age = (byte?)subject.Age
+                    });
+                }
+            }
+        }
+        //Officer Table
+        foreach (var officer in model.Officers)
+        {
+            using (var connection = new MySqlConnection(ConnectionStringHelper.GetConnectionString()))
+            {
+
+                if (officer.SameAsId == null)
+                {
+                    var officerSql = "INSERT INTO officers (`Name`, `Race`, `Sex`)" +
+                                 "VALUES (@name, @race, @sex);" +
+                                 "SELECT LAST_INSERT_ID();";
+                    //Add to officers table and return id
+                    var IdOfficer = connection.QuerySingle<int>(officerSql, new
+                    {
+                        name = officer.Name,
+                        race = officer.Race,
+                        sex = officer.Sex
+                    });
+
+                    //Add to junction table
+                    var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
+                                    "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
+                    connection.Execute(junctionSql, new
+                    {
+                        idtimelineinfo = IdTimelineinfo,
+                        idofficer = IdOfficer,
+                        age = (byte?)officer.Age,
+                        misconduct = officer.Misconduct.Sum(),
+                        weapon = officer.Weapon.Sum(),
+                    });
+                }
+                else
+                {
+                    var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
+                                     "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
+                    connection.Execute(junctionSql, new
+                    {
+                        idtimelineinfo = IdTimelineinfo,
+                        idofficer = officer.SameAsId,
+                        age = (byte?)officer.Age,
+                        misconduct = officer.Misconduct.Sum(),
+                        weapon = officer.Weapon.Sum(),
+                    });
+                }
+            }
+        }
+
+        //string processQuery = "INSERT INTO PROCESS_LOGS VALUES (@A, @B)";
+        //connection.Execute(processQuery, processList);
+
+        if (true) //if successful submit
         {
             NavManager.NavigateTo("/Index");
         }
@@ -264,6 +406,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var userState = await _authState;
         SearchesSubmit searchesSubmit = new SearchesSubmit();
         SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
         SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
@@ -274,7 +417,7 @@
         // DateValue = new DateTime(DateTime.Today.Year, DateTime.Now.Month, DateTime.Today.Day);
     }
 
-    private void SetSameAsSubject(Tuple<int,int> tuple)
+    private void SetSameAsSubject(Tuple<int, int> tuple)
     {
         model.Subjects[tuple.Item2].SameAsId = tuple.Item1;
         SimilarSubjects[tuple.Item2] = new List<SimilarPersonGeneral>();
