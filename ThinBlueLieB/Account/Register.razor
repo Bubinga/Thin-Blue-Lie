@@ -40,13 +40,18 @@
                 </div>
             </div>
         </EditForm>
-        <div class="card-footer">          
+        <div class="card-footer">
         </div>
     </div>
 </div>
 
 @code {
-    private RegisterModel registerModel = new RegisterModel();
+    private RegisterModel registerModel;
+    protected override Task OnInitializedAsync()
+    {
+        registerModel = new RegisterModel();
+        return base.OnInitializedAsync();
+    }
 
     private async Task HandleValidSubmit()
     {
