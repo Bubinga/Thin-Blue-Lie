@@ -218,15 +218,6 @@
     protected async Task HandleValidSubmitAsync()
     {
         //display loading gif in modal while doing the processing
-        //fill out model with all values
-        //convert from viewModels to Models.
-
-        // Tables:
-        //   Timelineinfo
-        //     --DateValue = model.Timelineinfo.Date
-        //     --Locked default to 0
-        //     --SubmittedBy
-        //     --Verified 0 unless user is past certain point
 
         model.Timelineinfos.Date = (DateTime)DateValue;
         model.Timelineinfos.Locked = 0;
@@ -414,6 +405,7 @@
         Today = DateTime.Today;
         MinDate = new DateTime(1950, 1, 1);
         DateValue = DateTime.Today;
+        //return base.OnInitializedAsync();
         // DateValue = new DateTime(DateTime.Today.Year, DateTime.Now.Month, DateTime.Today.Day);
     }
 
