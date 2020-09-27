@@ -35,7 +35,10 @@ namespace ThinBlueLieB
                 options.UseMySql(Configuration.GetConnectionString("UserDB"), MySqlOptions => MySqlOptions
                 .ServerVersion(new Version(8, 0, 18), ServerType.MySql)));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.Password.RequireNonAlphanumeric = false)
+            services.AddDefaultIdentity<IdentityUser>(options =>
+            options.Password.RequireNonAlphanumeric = false
+
+            )
                 .AddEntityFrameworkStores<UserDbContext>();
 
             services.AddOptions();
@@ -52,8 +55,8 @@ namespace ThinBlueLieB
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-            services.AddSingleton<WeatherForecastService>();
-            services.AddSingleton<IDataAccess, DataAccess>();            
+            //services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<IDataAccess, DataAccess>();
 
             services.AddSyncfusionBlazor();
         }
