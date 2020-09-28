@@ -35,11 +35,12 @@ namespace ThinBlueLieB
                 options.UseMySql(Configuration.GetConnectionString("UserDB"), MySqlOptions => MySqlOptions
                 .ServerVersion(new Version(8, 0, 18), ServerType.MySql)));
 
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
             options.Password.RequireNonAlphanumeric = false
-
             )
-                .AddEntityFrameworkStores<UserDbContext>();
+                .AddEntityFrameworkStores<UserDbContext>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders();
 
             services.AddOptions();
 
