@@ -10,12 +10,16 @@ namespace ThinBlueLieB.Models
         public class SubmitModel
         {
             [BindProperty]
+            [ValidateComplexType]
             public ViewTimelineinfo Timelineinfos { get; set; }
-            [BindProperty]           
+            [BindProperty]
+            [ValidateComplexType]
             public List<ViewMedia> Medias { get; set; }
-            [BindProperty]         
+            [BindProperty]
+            [ValidateComplexType]
             public List<ViewOfficer> Officers { get; set; }
-            [BindProperty]           
+            [BindProperty]
+            [ValidateComplexType]
             public List<ViewSubject> Subjects { get; set; }
             public bool SignedIn { get; set; }            
             public int Misconducts { get; set; }

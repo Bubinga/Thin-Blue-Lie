@@ -85,7 +85,7 @@
         }
 </style>
 <div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
-    <EditForm Model="model" OnValidSubmit="@HandleValidSubmitAsync">
+    <EditForm Model="model" OnValidSubmit="HandleValidSubmitAsync">
         <ObjectGraphDataAnnotationsValidator />
         <div class="col-lg-5 col-md-6 border-left border-right border-bottom">
             <div class="d-block mb-0 pt-3 border-bottom mb-2">
@@ -97,6 +97,7 @@
                         <SfDatePicker TValue="DateTime?" @bind-Value="@DateValue" Min="@MinDate" Max="@Today" Format="yyyy-MM-dd" Placeholder="Select a date" StrictMode="true">
                             <DatePickerEvents TValue="DateTime?" ValueChange="@FindEvents"></DatePickerEvents>
                         </SfDatePicker>
+                        <ValidationMessage For="@(() => model.Timelineinfos.Date)"></ValidationMessage>
                     </div>
                 </div>
             </div>
@@ -105,9 +106,11 @@
                     <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
+                    <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>
                 </div>
                 <div class="col-7">
                     <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.City"></SfTextBox>
+                    <ValidationMessage For="@(() => model.Timelineinfos.City)"></ValidationMessage>
                 </div>
             </div>
             <hr />
@@ -219,14 +222,21 @@
     {
         //display loading gif in modal while doing the processing
 
-        model.Timelineinfos.Date = (DateTime)DateValue;
+        //model.Timelineinfos.Date = (DateTime)DateValue;
+        //TODO add locked option in form for authed users with perms
         model.Timelineinfos.Locked = 0;
+        string userId;
         if (signInManager.IsSignedIn(userState.User))
         {
-            var UserId = userManager.GetUserId(userState.User);
-            model.Timelineinfos.SubmittedBy = UserId;
+            userId = userManager.GetUserId(userState.User);
+            model.Timelineinfos.SubmittedBy = userId;
+        }
+        else
+        {
+            userId = null;
         }
         //model.Timelineinfos.SubmittedBy = "null"; not 'null' but nothing
+        //TODO if user is has perms auto verify
         model.Timelineinfos.Verified = 1;
         int IdTimelineinfo;
         using (var connection = new MySqlConnection(ConnectionStringHelper.GetConnectionString()))
@@ -250,10 +260,10 @@
         {
             string path;
             //if there is a file for the media save it to disk
-            if (media.Source.FileInfo.Name != null & media.SourceFrom == 6)
+            if (media.Source != null & media.SourceFrom == 6)
             {
-                var rand = Extensions.RandomString(5);
-                path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + media.Source.FileInfo.Name + "-" + rand;
+                var rand = Extensions.RandomString(12); //random string of 5 characters
+                path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + rand;
                 FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
                 media.Source.Stream.WriteTo(filestream);
                 filestream.Close();
@@ -275,7 +285,7 @@
                 sourcefrom = media.SourceFrom,
                 blurb = media.Blurb,
                 credit = media.Credit,
-                submittedby = "test-user-id",//TODO change to actual user id
+                submittedby = userId,
                 rank = media.ListIndex
             }
             , ConnectionStringHelper.GetConnectionString());
@@ -385,6 +395,7 @@
     public List<ViewSimilar>? SimilarEvents { get; set; } = new List<ViewSimilar>();
     protected async void FindEvents(ChangedEventArgs<DateTime?> args)
     {
+        model.Timelineinfos.Date = DateValue?.ToString("yyyy-MM-dd");
         SearchesSubmit searchesSubmit = new SearchesSubmit();
         SimilarEvents = await searchesSubmit.GetSimilar(args.Value?.ToString("yyyy-MM-dd"));
         this.StateHasChanged();
@@ -397,14 +408,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var userState = await _authState;
+        userState = await _authState;
         SearchesSubmit searchesSubmit = new SearchesSubmit();
-        SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
         SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
         SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
         Today = DateTime.Today;
-        MinDate = new DateTime(1950, 1, 1);
+        MinDate = new DateTime(1776, 6, 4);
         DateValue = DateTime.Today;
+        SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
         //return base.OnInitializedAsync();
         // DateValue = new DateTime(DateTime.Today.Year, DateTime.Now.Month, DateTime.Today.Day);
     }

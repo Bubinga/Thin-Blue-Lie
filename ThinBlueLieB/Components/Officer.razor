@@ -21,13 +21,13 @@
             </div>
             <div class="form-row position-relative my-2">
                 <div class="col-6">
-                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@officer.Race" DataSource="@Races">
+                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Always" Index="1" Placeholder="Race" @bind-Value="@officer.Race" DataSource="@Races">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => officer.Race)"></ValidationMessage>
                 </div>
                 <div class="col-6">
-                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="2" Placeholder="Sex" @bind-Value="@officer.Sex" DataSource="@Sexes">
+                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Always" Index="2" Placeholder="Sex" @bind-Value="@officer.Sex" DataSource="@Sexes">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => officer.Sex)"></ValidationMessage>

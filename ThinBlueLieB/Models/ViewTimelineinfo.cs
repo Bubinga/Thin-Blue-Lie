@@ -9,12 +9,11 @@ namespace ThinBlueLieB.Models
     public class ViewTimelineinfo
     {
         public int IdTimelineinfo { get; set; }
-        [Required]
-        [MaxLength(10)]
-        [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
+        [Required(ErrorMessage = "Please enter a Date")]
+        [MaxLength(10, ErrorMessage = "Please enter a date in the format 'yyyy-MM-dd'")]
+        public string Date { get; set; }
         public byte State { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Please enter a City")]
         [MaxLength(30, ErrorMessage ="City name must be shorter than 30 characters")]
         public string City { get; set; }     
         [Required]

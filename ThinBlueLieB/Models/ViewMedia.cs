@@ -20,8 +20,9 @@ namespace ThinBlueLieB.Models
         [Required]
         public byte SourceFrom { get; set; }
         [Required]
-        [MaxLength(250)]
-        public string Blurb { get; set; }        
+        [StringLength(250, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
+        public string Blurb { get; set; }      
+        [MaxLength(100, ErrorMessage = "Please type less than 100 characters")]
         public string Credit { get; set; }
     }
 }
