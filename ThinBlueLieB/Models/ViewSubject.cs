@@ -7,6 +7,7 @@ namespace ThinBlueLieB.Models
         public int IdSubject { get; set; }
         public int ListIndex { get; set; }
         [RegularExpression("(?i)^(?:(?![×Þß÷þø])[-'a-zÀ-ÿ ])+$", ErrorMessage = "Enter only letters")]
+        [MaxLength(60, ErrorMessage = "Please enter less than 60 characters")]
         public string Name { get; set; }
         [Required(ErrorMessage = "The Subject's Race field is required")]
         public byte Race { get; set; }
