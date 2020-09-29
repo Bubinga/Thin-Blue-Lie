@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ThinBlueLieB.Models;
-using static ThinBlueLieB.Helper.Algorithms;
 using static ThinBlueLieB.Models.ViewSimilar;
 using static ThinBlueLieB.Searches.SearchClasses;
 using static ThinBlueLieB.Helper.ConnectionStringHelper;
+using ThinBlueLieB.Helper.Algorithms;
 
 namespace ThinBlueLieB.Helper
 {
