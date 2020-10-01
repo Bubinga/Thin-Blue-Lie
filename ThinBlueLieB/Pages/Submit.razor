@@ -225,11 +225,11 @@
         //model.Timelineinfos.Date = (DateTime)DateValue;
         //TODO add locked option in form for authed users with perms
         model.Timelineinfos.Locked = 0;
-        string userId;
+        string? userId;
         if (signInManager.IsSignedIn(userState.User))
         {
             userId = userManager.GetUserId(userState.User);
-            model.Timelineinfos.SubmittedBy = userId;
+            //model.Timelineinfos.SubmittedBy = userId;
         }
         else
         {
@@ -244,6 +244,8 @@
             var timelineSave = "INSERT INTO timelineinfo (`Date`, `State`, `City`, `Context`, `Locked`, `SubmittedBy`, `Verified`)" +
                                "VALUES (@date, @state, @city, @context, @locked, @submittedby, @verified);" +
                                "SELECT LAST_INSERT_ID();";
+
+            //Set IdTimelineinfo and insert data into `timelineinfo` table
             IdTimelineinfo = connection.QuerySingle<int>(timelineSave, new
             {
                 date = model.Timelineinfos.Date,
@@ -251,7 +253,7 @@
                 city = model.Timelineinfos.City,
                 context = model.Timelineinfos.Context,
                 locked = model.Timelineinfos.Locked,
-                submittedby = model.Timelineinfos.SubmittedBy,
+                submittedby = (string)userId, //nullable
                 verified = model.Timelineinfos.Verified
             });
         }
@@ -273,22 +275,37 @@
             {
                 path = media.SourcePath;
             }
-            string mediaSql = "INSERT INTO media (`IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`)" +
+            string mediaSql = "INSERT INTO media (`IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`) " +
                               "VALUES (@idtimelineinfo, @mediatype, @sourcepath, @gore, @sourcefrom, @blurb, @credit, @submittedby, @rank);";
-
-            DataAccessLibrary.DataAccess.DataAccess dataAccess = new DataAccessLibrary.DataAccess.DataAccess();
-            await dataAccess.SaveData(mediaSql, new
+            using (var connection = new MySqlConnection(ConnectionStringHelper.GetConnectionString()))
             {
-                idtimelineinfo = IdTimelineinfo,
-                sourcepath = path,
-                gore = media.Gore,
-                sourcefrom = media.SourceFrom,
-                blurb = media.Blurb,
-                credit = media.Credit,
-                submittedby = userId,
-                rank = media.ListIndex
+                await connection.ExecuteAsync(mediaSql, new
+                {
+                    idtimelineinfo = IdTimelineinfo,
+                    mediatype = media.MediaType,
+                    sourcepath = path,
+                    gore = media.Gore,
+                    sourcefrom = media.SourceFrom,
+                    blurb = media.Blurb,
+                    credit = (string)media.Credit, //nullable
+                    submittedby = (string)userId, //nullable
+                    rank = media.ListIndex
+                });
             }
-            , ConnectionStringHelper.GetConnectionString());
+            //DataAccessLibrary.DataAccess.DataAccess dataAccess = new DataAccessLibrary.DataAccess.DataAccess();
+            //await dataAccess.SaveData(mediaSql, new
+            //{
+            //    idtimelineinfo = IdTimelineinfo,
+            //    mediatype = media.MediaType,
+            //    sourcepath = path,
+            //    gore = media.Gore,
+            //    sourcefrom = media.SourceFrom,
+            //    blurb = media.Blurb,
+            //    credit = (string)media.Credit, //nullable
+            //    submittedby = (string)userId, //nullable
+            //    rank = media.ListIndex
+            //},
+            //ConnectionStringHelper.GetConnectionString());
 
         }
 
@@ -300,7 +317,8 @@
 
                 if (subject.SameAsId == null)
                 {
-                    var subjectSql = "INSERT INTO subjects (`Name`, `Race`, `Sex`)" +
+                    //Create new subject
+                    var subjectSql = "INSERT INTO subjects (`Name`, `Race`, `Sex`) " +
                                  "VALUES (@name, @race, @sex);" +
                                  "SELECT LAST_INSERT_ID();";
                     //Add to subjects table and return id
@@ -344,6 +362,7 @@
 
                 if (officer.SameAsId == null)
                 {
+                    //Create new officer
                     var officerSql = "INSERT INTO officers (`Name`, `Race`, `Sex`)" +
                                  "VALUES (@name, @race, @sex);" +
                                  "SELECT LAST_INSERT_ID();";
@@ -362,9 +381,9 @@
                     {
                         idtimelineinfo = IdTimelineinfo,
                         idofficer = IdOfficer,
-                        age = (byte?)officer.Age,
+                        age = (byte)officer.Age,
                         misconduct = officer.Misconduct.Sum(),
-                        weapon = officer.Weapon.Sum(),
+                        weapon = (int)officer.Weapon.Sum(),
                     });
                 }
                 else
