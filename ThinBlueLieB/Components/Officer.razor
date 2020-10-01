@@ -1,6 +1,6 @@
 ﻿@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Buttons
-@using ThinBlueLieB.Helper
+@using ThinBlueLieB.Helper.Extensions
 
 <div class="AddOfficer mt-2">
     <div class="card border-dark mb-3 mx-auto">
@@ -21,13 +21,13 @@
             </div>
             <div class="form-row position-relative my-2">
                 <div class="col-6">
-                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Always" Index="1" Placeholder="Race" @bind-Value="@officer.Race" DataSource="@Races">
+                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Always" Index="1" Placeholder="Race" @bind-Value="@officer.Race" DataSource="@Races">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => officer.Race)"></ValidationMessage>
                 </div>
                 <div class="col-6">
-                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Always" Index="2" Placeholder="Sex" @bind-Value="@officer.Sex" DataSource="@Sexes">
+                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Always" Index="2" Placeholder="Sex" @bind-Value="@officer.Sex" DataSource="@Sexes">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => officer.Sex)"></ValidationMessage>
@@ -70,13 +70,13 @@
     [Parameter]
     public EventCallback<SimilarPersonCallback> SuggestOfficers { get; set; }
 
-    IReadOnlyList<Extensions.ListItem> Sexes = Extensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
-    IReadOnlyList<Extensions.ListItem> Races = Extensions.GetDropdownList<TimelineinfoEnums.RaceEnum>.Items;
+    IReadOnlyList<EnumExtensions.ListItem> Sexes = EnumExtensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
+    IReadOnlyList<EnumExtensions.ListItem> Races = EnumExtensions.GetDropdownList<TimelineinfoEnums.RaceEnum>.Items;
 
     public int[] MisconductsVal { get; set; } = new int[] { };
     public int[] WeaponsVal { get; set; } = new int[] { };
 
-    IReadOnlyList<Extensions.ListItem> MisconductsList = Extensions.GetDropdownList<TimelineinfoEnums.MisconductEnum>.Items;
-    IReadOnlyList<Extensions.ListItem> WeaponsList = Extensions.GetDropdownList<TimelineinfoEnums.WeaponEnum>.Items;
+    IReadOnlyList<EnumExtensions.ListItem> MisconductsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.MisconductEnum>.Items;
+    IReadOnlyList<EnumExtensions.ListItem> WeaponsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.WeaponEnum>.Items;
 
 }

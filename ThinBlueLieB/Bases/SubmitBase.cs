@@ -1,11 +1,14 @@
 ﻿using DataAccessLibrary.DataModels;
 using DataAccessLibrary.Enums;
 using Microsoft.AspNetCore.Components;
+using Syncfusion.Licensing;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using ThinBlueLieB.Helper;
+using ThinBlueLieB.Helper.Extensions;
 using static ThinBlueLieB.Searches.SearchClasses;
 
 namespace ThinBlueLieB.Models
@@ -27,10 +30,11 @@ namespace ThinBlueLieB.Models
         "CreateLink", "|", "ClearFormat",
         "SourceCode", "|", "Undo", "Redo"
          };
-       
-        internal IReadOnlyList<Extensions.ListItem> States = Extensions.GetDropdownList<TimelineinfoEnums.StateEnum>.Items;        
-           
-       
+
+        internal IEnumerable<EnumExtensions.ListItem> States = EnumExtensions.GetDropdownList<TimelineinfoEnums.StateEnum>.Items;
+        //internal IEnumerable<string> States = Enum.GetNames(typeof(TimelineinfoEnums.StateEnum));
+        //internal IEnumerable<string> States = EnumHelper<TimelineinfoEnums.StateEnum>.GetNames(TimelineinfoEnums.StateEnum);
+        //internal IEnumerable<string> States = TimelineinfoEnums.StateEnum.AmericanSamoa.GetAttributeOfType<DisplayAttribute>().Description;
         //add login suggestion
 
     }

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ThinBlueLieB.Helper;
+using ThinBlueLieB.Helper.Extensions;
 using static ThinBlueLieB.Helper.ConnectionStringHelper;
 
 namespace ThinBlueLieB.Searches
@@ -14,7 +14,7 @@ namespace ThinBlueLieB.Searches
     {      
         public async Task<Tuple<List<List<Timelineinfo>>, DateTime[]>> GetTimeline(string? current, int? dateChange, string? date)
         {
-            Extensions extensions = new Extensions();
+            StringExtensions extensions = new StringExtensions();
             if (current != null && dateChange != null)
             {
                 date = Convert.ToDateTime(current).AddDays((double)dateChange).ToString("yyyy-MM-dd");
