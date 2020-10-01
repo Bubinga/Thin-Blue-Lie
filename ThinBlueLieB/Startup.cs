@@ -13,7 +13,6 @@ using DataAccessLibrary.DataAccess;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Syncfusion.Blazor;
 using ThinBlueLieB.Helper;
-using ThinBlueLieB.Searches;
 using AutoMapper;
 
 namespace ThinBlueLieB

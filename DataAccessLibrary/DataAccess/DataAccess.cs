@@ -1,13 +1,14 @@
 ﻿extern alias MySqlConnectorAlias;
 
+using MySqlConnectorAlias::MySqlConnector;
 using Dapper;
-using MySqlConnectorAlias::MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MySqlConnectorAlias::MySql.Data.MySqlClient;
 
 namespace DataAccessLibrary.DataAccess
 {
