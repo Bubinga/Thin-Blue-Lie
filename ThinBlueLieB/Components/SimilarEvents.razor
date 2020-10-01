@@ -1,7 +1,7 @@
 ﻿@using ThinBlueLieB.Models;
 @using DataAccessLibrary.Enums;
 @using ThinBlueLieB.Helper;
-@using static ThinBlueLieB.Helper.Extensions;
+@using ThinBlueLieB.Helper.Extensions;
 
 <style>
     .location {
@@ -32,12 +32,12 @@
 <div id="likeVideos" class="mt-2">
     <div class="card border-dark mb-3 ml-1">
         <div class="card-header">
-            @(Event.Timelineinfo.Date.ToString("MMMM d") + Extensions.GetDaySuffix(Event.Timelineinfo.Date.Day) + ", " + Event.Timelineinfo.Date.Year.ToString())
+            @(Event.Timelineinfo.Date.ToString("MMMM d") + StringExtensions.GetDaySuffix(Event.Timelineinfo.Date.Day) + ", " + Event.Timelineinfo.Date.Year.ToString())
             </div> 
         <div class="card-body text-dark pt-2">
             <div class="d-block">
                 <div class="d-inline-block">
-                    <p class="location">@Event.Timelineinfo.City, @GetEnumDisplayName((TimelineinfoEnums.StateEnum)Event.Timelineinfo.State)</p>
+                    <p class="location">@Event.Timelineinfo.City, @EnumExtensions.GetEnumDisplayName((TimelineinfoEnums.StateEnum)Event.Timelineinfo.State)</p>
                     <div class="people">
                         <span class="similar-bold">
                             <strong>Subject@(subjectsDetails.Count != 1? "s:" : ":")</strong>
@@ -88,7 +88,7 @@
                 </div>
             </div>
             <div>
-                <p class="mb-0 d-block"><strong>Context:</strong> @Extensions.TruncateString(Event.Timelineinfo.Context)</p>
+                <p class="mb-0 d-block"><strong>Context:</strong> @StringExtensions.TruncateString(Event.Timelineinfo.Context)</p>
             </div>
         </div>
     </div>
@@ -106,15 +106,15 @@
     {
         subjectsDetails = GetSummaryList(Event.Subjects);
         officersDetails = GetSummaryList(Event.Officers);
-        subjectList = CommaQuibbling(subjectsDetails);
-        officerList = CommaQuibbling(officersDetails);
+        subjectList = StringExtensions.CommaQuibbling(subjectsDetails);
+        officerList = StringExtensions.CommaQuibbling(officersDetails);
     }
     List<string> GetSummaryList(List<ViewSimilar.ViewSimilarPerson> People)
     {
         List<string> list = new List<string>();
         foreach (var person in People)
         {
-            list.Add(Extensions.GetPersonSummary(person));
+            list.Add(StringExtensions.GetPersonSummary(person));
         }
         return list;
     }

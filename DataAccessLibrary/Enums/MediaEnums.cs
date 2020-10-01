@@ -10,14 +10,14 @@ namespace DataAccessLibrary.Enums
     {
         public enum MediaTypeEnum
         {
-            Video,            
+            Video = 1,            
             Image,
             [Display(Name = "News Article")]
             News,  
         }
         public enum SourceFromEnum
         {
-            Youtube,
+            Youtube = 1,
             Reddit,
             Instagram,
             Facebook,
