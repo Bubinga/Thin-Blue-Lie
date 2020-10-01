@@ -2,43 +2,39 @@
 @using Syncfusion.Blazor.Buttons
 @using System.ComponentModel.DataAnnotations;
 @using Microsoft.AspNetCore.Mvc
-@using ThinBlueLieB.Helper
+@using ThinBlueLieB.Helper.Extensions
 
 @using Syncfusion.Blazor.DropDowns
-
-<div class="container w-25 mt-5 px-5">
-    <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px"  Placeholder="Race" DataSource="@Races">
-        <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+<div class="container w-25 mt-5">
+    <SfDropDownList TValue="Values" TItem="string" Placeholder="e.g. Australia" DataSource="@EnumValues" @bind-Value="@ddlVal">
     </SfDropDownList>
-    <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" Placeholder="Race" DataSource="@Races">
-        <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+    <SfDropDownList TValue="Values" TItem="EnumExtensions.ListItem" Placeholder="e.g. Australia" DataSource="@EnumValues2" @bind-Value="@ddlVal">
+        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
     </SfDropDownList>
-    <SfDropDownList TValue="string" TItem="GameFields" PopupHeight="230px" Placeholder="Select a game" DataSource="@Games">
-        <DropDownListFieldSettings Text="Text" Value="ID"></DropDownListFieldSettings>
+    <SfDropDownList TValue="Values" TItem="EnumExtensions.ListItem" Placeholder="e.g. Australia" DataSource="@Sexes" @bind-Value="@ddlVal">
+        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
     </SfDropDownList>
 </div>
-@code {
-    public List<Extensions.ListItem> Races;
-    public class GameFields
-    {
-        public string ID { get; set; }
-        public string Text { get; set; }
-    }
-    public List<GameFields> Games;
+
+@code{
+    IReadOnlyList<EnumExtensions.ListItem> Sexes;
+    public IEnumerable<string> EnumValues;
+    IReadOnlyList<EnumExtensions.ListItem> EnumValues2;
+    public Values ddlVal { get; set; }
     protected override void OnInitialized()
     {
-        Races = (List<Extensions.ListItem>)Extensions.GetDropdownList<TimelineinfoEnums.RaceEnum>.Items;
-        Games = new List<GameFields>() {
-    new GameFields(){ ID= "Game1", Text= "American Football" },
-    new GameFields(){ ID= "Game2", Text= "Badminton" },
-    new GameFields(){ ID= "Game3", Text= "Basketball" },
-    new GameFields(){ ID= "Game4", Text= "Cricket" },
-    new GameFields(){ ID= "Game5", Text= "Football" },
-    new GameFields(){ ID= "Game6", Text= "Golf" },
-    new GameFields(){ ID= "Game7", Text= "Hockey" },
-    new GameFields(){ ID= "Game8", Text= "Rugby"},
-    new GameFields(){ ID= "Game9", Text= "Snooker" },
-    new GameFields(){ ID= "Game10",Text= "Tennis"}
-    };
+        Sexes = EnumExtensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
+        EnumValues = Enum.GetNames(typeof(Values));
+        EnumValues2 = EnumExtensions.GetDropdownList<Values>.Items;
+    }
+    public enum Values
+    {
+        Australia = 1,
+        Bermuda,
+        Canada,
+        Denmark,
+        India,
+        US
+
     }
 }

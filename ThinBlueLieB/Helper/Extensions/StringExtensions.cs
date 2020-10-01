@@ -8,19 +8,11 @@ using DataAccessLibrary.Enums;
 using Microsoft.AspNetCore.Components;
 using static ThinBlueLieB.Models.ViewSimilar;
 
-namespace ThinBlueLieB.Helper
+namespace ThinBlueLieB.Helper.Extensions
 {
-    public class Extensions
-    {
-        
-        public static string GetEnumDisplayName<T>(T value) where T : Enum
-        {
-            var fieldName = Enum.GetName(typeof(T), value);
-            var displayAttr = typeof(T)
-                .GetField(fieldName)
-                .GetCustomAttribute<DisplayAttribute>();
-            return displayAttr?.Name ?? fieldName;
-        }
+    public class StringExtensions
+    {        
+
         public static string TruncateString(string str)
         {
             const int MaxLength = 100;
@@ -42,17 +34,7 @@ namespace ThinBlueLieB.Helper
             return q[parmName] ?? "";
         }
 
-        public class ListItem
-        {
-            public int Value { get; set; }
-            public string Text { get; set; }
-        }
-        public static class GetDropdownList<TEnum>
-         where TEnum : struct, Enum
-        {
-            public static IReadOnlyList<ListItem> Items { get; } = Enum.GetValues(typeof(TEnum)).Cast<TEnum>()
-                            .Select(e => new ListItem() { Text = GetEnumDisplayName(e), Value = Convert.ToInt32(e) }).ToList();
-        }
+       
         internal static string GetPersonSummary(ViewSimilarPerson person)
         {
             var personSummary = person.Name;

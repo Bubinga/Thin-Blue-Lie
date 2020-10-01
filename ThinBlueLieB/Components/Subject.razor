@@ -1,6 +1,6 @@
 ﻿@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Buttons
-@using ThinBlueLieB.Helper
+@using ThinBlueLieB.Helper.Extensions
 
 <style>
    /* .armed-checkbox {
@@ -27,13 +27,13 @@
             </div>
             <div class="form-row position-relative my-2">
                 <div class="col-6">
-                    <SfDropDownList Enabled="@(subject.SameAsId != null? false: true)" TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@subject.Race" DataSource="@Races">
+                    <SfDropDownList Enabled="@(subject.SameAsId != null? false: true)" TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@subject.Race" DataSource="@Races">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => subject.Race)"></ValidationMessage>
                 </div>
                 <div class="col-6">
-                    <SfDropDownList Enabled="@(subject.SameAsId != null? false: true)" TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="2" Placeholder="Sex" @bind-Value="@subject.Sex" DataSource="@Sexes">
+                    <SfDropDownList Enabled="@(subject.SameAsId != null? false: true)" TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="2" Placeholder="Sex" @bind-Value="@subject.Sex" DataSource="@Sexes">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => subject.Race)"></ValidationMessage>
@@ -57,6 +57,6 @@
     [Parameter]
     public EventCallback<SimilarPersonCallback> SuggestSubjects { get; set; }
 
-    IReadOnlyList<Extensions.ListItem> Sexes = Extensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
-    IReadOnlyList<Extensions.ListItem> Races = Extensions.GetDropdownList<TimelineinfoEnums.RaceEnum>.Items;
+    IReadOnlyList<EnumExtensions.ListItem> Sexes = EnumExtensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
+    IReadOnlyList<EnumExtensions.ListItem> Races = EnumExtensions.GetDropdownList<TimelineinfoEnums.RaceEnum>.Items;
 }

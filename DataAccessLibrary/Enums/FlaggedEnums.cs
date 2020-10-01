@@ -6,7 +6,7 @@ namespace DataAccessLibrary.Enums
     {
         public enum FlagTypeEnum { 
             [Display(Name = "Vulgar or Racist")]
-            Vulgar,
+            Vulgar = 1,
             [Display(Name = "False Information")]
             False,
             [Display(Name = "Not Police Brutality")]

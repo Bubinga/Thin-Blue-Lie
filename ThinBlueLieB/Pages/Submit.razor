@@ -10,6 +10,7 @@
 @using MySql.Data.MySqlClient
 @using Microsoft.AspNetCore.Identity;
 @using Syncfusion.Blazor.DropDowns
+@using ThinBlueLieB.Helper.Extensions
 @using ThinBlueLieB.Helper
 @using Syncfusion.Blazor.RichTextEditor
 @using Syncfusion.Blazor.Buttons
@@ -103,7 +104,7 @@
             </div>
             <div class="form-row">
                 <div class="col-5 dropdown" style="position:relative;">
-                    <SfDropDownList TItem="Extensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                    <SfDropDownList TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>
@@ -264,7 +265,7 @@
             //if there is a file for the media save it to disk
             if (media.Source != null & media.SourceFrom == 6)
             {
-                var rand = Extensions.RandomString(12); //random string of 5 characters
+                var rand = StringExtensions.RandomString(12); //random string of 5 characters
                 path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + rand;
                 FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
                 media.Source.Stream.WriteTo(filestream);

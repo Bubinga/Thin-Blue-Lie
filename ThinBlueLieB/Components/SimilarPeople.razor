@@ -1,6 +1,6 @@
 ﻿@using ThinBlueLieB.Helper
 @using static ThinBlueLieB.Searches.SearchClasses
-@using static ThinBlueLieB.Helper.Extensions;
+@using ThinBlueLieB.Helper.Extensions;
 @using Syncfusion.Blazor.Buttons;
 @inherits SimilarPeopleBase
 
@@ -43,7 +43,7 @@
                                 <a href="#">
                                     <span class="ml-md-1">@item.Date.ToString("yyyy, MMMM dd") ---</span>
                                     <span>@item.City,</span>
-                                    <span>@GetEnumDisplayName((TimelineinfoEnums.StateEnum)item.State)</span>
+                                    <span>@EnumExtensions.GetEnumDisplayName((TimelineinfoEnums.StateEnum)item.State)</span>
                                 </a>
                             </li>
                         }
