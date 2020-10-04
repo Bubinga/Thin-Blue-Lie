@@ -3,38 +3,20 @@
 @using System.ComponentModel.DataAnnotations;
 @using Microsoft.AspNetCore.Mvc
 @using ThinBlueLieB.Helper.Extensions
-
 @using Syncfusion.Blazor.DropDowns
-<div class="container w-25 mt-5">
-    <SfDropDownList TValue="Values" TItem="string" Placeholder="e.g. Australia" DataSource="@EnumValues" @bind-Value="@ddlVal">
-    </SfDropDownList>
-    <SfDropDownList TValue="Values" TItem="EnumExtensions.ListItem" Placeholder="e.g. Australia" DataSource="@EnumValues2" @bind-Value="@ddlVal">
-        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
-    </SfDropDownList>
-    <SfDropDownList TValue="Values" TItem="EnumExtensions.ListItem" Placeholder="e.g. Australia" DataSource="@Sexes" @bind-Value="@ddlVal">
-        <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
-    </SfDropDownList>
-</div>
+@using System.Threading.Tasks;
+@using OpenGraphNet
 
+<NewsCard></NewsCard>
 @code{
-    IReadOnlyList<EnumExtensions.ListItem> Sexes;
-    public IEnumerable<string> EnumValues;
-    IReadOnlyList<EnumExtensions.ListItem> EnumValues2;
-    public Values ddlVal { get; set; }
-    protected override void OnInitialized()
+    public NewsArticle news { get; set; }
+    public OpenGraph graph { get; set; }
+    protected override async Task OnInitializedAsync()
     {
-        Sexes = EnumExtensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
-        EnumValues = Enum.GetNames(typeof(Values));
-        EnumValues2 = EnumExtensions.GetDropdownList<Values>.Items;
-    }
-    public enum Values
-    {
-        Australia = 1,
-        Bermuda,
-        Canada,
-        Denmark,
-        India,
-        US
-
+        news = new NewsArticle();
+        var link = "http://www.imdb.com/title/tt0187664/";
+        graph = OpenGraph.ParseUrl(link);
+        //graph = await OpenGraph.ParseUrlAsync("https://open.spotify.com/user/er811nzvdw2cy2qgkrlei9sqe/playlist/2lzTTRqhYS6AkHPIvdX9u3?si=KcZxfwiIR7OBPCzj20utaQ");
+        //news = await ThinBlueLieB.Helper.Algorithms.WebsiteProfiling.WebsiteProfile.GetWebsiteData("https://www.washingtonpost.com/elections/2020/10/03/trump-covid-live-updates/");
     }
 }
