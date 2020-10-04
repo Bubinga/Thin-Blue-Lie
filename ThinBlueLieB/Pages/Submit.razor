@@ -104,7 +104,7 @@
             </div>
             <div class="form-row">
                 <div class="col-5 dropdown" style="position:relative;">
-                    <SfDropDownList TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                    <SfDropDownList TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" Index="1" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
                         <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>

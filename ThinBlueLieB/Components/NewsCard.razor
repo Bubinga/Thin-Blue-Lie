@@ -1,0 +1,35 @@
+﻿@using Syncfusion.Blazor.Cards
+@using Syncfusion.Blazor.Buttons
+@using OpenGraphNet
+@using ThinBlueLieB.Helper.Algorithms.WebsiteProfiling 
+
+<style>
+    .e-card > .e-card-image {
+        background-repeat: no-repeat;
+        min-height: 205px;
+    }
+</style>
+<div class="mt-5 container w-25 px-4">
+    <SfCard ID="SideCard">
+        <CardImage Image="@news.Image.ToString()" />
+        <CardHeader Title="@news.Title.ToString()" />
+        <CardContent Content="@news.Description" />
+        <CardFooter>
+            <CardFooterContent>
+                <a class="e-btn e-outline e-primary" href="@news.Url.ToString()">Read More</a>
+                <span class="float-right">@news.Site</span>
+            </CardFooterContent>
+        </CardFooter>
+    </SfCard>
+</div>
+@code {
+
+    public NewsArticle news { get; set; }
+    //public OpenGraph graph { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        news = new NewsArticle();       
+        //graph = await OpenGraph.ParseUrlAsync("https://open.spotify.com/user/er811nzvdw2cy2qgkrlei9sqe/playlist/2lzTTRqhYS6AkHPIvdX9u3?si=KcZxfwiIR7OBPCzj20utaQ");
+        news = WebsiteProfile.GetWebsiteData("https://www.denverpost.com/2020/10/03/president-trump-fight-against-covid-19-update/");
+    }
+}

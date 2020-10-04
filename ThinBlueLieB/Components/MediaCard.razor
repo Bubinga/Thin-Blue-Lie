@@ -15,7 +15,7 @@
                 </div>
                 <div class="form-row position-relative">
                     <div class="col-6 dropdown my-2 pr-2">
-                        <SfDropDownList TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Type of Media" @bind-Value="@media.MediaType" DataSource="@MediaTypes">
+                        <SfDropDownList TItem="EnumExtensions.ListItem" Enabled="deviceMedia" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Type of Media" @bind-Value="@media.MediaType" DataSource="@MediaTypes">
                             <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
@@ -37,16 +37,17 @@
                 <div class="form-row">
                     <div class="col-5">
                         @*@if (Enum.GetName(typeof(MediaEnums.MediaTypeEnum), media.SourceFrom) == "Device")*@
-                        @if (media.SourceFrom == 6)
-                        {
+                        @if (media.SourceFrom == 7)
+                        {                            
                             <div class="form-group MediaFile">
                                 <SfUploader Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
                                     <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>                                  
                                 </SfUploader>
                             </div>
+                            deviceMedia = false;
                         }
                         else
-                        {                           
+                        {
                     <div class="form-group MediaLink">
                         <SfTextBox CssClass="e-filled" Placeholder="Link your Media here" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
                         <ValidationMessage For="@(() => media.SourcePath)"></ValidationMessage>
@@ -75,7 +76,7 @@
 @code {
     [Parameter]
     public ViewMedia media { get; set; }
-
+    private bool deviceMedia = true;
     [Parameter]
     public EventCallback<int> MoveMediaUp { get; set; }
     [Parameter]
