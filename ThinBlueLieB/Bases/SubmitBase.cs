@@ -33,7 +33,7 @@ namespace ThinBlueLieB.Models
 
         internal IEnumerable<EnumExtensions.ListItem> States = EnumExtensions.GetDropdownList<TimelineinfoEnums.StateEnum>.Items;
         //internal IEnumerable<string> States = Enum.GetNames(typeof(TimelineinfoEnums.StateEnum));
-        //internal IEnumerable<string> States = EnumHelper<TimelineinfoEnums.StateEnum>.GetNames(TimelineinfoEnums.StateEnum);
+        //internal IEnumerable<string> States = EnumHelper<TimelineinfoEnums>.GetNames(TimelineinfoEnums.StateEnum);
         //internal IEnumerable<string> States = TimelineinfoEnums.StateEnum.AmericanSamoa.GetAttributeOfType<DisplayAttribute>().Description;
         //add login suggestion
 

@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DataAccessLibrary.Enums;
+using System;
+using System.ComponentModel.DataAnnotations;
+using ThinBlueLieB.Helper.Validators;
 
 namespace ThinBlueLieB.Models
 {
     public class ViewOfficer
-    {
+    {               
         public int IdOfficer { get; set; }
         public int ListIndex { get; set; }
         [RegularExpression("(?i)^(?:(?![×Þß÷þø])[-'a-zÀ-ÿ ])+$", ErrorMessage = "Enter only letters")]
@@ -17,6 +20,7 @@ namespace ThinBlueLieB.Models
         ErrorMessage = "Age must be between {1} and {2}.")]
         public int? Age { get; set; }
         [Required]
+        [MisconductValidator]
         public int[]? Misconduct { get; set; }
         public int[]? Weapon { get; set; }
         public int? SameAsId { get; set; }
