@@ -7,6 +7,7 @@ namespace ThinBlueLieB.Models
 {
     public class MetaTags
     {
+        public bool HasData { get; set; }
         public string Title { get; set; }
         public string? Description { get; set; }
         public string Image { get; set; }
@@ -17,7 +18,7 @@ namespace ThinBlueLieB.Models
         public MetaTags(string url)
         {
             Url = url;
-           // HasData = false;
+            HasData = false;
         }
 
         public MetaTags(string url, string title, string description, string keywords, string imageUrl, string siteName)

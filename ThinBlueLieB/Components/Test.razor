@@ -5,21 +5,16 @@
 @using ThinBlueLieB.Helper.Extensions
 @using Syncfusion.Blazor.DropDowns
 @using System.Threading.Tasks;
-@using OpenGraphNet
+@using ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
 
 <div class="w-50 mt-5 container">
-    <NewsCard></NewsCard>
+    <NewsCard newsUrl="@url"></NewsCard>
 </div>
 
 @code{
-    public MetaTags news { get; set; }
-    public OpenGraph graph { get; set; }
-    protected override async Task OnInitializedAsync()
+    public string url { get; set; }
+    protected override void OnInitialized()
     {
-        //news = new MetaTags();
-        var link = "http://www.imdb.com/title/tt0187664/";
-        graph = OpenGraph.ParseUrl(link);
-        //graph = await OpenGraph.ParseUrlAsync("https://open.spotify.com/user/er811nzvdw2cy2qgkrlei9sqe/playlist/2lzTTRqhYS6AkHPIvdX9u3?si=KcZxfwiIR7OBPCzj20utaQ");
-        //news = await ThinBlueLieB.Helper.Algorithms.WebsiteProfiling.WebsiteProfile.GetWebsiteData("https://www.washingtonpost.com/elections/2020/10/03/trump-covid-live-updates/");
+        url = "https://www.denverpost.com/2020/10/03/president-trump-fight-against-covid-19-update/";
     }
 }
