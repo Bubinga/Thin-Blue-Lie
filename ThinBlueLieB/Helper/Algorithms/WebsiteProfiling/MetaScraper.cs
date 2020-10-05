@@ -1,6 +1,4 @@
 ﻿using HtmlAgilityPack;
-using OpenGraphNet;
-using OpenGraphNet.Namespaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +15,11 @@ namespace ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static MetaTags GetMetaData(string url)
+        public static async Task<MetaTags> GetMetaData(string url)
         {
             // Get the URL specified
             var webGet = new HtmlWeb();
-            var document = webGet.Load(url);
+            var document = await webGet.LoadFromWebAsync(url);
             var metaTags = document.DocumentNode.SelectNodes("//meta");
             MetaTags metaInfo = new MetaTags(url);
             if (metaTags != null)
@@ -106,7 +104,7 @@ namespace ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
                         }
                     }
                 }
-                //metaInfo.HasData = matchCount > 0;
+                metaInfo.HasData = matchCount > 0;
             }
             return metaInfo;
         }

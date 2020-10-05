@@ -1,17 +1,22 @@
 ﻿@using Syncfusion.Blazor.Cards
 @using Syncfusion.Blazor.Buttons
-@using OpenGraphNet
-@using ThinBlueLieB.Helper.Algorithms.WebsiteProfiling 
+@using ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
 
 <style>
     .e-card > .e-card-image {
         background-repeat: no-repeat;
         min-height: 205px;
     }
-    e-card-header-title{
+
+    e-card-header-title {
         white-space: normal;
     }
 </style>
+@if (news.HasData == false)
+{
+    <p>Loading</p>
+}
+else{
     <SfCard ID="SideCard">
         <CardImage Image="@news.Image.ToString()" />
         <CardHeader Title="@news.Title" />
@@ -23,15 +28,15 @@
             </CardFooterContent>
         </CardFooter>
     </SfCard>
+}
+
 @code {
+    [Parameter]
+    public string newsUrl { get; set; }
     public MetaTags news { get; set; }
-    //public OpenGraph graph { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        //news = new MetaTags();
-        //graph = await OpenGraph.ParseUrlAsync("https://open.spotify.com/user/er811nzvdw2cy2qgkrlei9sqe/playlist/2lzTTRqhYS6AkHPIvdX9u3?si=KcZxfwiIR7OBPCzj20utaQ");
-        //news = MetaScraper.GetMetaData("https://www.nytimes.com/2020/10/03/us/sean-conley-trump-doctor.html");
-        //news = MetaScraper.GetMetaData("https://www.washingtonpost.com/elections/2020/10/03/trump-covid-live-updates/");
-        news = MetaScraper.GetMetaData(" https://www.denverpost.com/2020/10/03/president-trump-fight-against-covid-19-update/");   
+        news = new MetaTags(newsUrl); //initialized with HasData = false
+        news = await MetaScraper.GetMetaData(newsUrl); //Filling out with data later. 
     }
 }
