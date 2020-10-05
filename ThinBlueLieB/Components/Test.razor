@@ -7,13 +7,16 @@
 @using System.Threading.Tasks;
 @using OpenGraphNet
 
-<NewsCard></NewsCard>
+<div class="w-50 mt-5 container">
+    <NewsCard></NewsCard>
+</div>
+
 @code{
-    public NewsArticle news { get; set; }
+    public MetaTags news { get; set; }
     public OpenGraph graph { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        news = new NewsArticle();
+        //news = new MetaTags();
         var link = "http://www.imdb.com/title/tt0187664/";
         graph = OpenGraph.ParseUrl(link);
         //graph = await OpenGraph.ParseUrlAsync("https://open.spotify.com/user/er811nzvdw2cy2qgkrlei9sqe/playlist/2lzTTRqhYS6AkHPIvdX9u3?si=KcZxfwiIR7OBPCzj20utaQ");

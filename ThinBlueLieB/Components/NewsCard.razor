@@ -8,28 +8,30 @@
         background-repeat: no-repeat;
         min-height: 205px;
     }
+    e-card-header-title{
+        white-space: normal;
+    }
 </style>
-<div class="mt-5 container w-25 px-4">
     <SfCard ID="SideCard">
         <CardImage Image="@news.Image.ToString()" />
-        <CardHeader Title="@news.Title.ToString()" />
+        <CardHeader Title="@news.Title" />
         <CardContent Content="@news.Description" />
         <CardFooter>
             <CardFooterContent>
                 <a class="e-btn e-outline e-primary" href="@news.Url.ToString()">Read More</a>
-                <span class="float-right">@news.Site</span>
+                <span class="float-right">@news.SiteName</span>
             </CardFooterContent>
         </CardFooter>
     </SfCard>
-</div>
 @code {
-
-    public NewsArticle news { get; set; }
+    public MetaTags news { get; set; }
     //public OpenGraph graph { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        news = new NewsArticle();       
+        //news = new MetaTags();
         //graph = await OpenGraph.ParseUrlAsync("https://open.spotify.com/user/er811nzvdw2cy2qgkrlei9sqe/playlist/2lzTTRqhYS6AkHPIvdX9u3?si=KcZxfwiIR7OBPCzj20utaQ");
-        news = WebsiteProfile.GetWebsiteData("https://www.denverpost.com/2020/10/03/president-trump-fight-against-covid-19-update/");
+        //news = MetaScraper.GetMetaData("https://www.nytimes.com/2020/10/03/us/sean-conley-trump-doctor.html");
+        //news = MetaScraper.GetMetaData("https://www.washingtonpost.com/elections/2020/10/03/trump-covid-live-updates/");
+        news = MetaScraper.GetMetaData(" https://www.denverpost.com/2020/10/03/president-trump-fight-against-covid-19-update/");   
     }
 }
