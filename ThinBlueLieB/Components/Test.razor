@@ -6,15 +6,21 @@
 @using Syncfusion.Blazor.DropDowns
 @using System.Threading.Tasks;
 @using ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
+@inject IJSRuntime JsRuntime
 
 <div class="w-50 mt-5 container">
-    <NewsCard newsUrl="@url"></NewsCard>
+  <div id="player"></div>
 </div>
 
 @code{
-    public string url { get; set; }
-    protected override void OnInitialized()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        url = "https://www.denverpost.com/2020/10/03/president-trump-fight-against-covid-19-update/";
+        if (firstRender)
+        {
+            //await JsRuntime.InvokeVoidAsync("loadYTScript", "p4MD6ycpQpY");
+            //await JsRuntime.InvokeVoidAsync("onYouTubeIframeAPIReady");
+            //await JsRuntime.InvokeVoidAsync("onYouTubeIframeAPIReady");
+            await JsRuntime.InvokeVoidAsync("LoadVideo", "p4MD6ycpQpY");
+        }
     }
 }
