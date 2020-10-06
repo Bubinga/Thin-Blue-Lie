@@ -47,15 +47,15 @@ namespace ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
                                 metaInfo.Description = content;
                                 matchCount++;
                                 break;
-                            case "site_name":
+                            case "og:site_name":
                                 metaInfo.SiteName = content;
                                 matchCount++;
                                 break;
-                            case "published_time":
+                            case "article:published_time":
                                 metaInfo.Date = Convert.ToDateTime(content);
                                 matchCount++;
                                 break;
-                            case "modified_time":
+                            case "article:modified_time":
                                 metaInfo.Date = Convert.ToDateTime(content);
                                 matchCount++;
                                 break;
