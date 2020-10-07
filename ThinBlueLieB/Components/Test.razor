@@ -9,18 +9,20 @@
 @inject IJSRuntime JsRuntime
 
 <div class="w-50 mt-5 container">
-  <div id="player"></div>
+  <YoutubeComponent videoId="@videoId"></YoutubeComponent>
 </div>
 
 @code{
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    string videoId = "MJCYFPVsBN0";
+    bool Loading;
+    protected override async Task OnInitializedAsync()
     {
-        if (firstRender)
-        {
-            //await JsRuntime.InvokeVoidAsync("loadYTScript", "p4MD6ycpQpY");
-            //await JsRuntime.InvokeVoidAsync("onYouTubeIframeAPIReady");
-            //await JsRuntime.InvokeVoidAsync("onYouTubeIframeAPIReady");
-            await JsRuntime.InvokeVoidAsync("LoadVideo", "p4MD6ycpQpY");
-        }
+        //Loading = false;
+        //await JsRuntime.InvokeVoidAsync("loadYTScript", "p4MD6ycpQpY");
+        //await JsRuntime.InvokeVoidAsync("onYouTubeIframeAPIReady");
+        //await JsRuntime.InvokeVoidAsync("onYouTubeIframeAPIReady");
+        //await JsRuntime.InvokeVoidAsync("LoadVideo", "p4MD6ycpQpY");
+        //await JsRuntime.InvokeVoidAsync("loadYTScript");
+        //Loading = false;
     }
 }
