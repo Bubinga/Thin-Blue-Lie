@@ -13,16 +13,16 @@
                     <SfButton @onclick="@(() => MoveMediaTop.InvokeAsync(media.ListIndex))" IconCss="e-icons e-double-arrow-up-icon" IsPrimary="true" CssClass="e-flat mr-lg-3 mr-2 e-custom"></SfButton>
                     <SfButton @onclick="@(() => DeleteMedia.InvokeAsync(media.ListIndex))" IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
                 </div>
-                <div class="form-row position-relative">
+                <div class="mt-4 form-row position-relative">
                     <div class="col-6 dropdown my-2 pr-2">
-                        <SfDropDownList TItem="EnumExtensions.ListItem" Enabled="deviceMedia" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Type of Media" @bind-Value="@media.MediaType" DataSource="@MediaTypes">
-                            <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                        <SfDropDownList TItem="string" Enabled="deviceMedia" TValue="MediaEnums.MediaTypeEnum?" PopupHeight="230px" Placeholder="Type of Media" @bind-Value="@media.MediaType" DataSource="@MediaTypes">
                         </SfDropDownList>
+                        <ValidationMessage For="@(() => media.MediaType)"></ValidationMessage>
                     </div>
                     <div class="col-6 dropdown my-2 pl-2">
-                        <SfDropDownList TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Source Location" @bind-Value="@media.SourceFrom" DataSource="@SourceFromOptions">
-                            <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                        <SfDropDownList TItem="string" TValue="MediaEnums.SourceFromEnum?" PopupHeight="230px" Placeholder="Source Location" @bind-Value="@media.SourceFrom" DataSource="@SourceFromOptions">
                         </SfDropDownList>
+                        <ValidationMessage For="@(() => media.SourceFrom)"></ValidationMessage>
                     </div>
                 </div>
                 <div class="form-row align-middle mb-2 pl-1">
@@ -36,27 +36,27 @@
                 </div>
                 <div class="form-row">
                     <div class="col-5">
-                        @*@if (Enum.GetName(typeof(MediaEnums.MediaTypeEnum), media.SourceFrom) == "Device")*@
-                        @if (media.SourceFrom == 7)
-                        {                            
+                        @if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+                        {         
+                             deviceMedia = false;
                             <div class="form-group MediaFile">
                                 <SfUploader Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
                                     <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>                                  
                                 </SfUploader>
-                            </div>
-                            deviceMedia = false;
+                            </div>                           
                         }
                         else
                         {
-                    <div class="form-group MediaLink">
-                        <SfTextBox CssClass="e-filled" Placeholder="Link your Media here" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
-                        <ValidationMessage For="@(() => media.SourcePath)"></ValidationMessage>
-                    </div>
+                            deviceMedia = true;
+                            <div class="form-group MediaLink">
+                                <SfTextBox CssClass="e-filled" Placeholder="Link your Media here" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
+                                <ValidationMessage For="@(() => media.SourcePath)"></ValidationMessage>
+                            </div>
                         }
                     </div>
                     <div class="ml-3 col-6">
                         <label class="form-check-label">
-                            Is there any blood or gore in the video?<span class="text-danger ml-1">*</span>
+                            Is there any blood or gore in the media?<span class="text-danger ml-1">*</span>
                             <ValidationMessage For="@(() => media.Gore)"></ValidationMessage>
                         </label>
                         <div class="row">
@@ -86,8 +86,8 @@
     [Parameter]
     public EventCallback<int> DeleteMedia { get; set; }
 
-    IReadOnlyList<EnumExtensions.ListItem> MediaTypes = EnumExtensions.GetDropdownList<MediaEnums.MediaTypeEnum>.Items;
-    IReadOnlyList<EnumExtensions.ListItem> SourceFromOptions = EnumExtensions.GetDropdownList<MediaEnums.SourceFromEnum>.Items;
+    public IEnumerable<string> MediaTypes = EnumExtensions.GetEnumDisplayNames<MediaEnums.MediaTypeEnum>();
+    public IEnumerable<string> SourceFromOptions = EnumExtensions.GetEnumDisplayNames<MediaEnums.SourceFromEnum>();
 
     //public void OnFileRemove(RemovingEventArgs args)
     //{
@@ -96,18 +96,13 @@
 
     public void OnFileChange(UploadChangeEventArgs args)
     {
-       // Console.WriteLine(args.Files[0].FileInfo.Name);
-        media.Source = args.Files[0];        
+        // Console.WriteLine(args.Files[0].FileInfo.Name);
+        media.Source = args.Files[0];
     }
 
     private void OnFileRemove(RemovingEventArgs args)
     {
         //foreach (var removeFile in args.FilesData)
-        //{
-        //    if (File.Exists(Path.Combine(@"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\", removeFile.Name)))
-        //    {
-        //        File.Delete(Path.Combine(@"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\", removeFile.Name));
-        //    }
-        //}
+        media.Source = null;
     }
 }

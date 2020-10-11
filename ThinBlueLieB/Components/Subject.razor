@@ -27,16 +27,14 @@
             </div>
             <div class="form-row position-relative my-2">
                 <div class="col-6">
-                    <SfDropDownList Enabled="@(subject.SameAsId != null? false: true)" TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@subject.Race" DataSource="@Races">
-                        <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                    <SfDropDownList Enabled="@(subject.SameAsId != null? false: true)" TItem="string" TValue="TimelineinfoEnums.RaceEnum?" PopupHeight="230px" Placeholder="Race" @bind-Value="@subject.Race" DataSource="@Races">
                     </SfDropDownList>
                     <ValidationMessage For="@(() => subject.Race)"></ValidationMessage>
                 </div>
                 <div class="col-6">
-                    <SfDropDownList Enabled="@(subject.SameAsId != null? false: true)" TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="2" Placeholder="Sex" @bind-Value="@subject.Sex" DataSource="@Sexes">
-                        <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                    <SfDropDownList Enabled="@(subject.SameAsId != null? false: true)" TItem="string" TValue="TimelineinfoEnums.SexEnum?" PopupHeight="230px" Placeholder="Sex" @bind-Value="@subject.Sex" DataSource="@Sexes">
                     </SfDropDownList>
-                    <ValidationMessage For="@(() => subject.Race)"></ValidationMessage>
+                    <ValidationMessage For="@(() => subject.Sex)"></ValidationMessage>
                 </div>
             </div>
             <div class="ml-3 d-inline-block" style="width:6rem;">
@@ -50,13 +48,11 @@
     [Parameter]
     public ViewSubject subject { get; set; }
 
-
-
     [Parameter]
     public EventCallback<int> DeleteSubject { get; set; }
     [Parameter]
     public EventCallback<SimilarPersonCallback> SuggestSubjects { get; set; }
 
-    IReadOnlyList<EnumExtensions.ListItem> Sexes = EnumExtensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
-    IReadOnlyList<EnumExtensions.ListItem> Races = EnumExtensions.GetDropdownList<TimelineinfoEnums.RaceEnum>.Items;
+    public IEnumerable<string> Races = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.RaceEnum>();
+    public IEnumerable<string> Sexes = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.SexEnum>();
 }

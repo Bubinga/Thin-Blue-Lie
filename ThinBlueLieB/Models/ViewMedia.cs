@@ -2,6 +2,7 @@
 using Syncfusion.Blazor.Inputs;
 using System.ComponentModel.DataAnnotations;
 using Syncfusion.Blazor.Inputs.Internal;
+using DataAccessLibrary.Enums;
 
 namespace ThinBlueLieB.Models
 {
@@ -11,14 +12,14 @@ namespace ThinBlueLieB.Models
         public int IdTimelineinfo { get; set; }
         public int ListIndex { get; set; } //becomes Rank
         [Required]
-        public byte MediaType { get; set; }    
+        public MediaEnums.MediaTypeEnum? MediaType { get; set; }    
         [Url]
         public string SourcePath { get; set; } //For linked image 
         public UploadFiles Source { get; set; } //For uploaded image file         
         [Required]
         public byte Gore { get; set; }
         [Required]
-        public byte SourceFrom { get; set; }
+        public MediaEnums.SourceFromEnum? SourceFrom { get; set; }
         [Required]
         [StringLength(250, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
         public string Blurb { get; set; }      
