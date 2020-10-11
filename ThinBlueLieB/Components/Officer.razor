@@ -21,14 +21,12 @@
             </div>
             <div class="form-row position-relative my-2">
                 <div class="col-6">
-                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Always" Index="1" Placeholder="Race" @bind-Value="@officer.Race" DataSource="@Races">
-                        <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="string" TValue="TimelineinfoEnums.RaceEnum?" PopupHeight="230px" Placeholder="Race" @bind-Value="@officer.Race" DataSource="@Races">
                     </SfDropDownList>
                     <ValidationMessage For="@(() => officer.Race)"></ValidationMessage>
                 </div>
                 <div class="col-6">
-                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" FloatLabelType="@FloatLabelType.Always" Index="2" Placeholder="Sex" @bind-Value="@officer.Sex" DataSource="@Sexes">
-                        <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                    <SfDropDownList Enabled="@(officer.SameAsId != null? false: true)" TItem="string" TValue="TimelineinfoEnums.SexEnum?" PopupHeight="230px" Placeholder="Sex" @bind-Value="@officer.Sex" DataSource="@Sexes">
                     </SfDropDownList>
                     <ValidationMessage For="@(() => officer.Sex)"></ValidationMessage>
                 </div>
@@ -70,8 +68,8 @@
     [Parameter]
     public EventCallback<SimilarPersonCallback> SuggestOfficers { get; set; }
 
-    IReadOnlyList<EnumExtensions.ListItem> Sexes = EnumExtensions.GetDropdownList<TimelineinfoEnums.SexEnum>.Items;
-    IReadOnlyList<EnumExtensions.ListItem> Races = EnumExtensions.GetDropdownList<TimelineinfoEnums.RaceEnum>.Items;
+    public IEnumerable<string> Races = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.RaceEnum>();
+    public IEnumerable<string> Sexes = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.SexEnum>();
 
     public int[] MisconductsVal { get; set; } = new int[] { };
     public int[] WeaponsVal { get; set; } = new int[] { };

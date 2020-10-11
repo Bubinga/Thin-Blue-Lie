@@ -104,10 +104,12 @@
             </div>
             <div class="form-row">
                 <div class="col-5 dropdown" style="position:relative;">
-                    <SfDropDownList TItem="EnumExtensions.ListItem" TValue="byte" PopupHeight="230px" Index="1" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
-                        <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
-                    </SfDropDownList>
-                    <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>
+                    <div class="align">
+                        <div class="position-relative mb-1 mb-md-0"> <br /> <label class="position-absolute" style="top:-6px; font-size:14px; line-height:24px;">State</label></div>
+                        <SfDropDownList TItem="string" TValue="TimelineinfoEnums.StateEnum?" PopupHeight="230px" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                        </SfDropDownList>
+                        <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>
+                    </div>
                 </div>
                 <div class="col-7">
                     <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.City"></SfTextBox>
@@ -223,7 +225,6 @@
     {
         //display loading gif in modal while doing the processing
 
-        //model.Timelineinfos.Date = (DateTime)DateValue;
         //TODO add locked option in form for authed users with perms
         model.Timelineinfos.Locked = 0;
         string? userId;
@@ -236,7 +237,6 @@
         {
             userId = null;
         }
-        //model.Timelineinfos.SubmittedBy = "null"; not 'null' but nothing
         //TODO if user is has perms auto verify
         model.Timelineinfos.Verified = 1;
         int IdTimelineinfo;
@@ -263,7 +263,7 @@
         {
             string path;
             //if there is a file for the media save it to disk
-            if (media.Source != null & media.SourceFrom == 6)
+            if (media.Source != null & media.SourceFrom.Equals(6))
             {
                 var rand = StringExtensions.RandomString(12); //random string of 5 characters
                 path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + rand;
