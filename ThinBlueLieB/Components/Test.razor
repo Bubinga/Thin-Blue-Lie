@@ -5,24 +5,19 @@
 @using ThinBlueLieB.Helper.Extensions
 @using Syncfusion.Blazor.DropDowns
 @using System.Threading.Tasks;
-@using ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
 @inject IJSRuntime JsRuntime
 
 <div class="w-50 mt-5 container">
-  <YoutubeComponent videoId="@videoId"></YoutubeComponent>
+    <EditForm Model="model">
+        <MediaCard media="model"></MediaCard>
+    </EditForm>
 </div>
 
 @code{
-    string videoId = "MJCYFPVsBN0";
-    bool Loading;
+    public ViewMedia model = new ViewMedia();
+
     protected override async Task OnInitializedAsync()
     {
-        //Loading = false;
-        //await JsRuntime.InvokeVoidAsync("loadYTScript", "p4MD6ycpQpY");
-        //await JsRuntime.InvokeVoidAsync("onYouTubeIframeAPIReady");
-        //await JsRuntime.InvokeVoidAsync("onYouTubeIframeAPIReady");
-        //await JsRuntime.InvokeVoidAsync("LoadVideo", "p4MD6ycpQpY");
-        //await JsRuntime.InvokeVoidAsync("loadYTScript");
-        //Loading = false;
+
     }
 }

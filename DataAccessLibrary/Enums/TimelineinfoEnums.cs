@@ -13,7 +13,7 @@ namespace DataAccessLibrary.Enums
 
         public enum StateEnum
         {
-            Alabama =1, Alaska, [Display(Name = "American Samoa")] AmericanSamoa, Arizona, Arkansas,
+            Alabama, Alaska, [Display(Name = "American Samoa")] AmericanSamoa, Arizona, Arkansas,
             California, Colorado, Connecticut, Delaware, [Display(Name = "District of Columbia")] DistrictofColumbia,
             Florida, Georgia, Guam, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland,
             Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada,
@@ -29,14 +29,14 @@ namespace DataAccessLibrary.Enums
 
         public enum SexEnum : short
         {
-            Male =1,
+            Male,
             Female,
             Unclear
         }
 
         public enum RaceEnum : short
         {            
-            White =1,
+            White,
             Black,
             Hispanic,
             Asian,

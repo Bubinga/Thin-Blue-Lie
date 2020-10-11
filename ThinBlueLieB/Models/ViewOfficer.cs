@@ -13,9 +13,9 @@ namespace ThinBlueLieB.Models
         [MaxLength(60, ErrorMessage = "Please enter less than 60 characters")]
         public string Name { get; set; }
         [Required(ErrorMessage = "The Officer's Race field is required")]
-        public byte Race { get; set; }
+        public TimelineinfoEnums.RaceEnum? Race { get; set; }
         [Required(ErrorMessage = "The Officer's Sex field is required")]
-        public byte Sex { get; set; }
+        public TimelineinfoEnums.SexEnum? Sex { get; set; }
         [Range(0, 130,
         ErrorMessage = "Age must be between {1} and {2}.")]
         public int? Age { get; set; }
