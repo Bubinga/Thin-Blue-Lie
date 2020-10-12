@@ -263,9 +263,9 @@
         {
             string path;
             //if there is a file for the media save it to disk
-            if (media.Source != null & media.SourceFrom.Equals(6))
+            if (media.Source != null & media.SourceFrom == MediaEnums.SourceFromEnum.Device)
             {
-                var rand = StringExtensions.RandomString(12); //random string of 5 characters
+                var rand = StringExtensions.RandomString(12); //random string of 12 characters
                 path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + rand;
                 FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
                 media.Source.Stream.WriteTo(filestream);
