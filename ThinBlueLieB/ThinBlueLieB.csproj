@@ -35,10 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Uploads\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="Areas\Identity\Pages\Account\Logout.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
