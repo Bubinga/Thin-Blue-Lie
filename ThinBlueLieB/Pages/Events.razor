@@ -1,9 +1,16 @@
 ﻿@page "/Events"
+@using ThinBlueLie.ViewModels 
 
 <h3>Events</h3>
 
 
 
 @code {
-    //Load data into model    
+    [Parameter]
+    public ViewEvent Event { get; set; }
+    public DateTime? Date { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+       //on
+    }
 }

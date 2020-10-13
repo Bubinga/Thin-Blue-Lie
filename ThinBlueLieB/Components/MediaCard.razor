@@ -37,13 +37,13 @@
                 <div class="form-row">
                     <div class="col-5">
                         @if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
-                        {         
-                             deviceMedia = false;
+                        {
+                            deviceMedia = false;
                             <div class="form-group MediaFile">
                                 <SfUploader Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
-                                    <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>                                  
+                                    <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>
                                 </SfUploader>
-                            </div>                           
+                            </div>
                         }
                         else
                         {
@@ -69,6 +69,9 @@
                         </div>
                     </div>
                 </div>
+                <p>
+                    @media.SourceFrom.ToString()
+                </p>
             </div>
         </div>
     </div>
