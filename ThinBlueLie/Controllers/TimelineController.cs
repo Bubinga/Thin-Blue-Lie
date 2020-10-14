@@ -123,7 +123,7 @@ namespace ThinBlueLie.Controllers
                 dates[i] = weekStart.AddDays(i);
             }          
             ViewData["Dates"] = dates;
-            var dateData = new List<List<Timelineinfo>>(new List<Timelineinfo>[7]);           
+            var dateData = new List<List<TimelineinfoFull>>(new List<TimelineinfoFull>[7]);           
             for (int i = 0; i < 7; i++)
             {                       
                 dateData[i] = await _datacontext.Timelineinfo.Where(t => t.Date.Equals(dates[i].ToString("yyyy-MM-dd"))).ToListAsync();

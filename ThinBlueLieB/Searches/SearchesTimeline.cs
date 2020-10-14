@@ -19,13 +19,13 @@ namespace ThinBlueLieB.Searches
             {
                 date = Convert.ToDateTime(current).AddDays((double)dateChange).ToString("yyyy-MM-dd");
             }
-            else if (date == null || string.IsNullOrWhiteSpace(extensions.GetQueryParm("d")))
-            {
-                date = DateTime.Today.ToString("yyyy-MM-dd");
-            }
+            //else if (date == null || string.IsNullOrWhiteSpace(extensions.GetQueryParm("d")))
+            //{
+            //    date = DateTime.Today.ToString("yyyy-MM-dd");
+            //}
             else
             {
-                date = extensions.GetQueryParm("d");
+                //date = extensions.GetQueryParm("d");
             }
             DateTime dateT = Convert.ToDateTime(date); //convert date from string to DateTime
             DateTime[] dates = new DateTime[7];

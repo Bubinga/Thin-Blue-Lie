@@ -9,7 +9,7 @@ namespace ThinBlueLie.Pages
     public class SubmitModel
     { 
         [BindProperty]
-        public Timelineinfo Timelineinfos { get; set; }
+        public TimelineinfoFull Timelineinfos { get; set; }
         [BindProperty]
         public List<ViewMedia> Medias { get; set; }
         [BindProperty]

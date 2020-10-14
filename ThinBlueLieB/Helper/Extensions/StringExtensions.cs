@@ -28,9 +28,9 @@ namespace ThinBlueLieB.Helper.Extensions
 
         [Inject]
         public NavigationManager MyNavigationManager { get; set; }
-        public string GetQueryParm(string parmName)
+        public string GetQueryParm(string parmName, NavigationManager navigationManager)
         {
-            var uriBuilder = new UriBuilder(MyNavigationManager.Uri);
+            var uriBuilder = new UriBuilder(navigationManager.Uri);
             var q = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
             return q[parmName] ?? "";
         }

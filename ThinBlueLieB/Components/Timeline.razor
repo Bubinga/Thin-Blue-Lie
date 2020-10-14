@@ -5,7 +5,16 @@
 @using ThinBlueLieB.Searches
 @inject NavigationManager MyNavigationManager
 
-<div @onclick="PrevWeek" id="triangle-left"> <div class="empty"></div></div>
+
+@if (Day == null)
+{
+    <p>
+        Loading
+    </p>
+}
+else
+{
+<div @onclick="PrevWeek" id="triangle-left"> <div class="empty">aaaaaaaaaaaaaaaaaaa</div></div>
 @foreach ((var day, Int32 i) in Day.Select((day, i) => (day, i)))
     {
         <div class="week btn" onclick='location.href = "?d=@Dates[i].Year-@Dates[i].Month.ToString().PadLeft(2, '0')-@Dates[i].Day.ToString().PadLeft(2, '0')"'>
@@ -13,19 +22,20 @@
                 <span>@Dates[i].DayOfWeek</span>
                 <span> @Dates[i].Month/@Dates[i].Day</span>
             </div>
-            <div class="badge-bar">
+            @*<div class="badge-bar">
                 <svg class="badge">
                     <circle cx="13" cy="13" r="12" stroke="DarkBlue" stroke-width="2" fill="#dedede" />
                     <text x="8" y="18" fill="black">@day.Count</text>
                 </svg>
-            </div>
+            </div>*@
             <input type="radio">
         </div>
-    }
+}
 <div @onclick="NextWeek" id="triangle-right"><div class="empty"></div></div>
 <p>
     @*@searchess.Value.DataDB.ToString()*@
 </p>
+}
 @code {
     DateTime[] Dates;
     List<List<Timelineinfo>> Day { get; set; }
@@ -50,12 +60,14 @@
         var Result = await searches.GetTimeline(current, +7, date);
         Day = Result.Item1;
         Dates = Result.Item2;
+        this.StateHasChanged();
     }
     public async Task PrevWeek()
     {
         var Result = await searches.GetTimeline(current, +7, date);
         Day = Result.Item1;
         Dates = Result.Item2;
+        this.StateHasChanged();
     }
 
 }
