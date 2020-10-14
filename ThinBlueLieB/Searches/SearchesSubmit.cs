@@ -133,7 +133,7 @@ namespace ThinBlueLieB.Helper
             }
             //return list of names in order of lowest to highest score
             var SortedNames = nameScores.OrderByDescending(o => o.Score).ToList();
-            var Ids = String.Join(",", SortedNames.Where(s => s.Score > 0.7).Select(x => x.Id));           
+            var Ids = String.Join(",", SortedNames.Where(s => s.Score > 0.7).Select(x => x.Id));   //deliminated ids of possible names        
             List<SimilarSubject> similarPeople;
             if (!string.IsNullOrWhiteSpace(Ids))
             {

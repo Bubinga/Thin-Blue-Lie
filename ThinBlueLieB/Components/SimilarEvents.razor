@@ -62,7 +62,7 @@
                         <span class="similar-bold">
                             <strong>Officer@(officersDetails.Count != 1? "s:" : ":")</strong>
                         </span>
-                        @if (officersDetails.Count > 0)
+                        @if (officersDetails.Count > 1)
                         {
                             <ul class="people-list">
                                 @foreach (var officer in officersDetails)
@@ -104,19 +104,10 @@
     string officerList;
     protected override void OnInitialized()
     {
-        subjectsDetails = GetSummaryList(Event.Subjects);
-        officersDetails = GetSummaryList(Event.Officers);
+        subjectsDetails = StringExtensions.GetSummaryList(Event.Subjects);
+        officersDetails = StringExtensions.GetSummaryList(Event.Officers);
         subjectList = StringExtensions.CommaQuibbling(subjectsDetails);
         officerList = StringExtensions.CommaQuibbling(officersDetails);
-    }
-    List<string> GetSummaryList(List<ViewSimilar.ViewSimilarPerson> People)
-    {
-        List<string> list = new List<string>();
-        foreach (var person in People)
-        {
-            list.Add(StringExtensions.GetPersonSummary(person));
-        }
-        return list;
-    }
+    }   
 
 }
