@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataAccessLibrary.DataModels;
+using DataAccessLibrary.Enums;
 using Syncfusion.Blazor.Lists;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,12 @@ namespace ThinBlueLieB.Helper
             CreateMap<ViewTimelineinfo, Timelineinfo>();
             CreateMap<DisplayOfficer, ViewSimilarPerson>();
             CreateMap<DisplaySubject, ViewSimilarPerson>();
+            CreateMap<BaseOfficer, DisplayOfficer>()
+                .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (TimelineinfoEnums.RaceEnum)src.Race))
+                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (TimelineinfoEnums.SexEnum)src.Sex));
+            CreateMap<BaseSubject, DisplaySubject>()
+                 .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (TimelineinfoEnums.RaceEnum)src.Race))
+                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (TimelineinfoEnums.SexEnum)src.Sex)); 
         }
     }
 }
