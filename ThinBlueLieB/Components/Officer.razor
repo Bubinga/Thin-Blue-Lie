@@ -39,6 +39,7 @@
                     <SfMultiSelect Mode="@VisualMode.Box" Placeholder="Miconducts" @bind-Value="@officer.Misconduct" DataSource="@MisconductsList">
                         <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
                     </SfMultiSelect>
+                    <ValidationMessage For="@(() => officer.Misconduct)"></ValidationMessage>
                 </div>
                 <div class="col-6">
                     <label class="form-check-label">
@@ -71,8 +72,8 @@
     public IEnumerable<string> Races = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.RaceEnum>();
     public IEnumerable<string> Sexes = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.SexEnum>();
 
-    public int[] MisconductsVal { get; set; } = new int[] { };
-    public int[] WeaponsVal { get; set; } = new int[] { };
+    //public int[] MisconductsVal { get; set; } = new int[] { };
+    //public int[] WeaponsVal { get; set; } = new int[] { };
 
     IReadOnlyList<EnumExtensions.ListItem> MisconductsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.MisconductEnum>.Items;
     IReadOnlyList<EnumExtensions.ListItem> WeaponsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.WeaponEnum>.Items;

@@ -1,4 +1,5 @@
 ﻿@using ThinBlueLieB.Helper.Algorithms 
+@using Syncfusion.Blazor.Spinner 
 <style>
    
 
@@ -62,6 +63,16 @@
         margin: -10% 0 0 -8%;
     }
 </style>
+@if (Media == null)
+{
+        <div class="col-lg-9">
+            <div class="mx-auto">
+                <SfSpinner Type="@SpinnerType.Material"></SfSpinner>
+            </div>
+        </div>
+}
+else
+{
 <div class="swiper-container gallery-top">
     <div class="swiper-wrapper">
         @foreach (var media in Media)
@@ -73,7 +84,7 @@
                 </div>
             }
             else
-            {                
+            {
                 <div class="swiper-slide" style="
                    background-image: url(@LinkConverter.GetLinkFromData(media);">
                 </div>
@@ -89,7 +100,7 @@
         @foreach (var media in Media)
         {
             if (media.MediaType == MediaEnums.MediaTypeEnum.Video)
-            {               
+            {
                 <div class="swiper-slide video"
                      style="background-image: url(@LinkConverter.GetLinkFromData(media)) ">
                     <img class="play-button" alt="play button overlay" src="/Assets/Play-Button.png" href="#" />
@@ -104,11 +115,11 @@
         }
     </div>
 </div>
-
+}
 
 @code {
     [Parameter]
-    public List<ViewMedia> Media { get; set; }
+    public List<DisplayMedia>? Media { get; set; }
     //get list of images and videos
     //type of media and information
     //if video get thumbnail and overlay a triangle

@@ -13,9 +13,10 @@ namespace ThinBlueLieB.Helper.Validators
         {
             var length = Enum.GetValues(typeof(TimelineinfoEnums.MisconductEnum)).Length;
             var misconductMax = Math.Pow(2, length);
-            if ((int)value > misconductMax | (int)value == 0) //bad
+            int[] values = (int[])value;
+            if (values.Sum() > misconductMax | values.Sum() == 0) //bad
             {
-                return new ValidationResult("Remove select at least one Misconduct", new[] { validationContext.MemberName });
+                return new ValidationResult("Select at least one Misconduct", new[] { validationContext.MemberName });
             }
             else
             {

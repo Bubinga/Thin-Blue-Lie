@@ -1,16 +1,104 @@
 ﻿@page "/Events"
-@using ThinBlueLie.ViewModels 
+@using ThinBlueLieB.ViewModels
+@using Syncfusion.Blazor.Calendars
+@using ThinBlueLieB.Helper.Extensions
+@using DataAccessLibrary.DataAccess
+@using Syncfusion.Blazor.Spinner
+@using static ThinBlueLieB.Helper.ConnectionStringHelper
 
-<h3>Events</h3>
-
-
+<div>
+    <SfDatePicker TValue="DateTime?" Format="yyyy-MM-dd" Max="DateTime.Today" Placeholder="Select a date" @bind-Value="Date" StrictMode="true">
+        <DatePickerEvents TValue="DateTime?" ValueChange="@ChangeDay"></DatePickerEvents>
+    </SfDatePicker>
+</div>
+@foreach (var Case in Event)
+{
+    <div class="mx-3">
+        <div class="row">
+            <div class="col-lg-9">
+                <MediaCarousel Media="Case.Medias"></MediaCarousel>
+            </div>
+            <div class="col-lg-3">
+                <DataCard Information="Case.Data" Officers="Case.Officers" Subjects="Case.Subjects"></DataCard>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9">
+                @*Context Section*@
+                @if (Case.Data.Context == null)
+                {
+                    <div class="col-lg-9">
+                        <div class="mx-auto">
+                            <SfSpinner Type="@SpinnerType.Material"></SfSpinner>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @((MarkupString)Case.Data.Context)
+                }
+            </div>
+            <div class="col-lg-3">
+                @foreach (var newsItem in Case.Medias.Where(m => m.MediaType == MediaEnums.MediaTypeEnum.News))
+                {
+                    <NewsCard newsUrl="@newsItem.SourcePath"></NewsCard>
+                }
+            </div>
+        </div>
+    </div>
+}
 
 @code {
-    [Parameter]
-    public ViewEvent Event { get; set; }
+    public List<ViewEvent> Event { get; set; }
     public DateTime? Date { get; set; }
+    DataAccess data = new DataAccess();
     protected override async Task OnInitializedAsync()
     {
-       //on
+        Event = new List<ViewEvent>();
+
+        StringExtensions stringExtensions = new StringExtensions();
+        if (string.IsNullOrWhiteSpace(stringExtensions.GetQueryParm("d")) | Date == null)
+        {
+            Date = DateTime.Today;
+        }
+        else
+        {
+            Date = Convert.ToDateTime(stringExtensions.GetQueryParm("d"));
+        }
+        await ChangeDay();
+    }
+    private async Task ChangeDay()
+    {
+        //take new date
+        //get new information from DB
+        var query = "SELECT * From timelineinfo t where t.date = @date;";
+        List<Timelineinfo> timelineinfo = await data.LoadData<Timelineinfo, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd") }, GetConnectionString());
+        foreach ((var Case, Int32 i) in timelineinfo.Select((Case, i) => (Case, i)))
+        {
+            var mediaQuery = "SELECT * From media m where m.IdTimelieinfo = @id Order By Rank;";
+            var officerQuery = "SELECT o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
+                    "FROM timelineinfo t " +
+                    "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
+                    "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
+                    "WHERE t.IdTimelineinfo = @id ";
+            var subjectQuery = "SELECT s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed " +
+                    "FROM timelineinfo t " +
+                    "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
+                    "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
+                    "WHERE t.IdTimelineinfo = @id";
+
+            //get media, officers, and subjects using timelineinfo id
+            List<DisplayMedia> media = await data.LoadData<DisplayMedia, dynamic>(query, new { id = Case.IdTimelineinfo }, GetConnectionString());
+            List<DisplayOfficer> officers = await data.LoadData<DisplayOfficer, dynamic>(query, new { id = Case.IdTimelineinfo }, GetConnectionString());
+            List<DisplaySubject> subjects = await data.LoadData<DisplaySubject, dynamic>(query, new { id = Case.IdTimelineinfo }, GetConnectionString());
+
+            Event[i] = new ViewEvent
+            {
+                Data = Case,
+                Medias = media,
+                Officers = officers,
+                Subjects = subjects
+            };
+        }
     }
 }

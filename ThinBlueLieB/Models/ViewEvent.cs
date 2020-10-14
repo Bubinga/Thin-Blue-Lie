@@ -1,13 +1,14 @@
 ﻿using DataAccessLibrary.DataModels;
 using System.Collections.Generic;
+using ThinBlueLieB.Models;
 
-namespace ThinBlueLie.ViewModels
+namespace ThinBlueLieB.ViewModels
 {
     public class ViewEvent
     {
         public Timelineinfo Data { get; set; }
-        public List<Officers> Officers { get; set; }
-        public List<Subjects> Subjects { get; set; }
-        public List<Media> Medias { get; set; }
+        public List<DisplayOfficer> Officers { get; set; }
+        public List<DisplaySubject> Subjects { get; set; }
+        public List<DisplayMedia> Medias { get; set; }
     }
 }
