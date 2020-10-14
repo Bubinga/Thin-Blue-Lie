@@ -24,14 +24,6 @@ namespace ThinBlueLieB.Models
             Subjects = new List<ViewSubject> { new ViewSubject { ListIndex = 0 } }
         };
 
-        //public object[] Tools = new object[]{
-        //"Bold", "Italic", "Underline", "|",
-        //"Formats", "Alignments", "OrderedList", "UnorderedList",
-        //"Outdent", "Indent", "|", "CreateTable",
-        //"CreateLink", "|", "ClearFormat",
-        //"SourceCode", "|", "Undo", "Redo"
-        // };
-
         public List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
         {
             new ToolbarItemModel() { Command = ToolbarCommand.Bold },

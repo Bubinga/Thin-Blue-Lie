@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ThinBlueLieB.Models;
+using ThinBlueLieB.ViewModels;
+using static ThinBlueLieB.Models.ViewSimilar;
 
 namespace ThinBlueLieB.Helper
 {
@@ -18,6 +20,8 @@ namespace ThinBlueLieB.Helper
             CreateMap<ViewSubject, Subjects>();
             CreateMap<ViewMedia, Media>();
             CreateMap<ViewTimelineinfo, Timelineinfo>();
+            CreateMap<DisplayOfficer, ViewSimilarPerson>();
+            CreateMap<DisplaySubject, ViewSimilarPerson>();
         }
     }
 }

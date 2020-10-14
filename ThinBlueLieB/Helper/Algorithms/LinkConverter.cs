@@ -10,7 +10,7 @@ namespace ThinBlueLieB.Helper.Algorithms
 {
     public class LinkConverter
     {
-        public static string GetLinkFromData(ViewMedia media, bool video = false)
+        public static string GetLinkFromData(DisplayMedia media, bool video = false)
         {
             if (media.MediaType == MediaEnums.MediaTypeEnum.Video)
             {

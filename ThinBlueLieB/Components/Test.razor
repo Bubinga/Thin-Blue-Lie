@@ -10,14 +10,16 @@
 <div class="w-50 mt-5 container">
     <EditForm Model="model">
         <MediaCard media="model"></MediaCard>
-    </EditForm>
+        <Officer officer="officer"></Officer>
+    </EditForm>  
 </div>
 
 @code{
     public ViewMedia model = new ViewMedia();
-
+    public ViewOfficer officer { get; set; } = new ViewOfficer();
     protected override async Task OnInitializedAsync()
     {
-
+        officer.Misconduct = new int[] { };
     }
+    IReadOnlyList<EnumExtensions.ListItem> MisconductsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.MisconductEnum>.Items;
 }

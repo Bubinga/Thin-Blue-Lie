@@ -161,8 +161,8 @@
             <hr />
             <div class="form-group">
                 <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, and anything related to the event that happened off-screen.</label>
-                <SfRichTextEditor CssClass="w-100" @bind-Value="@model.Timelineinfos.Context" EnableResize="true" EditorMode="EditorMode.Markdown" EnableHtmlSanitizer="true" ShowCharCount="true">
-                    <RichTextEditorPasteCleanupSettings PlainText="true"></RichTextEditorPasteCleanupSettings>
+                <SfRichTextEditor CssClass="w-100" @bind-Value="@model.Timelineinfos.Context" EnableResize="true" EnableHtmlSanitizer="true" ShowCharCount="true">
+                    <RichTextEditorPasteCleanupSettings></RichTextEditorPasteCleanupSettings>
                     <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
                 </SfRichTextEditor>
                 <ValidationMessage For="@(() => model.Timelineinfos.Context)"></ValidationMessage>

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using DataAccessLibrary.Enums;
 using Microsoft.AspNetCore.Components;
+using ThinBlueLieB.Models;
 using static ThinBlueLieB.Models.ViewSimilar;
 
 namespace ThinBlueLieB.Helper.Extensions
@@ -47,7 +48,15 @@ namespace ThinBlueLieB.Helper.Extensions
                                + " " + Enum.GetName(typeof(TimelineinfoEnums.SexEnum), person.Sex);
             return personSummary;
         }
-
+        internal static List<string> GetSummaryList(List<ViewSimilarPerson> People)
+        {
+            List<string> list = new List<string>();
+            foreach (var person in People)
+            {
+                list.Add(StringExtensions.GetPersonSummary(person));
+            }
+            return list;
+        }
         public static string CommaQuibbling(IEnumerable<string> items)
         {
             StringBuilder sb = new StringBuilder();
