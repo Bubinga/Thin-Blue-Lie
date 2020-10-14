@@ -35,8 +35,8 @@ namespace DataAccessLibrary.DataModels
         public int IdTimelineinfo { get; set; }
 
         [ForeignKey(nameof(IdTimelineinfo))]
-        [InverseProperty(nameof(Timelineinfo.Edits))]
-        public virtual Timelineinfo IdTimelineinfoNavigation { get; set; }
+        [InverseProperty(nameof(TimelineinfoFull.Edits))]
+        public virtual TimelineinfoFull IdTimelineinfoNavigation { get; set; }
         [InverseProperty("IdEditsNavigation")]
         public virtual ICollection<EditMedia> EditMedia { get; set; }
         [ForeignKey(nameof(SubmittedBy))]

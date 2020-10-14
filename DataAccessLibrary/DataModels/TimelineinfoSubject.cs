@@ -20,7 +20,7 @@ namespace DataAccessLibrary.DataModels
         [InverseProperty(nameof(Subjects.TimelineinfoSubject))]
         public virtual Subjects IdSubjectNavigation { get; set; }
         [ForeignKey(nameof(IdTimelineinfo))]
-        [InverseProperty(nameof(Timelineinfo.TimelineinfoSubject))]
-        public virtual Timelineinfo IdTimelineinfoNavigation { get; set; }
+        [InverseProperty(nameof(TimelineinfoFull.TimelineinfoSubject))]
+        public virtual TimelineinfoFull IdTimelineinfoNavigation { get; set; }
     }
 }

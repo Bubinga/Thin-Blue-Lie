@@ -16,7 +16,7 @@ namespace DataAccessLibrary.UserModels
             Flagged = new HashSet<Flagged>();
             Log = new HashSet<Log>();
             Media = new HashSet<Media>();
-            Timelineinfo = new HashSet<Timelineinfo>();
+            Timelineinfo = new HashSet<TimelineinfoFull>();
             Aspnetuserclaims = new HashSet<Aspnetuserclaims>();
             Aspnetuserlogins = new HashSet<Aspnetuserlogins>();
             Aspnetuserroles = new HashSet<Aspnetuserroles>();
@@ -72,6 +72,6 @@ namespace DataAccessLibrary.UserModels
         [InverseProperty("SubmittedByNavigation")]
         public virtual ICollection<Media> Media { get; set; }
         [InverseProperty("SubmittedByNavigation")]
-        public virtual ICollection<Timelineinfo> Timelineinfo { get; set; }
+        public virtual ICollection<TimelineinfoFull> Timelineinfo { get; set; }
     }
 }

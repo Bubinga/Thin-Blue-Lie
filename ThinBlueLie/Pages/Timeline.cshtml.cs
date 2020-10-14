@@ -12,6 +12,6 @@ namespace ThinBlueLie.Pages
         [BindProperty]
         public Flagged Flags { get; set; }
 
-        public IList<Timelineinfo> Timelineinfos { get; set; }      
+        public IList<TimelineinfoFull> Timelineinfos { get; set; }      
     }
 }
