@@ -1,7 +1,23 @@
 ﻿@page "/Account/Profile"
+<AuthorizeView>
+    <Authorized>
 
+    </Authorized>
+    <NotAuthorized>
+        <h3>
+            Please <a href="Account/Login">Log in</a> to view your profile
+        </h3>
+    </NotAuthorized>
+</AuthorizeView>
 <h3>Profile</h3>
 
 @code {
+    //personmodel
+    //  list of events
+    //  user role
+    //  
+    //get list of persons events
+    //get user status of person
+    //get stats of person
 
 }
