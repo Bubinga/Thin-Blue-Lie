@@ -5,6 +5,8 @@
 @using DataAccessLibrary.DataAccess
 @using Syncfusion.Blazor.Spinner
 @using static ThinBlueLieB.Helper.ConnectionStringHelper
+@using Microsoft.AspNetCore.WebUtilities
+@implements IDisposable
 @inject NavigationManager navManager
 @inject AutoMapper.IMapper mapper
 
@@ -19,7 +21,7 @@
 </style>
 <div>
     <SfCalendar TValue="DateTime?" Max="DateTime.Today" @bind-Value="Date">
-        <CalendarEvents TValue="DateTime?" ValueChange="@ChangeDay"></CalendarEvents>
+        <CalendarEvents TValue="DateTime?" ValueChange="@SetDay"></CalendarEvents>
     </SfCalendar>
 </div>
 @foreach (var Case in Event)
@@ -37,7 +39,7 @@
             <div class="col-lg-9">
                 @*Context Section*@
                 <div class="border-bottom">
-                <h5 style="margin-left: 8rem; font-size:30px;" class="mt-2 mb-0"> <strong>Context</strong></h5>
+                    <h5 style="margin-left: 8rem; font-size:30px;" class="mt-2 mb-0"> <strong>Context</strong></h5>
                 </div>
                 @if (Case.Data.Context == null)
                 {
@@ -49,9 +51,9 @@
                 }
                 else
                 {
-                <p style="margin-left: 8rem; margin-right: 15rem;" class="context indent">
-                    @((MarkupString)Case.Data.Context)
-                </p> 
+                    <p style="margin-left: 8rem; margin-right: 15rem;" class="context indent">
+                        @((MarkupString)Case.Data.Context)
+                    </p>
                 }
             </div>
             <div class="col-lg-3">
@@ -67,26 +69,64 @@
 @code {
     public List<ViewEvent> Event { get; set; }
     public DateTime? Date { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        navManager.LocationChanged += LocationChanged;
         Event = new List<ViewEvent>();
-        StringExtensions stringExtensions = new StringExtensions();
-        if (string.IsNullOrWhiteSpace(stringExtensions.GetQueryParm("d", navManager)))
+        var uri = new Uri(navManager.Uri);
+        if (string.IsNullOrWhiteSpace(QueryHelpers.ParseQuery(uri.Query).TryGetValue("d", out var type) ? type.First() : ""))
         {
             Date = DateTime.Today;
         }
         else
         {
-            Date = Convert.ToDateTime(stringExtensions.GetQueryParm("d", navManager));
+            Date = TryCatchDate();
         }
         await ChangeDay();
     }
+    //When the url changes, rerun the changeday on the new date
+    async void LocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        Date = TryCatchDate();
+
+        await ChangeDay();
+    }
+
+    private DateTime TryCatchDate()
+    {
+        var uri = new Uri(navManager.Uri);
+        try
+        {
+            return Convert.ToDateTime(QueryHelpers.ParseQuery(uri.Query).TryGetValue("d", out var type) ? type.First() : "");
+        }
+        catch (FormatException)
+        {
+            return DateTime.Today;
+        }
+    }
+
+    public void Dispose()
+    {
+        // Unsubscribe from the event when component is disposed
+        navManager.LocationChanged -= LocationChanged;
+    }
+
+    //Change url
+    private void SetDay()
+    {
+        string url = UriExtensions.RemoveQueryStringByKey(navManager.Uri, "d");
+        var query = new Dictionary<string, string> { { "d", Date?.ToString("yyyy-MM-dd") } };
+
+        navManager.NavigateTo(QueryHelpers.AddQueryString(url, query));
+    }
+
+    //Get new information
     private async Task ChangeDay()
     {
-        Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(navManager.ToAbsoluteUri("Events").ToString(), "d", Date?.ToString("yyyy-MM-dd"));
         Event = new List<ViewEvent>(); //clearing previous information
         DataAccess data = new DataAccess();
-        //take new date
+
         //get new information from DB
         var query = "SELECT * From timelineinfo t where t.date = @date;";
         List<Timelineinfo> timelineinfo = await data.LoadData<Timelineinfo, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd") }, GetConnectionString());
