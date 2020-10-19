@@ -18,7 +18,7 @@ namespace ThinBlueLieB.Helper.Algorithms
                 {
                     if (video)
                     {
-                        var path = $"https://www.youtube-nocookie.com/embed/{media.SourcePath}?rel=0&autoplay=1&enablejsapi=1&fs=0&iv_load_policy=3&version=3&modestbranding=1";
+                        var path = $"https://www.youtube-nocookie.com/embed/{media.SourcePath}?rel=0&enablejsapi=1&fs=0&iv_load_policy=3&version=3&modestbranding=1";
                         return path;
                     }
                     else
