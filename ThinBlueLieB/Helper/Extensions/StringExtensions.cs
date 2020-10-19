@@ -26,16 +26,7 @@ namespace ThinBlueLieB.Helper.Extensions
             return name;
         }
 
-        [Inject]
-        public NavigationManager MyNavigationManager { get; set; }
-        public string GetQueryParm(string parmName, NavigationManager navigationManager)
-        {
-            var uriBuilder = new UriBuilder(navigationManager.Uri);
-            var q = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
-            return q[parmName] ?? "";
-        }
-
-       
+              
         internal static string GetPersonSummary(ViewSimilarPerson person)
         {
             var personSummary = person.Name;
