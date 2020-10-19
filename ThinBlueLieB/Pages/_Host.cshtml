@@ -41,6 +41,25 @@
 
     <script src="_framework/blazor.server.js"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        var galleryThumbs = new Swiper(".gallery-thumbs", {
+            spaceBetween: 10,
+            slidesPerView: 4,
+            freeMode: true,
+            watchSlidesVisibility: true,
+            watchSlidesProgress: true,
+        });
+        var galleryTop = new Swiper(".gallery-top", {
+            spaceBetween: 10,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            thumbs: {
+                swiper: galleryThumbs,
+            },
+        });
+    </script>
     <script src="~/js/YoutubeAPI.js"></script>
     <script src="~/js/Carousel.js"></script>
 

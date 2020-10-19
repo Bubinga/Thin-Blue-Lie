@@ -40,10 +40,6 @@
             opacity: 1;
         }
 
-    div.swiper-slide {
-        pointer-events: none;
-    }
-
     .swiper-slide iframe {
         width: 100%;
         height: 100%;
@@ -74,16 +70,16 @@
 else
 {
 <div class="swiper-container gallery-top">
-    <div class="swiper-wrapper">
+    <div class="swiper-wrapper hytPlayerWrapOuter">
         @foreach (var media in Media)
         {
             if (media.MediaType == MediaEnums.MediaTypeEnum.Video)
             {
-                <div class="swiper-slide">
+                <div class="swiper-slide hytPlayerWrap">
                     <iframe src="@LinkConverter.GetLinkFromData(media, true)"frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             }
-            else
+            else if ((media.MediaType == MediaEnums.MediaTypeEnum.Image))
             {
                 <div class="swiper-slide" style="
                    background-image: url(@LinkConverter.GetLinkFromData(media);">
@@ -106,7 +102,7 @@ else
                     <img class="play-button" alt="play button overlay" src="/Assets/Play-Button.png" href="#" />
                 </div>
             }
-            else
+            else if((media.MediaType == MediaEnums.MediaTypeEnum.Image))
             {
                 <div class="swiper-slide" style="
                    background-image: url(@LinkConverter.GetLinkFromData(media);">
@@ -120,6 +116,11 @@ else
 @code {
     [Parameter]
     public List<DisplayMedia>? Media { get; set; }
+
+    protected override void OnInitialized()
+    {
+        //Media = Media.Where(m => m.MediaType == MediaEnums.MediaTypeEnum.Image || m.MediaType == MediaEnums.MediaTypeEnum.Video).ToList();
+    }
     //get list of images and videos
     //type of media and information
     //if video get thumbnail and overlay a triangle
