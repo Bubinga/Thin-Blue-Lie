@@ -13,7 +13,7 @@
         <div class="navbar-collapse collapse text-right d-lg-inline-flex flex-lg-row-reverse">
             <ul class="navbar-nav flex-grow-1">
                 <li class="nav-item" id="Timeline">
-                    <NavLink class="nav-link text-white text-responsive" ActiveClass="onpage" href="@currentDate">Timeline</NavLink>
+                    <NavLink class="nav-link text-white text-responsive" ActiveClass="onpage" href="@currentDate">Events</NavLink>
                 </li>
                 <li class="nav-item" id="Solutions">
                     <NavLink class="nav-link text-white" href="/Solutions" ActiveClass="onpage">Solutions</NavLink>
@@ -52,7 +52,7 @@
 </nav>
 
 @code {
-    private string currentDate = "/Timeline?d=" + DateTime.Today.ToString("yyyy-MM-dd");
+    private string currentDate = "/Events?d=" + DateTime.Today.ToString("yyyy-MM-dd");
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;

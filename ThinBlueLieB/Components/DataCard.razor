@@ -5,6 +5,12 @@
 @using Syncfusion.Blazor.Spinner
 @inject AutoMapper.IMapper mapper
 
+<style>
+    .card-title{
+        margin-bottom: .5rem;
+    }
+   
+</style>
 @if (Information == null)
 {
     <div class="col-lg-9">
@@ -21,15 +27,11 @@ else
             @(Information.Date.ToString("MMMM d") + GetDaySuffix(Information.Date.Day) + ", " + Information.Date.Year.ToString())
         </div>
         <div class="card-body text-dark pb-0">
-            <h5 class="card-title mb-0"></h5>
-            <hr class="mt-0 pb-0 mb-0 pt-0" />
-            <ul class="list-group list-group-flush">
-                <li class="brokencard list-group-item">
-                    @Information.City, @GetEnumDisplayName((TimelineinfoEnums.StateEnum)Information.State)
-                </li>
-            </ul>
-            <h5 class="card-title text-left mb-0">Officer's Information</h5>
-            <hr style="height:1px;" class="mt-0 pb-0 mb-0 pt-0" />
+           <div> <h5 class="card-title mb-0"> @Information.City, @GetEnumDisplayName((TimelineinfoEnums.StateEnum)Information.State)</h5>
+            <hr class="mt-0 pb-0 mb-2 pt-0" /></div>
+
+            @*<h6 class="text-left mb-0">Subject's Information</h6>
+            <hr style="height:1px;" class="mt-0 pb-0 mb-0 pt-0" />*@
             <div class="people">
                 <span class="similar-bold">
                     <strong>Subject@(subjectsDetails.Count != 1? "s:" : ":")</strong>
@@ -50,42 +52,42 @@ else
                     <span class="single-person">@subjectsDetails[0]</span>
                 }
             </div>
+            @*<h6 class="text-left mb-0">Officers's Information</h6>*@
+            <div class="people">
+                <span class="similar-bold">
+                    <strong>Officer@(officersDetails.Count != 1? "s:" : ":")</strong>
+                </span>
+                @if (officersDetails.Count > 1)
+                {
+                    <ul class="people-list">
+                        @foreach (var officer in officersDetails)
+                        {
+                            <li>
+                                @officer
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <span class="single-person">@officersDetails[0]</span>
+                }
+            </div>
         </div>
-        <h5 class="card-title text-left mb-0">Victim's Information</h5>
-        <div class="people">
-            <span class="similar-bold">
-                <strong>Officer@(officersDetails.Count != 1? "s:" : ":")</strong>
-            </span>
-            @if (officersDetails.Count > 1)
-            {
-                <ul class="people-list">
-                    @foreach (var officer in officersDetails)
-                    {
-                        <li>
-                            @officer
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <span class="single-person">@officersDetails[0]</span>
-            }
-        </div>
-    </div>
-    <div class="card-footer">
-        <div class="row">
-            <div class="col-6 px-0 offset-1">
-                @*<a class="btn btn-primary position-relative" href="/Edit?id=@Timelineinfo.Data.IdTimelineinfo" data-placement="top"
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-6 px-0 offset-1">
+                    @*<a class="btn btn-primary position-relative" href="/Edit?id=@Timelineinfo.Data.IdTimelineinfo" data-placement="top"
                        data-toggle="tooltip" title="Edit info">
                         Incorrect Info?
                     </a>*@
-            </div>
-            <div class="col-5 px-0">
-                <a tabindex="0" class="btn btn-danger position-relative flag" data-placement="top" role="button" data-html="true" data-toggle="popover" data-trigger="click" title="Report"
-                   data-content=''>
-                    Flag ⚐
-                </a>
+                </div>
+                <div class="col-5 px-0">
+                    <a tabindex="0" class="btn btn-danger position-relative flag" data-placement="top" role="button" data-html="true" data-toggle="popover" data-trigger="click" title="Report"
+                       data-content=''>
+                        Flag ⚐
+                    </a>
+                </div>
             </div>
         </div>
     </div>

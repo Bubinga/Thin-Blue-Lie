@@ -8,6 +8,15 @@
 @inject NavigationManager navManager
 @inject AutoMapper.IMapper mapper
 
+<style>
+    .context {
+        font-size: 1.1rem;
+    }
+
+    .brokencard {
+        border: none;
+    }
+</style>
 <div>
     <SfCalendar TValue="DateTime?" Max="DateTime.Today" @bind-Value="Date">
         <CalendarEvents TValue="DateTime?" ValueChange="@ChangeDay"></CalendarEvents>
@@ -27,6 +36,9 @@
         <div class="row">
             <div class="col-lg-9">
                 @*Context Section*@
+                <div class="border-bottom">
+                <h5 style="margin-left: 8rem; font-size:30px;" class="mt-2 mb-0"> <strong>Context</strong></h5>
+                </div>
                 @if (Case.Data.Context == null)
                 {
                     <div class="col-lg-9">
@@ -37,7 +49,9 @@
                 }
                 else
                 {
+                <p style="margin-left: 8rem; margin-right: 15rem;" class="context indent">
                     @((MarkupString)Case.Data.Context)
+                </p> 
                 }
             </div>
             <div class="col-lg-3">
@@ -56,9 +70,8 @@
     protected override async Task OnInitializedAsync()
     {
         Event = new List<ViewEvent>();
-
         StringExtensions stringExtensions = new StringExtensions();
-        if (string.IsNullOrWhiteSpace(stringExtensions.GetQueryParm("d", navManager)) | Date == null)
+        if (string.IsNullOrWhiteSpace(stringExtensions.GetQueryParm("d", navManager)))
         {
             Date = DateTime.Today;
         }
@@ -70,6 +83,7 @@
     }
     private async Task ChangeDay()
     {
+        Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(navManager.ToAbsoluteUri("Events").ToString(), "d", Date?.ToString("yyyy-MM-dd"));
         Event = new List<ViewEvent>(); //clearing previous information
         DataAccess data = new DataAccess();
         //take new date
