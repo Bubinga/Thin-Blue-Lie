@@ -69,7 +69,7 @@
 @code {
     public List<ViewEvent> Event { get; set; }
     public DateTime? Date { get; set; }
-
+    string newUri;
     protected override async Task OnInitializedAsync()
     {
         navManager.LocationChanged += LocationChanged;
@@ -88,6 +88,7 @@
     //When the url changes, rerun the changeday on the new date
     async void LocationChanged(object sender, LocationChangedEventArgs e)
     {
+        newUri = e.Location;
         Date = TryCatchDate();
 
         await ChangeDay();
@@ -115,10 +116,14 @@
     //Change url
     private void SetDay()
     {
-        string url = UriExtensions.RemoveQueryStringByKey(navManager.Uri, "d");
-        var query = new Dictionary<string, string> { { "d", Date?.ToString("yyyy-MM-dd") } };
+        var queryParam = QueryHelpers.ParseQuery(new Uri(navManager.Uri).Query).TryGetValue("d", out var type) ? type.First() : "";
+        if (queryParam != Date?.ToString("yyyy-MM-dd"))//if url does not match date
+        {
+            string url = UriExtensions.RemoveQueryStringByKey(navManager.Uri, "d");
+            var query = new Dictionary<string, string> { { "d", Date?.ToString("yyyy-MM-dd") } };
 
-        navManager.NavigateTo(QueryHelpers.AddQueryString(url, query));
+            navManager.NavigateTo(QueryHelpers.AddQueryString(url, query));
+        }
     }
 
     //Get new information
