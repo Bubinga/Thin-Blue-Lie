@@ -6,6 +6,7 @@
 @using Syncfusion.Blazor.Spinner
 @using static ThinBlueLieB.Helper.ConnectionStringHelper
 @using Microsoft.AspNetCore.WebUtilities
+@inject IJSRuntime JsRuntime
 @implements IDisposable
 @inject NavigationManager navManager
 @inject AutoMapper.IMapper mapper
@@ -14,7 +15,9 @@
     .context {
         font-size: 1.1rem;
     }
-
+    .event-main-row{
+        min-height: 550px;
+    }
     .brokencard {
         border: none;
     }
@@ -28,7 +31,7 @@
 {
     <div class="mx-3">
         <div class="row">
-            <div class="col-lg-9">
+            <div class="col-lg-9 event-main-row">
                 <MediaCarousel Media="Case.Medias"></MediaCarousel>
             </div>
             <div class="col-lg-3">
@@ -39,7 +42,7 @@
             <div class="col-lg-9">
                 @*Context Section*@
                 <div class="border-bottom">
-                    <h5 style="margin-left: 8rem; font-size:30px;" class="mt-2 mb-0"> <strong>Context</strong></h5>
+                    <h5 style="margin-left: 6%; font-size:30px;" class="mt-2 mb-0"> <strong>Context</strong></h5>
                 </div>
                 @if (Case.Data.Context == null)
                 {
@@ -51,12 +54,17 @@
                 }
                 else
                 {
-                    <p style="margin-left: 8rem; margin-right: 15rem;" class="context indent">
+                    <p class="context indent">
                         @((MarkupString)Case.Data.Context)
                     </p>
                 }
             </div>
             <div class="col-lg-3">
+                <div class="container-fluid border-bottom mb-2">
+                    <h4 class="mt-3 mb-0">
+                        <strong>News Articles</strong>
+                     </h4>
+                </div>
                 @foreach (var newsItem in Case.Medias.Where(m => m.MediaType == MediaEnums.MediaTypeEnum.News))
                 {
                     <NewsCard newsUrl="@newsItem.SourcePath"></NewsCard>
@@ -70,6 +78,7 @@
     public List<ViewEvent> Event { get; set; }
     public DateTime? Date { get; set; }
     string newUri;
+
     protected override async Task OnInitializedAsync()
     {
         navManager.LocationChanged += LocationChanged;
@@ -85,6 +94,15 @@
         }
         await ChangeDay();
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {          
+            await JsRuntime.InvokeVoidAsync("InitializeSwiper");
+        }
+    }
+
     //When the url changes, rerun the changeday on the new date
     async void LocationChanged(object sender, LocationChangedEventArgs e)
     {
