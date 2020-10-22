@@ -12,35 +12,16 @@ namespace ThinBlueLieB.Searches
 {
     public class SearchesTimeline
     {      
-        public async Task<Tuple<List<List<Timelineinfo>>, DateTime[]>> GetTimeline(string? current, int? dateChange, string? date)
+        public async Task<Tuple<List<List<Timelineinfo>>, DateTime[]>> GetTimeline(DateTime date)
         {
-            StringExtensions extensions = new StringExtensions();
-            if (current != null && dateChange != null)
-            {
-                date = Convert.ToDateTime(current).AddDays((double)dateChange).ToString("yyyy-MM-dd");
-            }
-            //else if (date == null || string.IsNullOrWhiteSpace(extensions.GetQueryParm("d")))
-            //{
-            //    date = DateTime.Today.ToString("yyyy-MM-dd");
-            //}
-            else
-            {
-                //date = extensions.GetQueryParm("d");
-            }
-            DateTime dateT = Convert.ToDateTime(date); //convert date from string to DateTime
-            DateTime[] dates = new DateTime[7];
-            var weekStart = dateT.AddDays(-(int)dateT.DayOfWeek); //week start date
-            if (dateChange == null)
-            {
-                dates[0] = dateT.AddDays(-(int)dateT.DayOfWeek);
-            }
-            else
-            {
-                dates[0] = dateT.AddDays(-(int)dateT.DayOfWeek);
-            }
+            //get dates[] 
+            //get information for each date
+          
+            DateTime[] dates = new DateTime[7];           
+            dates[0] = date.AddDays(-(int)date.DayOfWeek); //set first day of week           
             for (int i = 1; i < 7; i++)
             {
-                dates[i] = weekStart.AddDays(i);
+                dates[i] = dates[0].AddDays(i);
             }
             var dateData = new List<List<Timelineinfo>>(new List<Timelineinfo>[7]);
             for (int i = 0; i < 7; i++)

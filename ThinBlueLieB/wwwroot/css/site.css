@@ -185,7 +185,7 @@ card.header {
 
 .timeline-label {
     position: absolute !important;
-    top: -25px !important;
+    //top: -25px !important;
     text-align: center;
     padding: 0px;
     margin: 0px;
@@ -199,9 +199,57 @@ card.header {
     outline: #919191 solid 3px;
 }
 
+
 .btn {
     cursor: pointer;
 }
+
+#triangle-left {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-right: 30px solid black;
+    border-bottom: 16px solid transparent;
+    margin-right: 0.4rem;
+    position: relative;
+    cursor: pointer;
+}
+
+    #triangle-left .empty {
+        left: 10px;
+        width: 0;
+        height: 0;
+        border-top: 11px solid transparent;
+        border-right: 20px solid white;
+        border-bottom: 11px solid transparent;
+        left: 7px;
+        position: absolute;
+        top: -11px;
+        content: '';
+    }
+
+#triangle-right {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-left: 30px solid black;
+    border-bottom: 16px solid transparent;
+    margin-left: 0.4rem;
+    cursor: pointer;
+    position: relative;
+}
+
+    #triangle-right .empty {
+        width: 0;
+        height: 0;
+        border-top: 11px solid transparent;
+        border-left: 20px solid white;
+        border-bottom: 11px solid transparent;
+        position: absolute;
+        left: -27px;
+        top: -11px;
+        content: '';
+    }
 
 
 .embed-responsive-2by1::before {
