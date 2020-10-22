@@ -7,11 +7,8 @@
 @using System.Threading.Tasks;
 @inject IJSRuntime JsRuntime
 
-<div class="w-50 mt-5 container">
-    <EditForm Model="model">
-        <MediaCard media="model"></MediaCard>
-        <Officer officer="officer"></Officer>
-    </EditForm>  
+<div class="mt-5 container">
+    <Timeline Date="DateTime.Today"></Timeline>
 </div>
 
 @code{
