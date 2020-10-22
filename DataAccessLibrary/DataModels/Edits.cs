@@ -16,6 +16,7 @@ namespace DataAccessLibrary.DataModels
 
         [Key]
         public int IdEdits { get; set; }
+        public int IdTimelineinfo { get; set; }
         [Required]
         [Column(TypeName = "char(10)")]
         public string Date { get; set; }
@@ -32,7 +33,7 @@ namespace DataAccessLibrary.DataModels
         [Column(TypeName = "varchar(255)")]
         public string SubmittedBy { get; set; }
         public byte Confirmed { get; set; }
-        public int IdTimelineinfo { get; set; }
+        public DateTime Timestamp { get; set; }
 
         [ForeignKey(nameof(IdTimelineinfo))]
         [InverseProperty(nameof(TimelineinfoFull.Edits))]

@@ -27,6 +27,7 @@ namespace DataAccessLibrary.DataModels
         public string SubmittedBy { get; set; }
         public byte Confirmed { get; set; }
         public short Rank { get; set; }
+        public DateTime Timestamp { get; set; }
 
         [ForeignKey(nameof(IdEdits))]
         [InverseProperty(nameof(Edits.EditMedia))]
