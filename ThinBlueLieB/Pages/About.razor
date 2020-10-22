@@ -13,26 +13,31 @@
         <h5>About Us</h5>
         <ul>
             <li>
-                <NavLink class="nav-link" href="/About#purpose" >Purpose</NavLink>
+                <NavLink class="nav-link" href="/About#purpose">Purpose</NavLink>
             </li>
             <li>
-                <NavLink class="nav-link" href="/About#founding" >Founding</NavLink>
+                <NavLink class="nav-link" href="/About#founding">Founding</NavLink>
             </li>
             <li>
-                <NavLink class="nav-link" href="/About#future" >Future</NavLink>
+                <NavLink class="nav-link" href="/About#future">Future</NavLink>
             </li>
             <li>
-                <NavLink class="nav-link" href="/About#contributors" >Contributors</NavLink>
+                <NavLink class="nav-link" href="/About#contributors">Contributors</NavLink>
+            </li>
+            <li>
+                <NavLink class="nav-link" href="/About#contact">Contact</NavLink>
             </li>
         </ul>
     </div>
     <div class="col-md-7 d-inline-block about">
         <div id="purpose">
             <h4 class="mb-0">Purpose</h4> <hr class="nogap" />
-             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
         </div>
         <div id="founding">
             <h4 class="mb-0">Founding</h4> <hr class="nogap" />
@@ -61,15 +66,41 @@
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             </p>
         </div>
+        <div id="contact">
+            <h4 class="mb-0">Contact</h4> <hr class="nogap" />
+            <p>Listed below are emails links for contacting Thin Blue Lie. Don't hesitiate to reach out, we want to hear from you!</p>
+
+            <div class="email-description">
+                <p>Is there an issue or a suggestion you want to tell us about? Please email us here:</p>
+                <a href="mailto: feedback@thinbluelie.us">feedback@thinbluelie.us</a> 
+            </div>
+            <div class="email-description">
+                <p>Are you media or trying a journalist? Please email us here:</p>
+                <a href="mailto: media@thinbluelie.us">media@thinbluelie.us</a>
+            </div>
+            <div class="email-description">
+                <p>For anything else please email here:</p>
+                <a href="mailto: general@thinbluelie.us">general@thinbluelie.us</a>
+            </div>
+        </div>
     </div>
 </div>
 <style>
-    .about{
-        margin-top: 50px;       
+    .email-description p{
+        margin-bottom: 0px;
     }
-    h4{
-        padding-left:.3rem;
+    .email-description{
+        margin-bottom: .75rem;
     }
+
+    .about {
+        margin-top: 50px;
+    }
+
+    h4 {
+        padding-left: .3rem;
+    }
+
     .about-header-image {
         background-size: cover !important;
         background-color: #919191;
@@ -80,10 +111,12 @@
         margin-bottom: 0px;
         margin-top: 0px !important;
     }
+
     .aboutnav ul {
-        list-style-type: none;   
+        list-style-type: none;
         padding-left: 10px;
     }
+
     .aboutnav {
         position: sticky;
         margin-top: 25px;
@@ -94,17 +127,19 @@
         width: 150px;
         margin-right: 100px;
     }
-    .aboutnav h5 {
-       text-decoration: underline;
-    }
-    .aboutnav .nav-link:hover {
-        text-decoration: underline;
-    }
-    .aboutnav .nav-link.active {
-        border-right: 3px solid blue;
-        
-    }
-    /*.aboutnav p {
+
+        .aboutnav h5 {
+            text-decoration: underline;
+        }
+
+        .aboutnav .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        .aboutnav .nav-link.active {
+            border-right: 3px solid blue;
+        }
+        /*.aboutnav p {
         padding: 6px 8px 6px 16px;
         text-decoration: none;
         font-size: 25px;
@@ -112,10 +147,11 @@
         display: block;
     }*/
         .aboutnav a {
-            padding-top:5px;
-            padding-bottom:5px;
+            padding-top: 5px;
+            padding-bottom: 5px;
             padding-left: 0px;
         }
+
             .aboutnav a:hover {
                 color: #064579;
             }
