@@ -14,57 +14,65 @@
 }
 else
 {
-<div @onclick="PrevWeek" id="triangle-left"> <div class="empty">aaaaaaaaaaaaaaaaaaa</div></div>
-@foreach ((var day, Int32 i) in Day.Select((day, i) => (day, i)))
+    <div class="d-flex justify-content-center">
+        @Dates[0].Year
+    </div>
+<div class="btn-group btn-group-toggle my-auto w-100 mt-5" data-toggle="buttons">
+    <div @onclick="PrevWeek" id="triangle-left"> <div class="empty"></div></div>
+    @foreach ((var day, Int32 i) in Day.Select((day, i) => (day, i)))
     {
-        <div class="week btn" onclick='location.href = "?d=@Dates[i].Year-@Dates[i].Month.ToString().PadLeft(2, '0')-@Dates[i].Day.ToString().PadLeft(2, '0')"'>
+        <div class="week btn @(DateTime.Compare(Dates[i], DateTime.Today.Date) <= 0 ? "" : "disabled") " onclick='location.href = "/Events?d=@Dates[i].Year-@Dates[i].Month.ToString().PadLeft(2, '0')-@Dates[i].Day.ToString().PadLeft(2, '0')"'>
             <div class="timeline-label">
                 <span>@Dates[i].DayOfWeek</span>
                 <span> @Dates[i].Month/@Dates[i].Day</span>
             </div>
             @*<div class="badge-bar">
-                <svg class="badge">
-                    <circle cx="13" cy="13" r="12" stroke="DarkBlue" stroke-width="2" fill="#dedede" />
-                    <text x="8" y="18" fill="black">@day.Count</text>
-                </svg>
-            </div>*@
+                    <svg class="badge">
+                        <circle cx="13" cy="13" r="12" stroke="DarkBlue" stroke-width="2" fill="#dedede" />
+                        <text x="8" y="18" fill="black">@day.Count</text>
+                    </svg>
+                </div>*@
             <input type="radio">
         </div>
-}
-<div @onclick="NextWeek" id="triangle-right"><div class="empty"></div></div>
-<p>
-    @*@searchess.Value.DataDB.ToString()*@
-</p>
+    }
+    <div @onclick="NextWeek" id="triangle-right"><div class="empty"></div></div>
+</div>
+
 }
 @code {
     DateTime[] Dates;
     List<List<Timelineinfo>> Day { get; set; }
     SearchesTimeline searches;
-
-#nullable enable
     [Parameter]
-    public string? current { get; set; }
-#nullable enable
-    [Parameter]
-    public string? date { get; set; }
+    public DateTime Date { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        //TODO make synchronous
         searches = new Searches.SearchesTimeline();
-        var Result = await searches.GetTimeline(current, 0, date);
+        await LoadFromNewDate(Date);
+    }
+
+    public async Task LoadFromNewDate(DateTime date)
+    {
+        var Result = await searches.GetTimeline(date);
         Day = Result.Item1;
         Dates = Result.Item2;
+        this.StateHasChanged();
     }
+
     public async Task NextWeek()
     {
-        var Result = await searches.GetTimeline(current, +7, date);
+        Date = Date.AddDays(7);
+        var Result = await searches.GetTimeline(Date);
         Day = Result.Item1;
         Dates = Result.Item2;
         this.StateHasChanged();
     }
     public async Task PrevWeek()
     {
-        var Result = await searches.GetTimeline(current, +7, date);
+        Date = Date.AddDays(-7);
+        var Result = await searches.GetTimeline(Date);
         Day = Result.Item1;
         Dates = Result.Item2;
         this.StateHasChanged();

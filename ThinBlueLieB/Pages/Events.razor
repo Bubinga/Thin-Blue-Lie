@@ -1,6 +1,8 @@
 ﻿@page "/Events"
 @using ThinBlueLieB.ViewModels
 @using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
 @using ThinBlueLieB.Helper.Extensions
 @using DataAccessLibrary.DataAccess
 @using Syncfusion.Blazor.Spinner
@@ -21,11 +23,31 @@
     .brokencard {
         border: none;
     }
+    .e-tip-content .e-calendar{
+        border: none !important;
+        background-color: white !important;
+    }
+    .e-popup{
+        background-color: white !important;
+    }
 </style>
-<div>
-    <SfCalendar TValue="DateTime?" Max="DateTime.Today" @bind-Value="Date">
-        <CalendarEvents TValue="DateTime?" ValueChange="@SetDay"></CalendarEvents>
-    </SfCalendar>
+<div class="d-flex my-2">
+    <div class="col-10">
+        <Timeline Date="(DateTime)Date" @ref="Timeline"></Timeline>
+    </div>   
+    <div class="ml-4 mt-auto">
+        <SfTooltip CssClass="e-tooltip-css" OpensOn="Click">
+            <TooltipTemplates>
+                <Content>
+                    <SfCalendar TValue="DateTime?" Max="DateTime.Today" @bind-Value="Date">
+                        <CalendarEvents TValue="DateTime?" ValueChange="@SetDay"></CalendarEvents>
+                    </SfCalendar>
+                </Content>
+            </TooltipTemplates>
+            <SfButton CssClass="e-outline text" IsPrimary="true" Content="Calendar"></SfButton>
+        </SfTooltip>
+    </div>
+    @**@
 </div>
 @foreach (var Case in Event)
 {
@@ -78,6 +100,8 @@
     public List<ViewEvent> Event { get; set; }
     public DateTime? Date { get; set; }
     string newUri;
+    Timeline Timeline;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -98,7 +122,7 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
-        {          
+        {
             await JsRuntime.InvokeVoidAsync("InitializeSwiper");
         }
     }
@@ -108,7 +132,6 @@
     {
         newUri = e.Location;
         Date = TryCatchDate();
-
         await ChangeDay();
     }
 
@@ -132,7 +155,7 @@
     }
 
     //Change url
-    private void SetDay()
+    private async Task SetDay()
     {
         var queryParam = QueryHelpers.ParseQuery(new Uri(navManager.Uri).Query).TryGetValue("d", out var type) ? type.First() : "";
         if (queryParam != Date?.ToString("yyyy-MM-dd"))//if url does not match date
@@ -142,6 +165,7 @@
 
             navManager.NavigateTo(QueryHelpers.AddQueryString(url, query));
         }
+        await Timeline.LoadFromNewDate((DateTime)Date);
     }
 
     //Get new information
