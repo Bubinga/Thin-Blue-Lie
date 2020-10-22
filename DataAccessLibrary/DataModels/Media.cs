@@ -26,6 +26,7 @@ namespace DataAccessLibrary.DataModels
         [Column(TypeName = "varchar(255)")]
         public string? SubmittedBy { get; set; }
         public short Rank { get; set; }
+        public DateTime Timestamp { get; set; }
 
         [ForeignKey(nameof(IdTimelineinfo))]
         [InverseProperty(nameof(TimelineinfoFull.Media))]

@@ -14,5 +14,6 @@ namespace DataAccessLibrary.DataModels
         public byte Locked { get; set; }
         public string SubmittedBy { get; set; }
         public byte Verified { get; set; }
+        public DateTime Updated { get; set; }
     }
 }
