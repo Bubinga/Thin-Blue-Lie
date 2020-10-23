@@ -1,5 +1,6 @@
 ﻿@page "/Submit"
 @inherits SubmitBase
+@inject Microsoft.AspNetCore.Http.HttpContext Request
 @inject NavigationManager NavManager
 @inject SignInManager<IdentityUser> signInManager
 @inject UserManager<IdentityUser> userManager
@@ -240,7 +241,7 @@
         //TODO if user is has perms auto verify
         model.Timelineinfos.Verified = 1;
         int IdTimelineinfo;
-        using (var connection = new MySqlConnection(ConnectionStringHelper.GetConnectionString()))
+        using (var connection = new MySqlConnection(ConfigHelper.GetConnectionString()))
         {
             var timelineSave = "INSERT INTO timelineinfo (`Date`, `State`, `City`, `Context`, `Locked`, `SubmittedBy`, `Verified`)" +
                                "VALUES (@date, @state, @city, @context, @locked, @submittedby, @verified);" +
@@ -265,8 +266,8 @@
             //if there is a file for the media save it to disk
             if (media.Source != null & media.SourceFrom == MediaEnums.SourceFromEnum.Device)
             {
-                var rand = StringExtensions.RandomString(12); //random string of 12 characters
-                path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + rand;
+                var rand = StringExtensions.RandomString(12); //random string of 12 characters               
+                path = ConfigHelper.GetUploadsDirectory() + rand;
                 FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
                 media.Source.Stream.WriteTo(filestream);
                 filestream.Close();
@@ -278,7 +279,7 @@
             }
             string mediaSql = "INSERT INTO media (`IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`) " +
                               "VALUES (@idtimelineinfo, @mediatype, @sourcepath, @gore, @sourcefrom, @blurb, @credit, @submittedby, @rank);";
-            using (var connection = new MySqlConnection(ConnectionStringHelper.GetConnectionString()))
+            using (var connection = new MySqlConnection(ConfigHelper.GetConnectionString()))
             {
                 await connection.ExecuteAsync(mediaSql, new
                 {
@@ -313,7 +314,7 @@
         //Subject Table
         foreach (var subject in model.Subjects)
         {
-            using (var connection = new MySqlConnection(ConnectionStringHelper.GetConnectionString()))
+            using (var connection = new MySqlConnection(ConfigHelper.GetConnectionString()))
             {
 
                 if (subject.SameAsId == null)
@@ -358,7 +359,7 @@
         //Officer Table
         foreach (var officer in model.Officers)
         {
-            using (var connection = new MySqlConnection(ConnectionStringHelper.GetConnectionString()))
+            using (var connection = new MySqlConnection(ConfigHelper.GetConnectionString()))
             {
 
                 if (officer.SameAsId == null)
