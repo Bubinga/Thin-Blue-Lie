@@ -1,4 +1,5 @@
 ﻿@page "/Account/Profile"
+@using Syncfusion.Blazor.ProgressBar
 <AuthorizeView>
     <NotAuthorized>
         <h3>
@@ -7,46 +8,71 @@
     </NotAuthorized>
     <Authorized>
         <div class="container">
-            <div>
-
+            <div class="d-flex justify-content-between border-bottom">
+                <div class="d-flex align-items-end"> @context.User.Identity.Name</div>
+                <div class="d-flex">
+                    <div class="d-flex align-items-end mb-1">Reputation</div>
+                    <div class="d-inline-block">
+                        <SfProgressBar @ref="Reputation" Type="ProgressType.Linear" Height="40"
+                                       Width="100%" ID="Percentage"
+                                       TrackThickness="24"
+                                       ProgressThickness="24" Role="ModeType.Success"
+                                       ShowProgressValue="true"
+                                       Value="40" Minimum="0" Maximum="100"
+                                       Theme="@ProgressTheme.Bootstrap4">
+                            <ProgressBarLabelStyle Text="40/150" TextAlignment="TextAlignmentType.Center" Color="#FFFFFF" />
+                            <ProgressBarAnimation Enable="true" Duration="2000" Delay="0" />
+                        </SfProgressBar>
+                    </div>
+                </div>
             </div>
-
+            <div class="row">
+                <div class="col-6">
+                    <p>
+                        <strong>Submissions:</strong>
+                    </p>
+                    <p>
+                        <strong>Edits:</strong>
+                    </p>                   
+                </div>
+                <div lass="col-6">
+                    <p>
+                        <strong>Verifications:</strong>
+                    </p>
+                    <p>
+                        <strong>Flags:</strong>
+                    </p>
+                </div>
+            </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">Uploaded</th>
                         <th scope="col">Date</th>
-                        <th scope="col">Delete</th>
+                        <th scope="col">Title</th>
                         <th scope="col">Public</th>
+                       
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row">1</th>
-                        <td>Mark</td>                       
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>                        
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>                        
-                    </tr>
+                        <td>10/18/2020</td>
+                        <td>6/4/2020</td>
+                        <td>This is an example title</td>
+                        <td>Delete</td>
+                    </tr>                    
                 </tbody>
             </table>
         </div>
     </Authorized>
 </AuthorizeView>
-<h3>Profile</h3>
-
 @code {
-    //personmodel
-    //  list of events
-    //    -date uploaded
-    //    -date of event
-    //    -blurb
-    //    
+    SfProgressBar Reputation;
+
+    List<Timelineinfo> Events { get; set; }
+
+   
     //   user role status -context
     //    
     //get stats of person
