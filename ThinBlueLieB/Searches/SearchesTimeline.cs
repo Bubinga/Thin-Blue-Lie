@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ThinBlueLieB.Helper.Extensions;
-using static ThinBlueLieB.Helper.ConnectionStringHelper;
+using static ThinBlueLieB.Helper.ConfigHelper;
 
 namespace ThinBlueLieB.Searches
 {
