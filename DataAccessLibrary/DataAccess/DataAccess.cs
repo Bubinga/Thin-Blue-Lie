@@ -22,11 +22,11 @@ namespace DataAccessLibrary.DataAccess
                 return rows.ToList();
             }
         }
-        public Task SaveData<T>(string sql, T parameters, string connectionString)
+        public async Task SaveData<T>(string sql, T parameters, string connectionString)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                return connection.ExecuteAsync(sql, parameters);
+                await connection.ExecuteAsync(sql, parameters);
             }
         }
     }

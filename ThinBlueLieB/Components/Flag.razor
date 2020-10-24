@@ -6,30 +6,93 @@
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
 @using ThinBlueLieB.Helper.Extensions
+@using Microsoft.AspNetCore.Identity
+@using static ThinBlueLieB.Helper.ConfigHelper
+@using Dapper
+@using MySql.Data.MySqlClient
+@using DataAccessLibrary.DataAccess 
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor httpContextAccessor
+@inject UserManager<IdentityUser> userManager
 
 <div class="flagPopover">
-    <form>
-        <div style="width:200px; min-height:150px;">
-            <div class="form-group">
-                <div class="dropdown pl-0" style="position:relative;">
-                    <SfDropDownList TItem="EnumExtensions.ListItem" TValue="uint" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Index="1" Placeholder="Race" @bind-Value="@flagged.FlagType" DataSource="@FlagTypes">
-                        <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
-                    </SfDropDownList>
-                </div>
-            </div>
-            <div class="form-group mb-2">
-                <SfTextBox Placeholder="Explain why you are flagging" FloatLabelType="@FloatLabelType.Auto" Multiline="true"></SfTextBox>
-            </div>
-            <textarea asp-for="Flags.IdTimelineinfo" class="idTimelineInput d-none"></textarea>
-        </div>
-    </form>
-    <div>
-        <button class="submitFlag btn btn-primary float-right w-50 mb-1">Submit</button>
-    </div>
+    <AuthorizeView>
+        <NotAuthorized>
+            <h6>
+                Please
+                <a href="/Account/Login">Login</a> or
+                <a href="/Account/Register">Register</a>
+                to flag a post
+            </h6>
+        </NotAuthorized>
+        <Authorized Context="Auth">
+            @if (submitted == false)
+            {
+                <EditForm Model="flagged" OnValidSubmit="SubmitFlag">
+                    <div style="width:200px; min-height:150px;">
+                        <div class="form-group">
+                            <div class="dropdown pl-0" style="position:relative;">
+                                <SfDropDownList TItem="EnumExtensions.ListItem" TValue="uint" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Placeholder="Reason for Flagging" @bind-Value="@flagged.FlagType" DataSource="@FlagTypes">
+                                    <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                                </SfDropDownList>
+                            </div>
+                        </div>
+                        <div class="form-group mb-2">
+                            <SfTextBox Placeholder="Explain why you are flagging" @bind-Value="flagged.Message" FloatLabelType="@FloatLabelType.Always" Multiline="true"></SfTextBox>
+                            <ValidationMessage For="@(() => flagged.Message)"></ValidationMessage>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="submitFlag btn btn-primary w-50 mb-1">Submit</button>
+                    </div>
+                </EditForm>
+            }
+            else
+            {
+                <h6>Thanks for flagging this post, it will be reviewed quickly</h6>
+            }
+        </Authorized>
+    </AuthorizeView>
 </div>
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> _authState { get; set; }
+    private AuthenticationState userState;
+    [Parameter]
+    public int IdTimelineinfo { get; set; }
+
     Flagged flagged = new Flagged();
+    bool submitted = false;
+
+    protected async override Task OnInitializedAsync()
+    {
+        userState = await _authState;
+    }
+
+    async void SubmitFlag()
+    {
+        //flagged.UserId = userManager.GetUserId(authentication.User);
+        try
+        {
+            flagged.UserId = userManager.GetUserId(userState.User);
+        }
+        catch (Exception)
+        {
+            flagged.UserId = null;
+        }
+        flagged.IdTimelineinfo = IdTimelineinfo;
+        string flaggedSql = "INSERT INTO flagged (`IdTimelineinfo`, `FlagType`, `Message`, `UserId`) VALUES (@idTimelineinfo, @flagType, @message, @userId);";
+        DataAccess data = new DataAccess();
+        await data.SaveData(flaggedSql, new {
+            idTimelineinfo = flagged.IdTimelineinfo,
+            flagType = flagged.FlagType,
+            message = flagged.Message,
+            userId = flagged.UserId
+        }, GetConnectionString());
+
+        submitted = true;
+    }
 
     IReadOnlyList<EnumExtensions.ListItem> FlagTypes = EnumExtensions.GetDropdownList<FlaggedEnums.FlagTypeEnum>.Items;
 }

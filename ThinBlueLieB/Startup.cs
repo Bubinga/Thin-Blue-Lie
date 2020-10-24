@@ -50,6 +50,8 @@ namespace ThinBlueLieB
                 mc.AddProfile(new MappingProfile());
             });
 
+            services.AddHttpContextAccessor();
+
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
