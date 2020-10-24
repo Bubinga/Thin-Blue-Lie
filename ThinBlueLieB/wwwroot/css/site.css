@@ -51,7 +51,7 @@ a, .btn-link {
 
 hr.blueline {
     border: none;
-    height: 2px;
+    height: 3px;
     /* Set the hr color */
     color: #314DB2; /* old IE */
     background-color: #314DB2; /* Modern Browsers */
