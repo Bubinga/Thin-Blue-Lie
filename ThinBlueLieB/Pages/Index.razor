@@ -1,25 +1,37 @@
 ﻿@page "/"
 @page "/Index"
-@using DataAccessLibrary.DataModels
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
-<div class="row">
-    <div class="col-7">
-        <EditForm Model="test">
-            <InputText @bind-Value="test.Timelineinfos.City"></InputText>
-        </EditForm>
+<style>
+    .bluestrikethrough {
+        z-index: 5;
+        top: 1.5em;
+        width: 100%;
+        border: none;
+        height: 3px;
+        /* Set the hr color */
+        color: #007bff; /* old IE */
+        background-color: #007bff; /* Modern Browsers */
+    }
+    .header-image{
+        display: flex;
+    }
+    .line {
+        position: relative;
+        width: 100%;
+    }
+</style>
+<div class="header-image" style="background-image: url(Assets/Protests-Wallpaper.jpg) !important;">
+    <div class="line"> <hr class="position-absolute bluestrikethrough"></div>
+    <div style="flex-grow: 0; flex-shrink: 0; ">
+        <h1 style="font-family: MillerItalic, Georgia, serif; font-size: 4em;" class="text-primary font-italic px-3">Thin Blue Lie </h1>
     </div>
+    <div class="line"><hr class="position-absolute bluestrikethrough"></div>
 </div>
-<SurveyPrompt Title="How is Blazor working for you?" />
+<div class="py-3 px-5 border-bottom container">
+    <h6>Every year, police kill roughly <strong>1,000</strong> people and commit countless misconducts. </h6>
+</div>
 
 
 @code {
-    public testmodel test = new testmodel() {Timelineinfos = new Timelineinfo() };
-
-    public class testmodel
-    {
-        public string Name { get; set; }
-        public Timelineinfo Timelineinfos { get; set; }
-    };
+   
 }
