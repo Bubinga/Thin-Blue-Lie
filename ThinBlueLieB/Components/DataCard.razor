@@ -3,6 +3,7 @@
 @using static ThinBlueLieB.Helper.Extensions.StringExtensions
 @using static ThinBlueLieB.Models.ViewSimilar;
 @using Syncfusion.Blazor.Spinner
+@using Syncfusion.Blazor.Popups 
 @inject AutoMapper.IMapper mapper
 
 <style>
@@ -75,20 +76,19 @@ else
             </div>
         </div>
         <div class="card-footer">
-            <div class="row">
-                <div class="col-6 px-0 offset-1">
-                    @*<a class="btn btn-primary position-relative" href="/Edit?id=@Timelineinfo.Data.IdTimelineinfo" data-placement="top"
-                       data-toggle="tooltip" title="Edit info">
-                        Incorrect Info?
-                    </a>*@
-                </div>
-                <div class="col-5 px-0">
-                    <a tabindex="0" class="btn btn-danger position-relative flag" data-placement="top" role="button" data-html="true" data-toggle="popover" data-trigger="click" title="Report"
-                       data-content=''>
-                        Flag ⚐
-                    </a>
-                </div>
-            </div>
+            <a href="/Edit?id=@Information.IdTimelineinfo">Edit</a>
+            <a href="javascript:void" @onclick="@(() => showFlagPopover = true)">Flag</a>
+            <SfDialog ShowCloseIcon="true" ID="prompt_dialog" @bind-Visible="@showFlagPopover" Target="#target" Width="240px">
+                <DialogTemplates>
+                    <Header>
+                        Flag Content
+                    </Header>
+                    <Content>
+                      <Flag IdTimelineinfo="Information.IdTimelineinfo"></Flag>
+                    </Content>
+                </DialogTemplates>
+                <DialogPositionData X="center" Y="center"></DialogPositionData>
+            </SfDialog>
         </div>
     </div>
 </div>
@@ -100,10 +100,13 @@ else
     public List<DisplayOfficer> Officers { get; set; }
     [Parameter]
     public List<DisplaySubject> Subjects { get; set; }
+
     List<string> subjectsDetails;
     List<string> officersDetails;
     string subjectList;
     string officerList;
+    bool showFlagPopover = false;
+
     protected override void OnInitialized()
     {
         subjectsDetails = GetSummaryList(mapper.Map<List<DisplaySubject>, List<ViewSimilarPerson>>(Subjects));
