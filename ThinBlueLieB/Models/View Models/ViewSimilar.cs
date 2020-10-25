@@ -14,8 +14,8 @@ namespace ThinBlueLieB.Models
         internal class ViewSimilarPerson
         {
             public string? Name { get; set; }
-            public TimelineinfoEnums.RaceEnum Race { get; set; }
-            public TimelineinfoEnums.SexEnum Sex { get; set; }
+            public TimelineinfoEnums.RaceEnum? Race { get; set; }
+            public TimelineinfoEnums.SexEnum? Sex { get; set; }
             public byte? Age { get; set; }          
         }
         internal Timelineinfo Timelineinfo { get; set; }

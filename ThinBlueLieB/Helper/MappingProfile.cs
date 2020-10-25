@@ -20,15 +20,21 @@ namespace ThinBlueLieB.Helper
             CreateMap<ViewOfficer, Officers>();
             CreateMap<ViewSubject, Subjects>();
             CreateMap<ViewMedia, Media>();
+            CreateMap<DisplayMedia, ViewMedia>();
             CreateMap<ViewTimelineinfo, Timelineinfo>();
-            CreateMap<DisplayOfficer, ViewSimilarPerson>();
-            CreateMap<DisplaySubject, ViewSimilarPerson>();
-            CreateMap<BaseOfficer, DisplayOfficer>()
-                .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (TimelineinfoEnums.RaceEnum)src.Race))
-                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (TimelineinfoEnums.SexEnum)src.Sex));
-            CreateMap<BaseSubject, DisplaySubject>()
-                 .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (TimelineinfoEnums.RaceEnum)src.Race))
-                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (TimelineinfoEnums.SexEnum)src.Sex)); 
+            CreateMap<Timelineinfo, ViewTimelineinfo>();
+            CreateMap<DBOfficer, ViewSimilarPerson>();
+            CreateMap<DBSubject, ViewSimilarPerson>();
+            CreateMap<ViewOfficer, ViewSimilarPerson>();
+            CreateMap<ViewSubject, ViewSimilarPerson>();
+            CreateMap<DBOfficer, ViewOfficer>();
+            CreateMap<DBSubject, ViewSubject>();
+            //CreateMap<DBOfficer, DisplayOfficer>()
+            //    .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (TimelineinfoEnums.RaceEnum)src.Race))
+            //    .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (TimelineinfoEnums.SexEnum)src.Sex));
+            //CreateMap<BaseSubject, DisplaySubject>()
+            //     .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (TimelineinfoEnums.RaceEnum)src.Race))
+            //    .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (TimelineinfoEnums.SexEnum)src.Sex)); 
         }
     }
 }
