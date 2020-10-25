@@ -292,22 +292,7 @@
                     submittedby = (string)userId, //nullable
                     rank = media.ListIndex
                 });
-            }
-            //DataAccessLibrary.DataAccess.DataAccess dataAccess = new DataAccessLibrary.DataAccess.DataAccess();
-            //await dataAccess.SaveData(mediaSql, new
-            //{
-            //    idtimelineinfo = IdTimelineinfo,
-            //    mediatype = media.MediaType,
-            //    sourcepath = path,
-            //    gore = media.Gore,
-            //    sourcefrom = media.SourceFrom,
-            //    blurb = media.Blurb,
-            //    credit = (string)media.Credit, //nullable
-            //    submittedby = (string)userId, //nullable
-            //    rank = media.ListIndex
-            //},
-            //ConnectionStringHelper.GetConnectionString());
-
+            }          
         }
 
         //Subject Table
@@ -403,9 +388,6 @@
             }
         }
 
-        //string processQuery = "INSERT INTO PROCESS_LOGS VALUES (@A, @B)";
-        //connection.Execute(processQuery, processList);
-
         if (true) //if successful submit
         {
             NavManager.NavigateTo("/Index");
@@ -419,13 +401,8 @@
         SearchesSubmit searchesSubmit = new SearchesSubmit();
         SimilarEvents = await searchesSubmit.GetSimilar(args.Value?.ToString("yyyy-MM-dd"));
         this.StateHasChanged();
-        //SimilarEvents = await searchesSubmit.GetSimilar(DateValue?.ToString("yyyy-MM-dd"));
-        //return SimilarEvents;
     }
-    public DateTime Today { get; set; }
-    public DateTime MinDate { get; set; }
-    public DateTime? DateValue { get; set; } //model.Timelineinfos.Date
-
+    
     protected override async Task OnInitializedAsync()
     {
         userState = await _authState;
@@ -436,128 +413,6 @@
         MinDate = new DateTime(1776, 6, 4);
         DateValue = DateTime.Today;
         SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
-        //return base.OnInitializedAsync();
-        // DateValue = new DateTime(DateTime.Today.Year, DateTime.Now.Month, DateTime.Today.Day);
     }
 
-    private void SetSameAsSubject(Tuple<int, int> tuple)
-    {
-        model.Subjects[tuple.Item2].SameAsId = tuple.Item1;
-        SimilarSubjects[tuple.Item2] = new List<SimilarPersonGeneral>();
-    }
-    private void SetSameAsOfficer(Tuple<int, int> tuple)
-    {
-        model.Officers[tuple.Item2].SameAsId = tuple.Item1;
-        SimilarOfficers[tuple.Item2] = new List<SimilarPersonGeneral>();
-    }
-
-    private void AddMedia()
-    {
-        var newMediaItem = new ViewMedia { ListIndex = model.Medias.Count };
-        model.Medias.Add(newMediaItem);
-    }
-
-    private void AddSubject()
-    {
-        var newSubjectItem = new ViewSubject { ListIndex = model.Subjects.Count };
-        model.Subjects.Add(newSubjectItem);
-        SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
-    }
-    private void AddOfficer()
-    {
-        var newOfficerItem = new ViewOfficer { ListIndex = model.Officers.Count };
-        model.Officers.Add(newOfficerItem);
-        SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
-    }
-
-    public List<List<SimilarPersonGeneral>> SimilarSubjects { get; set; } = new List<List<SimilarPersonGeneral>>();
-    private async void SuggestSubjects(SimilarPersonCallback personCallback)
-    {
-        SearchesSubmit searchesSubmit = new SearchesSubmit();
-        //TODO don't do suggest if name is too short or something
-        var similarSubject = await searchesSubmit.SearchSubject(personCallback.Name);
-        SimilarSubjects[personCallback.Index] = similarSubject;
-        this.StateHasChanged();
-    }
-
-    public List<List<SimilarPersonGeneral>> SimilarOfficers { get; set; } = new List<List<SimilarPersonGeneral>>();
-    private async void SuggestOfficers(SimilarPersonCallback personCallback)
-    {
-        SearchesSubmit searchesSubmit = new SearchesSubmit();
-        //TODO don't do suggest if name is too short or something
-        var similarOfficer = await searchesSubmit.SearchOfficer(personCallback.Name);
-        SimilarOfficers[personCallback.Index] = similarOfficer;
-        this.StateHasChanged();
-    }
-
-    private void MoveMediaUp(int Index)
-    {
-        if (Index != 0)
-        {
-            var item = model.Medias[Index]; //Get Card
-            model.Medias.RemoveAt(Index); //Remove Card
-            model.Medias.Insert(Index - 1, item); //Put Card in place above where it was
-            model.Medias[Index].ListIndex = Index; //Set ListIndex to fit it's position
-            model.Medias[Index - 1].ListIndex = Index - 1; //do above to item above
-        }
-    }
-
-    private void MoveMediaDown(int Index)
-    {
-        if (Index != model.Medias.Count - 1)
-        {
-            var item = model.Medias[Index]; //Get Card
-            model.Medias.RemoveAt(Index); //Remove Card
-            model.Medias.Insert(Index + 1, item); //Put Card in place below where it was
-            model.Medias[Index].ListIndex = Index; //Set ListIndex to fit it's position
-            model.Medias[Index + 1].ListIndex = Index + 1; //do above to item below
-        }
-    }
-
-    private void MoveMediaTop(int Index)
-    {
-        if (Index != 0)
-        {
-            var item = model.Medias[Index]; //Get Card
-            model.Medias.RemoveAt(Index); //Remove Card
-            model.Medias.Insert(0, item); //Put Card at Top
-            model.Medias[Index].ListIndex = 0; //Set ListIndex to fit it's position
-            for (int i = 0; i < model.Medias.Count; i++)
-            {
-                model.Medias[i].ListIndex = i;
-            }
-        }
-    }
-
-    private void DeleteMedia(int Index)
-    {
-        model.Medias.RemoveAt(Index);
-        for (int i = 0; i < model.Medias.Count; i++)
-        {
-            model.Medias[i].ListIndex = i;
-        }
-    }
-
-    private void DeleteSubject(int Index)
-    {
-        model.Subjects.RemoveAt(Index);
-        SimilarSubjects.RemoveAt(Index);
-        //Resetting List Indexes
-        for (int i = 0; i < model.Subjects.Count; i++)
-        {
-            model.Subjects[i].ListIndex = i;
-        }
-
-    }
-
-    private void DeleteOfficer(int Index)
-    {
-        model.Officers.RemoveAt(Index);
-        SimilarOfficers.RemoveAt(Index);
-        //Resetting List Indexes
-        for (int i = 0; i < model.Officers.Count; i++)
-        {
-            model.Officers[i].ListIndex = i;
-        }
-    }
 }
