@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ThinBlueLieB.Models;
 using ThinBlueLieB.ViewModels;
+using static ThinBlueLieB.Helper.Extensions.IntExtensions;
 using static ThinBlueLieB.Models.ViewSimilar;
 
 namespace ThinBlueLieB.Helper
@@ -27,7 +28,9 @@ namespace ThinBlueLieB.Helper
             CreateMap<DBSubject, ViewSimilarPerson>();
             CreateMap<ViewOfficer, ViewSimilarPerson>();
             CreateMap<ViewSubject, ViewSimilarPerson>();
-            CreateMap<DBOfficer, ViewOfficer>();
+            CreateMap<DBOfficer, ViewOfficer>()
+                .ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => IntToArray(src.Misconduct)))
+                .ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => IntToArray(src.Weapon)));
             CreateMap<DBSubject, ViewSubject>();
             //CreateMap<DBOfficer, DisplayOfficer>()
             //    .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (TimelineinfoEnums.RaceEnum)src.Race))
