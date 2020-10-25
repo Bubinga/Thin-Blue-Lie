@@ -193,20 +193,16 @@
 
             //get media, officers, and subjects using timelineinfo id
             List<DisplayMedia> media = await data.LoadData<DisplayMedia, dynamic>(mediaQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
-            List<BaseOfficer> officers = await data.LoadData<BaseOfficer, dynamic>(officerQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
-            List<BaseSubject> subjects = await data.LoadData<BaseSubject, dynamic>(subjectQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
+            List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
+            List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
 
-            //Event[i].Officers = mapper.Map<List<BaseOfficer>, List<DisplayOfficer>>(officers);
-            //Event[i].Subjects = mapper.Map<List<BaseSubject>, List<DisplaySubject>>(subjects);
-            //Event[i].Medias = media;
-            //Event[i].Data = Case;
-
+           
             Event.Add(new ViewEvent
             {
                 Data = Case,
                 Medias = media,
-                Officers = mapper.Map<List<BaseOfficer>, List<DisplayOfficer>>(officers),
-                Subjects = mapper.Map<List<BaseSubject>, List<DisplaySubject>>(subjects)
+                Officers = mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers),
+                Subjects = mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects)
             });
         }
         this.StateHasChanged();
