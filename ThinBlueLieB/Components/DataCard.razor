@@ -97,9 +97,9 @@ else
     [Parameter]
     public Timelineinfo Information { get; set; }
     [Parameter]
-    public List<DisplayOfficer> Officers { get; set; }
+    public List<ViewOfficer> Officers { get; set; }
     [Parameter]
-    public List<DisplaySubject> Subjects { get; set; }
+    public List<ViewSubject> Subjects { get; set; }
 
     List<string> subjectsDetails;
     List<string> officersDetails;
@@ -109,8 +109,8 @@ else
 
     protected override void OnInitialized()
     {
-        subjectsDetails = GetSummaryList(mapper.Map<List<DisplaySubject>, List<ViewSimilarPerson>>(Subjects));
-        officersDetails = GetSummaryList(mapper.Map<List<DisplayOfficer>, List<ViewSimilarPerson>>(Officers));
+        subjectsDetails = GetSummaryList(mapper.Map<List<ViewSubject>, List<ViewSimilarPerson>>(Subjects));
+        officersDetails = GetSummaryList(mapper.Map<List<ViewOfficer>, List<ViewSimilarPerson>>(Officers));
         subjectList = CommaQuibbling(subjectsDetails);
         officerList = CommaQuibbling(officersDetails);
     }
