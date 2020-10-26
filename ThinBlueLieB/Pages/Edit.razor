@@ -16,8 +16,74 @@
 @inject NavigationManager navManager
 
 
-<link rel="stylesheet" href="~/css/Submit.css" />
-@if (!string.IsNullOrWhiteSpace(id) && model.Timelineinfos.Date != null)
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    form {
+        display: inherit;
+    }
+
+    @@font-face {
+        font-family: 'button-icons';
+        src: url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .e-btn-sb-icons {
+        font-family: 'button-icons';
+        line-height: 1;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .e-add-icon::before {
+        content: '\e70a';
+    }
+
+    .e-richtexteditor .e-rte-content .e-content {
+        min-height: 150px;
+    }
+
+    .e-file-select-wrap {
+        padding: 0.2rem;
+    }
+
+    .e-close-icon:before {
+        content: '\e745';
+    }
+
+    .e-double-arrow-up-icon:before {
+        content: '\e7c5';
+    }
+
+    .e-chevron-up-icon:before {
+        content: '\e734';
+    }
+
+    .e-chevron-down-icon:before {
+        content: '\e705';
+    }
+
+    .e-custom {
+        color: #221e1e !important;
+        background-color: white !important;
+        border-color: white !important;
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+        .e-custom:hover {
+            color: #314DB2 !important;
+        }
+</style>
+@if (model.Timelineinfos.Date != null && !string.IsNullOrWhiteSpace(id))
 {
     <AuthorizeView>
         <NotAuthorized>
@@ -36,7 +102,7 @@
                     <ObjectGraphDataAnnotationsValidator />
                     <div class="col-lg-5 col-md-6 border-left border-right border-bottom">
                         <div class="d-block mb-0 pt-3 border-bottom mb-2">
-                            <h4 class="mb-0 align-te">Information Submission Form</h4>
+                            <h4 class="mb-0 align-te">Information Edit Form</h4>
                         </div>
                         <div>
                             <div class="form-group">
@@ -141,11 +207,11 @@
         </Authorized>
     </AuthorizeView>
 }
-else
+else if(!string.IsNullOrWhiteSpace(id))
 {
-    <div class="container">
-        <h6>Opps, this is not a valid url</h6>
-    </div>
+<div class="container container-fluid mt-5">
+    <h4>Opps, this is not a valid url</h4>
+</div>
 }
 
 @code {
@@ -154,22 +220,21 @@ else
     {
         var uri = new Uri(navManager.Uri);
         id = QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var type) ? type.First() : "";
-        if(!string.IsNullOrWhiteSpace(id))
+        if (!string.IsNullOrWhiteSpace(id))
         {
             Id = Convert.ToUInt32(id);
             model = await FetchDataAsync();
-            //var similarOfficers = new List<SimilarPersonGeneral>();
+
             for (int i = 0; i < model.Officers.Count; i++)
             {
                 SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
             };
-           // var similarSubjects = new List<SimilarPersonGeneral>();
             for (int i = 0; i < model.Subjects.Count; i++)
             {
                 SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
             };
-            //SimilarOfficers.Add(similarOfficers);
-            //SimilarSubjects.Add(similarSubjects);
+
+            DateValue = Convert.ToDateTime(model.Timelineinfos.Date);
 
             this.StateHasChanged();
         }
