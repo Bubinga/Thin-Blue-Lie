@@ -4,19 +4,19 @@
 @using Microsoft.AspNetCore.Mvc
 @using ThinBlueLieB.Helper.Extensions
 @using Syncfusion.Blazor.DropDowns
-@using System.Threading.Tasks;
-@inject IJSRuntime JsRuntime
 
-<div class="mt-5 container">
-    <Timeline Date="DateTime.Today"></Timeline>
+<div class="w-25 container">
+    <SfDropDownList TItem="string" TValue="TimelineinfoEnums.RaceEnum?" PopupHeight="230px" Placeholder="Race" @bind-Value="@officer.Race" DataSource="@Races">
+    </SfDropDownList>
+    <h3>@officer.Race</h3>
 </div>
 
 @code{
-    public ViewMedia model = new ViewMedia();
     public ViewOfficer officer { get; set; } = new ViewOfficer();
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
+        officer.Race = TimelineinfoEnums.RaceEnum.Native;
         officer.Misconduct = new int[] { };
     }
-    IReadOnlyList<EnumExtensions.ListItem> MisconductsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.MisconductEnum>.Items;
+    public IEnumerable<string> Races = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.RaceEnum>();
 }
