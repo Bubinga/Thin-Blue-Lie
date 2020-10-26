@@ -21,9 +21,7 @@ namespace ThinBlueLieB.Models
             [BindProperty]
             [ValidateComplexType]
             public List<ViewSubject> Subjects { get; set; }
-            public bool SignedIn { get; set; }            
-            public int Misconducts { get; set; }
-            public int Weapons { get; set; }
+        
         }
 
     }

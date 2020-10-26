@@ -32,12 +32,6 @@ namespace ThinBlueLieB.Helper
                 .ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => IntToArray(src.Misconduct)))
                 .ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => IntToArray(src.Weapon)));
             CreateMap<DBSubject, ViewSubject>();
-            //CreateMap<DBOfficer, DisplayOfficer>()
-            //    .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (TimelineinfoEnums.RaceEnum)src.Race))
-            //    .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (TimelineinfoEnums.SexEnum)src.Sex));
-            //CreateMap<BaseSubject, DisplaySubject>()
-            //     .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (TimelineinfoEnums.RaceEnum)src.Race))
-            //    .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (TimelineinfoEnums.SexEnum)src.Sex)); 
         }
     }
 }
