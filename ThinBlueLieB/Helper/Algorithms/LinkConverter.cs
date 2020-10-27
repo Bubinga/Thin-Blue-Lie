@@ -26,8 +26,9 @@ namespace ThinBlueLieB.Helper.Algorithms
                         var path = $"https://i.ytimg.com/vi/{media.SourcePath}/0.jpg";
                         return path;
                     }
-                } 
+                }
                 //Add support for reddit
+                // image: https://i.redd.it/0u3pdpo3zgv51.jpg
                 //Add support for other sourcefroms
             }
             if (media.MediaType == MediaEnums.MediaTypeEnum.Image)
@@ -35,6 +36,11 @@ namespace ThinBlueLieB.Helper.Algorithms
                 if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
                 {
                     var path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + media.SourcePath;
+                    return path;
+                }
+                else if (media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
+                {
+                    var path = $"https://i.redd.it/{media.SourcePath}.jpg";
                     return path;
                 }
                 else

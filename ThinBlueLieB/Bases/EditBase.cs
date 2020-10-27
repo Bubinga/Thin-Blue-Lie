@@ -87,7 +87,23 @@ namespace ThinBlueLieB.Bases
 
         internal async void HandleValidSubmitAsync()
         {
+            DataAccess data = new DataAccess();
+            //write to 
+            // edits
+            // editmedia
 
+            var editSql = "INSERT INTO `edits` (`IdTimelineinfo`, `Date`, `State`, `City`, `Context`, `Locked`, `SubmittedBy`, `Confirmed`)" +
+                " VALUES (IdTimelineinfo, Date, State, City, Context, Locked, SubmittedBy, Confirmed);";
+            await data.SaveData(editSql, model.Timelineinfos, GetConnectionString());
+            // subject and officer
+            // if user changes name, race, or sex, display similarperson 
+            // if they select similarperson to be the same person, 
+            //   change only the person table
+            // if they change it without selecting
+            //   remove from junction table
+            //   add to person table
+            //   add to junction table
+            
         }
     }
 }
