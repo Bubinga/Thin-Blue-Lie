@@ -25,7 +25,6 @@ namespace DataAccessLibrary.DataModels
         [Required]
         [Column(TypeName = "varchar(255)")]
         public string SubmittedBy { get; set; }
-        public byte Confirmed { get; set; }
         public short Rank { get; set; }
         public DateTime Timestamp { get; set; }
 
