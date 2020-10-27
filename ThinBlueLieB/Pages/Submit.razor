@@ -152,7 +152,7 @@
             <div id="OfficerList">
                 @foreach ((var officer, Int32 i) in model.Officers.Select((officer, i) => (officer, i)))
                 {
-                    <Officer officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
+                    <Officer isSubmit="true" officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
                     if (SimilarOfficers[i] != null)
                     {
                         <SimilarPeople PersonListIndex="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>

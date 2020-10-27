@@ -13,7 +13,29 @@
                     <SfButton @onclick="@(() => MoveMediaTop.InvokeAsync(media.ListIndex))" IconCss="e-icons e-double-arrow-up-icon" IsPrimary="true" CssClass="e-flat mr-lg-3 mr-2 e-custom"></SfButton>
                     <SfButton @onclick="@(() => DeleteMedia.InvokeAsync(media.ListIndex))" IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
                 </div>
-                <div class="mt-4 form-row position-relative">
+
+                <div class="form-row mt-4 ">
+                    <div class="col-12">
+                        @if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+                        {
+                            deviceMedia = false;
+                            <div class="form-group MediaFile">
+                                <SfUploader Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
+                                    <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>
+                                </SfUploader>
+                            </div>
+                        }
+                        else
+                        {
+                            deviceMedia = true;
+                            <div class="form-group MediaLink">
+                                <SfTextBox CssClass="e-filled" Placeholder="Link to Media" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
+                                <ValidationMessage For="@(() => media.SourcePath)"></ValidationMessage>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="form-row position-relative">
                     <div class="col-6 dropdown my-2 pr-2">
                         <SfDropDownList TItem="string" Enabled="deviceMedia" TValue="MediaEnums.MediaTypeEnum?" PopupHeight="230px" Placeholder="Type of Media" @bind-Value="@media.MediaType" DataSource="@MediaTypes">
                         </SfDropDownList>
@@ -34,44 +56,20 @@
                         <SfTextBox CssClass="e-filled" Placeholder="Credit" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.Credit"></SfTextBox>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-5">
-                        @if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
-                        {
-                            deviceMedia = false;
-                            <div class="form-group MediaFile">
-                                <SfUploader Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
-                                    <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>
-                                </SfUploader>
-                            </div>
-                        }
-                        else
-                        {
-                            deviceMedia = true;
-                            <div class="form-group MediaLink">
-                                <SfTextBox CssClass="e-filled" Placeholder="Link your Media here" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
-                                <ValidationMessage For="@(() => media.SourcePath)"></ValidationMessage>
-                            </div>
-                        }
-                    </div>
-                    <div class="ml-3 col-6">
-                        <label class="form-check-label">
-                            Is there any blood or gore in the media?<span class="text-danger ml-1">*</span>
-                            <ValidationMessage For="@(() => media.Gore)"></ValidationMessage>
-                        </label>
-                        <div class="row">
-                            <div class="form-check m-2 d-inline">
-                                <SfRadioButton Label="No" Name="@media.ListIndex.ToString()" Value="0" Checked="@media.Gore"></SfRadioButton>
-                            </div>
-                            <div class="form-check m-2 d-inline">
-                                <SfRadioButton Label="Yes" Name="@media.ListIndex.ToString()" Value="1" Checked="@media.Gore"></SfRadioButton>
-                            </div>
+                <div class="ml-3 col-6">
+                    <label class="form-check-label">
+                        Is there any blood or gore in the media?<span class="text-danger ml-1">*</span>
+                        <ValidationMessage For="@(() => media.Gore)"></ValidationMessage>
+                    </label>
+                    <div class="row">
+                        <div class="form-check m-2 d-inline">
+                            <SfRadioButton Label="No" Name="@media.ListIndex.ToString()" Value="0" Checked="@media.Gore"></SfRadioButton>
+                        </div>
+                        <div class="form-check m-2 d-inline">
+                            <SfRadioButton Label="Yes" Name="@media.ListIndex.ToString()" Value="1" Checked="@media.Gore"></SfRadioButton>
                         </div>
                     </div>
                 </div>
-                <p>
-                    @media.SourceFrom.ToString()
-                </p>
             </div>
         </div>
     </div>
