@@ -57,11 +57,16 @@
 @code {
     [Parameter]
     public ViewOfficer officer { get; set; }
-
+    [Parameter]
+    public bool isSubmit { get; set; }
     protected override void OnInitialized()
     {
-        officer.Misconduct = new int[] { };
-        officer.Weapon = new int[] { };
+        if (isSubmit)
+        {
+            officer.Misconduct = new int[] { };
+            officer.Weapon = new int[] { };
+        }
+
     }
 
     [Parameter]
@@ -71,9 +76,6 @@
 
     public IEnumerable<string> Races = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.RaceEnum>();
     public IEnumerable<string> Sexes = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.SexEnum>();
-
-    //public int[] MisconductsVal { get; set; } = new int[] { };
-    //public int[] WeaponsVal { get; set; } = new int[] { };
 
     IReadOnlyList<EnumExtensions.ListItem> MisconductsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.MisconductEnum>.Items;
     IReadOnlyList<EnumExtensions.ListItem> WeaponsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.WeaponEnum>.Items;
