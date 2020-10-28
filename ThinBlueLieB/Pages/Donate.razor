@@ -18,7 +18,7 @@
         </div>*@
         <!-- end of header-section -->
         <!-- sidebar element declaration -->
-        <SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" Animate="false"  Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)">
+        <SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" Animate="false" EnableGestures="false" Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)">
             <ChildContent>
                 <div class="main-menu">
                     <div>
@@ -34,7 +34,7 @@
                 </div>
             </ChildContent>
         </SfSidebar>
-        <SfSidebar Width="200px" Animate="false"  Position="SidebarPosition.Right" Target=".main-content" MediaQuery="(min-width:600px)">
+        <SfSidebar Width="200px" Animate="false" EnableGestures="false"  Position="SidebarPosition.Right" Target=".main-content" MediaQuery="(min-width:600px)">
             <ChildContent>
                 <div class="p-3 mt-2">
                     <div>
