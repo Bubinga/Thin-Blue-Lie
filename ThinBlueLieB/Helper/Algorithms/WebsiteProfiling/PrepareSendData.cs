@@ -9,6 +9,7 @@ namespace ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
 {
     public partial class WebsiteProfile
     {
+        //go from 0989uwefbwef to youtube.com/watch?v=0989uwefbwef
         public string PrepareSendData(ViewMedia media)
         {
             //Uri uri = new Uri(link, UriKind.Absolute);

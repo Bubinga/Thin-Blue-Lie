@@ -32,6 +32,7 @@ namespace ThinBlueLieB.Helper
                 .ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => IntToArray(src.Misconduct)))
                 .ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => IntToArray(src.Weapon)));
             CreateMap<DBSubject, ViewSubject>();
+            CreateMap<ViewMedia, EditMedia>();
         }
     }
 }

@@ -38,5 +38,14 @@ namespace DataAccessLibrary.DataAccess
                 await connection.ExecuteAsync(sql, parameters);
             }
         }
+
+        public async Task<int> SaveDataAndReturn<T>(string sql, T parameters, string connectionString)
+        {
+            using (IDbConnection connection = new MySqlConnection(connectionString))
+            {
+                int rows = await connection.ExecuteAsync(sql, parameters);
+                return rows;
+            }
+        }
     }
 }
