@@ -1,13 +1,18 @@
 ﻿using AutoMapper;
+using Dapper;
 using DataAccessLibrary.DataAccess;
 using DataAccessLibrary.DataModels;
 using DataAccessLibrary.Enums;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ThinBlueLieB.Helper;
 using ThinBlueLieB.Models;
 using ThinBlueLieB.ViewModels;
 using static ThinBlueLieB.Helper.ConfigHelper;
@@ -25,9 +30,14 @@ namespace ThinBlueLieB.Bases
         //    Subjects = new List<ViewSubject> { new ViewSubject { } }
         //};
         internal uint Id;
-
+        [Inject]
+        SignInManager<IdentityUser> signInManager { get; set; }
+        [Inject]
+        UserManager<IdentityUser> userManager { get; set; }
         [Inject]
         public IMapper mapper { get; set; }
+
+        SubmitModel oldInfo = new SubmitModel();
         //fill out timelineinfo
         //fill out media
         //fill out officers
@@ -73,7 +83,7 @@ namespace ThinBlueLieB.Bases
                     Media[i].ListIndex = i;
                 }
 
-                model = new SubmitModel
+                oldInfo = model = new SubmitModel
                 {
                     Timelineinfos = Info,
                     Medias = Media,
@@ -84,26 +94,121 @@ namespace ThinBlueLieB.Bases
             }
             return new SubmitModel{ Timelineinfos = new ViewTimelineinfo()};
         }
-
+        internal AuthenticationState userState;
         internal async void HandleValidSubmitAsync()
         {
             DataAccess data = new DataAccess();
             //write to 
             // edits
             // editmedia
-
-            var editSql = "INSERT INTO `edits` (`IdTimelineinfo`, `Date`, `State`, `City`, `Context`, `Locked`, `SubmittedBy`, `Confirmed`)" +
-                " VALUES (IdTimelineinfo, Date, State, City, Context, Locked, SubmittedBy, Confirmed);";
-            await data.SaveData(editSql, model.Timelineinfos, GetConnectionString());
-            // subject and officer
-            // if user changes name, race, or sex, display similarperson 
-            // if they select similarperson to be the same person, 
-            //   change only the person table
-            // if they change it without selecting
-            //   remove from junction table
-            //   add to person table
-            //   add to junction table
+            string userId = userManager.GetUserId(userState.User);
+            model.Timelineinfos.SubmittedBy = userId;
             
+            var editSql = "INSERT INTO `edits` (`IdTimelineinfo`, `Date`, `State`, `City`, `Context`, `Locked`, `SubmittedBy`, `Confirmed`)" +
+                " VALUES (IdTimelineinfo, Date, State, City, Context, Locked, SubmittedBy, Confirmed); " +
+                "SELECT LAST_INSERT_ID();";
+            int editid = await data.SaveDataAndReturn(editSql, model.Timelineinfos, GetConnectionString());
+
+            var editMediaSql = "INSERT INTO `editmedia` (`IdEdits`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`) " +
+                "VALUES (IdEdits, MediaType, SourcePath, Gore, SourceFrom, Blurb, Credit, SubmittedBy, Rank);";
+            var medias = mapper.Map<List<ViewMedia>, List<EditMedia>>(model.Medias);
+
+            for (int i = 0; i < medias.Count; i++)            
+            {
+                medias[i].IdEdits = editid;
+                //if matches submittedby stays the same, if different use userId
+                if (model.Medias[i] == oldInfo.Medias[i]) {
+                    medias[i].SubmittedBy = oldInfo.Medias[i].SubmittedBy;
+                }
+                else {
+                    medias[i].SubmittedBy = userId;
+                }
+                await data.SaveData(editMediaSql, medias[i], GetConnectionString());
+            }
+
+            //Subject Table
+            foreach (var subject in model.Subjects)
+            {
+                using (var connection = new MySqlConnection(GetConnectionString()))
+                {
+
+                    if (subject.SameAsId == null)
+                    {
+                        //Create new subject
+                        var subjectSql = "INSERT INTO edit_subjects (`Name`, `Race`, `Sex`) " +
+                                     "VALUES (@Name, @Race, @Sex);" +
+                                     "SELECT LAST_INSERT_ID();";
+                        //Add to subjects table and return id
+                        var IdSubject = connection.QuerySingle<int>(subjectSql, subject);
+
+                        //Add to junction table
+                        var junctionSql = "INSERT INTO edit_timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
+                                          "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
+                        connection.Execute(junctionSql, new
+                        {
+                            idtimelineinfo = editid,
+                            idsubject = IdSubject,
+                            armed = Convert.ToByte(subject.Armed),
+                            age = subject.Age
+                        });
+                    }
+                    else
+                    {
+                        var junctionSql = "INSERT INTO edit_timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
+                                         "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
+                        connection.Execute(junctionSql, new
+                        {
+                            idtimelineinfo = editid,
+                            idsubject = subject.SameAsId,
+                            armed = Convert.ToByte(subject.Armed),
+                            age = (byte?)subject.Age
+                        });
+                    }
+                }
+            }
+            //Officer Table
+            foreach (var officer in model.Officers)
+            {
+                using (var connection = new MySqlConnection(ConfigHelper.GetConnectionString()))
+                {
+
+                    if (officer.SameAsId == null)
+                    {
+                        //Create new officer
+                        var officerSql = "INSERT INTO edit_officers (`Name`, `Race`, `Sex`)" +
+                                     "VALUES (@Name, @Race, @Sex);" +
+                                     "SELECT LAST_INSERT_ID();";
+                        //Add to officers table and return id
+                        var IdOfficer = connection.QuerySingle<int>(officerSql,officer);
+
+                        //Add to junction table
+                        var junctionSql = "INSERT INTO edit_timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
+                                        "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
+                        connection.Execute(junctionSql, new
+                        {
+                            idtimelineinfo = editid,
+                            idofficer = IdOfficer,
+                            age = (byte)officer.Age,
+                            misconduct = officer.Misconduct.Sum(),
+                            weapon = (int)officer.Weapon.Sum(),
+                        });
+                    }
+                    else
+                    {
+                        var junctionSql = "INSERT INTO edit_timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
+                                         "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
+                        connection.Execute(junctionSql, new
+                        {
+                            idtimelineinfo = editid,
+                            idofficer = officer.SameAsId,
+                            age = (byte?)officer.Age,
+                            misconduct = officer.Misconduct.Sum(),
+                            weapon = officer.Weapon.Sum(),
+                        });
+                    }
+                }
+            }
+          
         }
     }
 }
