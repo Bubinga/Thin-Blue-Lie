@@ -16,6 +16,7 @@
 @inject NavigationManager navManager
 
 
+
 <style>
     body {
         overflow-x: hidden;
@@ -207,15 +208,18 @@
         </Authorized>
     </AuthorizeView>
 }
-else if(!string.IsNullOrWhiteSpace(id))
+else if (!string.IsNullOrWhiteSpace(id))
 {
-<div class="container container-fluid mt-5">
-    <h4>Opps, this is not a valid url</h4>
-</div>
+    <div class="container container-fluid mt-5">
+        <h4>Opps, this is not a valid url</h4>
+    </div>
 }
 
 @code {
     string id;
+    [CascadingParameter]
+    private Task<AuthenticationState> _authState { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         var uri = new Uri(navManager.Uri);
@@ -235,7 +239,7 @@ else if(!string.IsNullOrWhiteSpace(id))
             };
 
             DateValue = Convert.ToDateTime(model.Timelineinfos.Date);
-
+            userState = await _authState;
             this.StateHasChanged();
         }
     }
