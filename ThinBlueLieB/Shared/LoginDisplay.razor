@@ -1,6 +1,7 @@
-﻿@inject Microsoft.AspNetCore.Identity.SignInManager<IdentityUser> _signInManager
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> _signInManager
 @inject NavigationManager navManager
 @using Microsoft.AspNetCore.Identity;
+@using DataAccessLibrary.UserModels 
 <AuthorizeView>
     <Authorized>
         <div class="nav-item dropdown">

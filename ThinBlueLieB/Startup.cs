@@ -14,6 +14,7 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Syncfusion.Blazor;
 using ThinBlueLieB.Helper;
 using AutoMapper;
+using DataAccessLibrary.UserModels;
 
 namespace ThinBlueLieB
 {
@@ -35,7 +36,7 @@ namespace ThinBlueLieB
                 options.UseMySql(Configuration.GetConnectionString("UserDB"), MySqlOptions => MySqlOptions
                 .ServerVersion(new Version(8, 0, 18), ServerType.MySql)));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             options.Password.RequireNonAlphanumeric = false
             )
                 .AddEntityFrameworkStores<UserDbContext>()
@@ -57,7 +58,7 @@ namespace ThinBlueLieB
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             //services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<IDataAccess, DataAccess>();
 

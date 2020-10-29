@@ -3,6 +3,7 @@ using Dapper;
 using DataAccessLibrary.DataAccess;
 using DataAccessLibrary.DataModels;
 using DataAccessLibrary.Enums;
+using DataAccessLibrary.UserModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,9 +32,9 @@ namespace ThinBlueLieB.Bases
         //};
         internal uint Id;
         [Inject]
-        SignInManager<IdentityUser> signInManager { get; set; }
+        SignInManager<ApplicationUser> signInManager { get; set; }
         [Inject]
-        UserManager<IdentityUser> userManager { get; set; }
+        UserManager<ApplicationUser> userManager { get; set; }
         [Inject]
         public IMapper mapper { get; set; }
 
