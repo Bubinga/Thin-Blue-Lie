@@ -13,7 +13,8 @@
 @using DataAccessLibrary.DataAccess 
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor httpContextAccessor
-@inject UserManager<IdentityUser> userManager
+@inject UserManager<ApplicationUser> userManager
+@using DataAccessLibrary.UserModels
 
 <div class="flagPopover">
     <AuthorizeView>

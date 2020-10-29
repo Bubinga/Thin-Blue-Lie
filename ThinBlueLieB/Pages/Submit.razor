@@ -1,11 +1,12 @@
 ﻿@page "/Submit"
 @inherits SubmitBase
 @inject NavigationManager NavManager
-@inject SignInManager<IdentityUser> signInManager
-@inject UserManager<IdentityUser> userManager
+@inject SignInManager<ApplicationUser> signInManager
+@inject UserManager<ApplicationUser> userManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject AutoMapper.IMapper mapper
 
+@using DataAccessLibrary.UserModels
 @using Dapper
 @using MySql.Data.MySqlClient
 @using Microsoft.AspNetCore.Identity;
