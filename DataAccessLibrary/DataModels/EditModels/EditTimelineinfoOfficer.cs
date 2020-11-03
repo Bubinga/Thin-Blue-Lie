@@ -9,8 +9,8 @@ namespace DataAccessLibrary.DataModels
         public int IdEditsTimelineinfoOfficer { get; set; }
         public int IdEdits { get; set; }
         public int IdEditsOfficer { get; set; }
-        public int Age { get; set; }
         public int Misconduct { get; set; }
         public int Weapon { get; set; }
+        public int Age { get; set; }
     }
 }

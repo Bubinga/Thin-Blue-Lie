@@ -39,10 +39,8 @@ namespace ThinBlueLieB.Bases
         public IMapper mapper { get; set; }
 
         SubmitModel oldInfo = new SubmitModel();
-        //fill out timelineinfo
-        //fill out media
-        //fill out officers
-        //fill out subjects
+  
+        //TODO only add to junction tables is something changes. 
         internal async Task<SubmitModel> FetchDataAsync()
         {
             DataAccess data = new DataAccess();

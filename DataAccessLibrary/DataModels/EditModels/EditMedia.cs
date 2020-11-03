@@ -12,6 +12,7 @@ namespace DataAccessLibrary.DataModels
         [Key]
         public int IdEditMedia { get; set; }
         public int IdEdits { get; set; }
+        public short Rank { get; set; }
         public byte MediaType { get; set; }
         [Required]
         [Column(TypeName = "text")]
@@ -25,8 +26,8 @@ namespace DataAccessLibrary.DataModels
         [Required]
         [Column(TypeName = "varchar(255)")]
         public string SubmittedBy { get; set; }
-        public short Rank { get; set; }
         public DateTime Timestamp { get; set; }
+        public byte Action { get; set; }
 
         [ForeignKey(nameof(IdEdits))]
         [InverseProperty(nameof(Edits.EditMedia))]

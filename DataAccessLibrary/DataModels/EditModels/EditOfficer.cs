@@ -11,6 +11,7 @@ namespace DataAccessLibrary.DataModels
         public int EditCount { get; set; }
         public string Name { get; set; }
         public byte Race { get; set; }
+        public byte Sex { get; set; }
 
     }
 }
