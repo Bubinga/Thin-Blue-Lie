@@ -18,9 +18,10 @@ namespace ThinBlueLieB.Bases
         //highest edit count where confirmed = 1 is the active one
         //return two rows for all queries, the first being active, second being inactive
         //load on arrow click, get a list of all edits which have either
-        //  the original post having a submittedby matching the user
+        //      the original post having a submittedby matching the user
         //      edits where editcount = 0
-        //  the original post being a community post
+        //      the original post being a community post
+        //  store status of post in community column
         [Inject]
         public UserManager<ApplicationUser> userManager { get; set; }
         [CascadingParameter]
