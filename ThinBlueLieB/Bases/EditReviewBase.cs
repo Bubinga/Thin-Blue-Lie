@@ -31,7 +31,15 @@ namespace ThinBlueLieB.Bases
         {
             userState = await _authState;
             var userId = userManager.GetUserId(userState.User);
-            
+            await GetEdits();
+        }
+        async Task GetEdits()
+        {
+            //userState.User.IsInRole("");  
+            //get number of all the unconfirmed edits
+
+            // if user is not high enough role
+            // only select those that are their own
         }
     }
 }
