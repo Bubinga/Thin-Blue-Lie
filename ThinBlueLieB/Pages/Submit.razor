@@ -220,8 +220,8 @@
     </EditForm>
 </div>
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> _authState { get; set; }
+        [CascadingParameter]
+        private Task<AuthenticationState> _authState { get; set; }
     private AuthenticationState userState;
     protected async Task HandleValidSubmitAsync()
     {
@@ -260,137 +260,127 @@
                 submittedby = (string)userId, //nullable
                 verified = model.Timelineinfos.Verified
             });
-        }
 
-        foreach (var media in model.Medias)
-        {
-            string path;
-            //if there is a file for the media save it to disk
-            if (media.Source != null & media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+
+            foreach (var media in model.Medias)
             {
-                var rand = StringExtensions.RandomString(12); //random string of 12 characters
-                path = ConfigHelper.GetUploadsDirectory() + rand;
-                FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
-                media.Source.Stream.WriteTo(filestream);
-                filestream.Close();
-                media.Source.Stream.Close();
-            }
-            else
-            {
-                path = media.SourcePath;
-            }
-            string mediaSql = "INSERT INTO media (`IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`) " +
-                              "VALUES (@idtimelineinfo, @mediatype, @sourcepath, @gore, @sourcefrom, @blurb, @credit, @submittedby, @rank);";
-            using (var connection = new MySqlConnection(ConfigHelper.GetConnectionString()))
-            {
-                await connection.ExecuteAsync(mediaSql, new
+                string path;
+                //if there is a file for the media save it to disk
+                if (media.Source != null & media.SourceFrom == MediaEnums.SourceFromEnum.Device)
                 {
-                    idtimelineinfo = IdTimelineinfo,
-                    mediatype = media.MediaType,
-                    sourcepath = path,
-                    gore = media.Gore,
-                    sourcefrom = media.SourceFrom,
-                    blurb = media.Blurb,
-                    credit = (string)media.Credit, //nullable
-                    submittedby = (string)userId, //nullable
-                    rank = media.ListIndex
-                });
-            }
-        }
-
-        //Subject Table
-        foreach (var subject in model.Subjects)
-        {
-            using (var connection = new MySqlConnection(ConfigHelper.GetConnectionString()))
-            {
-
-                if (subject.SameAsId == null)
-                {
-                    //Create new subject
-                    var subjectSql = "INSERT INTO subjects (`Name`, `Race`, `Sex`) " +
-                                 "VALUES (@name, @race, @sex);" +
-                                 "SELECT LAST_INSERT_ID();";
-                    //Add to subjects table and return id
-                    var IdSubject = connection.QuerySingle<int>(subjectSql, new
-                    {
-                        name = subject.Name,
-                        race = subject.Race,
-                        sex = subject.Sex
-                    });
-
-                    //Add to junction table
-                    var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
-                                      "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
-                    connection.Execute(junctionSql, new
-                    {
-                        idtimelineinfo = IdTimelineinfo,
-                        idsubject = IdSubject,
-                        armed = Convert.ToByte(subject.Armed),
-                        age = subject.Age
-                    });
+                    var rand = StringExtensions.RandomString(12); //random string of 12 characters
+                    path = ConfigHelper.GetUploadsDirectory() + rand;
+                    FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
+                    media.Source.Stream.WriteTo(filestream);
+                    filestream.Close();
+                    media.Source.Stream.Close();
                 }
                 else
                 {
-                    var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
-                                     "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
-                    connection.Execute(junctionSql, new
+                    path = media.SourcePath;
+                }
+                string mediaSql = "INSERT INTO media (`IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`) " +
+                                  "VALUES (@idtimelineinfo, @mediatype, @sourcepath, @gore, @sourcefrom, @blurb, @credit, @submittedby, @rank);";
+               await connection.ExecuteAsync(mediaSql, new
                     {
                         idtimelineinfo = IdTimelineinfo,
-                        idsubject = subject.SameAsId,
-                        armed = Convert.ToByte(subject.Armed),
-                        age = (byte?)subject.Age
-                    });
-                }
+                        mediatype = media.MediaType,
+                        sourcepath = path,
+                        gore = media.Gore,
+                        sourcefrom = media.SourceFrom,
+                        blurb = media.Blurb,
+                        credit = (string)media.Credit, //nullable
+                        submittedby = (string)userId, //nullable
+                        rank = media.ListIndex
+                    });                
             }
-        }
-        //Officer Table
-        foreach (var officer in model.Officers)
-        {
-            using (var connection = new MySqlConnection(ConfigHelper.GetConnectionString()))
+
+            //Subject Table
+            foreach (var subject in model.Subjects)
             {
+                    if (subject.SameAsId == null)
+                    {
+                        //Create new subject
+                        var subjectSql = "INSERT INTO subjects (`Name`, `Race`, `Sex`) " +
+                                     "VALUES (@name, @race, @sex);" +
+                                     "SELECT LAST_INSERT_ID();";
+                        //Add to subjects table and return id
+                        var IdSubject = connection.QuerySingle<int>(subjectSql, new
+                        {
+                            name = subject.Name,
+                            race = subject.Race,
+                            sex = subject.Sex
+                        });
 
-                if (officer.SameAsId == null)
-                {
-                    //Create new officer
-                    var officerSql = "INSERT INTO officers (`Name`, `Race`, `Sex`)" +
-                                 "VALUES (@name, @race, @sex);" +
-                                 "SELECT LAST_INSERT_ID();";
-                    //Add to officers table and return id
-                    var IdOfficer = connection.QuerySingle<int>(officerSql, new
+                        //Add to junction table
+                        var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
+                                          "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
+                        connection.Execute(junctionSql, new
+                        {
+                            idtimelineinfo = IdTimelineinfo,
+                            idsubject = IdSubject,
+                            armed = Convert.ToByte(subject.Armed),
+                            age = subject.Age
+                        });
+                    }
+                    else
                     {
-                        name = officer.Name,
-                        race = officer.Race,
-                        sex = officer.Sex
-                    });
+                        var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
+                                         "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
+                        connection.Execute(junctionSql, new
+                        {
+                            idtimelineinfo = IdTimelineinfo,
+                            idsubject = subject.SameAsId,
+                            armed = Convert.ToByte(subject.Armed),
+                            age = (byte?)subject.Age
+                        });
+                    }
+                
+            }
+            //Officer Table
+            foreach (var officer in model.Officers)
+            {  
+                    if (officer.SameAsId == null)
+                    {
+                        //Create new officer
+                        var officerSql = "INSERT INTO officers (`Name`, `Race`, `Sex`)" +
+                                     "VALUES (@name, @race, @sex);" +
+                                     "SELECT LAST_INSERT_ID();";
+                        //Add to officers table and return id
+                        var IdOfficer = connection.QuerySingle<int>(officerSql, new
+                        {
+                            name = officer.Name,
+                            race = officer.Race,
+                            sex = officer.Sex
+                        });
 
-                    //Add to junction table
-                    var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
-                                    "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
-                    connection.Execute(junctionSql, new
+                        //Add to junction table
+                        var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
+                                        "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
+                        connection.Execute(junctionSql, new
+                        {
+                            idtimelineinfo = IdTimelineinfo,
+                            idofficer = IdOfficer,
+                            age = (byte)officer.Age,
+                            misconduct = officer.Misconduct.Sum(),
+                            weapon = (int)officer.Weapon.Sum(),
+                        });
+                    }
+                    else
                     {
-                        idtimelineinfo = IdTimelineinfo,
-                        idofficer = IdOfficer,
-                        age = (byte)officer.Age,
-                        misconduct = officer.Misconduct.Sum(),
-                        weapon = (int)officer.Weapon.Sum(),
-                    });
-                }
-                else
-                {
-                    var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
-                                     "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
-                    connection.Execute(junctionSql, new
-                    {
-                        idtimelineinfo = IdTimelineinfo,
-                        idofficer = officer.SameAsId,
-                        age = (byte?)officer.Age,
-                        misconduct = officer.Misconduct.Sum(),
-                        weapon = officer.Weapon.Sum(),
-                    });
-                }
+                        var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
+                                         "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
+                        connection.Execute(junctionSql, new
+                        {
+                            idtimelineinfo = IdTimelineinfo,
+                            idofficer = officer.SameAsId,
+                            age = (byte?)officer.Age,
+                            misconduct = officer.Misconduct.Sum(),
+                            weapon = officer.Weapon.Sum(),
+                        });
+                    }                
             }
         }
-
         if (true) //if successful submit
         {
             NavManager.NavigateTo("/Index");
