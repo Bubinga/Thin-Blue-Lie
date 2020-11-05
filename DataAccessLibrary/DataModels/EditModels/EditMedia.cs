@@ -11,7 +11,8 @@ namespace DataAccessLibrary.DataModels
     {
         [Key]
         public int IdEditMedia { get; set; }
-        public int IdEdits { get; set; }
+        public int IdEditHistory { get; set; }
+        public int IdTimelineinfo { get; set; }
         public short Rank { get; set; }
         public byte MediaType { get; set; }
         [Required]
@@ -29,11 +30,11 @@ namespace DataAccessLibrary.DataModels
         public DateTime Timestamp { get; set; }
         public byte Action { get; set; }
 
-        [ForeignKey(nameof(IdEdits))]
-        [InverseProperty(nameof(Edits.EditMedia))]
-        public virtual Edits IdEditsNavigation { get; set; }
-        [ForeignKey(nameof(SubmittedBy))]
-        [InverseProperty(nameof(Aspnetusers.EditMedia))]
-        public virtual Aspnetusers SubmittedByNavigation { get; set; }
+        //[ForeignKey(nameof(IdEdits))]
+        //[InverseProperty(nameof(Edits.EditMedia))]
+        //public virtual Edits IdEditsNavigation { get; set; }
+        //[ForeignKey(nameof(SubmittedBy))]
+        //[InverseProperty(nameof(Aspnetusers.EditMedia))]
+        //public virtual Aspnetusers SubmittedByNavigation { get; set; }
     }
 }
