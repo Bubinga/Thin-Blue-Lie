@@ -71,7 +71,7 @@ namespace ThinBlueLieB.Bases
                     City = timelineinfo.City,
                     Context = timelineinfo.Context,
                     Locked = timelineinfo.Locked,
-                    SubmittedBy = timelineinfo.SubmittedBy,
+                    SubmittedBy = timelineinfo.Owner,
                     Verified = timelineinfo.Verified
                 };
                 var Media = mapper.Map<List<DisplayMedia>, List<ViewMedia>>(media);
@@ -114,7 +114,7 @@ namespace ThinBlueLieB.Bases
 
             for (int i = 0; i < medias.Count; i++)            
             {
-                medias[i].IdEdits = editid;
+                medias[i].IdTimelineinfo = editid;
                 //if matches submittedby stays the same, if different use userId
                 if (model.Medias[i] == oldInfo.Medias[i]) {
                     medias[i].SubmittedBy = oldInfo.Medias[i].SubmittedBy;
