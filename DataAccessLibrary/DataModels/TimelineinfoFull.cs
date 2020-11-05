@@ -38,7 +38,7 @@ namespace DataAccessLibrary.DataModels
         [NotMapped]
         public byte Locked { get; set; }
         [NotMapped]
-        public string SubmittedBy { get; set; }        
+        public string Owner { get; set; }        
         public byte Verified { get; set; }
 
         [InverseProperty("IdTimelineinfoNavigation")]
@@ -53,7 +53,7 @@ namespace DataAccessLibrary.DataModels
         public virtual ICollection<TimelineinfoOfficer> TimelineinfoOfficer { get; set; }
         [InverseProperty("IdTimelineinfoNavigation")]
         public virtual ICollection<TimelineinfoSubject> TimelineinfoSubject { get; set; }
-        [ForeignKey(nameof(SubmittedBy))]
+        [ForeignKey(nameof(Owner))]
         [InverseProperty(nameof(Aspnetusers.Timelineinfo))]
         public virtual Aspnetusers SubmittedByNavigation { get; set; }
     }

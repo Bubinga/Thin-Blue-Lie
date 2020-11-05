@@ -7,6 +7,7 @@ namespace DataAccessLibrary.DataModels
     class EditSubject
     {
         public int IdEditsSubject { get; set; }
+        public int IdEditHistory { get; set; }
         public int IdSubject { get; set; }
         public int EditCount { get; set; }
         public string Name { get; set; }
