@@ -36,13 +36,18 @@ namespace ThinBlueLieB
                 options.UseMySql(Configuration.GetConnectionString("UserDB"), MySqlOptions => MySqlOptions
                 .ServerVersion(new Version(8, 0, 18), ServerType.MySql)));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            options.Password.RequireNonAlphanumeric = false
-            )
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<UserDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = false;
+                options.User.AllowedUserNameCharacters =
+                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
+                options.User.RequireUniqueEmail = true;
 
+            });
             services.AddOptions();
 
             // Auto Mapper Configurations
