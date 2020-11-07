@@ -26,8 +26,8 @@ namespace DataAccessLibrary.DataAccess
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                var rows = await connection.QueryAsync<T>(sql, parameters);
-                return rows.FirstOrDefault();
+                var row = await connection.QueryFirstAsync<T>(sql, parameters);
+                return row;
             }
         }
 

@@ -7,6 +7,7 @@ namespace DataAccessLibrary.DataModels
     public class Timelineinfo
     {
         public int IdTimelineinfo { get; set; }
+        public string Title { get; set; }
         public DateTime Date { get; set; }
         public byte State { get; set; }
         public string City { get; set; }
