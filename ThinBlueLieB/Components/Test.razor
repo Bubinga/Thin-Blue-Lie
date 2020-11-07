@@ -11,16 +11,7 @@
     <SfDropDownList TItem="string" TValue="TimelineinfoEnums.RaceEnum?" PopupHeight="230px" Placeholder="Race" @bind-Value="@officer.Race" DataSource="@Races">
     </SfDropDownList>
     <h3>@officer.Race</h3>
-    <h4>Create Role</h4>
-    <EditForm Model="model" OnValidSubmit="CreateRole">
-        <label>name of role</label>
-        <InputText @bind-Value="model.Name"></InputText>
-        <button type="submit">Submit</button>
-    </EditForm>
-    @if (ModelIsWrong)
-    {
-        <p>you fucked up</p>
-    }
+    
 </div>
 
 @code{
@@ -30,25 +21,10 @@
         officer.Race = TimelineinfoEnums.RaceEnum.Native;
         officer.Misconduct = new int[] { };
     }
-    bool ModelIsWrong = false;
-    roleCreationModel model = new roleCreationModel();
-    class roleCreationModel
-    {
-        public string Name { get; set; }
-    }
-    async Task CreateRole()
-    {
-        IdentityRole identityRole = new IdentityRole { Name = model.Name };
-        IdentityResult result = await roleManager.CreateAsync(identityRole);
-        if (result.Errors.Any())
-        {
-            ModelIsWrong = true;
-        }
-        else
-        {
-            ModelIsWrong = false;
-            model.Name = string.Empty;
-        }
-    }
+    string OldName = "";
+    string NewName = "";
+    string OldMisconduct = "";
+    string NewMisconduct = "";
+
     public IEnumerable<string> Races = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.RaceEnum>();
 }

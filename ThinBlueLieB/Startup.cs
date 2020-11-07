@@ -15,6 +15,7 @@ using Syncfusion.Blazor;
 using ThinBlueLieB.Helper;
 using AutoMapper;
 using DataAccessLibrary.UserModels;
+using ThinBlueLieB.Searches;
 
 namespace ThinBlueLieB
 {
@@ -64,8 +65,9 @@ namespace ThinBlueLieB
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
-            //services.AddSingleton<WeatherForecastService>();
+           
             services.AddSingleton<IDataAccess, DataAccess>();
+            services.AddSingleton<SearchesEditReview>();
 
             services.AddSyncfusionBlazor();
         }

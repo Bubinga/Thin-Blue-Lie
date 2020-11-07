@@ -1,4 +1,6 @@
-﻿@page "/Account/Edits"
+﻿@page "/Account/ReviewEdits"
+@inherits EditReviewBase
+@using ThinBlueLieB.Bases
 @using Syncfusion.Blazor.Navigations
 <style>
     ul {
@@ -14,7 +16,7 @@
             color: black;
         }
 
-    .edit-wrapper{
+    .edit-wrapper {
         padding: 0 40px;
     }
 </style>
@@ -34,7 +36,7 @@
                                 <NavLink class="nav-link" href="/Account/Profile">Profile</NavLink>
                             </li>
                             <li>
-                                <NavLink class="nav-link" href="/Account/Edits">Review Edits</NavLink>
+                                <NavLink class="nav-link" href="/Account/ReviewEdits">Review Edits</NavLink>
                             </li>
                             <li>
                                 <NavLink class="nav-link" href="/Account/Reputation">Reputation</NavLink>
@@ -49,19 +51,83 @@
                         <div class="" style="font-size:1.2rem;">Edit Review</div>
                         <div class="d-flex align-items-center">2/17</div>
                         @*<div class="d-flex">
-                           <InputCheckbox>Display only Changes</InputCheckbox>
-                        </div>*@
+                               <InputCheckbox>Display only Changes</InputCheckbox>
+                            </div>*@
                     </div>
                     <div class="text-center">
                         <h4>Title</h4>
                         <h6>07/20/2020</h6>
                     </div>
                     <div class="row edit-wrapper">
-                        <div class="col-6 px-4 border">
-
+                        <div class="col-6 px-4 ">
+                            <p class="border">
+                                <h5>Basic Information</h5>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                                et dolore magna aliqua. Tristique et egestas quis ipsum. Tristique et egestas quis ipsum suspendisse ultrices gravida.
+                                Cursus metus aliquam eleifend mi in. Turpis massa tincidunt dui ut. Id velit ut tortor pretium viverra.
+                                Viverra adipiscing at in tellus. Massa tincidunt dui ut ornare lectus sit amet est. Aliquet nibh praesent
+                                tristique magna sit. Et malesuada fames ac turpis egestas. In massa tempor nec feugiat nisl. Hendrerit dolor
+                                magna eget est lorem ipsum dolor. Elementum nisi quis eleifend quam adipiscing vitae proin sagittis. Rhoncus est
+                                pellentesque elit ullamcorper dignissim.
+                            </p>
+                            <p class="border">
+                                <h6>Officer</h6>
+                                Example Name
+                                <ul>
+                                    <li>
+                                        White
+                                    </li>
+                                    <li>
+                                        67- years old
+                                    </li>
+                                    <li>
+                                        Used
+                                        <ul>
+                                            <li>
+                                                Body Force
+                                            </li>
+                                            <li>
+                                                Taser
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </p>
                         </div>
                         <div class="col-6 px-4 border">
-
+                            <p class="border">
+                                <h5>Basic Information</h5>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                                et dolore magna aliqua. Tristique et egestas quis ipsum. Tristique et egestas quis ipsum suspendisse ultrices gravida.
+                                Cursus metus aliquam eleifend mi in. Turpis massa tincidunt dui ut. Id velit ut tortor pretium viverra.
+                                Viverra adipiscing at in tellus. Massa tincidunt dui ut ornare lectus sit amet est. Aliquet nibh praesent
+                                tristique magna sit. Et malesuada fames ac turpis egestas. In massa tempor nec feugiat nisl. Hendrerit dolor
+                                magna eget est lorem ipsum dolor. Elementum nisi quis eleifend quam adipiscing vitae proin sagittis. Rhoncus est
+                                pellentesque elit ullamcorper dignissim.
+                            </p>
+                            <p class="border">
+                                <h6>Officer</h6>
+                                Example Name
+                                <ul>
+                                    <li>
+                                        White
+                                    </li>
+                                    <li>
+                                        6<span style="background-color:mediumseagreen;">8</span> - years old
+                                    </li>
+                                    <li>
+                                        Used
+                                        <ul>
+                                            <li>
+                                                Body Force
+                                            </li>
+                                            <li>
+                                                Taser
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </p>
                         </div>
                     </div>
                 </div>

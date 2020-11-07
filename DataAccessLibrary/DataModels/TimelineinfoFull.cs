@@ -21,6 +21,7 @@ namespace DataAccessLibrary.DataModels
 
         [Key]
         public int IdTimelineinfo { get; set; }
+        public string Title { get; set; }
         [Required]       
         [MaxLength(10)]
         [DataType(DataType.Date)]

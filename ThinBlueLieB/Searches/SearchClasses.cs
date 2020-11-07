@@ -5,6 +5,11 @@ namespace ThinBlueLieB.Searches
 {
     public class SearchClasses
     {
+        public class FirstLoadEditHistory
+        {
+            public int IdEditHistory { get; set; }
+            public int IdTimelineinfo { get; set; }
+        }
         public class FirstLoadOfficer
         {
             public int IdOfficer { get; set; }
