@@ -18,6 +18,7 @@ namespace DataAccessLibrary.DataModels
         public int IdEdits { get; set; }
         public int IdEditHistory { get; set; }
         public int IdTimelineinfo { get; set; }
+        public string Title { get; set; }
         public int EditCount { get; set; }
         [Required]
         [Column(TypeName = "char(10)")]

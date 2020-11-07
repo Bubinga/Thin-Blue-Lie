@@ -96,6 +96,7 @@ namespace ThinBlueLieB.Bases
         internal AuthenticationState userState;
         internal async void HandleValidSubmitAsync()
         {
+            var medias = mapper.Map<List<ViewMedia>, List<EditMedia>>(model.Medias);
             DataAccess data = new DataAccess();
             //write to 
             // edits
@@ -110,7 +111,7 @@ namespace ThinBlueLieB.Bases
 
             var editMediaSql = "INSERT INTO `editmedia` (`IdEdits`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`) " +
                 "VALUES (IdEdits, MediaType, SourcePath, Gore, SourceFrom, Blurb, Credit, SubmittedBy, Rank);";
-            var medias = mapper.Map<List<ViewMedia>, List<EditMedia>>(model.Medias);
+            //var medias = mapper.Map<List<ViewMedia>, List<EditMedia>>(model.Medias);
 
             for (int i = 0; i < medias.Count; i++)            
             {

@@ -1,13 +1,20 @@
-﻿using DataAccessLibrary.UserModels;
+﻿using AutoMapper;
+using DataAccessLibrary.UserModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using MySql.Data.MySqlClient;
+using Syncfusion.Blazor.PdfViewer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ThinBlueLieB.Helper;
 using ThinBlueLieB.Models;
 using ThinBlueLieB.Models.View_Models;
+using ThinBlueLieB.Searches;
+using ThinBlueLieB.ViewModels;
+using static ThinBlueLieB.Searches.SearchClasses;
 
 namespace ThinBlueLieB.Bases
 {
@@ -24,22 +31,48 @@ namespace ThinBlueLieB.Bases
         //  store status of post in community column
         [Inject]
         public UserManager<ApplicationUser> userManager { get; set; }
+        [Inject]
+        public RoleManager<IdentityRole> roleManager { get; set; }
         [CascadingParameter]
         private Task<AuthenticationState> _authState { get; set; }
         private AuthenticationState userState;
+        ApplicationUser User;
+        string UserId;
+        int PendingEditsCount;
+        IEnumerable<FirstLoadEditHistory> Ids;
+        int ActiveIdIndex;
+        List<ViewEvent> Edits = new List<ViewEvent>();
+        [Inject]
+        SearchesEditReview review { get; set; }
         protected override async Task OnInitializedAsync()
         {
+            //TODO only trigger this if use is logged in
             userState = await _authState;
-            var userId = userManager.GetUserId(userState.User);
+            User = await userManager.GetUserAsync(userState.User);
+            UserId = User.Id;
             await GetEdits();
         }
         async Task GetEdits()
         {
-            //userState.User.IsInRole("");  
-            //get number of all the unconfirmed edits
-
-            // if user is not high enough role
-            // only select those that are their own
+            bool canReviewAll = await userManager.IsInRoleAsync(User, "GreatUser");
+            if (canReviewAll == false)
+                Ids = await review.GetPendingEdits(User);               
+            else 
+                Ids = await review.GetPendingEdits(User, true);      
+            
+            //get number of all the unconfirmed edits that user can access
+            PendingEditsCount = Ids.Count();
+            var firstId = Ids.FirstOrDefault().IdTimelineinfo;
+            if (firstId != 0) //firstId will never be zero other than if ids is empty
+            {
+                Edits.Add(await review.GetEditFromId(firstId));
+                ActiveIdIndex = 0;
+            }
+        }
+        async Task GetNextEdit()
+        {
+            Edits.Add(await review.GetEditFromId(Ids.Select(x => x.IdTimelineinfo).ToArray()[ActiveIdIndex]));
+            ActiveIdIndex++;
         }
     }
 }
