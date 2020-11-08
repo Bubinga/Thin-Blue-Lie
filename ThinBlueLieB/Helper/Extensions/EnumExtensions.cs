@@ -23,10 +23,22 @@ namespace ThinBlueLieB.Helper.Extensions
 
         public static string GetEnumDisplayName<T>(T value) where T : Enum
         {
-            var fieldName = Enum.GetName(typeof(T), value);
-            var displayAttr = typeof(T)
-                .GetField(fieldName)
-                .GetCustomAttribute<DisplayAttribute>();
+            string fieldName;
+            DisplayAttribute displayAttr;
+            try
+            {
+                fieldName = Enum.GetName(typeof(T), value);
+                displayAttr = typeof(T)
+               .GetField(fieldName)
+               .GetCustomAttribute<DisplayAttribute>();
+            }
+            catch (ArgumentException)
+            {
+                fieldName = Enum.GetName(value.GetType(), value);
+                displayAttr = value.GetType()
+               .GetField(fieldName)
+               .GetCustomAttribute<DisplayAttribute>();
+            }
             return displayAttr?.Name ?? fieldName;
         }
 
