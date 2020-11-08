@@ -1,10 +1,129 @@
 ﻿@using DiffPlex.DiffBuilder;
 @using DiffPlex.DiffBuilder.Model;
+@using ThinBlueLieB.Helper.Extensions 
 @inject IJSRuntime JSRuntime
 @inject ISideBySideDiffBuilder sideBySide
 
-<h3>CompareOfficer</h3>
+<style>
+    del, .deleted-li {
+        text-decoration: line-through;
+        background-color: #fbb;
+        color: #555;
+    }
+
+    ins, .inserted-li {
+        text-decoration: none;
+        background-color: #d4fcbc;
+    }
+</style>
+<div>
+    <h5 class="border-bottom">Officer's information</h5>
+    <p>
+        <CompareLine Model="Model.Lines.FirstOrDefault()"></CompareLine>
+    </p>
+    <span>
+        @((MarkupString)(NewOfficer.Race == OldOfficer.Race? NewOfficer.Race.ToString() : IsOriginal? "<del>"+OldOfficer.Race+"</del>" : "<ins>" + NewOfficer.Race + "</ins>" ))
+        @((MarkupString)(NewOfficer.Sex == OldOfficer.Sex? NewOfficer.Sex.ToString() : IsOriginal? "<del>"+OldOfficer.Sex+"</del>" : "<ins>" + NewOfficer.Sex + "</ins>" )),
+        @((MarkupString)(NewOfficer.Age == OldOfficer.Age? NewOfficer.Age.ToString() : IsOriginal? "<del>"+OldOfficer.Age+"</del>" : "<ins>" + NewOfficer.Age + "</ins>" )) years of age
+    </span>
+    <label style="display:block;">
+        Misconducts
+    </label>
+    <ul>
+        @if (IsOriginal)
+        {
+            @foreach (TimelineinfoEnums.MisconductEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.MisconductEnum)))
+            {
+                if (((TimelineinfoEnums.MisconductEnum)OldOfficer.Misconduct).HasFlag(flag))
+                {
+                    if (((TimelineinfoEnums.MisconductEnum)NewOfficer.Misconduct).HasFlag(flag))
+                    {
+                        <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
+                    }
+                    else
+                    {
+                        <li class="deleted-li">@EnumExtensions.GetEnumDisplayName(flag)</li>
+                    }
+
+                }
+            }
+        }
+        else
+        {
+            @foreach (TimelineinfoEnums.MisconductEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.MisconductEnum)))
+            {
+                if (((TimelineinfoEnums.MisconductEnum)NewOfficer.Misconduct).HasFlag(flag))
+                {
+                    if (((TimelineinfoEnums.MisconductEnum)OldOfficer.Misconduct).HasFlag(flag))
+                    {
+                        <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
+                    }
+                    else
+                    {
+                        <li class="inserted-li">@EnumExtensions.GetEnumDisplayName(flag)</li>
+                    }
+
+                }
+            }
+        }
+    </ul>
+    <label style="display:block;">
+        Weapon
+    </label>
+    <ul>
+        @if (OldOfficer.Weapon != 0 || NewOfficer.Weapon != 0)
+        {
+            @if (IsOriginal)
+            {
+                @foreach (TimelineinfoEnums.WeaponEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.WeaponEnum)))
+                {
+                    if (((TimelineinfoEnums.WeaponEnum)OldOfficer.Weapon).HasFlag(flag))
+                    {
+                        if (((TimelineinfoEnums.WeaponEnum)NewOfficer.Weapon).HasFlag(flag))
+                        {
+                            <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
+                        }
+                        else
+                        {
+                            <li class="deleted-li">@EnumExtensions.GetEnumDisplayName(flag)</li>
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+                @foreach (TimelineinfoEnums.WeaponEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.WeaponEnum)))
+                {
+                    if (((TimelineinfoEnums.WeaponEnum)NewOfficer.Weapon).HasFlag(flag))
+                    {
+                        if (((TimelineinfoEnums.WeaponEnum)OldOfficer.Weapon).HasFlag(flag))
+                        {
+                            <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
+                        }
+                        else
+                        {
+                            <li class="inserted-li">@EnumExtensions.GetEnumDisplayName(flag)</li>
+                        }
+
+                    }
+                }
+            }
+        }
+    </ul>
+</div>
 
 @code {
-
+    [Parameter]
+    public bool IsOriginal { get; set; }
+    [Parameter]
+    public DiffPaneModel Model { get; set; }
+    [Parameter]
+    public DBOfficer OldOfficer { get; set; }
+    [Parameter]
+    public DBOfficer NewOfficer { get; set; }
+    protected override void OnInitialized()
+    {
+       // OfficerSummary = StringExtensions.GetPersonSummary(new ViewSimilar.ViewSimilarPerson { })
+    }
 }
