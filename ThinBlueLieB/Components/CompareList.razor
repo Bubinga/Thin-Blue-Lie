@@ -3,11 +3,11 @@
 
 @if (IsOriginal)
 {
-    @foreach (TimelineinfoEnums.MisconductEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.MisconductEnum)))
+    @foreach (Enum flag in Enum.GetValues(typeof(TEnum)))
     {
-        if (((TimelineinfoEnums.MisconductEnum)Old).HasFlag(flag))
+        if (((Enum)Enum.ToObject(typeof(TEnum), Old)).HasFlag(flag))
         {
-            if (((TimelineinfoEnums.MisconductEnum)New).HasFlag(flag))
+            if (((Enum)Enum.ToObject(typeof(TEnum), New)).HasFlag(flag))
             {
                 <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
             }
@@ -21,11 +21,11 @@
 }
 else
 {
-    @foreach (TimelineinfoEnums.MisconductEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.MisconductEnum)))
+    @foreach (Enum flag in Enum.GetValues(typeof(TEnum)))
     {
-        if (((TimelineinfoEnums.MisconductEnum)New).HasFlag(flag))
+        if (((Enum)Enum.ToObject(typeof(TEnum), New)).HasFlag(flag))
         {
-            if (((TimelineinfoEnums.MisconductEnum)Old).HasFlag(flag))
+            if (((Enum)Enum.ToObject(typeof(TEnum), Old)).HasFlag(flag))
             {
                 <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
             }
@@ -33,17 +33,12 @@ else
             {
                 <li class="inserted-li">@EnumExtensions.GetEnumDisplayName(flag)</li>
             }
-
         }
     }
 }
-
 @code {
     [CascadingParameter]
     public bool IsOriginal { get; set; }
-
-    [Parameter]
-    public TEnum EnumType { get; set; }
 
     [Parameter]
     public int Old { get; set; }

@@ -26,95 +26,23 @@
         @((MarkupString)(NewOfficer.Sex == OldOfficer.Sex? NewOfficer.Sex.ToString() : IsOriginal? "<del>"+OldOfficer.Sex+"</del>" : "<ins>" + NewOfficer.Sex + "</ins>" )),
         @((MarkupString)(NewOfficer.Age == OldOfficer.Age? NewOfficer.Age.ToString() : IsOriginal? "<del>"+OldOfficer.Age+"</del>" : "<ins>" + NewOfficer.Age + "</ins>" )) years of age
     </span>
-    <label style="display:block;">
+    <label class="d-block font-weight-bold mt-1">
         Misconducts
     </label>
-    <ul>
-        @if (IsOriginal)
-        {
-            @foreach (TimelineinfoEnums.MisconductEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.MisconductEnum)))
-            {
-                if (((TimelineinfoEnums.MisconductEnum)OldOfficer.Misconduct).HasFlag(flag))
-                {
-                    if (((TimelineinfoEnums.MisconductEnum)NewOfficer.Misconduct).HasFlag(flag))
-                    {
-                        <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
-                    }
-                    else
-                    {
-                        <li class="deleted-li">@EnumExtensions.GetEnumDisplayName(flag)</li>
-                    }
-
-                }
-            }
-        }
-        else
-        {
-            @foreach (TimelineinfoEnums.MisconductEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.MisconductEnum)))
-            {
-                if (((TimelineinfoEnums.MisconductEnum)NewOfficer.Misconduct).HasFlag(flag))
-                {
-                    if (((TimelineinfoEnums.MisconductEnum)OldOfficer.Misconduct).HasFlag(flag))
-                    {
-                        <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
-                    }
-                    else
-                    {
-                        <li class="inserted-li">@EnumExtensions.GetEnumDisplayName(flag)</li>
-                    }
-
-                }
-            }
-        }
-    </ul>
-    <label style="display:block;">
+    <CompareList TEnum="TimelineinfoEnums.MisconductEnum" New="NewOfficer.Misconduct" Old="OldOfficer.Misconduct"></CompareList>   
+    <label class="d-block font-weight-bold mt-1">
         Weapon
     </label>
     <ul>
         @if (OldOfficer.Weapon != 0 || NewOfficer.Weapon != 0)
         {
-            @if (IsOriginal)
-            {
-                @foreach (TimelineinfoEnums.WeaponEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.WeaponEnum)))
-                {
-                    if (((TimelineinfoEnums.WeaponEnum)OldOfficer.Weapon).HasFlag(flag))
-                    {
-                        if (((TimelineinfoEnums.WeaponEnum)NewOfficer.Weapon).HasFlag(flag))
-                        {
-                            <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
-                        }
-                        else
-                        {
-                            <li class="deleted-li">@EnumExtensions.GetEnumDisplayName(flag)</li>
-                        }
-
-                    }
-                }
-            }
-            else
-            {
-                @foreach (TimelineinfoEnums.WeaponEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.WeaponEnum)))
-                {
-                    if (((TimelineinfoEnums.WeaponEnum)NewOfficer.Weapon).HasFlag(flag))
-                    {
-                        if (((TimelineinfoEnums.WeaponEnum)OldOfficer.Weapon).HasFlag(flag))
-                        {
-                            <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
-                        }
-                        else
-                        {
-                            <li class="inserted-li">@EnumExtensions.GetEnumDisplayName(flag)</li>
-                        }
-
-                    }
-                }
-            }
+            <CompareList TEnum="TimelineinfoEnums.WeaponEnum" New="(int)NewOfficer.Weapon" Old="(int)OldOfficer.Weapon"></CompareList>
         }
     </ul>
 </div>
 
 @code {
-    [Parameter]
+    [CascadingParameter]
     public bool IsOriginal { get; set; }
     [Parameter]
     public DiffPaneModel Model { get; set; }
