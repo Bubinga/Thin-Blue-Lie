@@ -16,10 +16,14 @@
     <h3>@officer.Race</h3>*@    
     <div class="row">
         <div class="col-6 px-4">
-            <CompareOfficer IsOriginal="true" Model="diff.OldText" NewOfficer="newOfficer" OldOfficer="oldOfficer"></CompareOfficer>
+            <CascadingValue Value="true">
+                <CompareOfficer Model="diff.OldText" NewOfficer="newOfficer" OldOfficer="oldOfficer"></CompareOfficer>
+            </CascadingValue>
         </div>
         <div class="col-6 px-4">
-            <CompareOfficer IsOriginal="false" Model="diff.NewText" NewOfficer="newOfficer" OldOfficer="oldOfficer"></CompareOfficer>
+            <CascadingValue Value="false">
+                <CompareOfficer Model="diff.NewText" NewOfficer="newOfficer" OldOfficer="oldOfficer"></CompareOfficer>
+            </CascadingValue>
         </div>
     </div>
 </div>
