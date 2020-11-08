@@ -16,6 +16,8 @@ using ThinBlueLieB.Helper;
 using AutoMapper;
 using DataAccessLibrary.UserModels;
 using ThinBlueLieB.Searches;
+using DiffPlex.DiffBuilder;
+using DiffPlex;
 
 namespace ThinBlueLieB
 {
@@ -61,6 +63,9 @@ namespace ThinBlueLieB
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            services.AddScoped<ISideBySideDiffBuilder, SideBySideDiffBuilder>();
+            services.AddScoped<IDiffer, Differ>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();

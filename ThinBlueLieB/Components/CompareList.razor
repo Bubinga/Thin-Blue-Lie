@@ -1,0 +1,52 @@
+﻿@using ThinBlueLieB.Helper.Extensions
+@typeparam TEnum
+
+@if (IsOriginal)
+{
+    @foreach (TimelineinfoEnums.MisconductEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.MisconductEnum)))
+    {
+        if (((TimelineinfoEnums.MisconductEnum)Old).HasFlag(flag))
+        {
+            if (((TimelineinfoEnums.MisconductEnum)New).HasFlag(flag))
+            {
+                <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
+            }
+            else
+            {
+                <li class="deleted-li">@EnumExtensions.GetEnumDisplayName(flag)</li>
+            }
+
+        }
+    }
+}
+else
+{
+    @foreach (TimelineinfoEnums.MisconductEnum flag in Enum.GetValues(typeof(TimelineinfoEnums.MisconductEnum)))
+    {
+        if (((TimelineinfoEnums.MisconductEnum)New).HasFlag(flag))
+        {
+            if (((TimelineinfoEnums.MisconductEnum)Old).HasFlag(flag))
+            {
+                <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
+            }
+            else
+            {
+                <li class="inserted-li">@EnumExtensions.GetEnumDisplayName(flag)</li>
+            }
+
+        }
+    }
+}
+
+@code {
+    [CascadingParameter]
+    public bool IsOriginal { get; set; }
+
+    [Parameter]
+    public TEnum EnumType { get; set; }
+
+    [Parameter]
+    public int Old { get; set; }
+    [Parameter]
+    public int New { get; set; }
+}
