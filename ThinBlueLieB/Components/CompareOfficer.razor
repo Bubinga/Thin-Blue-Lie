@@ -1,57 +1,186 @@
 ﻿@using DiffPlex.DiffBuilder;
 @using DiffPlex.DiffBuilder.Model;
 @using ThinBlueLieB.Helper.Extensions 
+@using static ThinBlueLieB.Helper.Extensions.StringExtensions 
+@using static DataAccessLibrary.Enums.TimelineinfoEnums; 
+@using AutoMapper
 @inject IJSRuntime JSRuntime
 @inject ISideBySideDiffBuilder sideBySide
+@inject IMapper mapper
 
 <style>
-    del, .deleted-li {
-        text-decoration: line-through;
-        background-color: #fbb;
-        color: #555;
-    }
-
-    ins, .inserted-li {
+    .added-item {
         text-decoration: none;
         background-color: #d4fcbc;
     }
+    .deleted-item {
+        text-decoration: line-through;
+        background-color: #fbb;
+     /*   color: #555;*/
+    }
 </style>
-<div>
+@foreach (var IsOriginal in boolValues)
+{
+<div class="col-6 px-4">
     <h5 class="border-bottom">Officer's information</h5>
-    <p>
-        <CompareLine Model="Model.Lines.FirstOrDefault()"></CompareLine>
-    </p>
-    <span>
-        @((MarkupString)(NewOfficer.Race == OldOfficer.Race? NewOfficer.Race.ToString() : IsOriginal? "<del>"+OldOfficer.Race+"</del>" : "<ins>" + NewOfficer.Race + "</ins>" ))
-        @((MarkupString)(NewOfficer.Sex == OldOfficer.Sex? NewOfficer.Sex.ToString() : IsOriginal? "<del>"+OldOfficer.Sex+"</del>" : "<ins>" + NewOfficer.Sex + "</ins>" )),
-        @((MarkupString)(NewOfficer.Age == OldOfficer.Age? NewOfficer.Age.ToString() : IsOriginal? "<del>"+OldOfficer.Age+"</del>" : "<ins>" + NewOfficer.Age + "</ins>" )) years of age
-    </span>
-    <label class="d-block font-weight-bold mt-1">
-        Misconducts
-    </label>
-    <CompareList TEnum="TimelineinfoEnums.MisconductEnum" New="NewOfficer.Misconduct" Old="OldOfficer.Misconduct"></CompareList>   
-    <label class="d-block font-weight-bold mt-1">
-        Weapon
-    </label>
-    <ul>
-        @if (OldOfficer.Weapon != 0 || NewOfficer.Weapon != 0)
+    @foreach ((var officerPair, Int32 i) in Officers.Select((officer, i) => (officer, i)))
+    {
+        //if the same officer exists in both. item1 is old item2 is new
+        if (officerPair.Item1 != null && officerPair.Item2 != null)
         {
-            <CompareList TEnum="TimelineinfoEnums.WeaponEnum" New="(int)NewOfficer.Weapon" Old="(int)OldOfficer.Weapon"></CompareList>
+            <p>
+                @if (IsOriginal)
+                {
+                    <CompareLine Model="Model[i].OldText.Lines.FirstOrDefault()"></CompareLine>
+                }
+                else
+                {
+                    <CompareLine Model="Model[i].NewText.Lines.FirstOrDefault()"></CompareLine>
+                }
+            </p>
+            <span>
+                @((MarkupString)(GetComparePersonSummary(
+                    new CommonPerson { Age = (int)officerPair.Item1.Age, Sex = officerPair.Item1.Sex, Race = officerPair.Item1.Race },
+                    new CommonPerson { Age = (int)officerPair.Item2.Age, Sex = officerPair.Item2.Sex, Race = officerPair.Item2.Race },
+                    IsOriginal
+                    )))
+            </span>
+            <label class="d-block font-weight-bold mt-1">
+                Misconduct(s)
+            </label>
+            <CompareList IsOriginal="IsOriginal" TEnum="TimelineinfoEnums.MisconductEnum" New="officerPair.Item2.Misconduct" Old="officerPair.Item1.Misconduct"></CompareList>
+            <label class="d-block font-weight-bold mt-1">
+                Weapon(s)
+            </label>
+            <ul>
+                @if (officerPair.Item1.Weapon != 0 && officerPair.Item2.Weapon != 0)
+                {
+                    <CompareList IsOriginal="IsOriginal" TEnum="TimelineinfoEnums.WeaponEnum" New="(int)officerPair.Item2.Weapon" Old="(int)officerPair.Item1.Weapon"></CompareList>
+                }
+            </ul>
         }
-    </ul>
+        //Old exists but not new
+        else if (officerPair.Item1 != null && officerPair.Item2 == null)
+        {
+            <div class="deleted-item">
+                @if (IsOriginal)
+                {
+                    <p>
+                        <del>@officerPair.Item1.Name</del>
+                    </p>
+                    <span>
+                        @((MarkupString)(GetComparePersonSummary(
+                    new CommonPerson { Age = (int)officerPair.Item1.Age, Sex = officerPair.Item1.Sex, Race = officerPair.Item1.Race },
+                    new CommonPerson { Age = (int)officerPair.Item1.Age, Sex = officerPair.Item1.Sex, Race = officerPair.Item1.Race },
+                    IsOriginal
+                    )))
+                    </span>
+                    <label class="d-block font-weight-bold mt-1">
+                        Misconduct(s)
+                    </label>
+                    <CompareList IsOriginal="IsOriginal" TEnum="TimelineinfoEnums.MisconductEnum" New="officerPair.Item1.Misconduct" Old="officerPair.Item1.Misconduct"></CompareList>
+                    <label class="d-block font-weight-bold mt-1">
+                        Weapon(s)
+                    </label>
+                    <ul>
+                        @if (officerPair.Item1.Weapon != 0)
+                        {
+                            <CompareList IsOriginal="IsOriginal" TEnum="TimelineinfoEnums.WeaponEnum" New="(int)officerPair.Item1.Weapon" Old="(int)officerPair.Item1.Weapon"></CompareList>
+                        }
+                    </ul>
+                }
+            </div>
+        }
+        //New Exists but not old
+        else if (officerPair.Item1 == null && officerPair.Item2 != null)
+        {
+            <div class="added-item">
+                @if (IsOriginal == false)
+                {
+                    <p>
+                        <ins>@officerPair.Item2.Name</ins>
+                    </p>
+                    <span>
+                        @((MarkupString)(GetComparePersonSummary(
+                    new CommonPerson { Age = (int)officerPair.Item2.Age, Sex = officerPair.Item2.Sex, Race = officerPair.Item2.Race },
+                    new CommonPerson { Age = (int)officerPair.Item2.Age, Sex = officerPair.Item2.Sex, Race = officerPair.Item2.Race },
+                    IsOriginal
+                    )))
+                    </span>
+                    <label class="d-block font-weight-bold mt-1">
+                        Misconduct(s)
+                    </label>
+                    <CompareList IsOriginal="IsOriginal" TEnum="TimelineinfoEnums.MisconductEnum" New="officerPair.Item2.Misconduct" Old="officerPair.Item2.Misconduct"></CompareList>
+                    <label class="d-block font-weight-bold mt-1">
+                        Weapon(s)
+                    </label>
+                    <ul>
+                        @if (officerPair.Item2.Weapon != 0)
+                        {
+                            <CompareList IsOriginal="IsOriginal" TEnum="TimelineinfoEnums.WeaponEnum" New="(int)officerPair.Item2.Weapon" Old="(int)officerPair.Item2.Weapon"></CompareList>
+                        }
+                    </ul>
+                }
+            </div>
+        }
+    }
 </div>
+}
 
 @code {
-    [CascadingParameter]
-    public bool IsOriginal { get; set; }
     [Parameter]
-    public DiffPaneModel Model { get; set; }
+    public List<SideBySideDiffModel> Model { get; set; }
     [Parameter]
-    public DBOfficer OldOfficer { get; set; }
+    public List<Tuple<DBOfficer, DBOfficer>> Officers { get; set; }
     [Parameter]
-    public DBOfficer NewOfficer { get; set; }
-    protected override void OnInitialized()
+    public List<DBOfficer> OldOfficers { get; set; }
+    [Parameter]
+    public List<DBOfficer> NewOfficers { get; set; }
+    List<bool> boolValues = new List<bool> { true, false };
+
+
+    protected override void OnParametersSet()
     {
-       // OfficerSummary = StringExtensions.GetPersonSummary(new ViewSimilar.ViewSimilarPerson { })
+        Officers = new List<Tuple<DBOfficer, DBOfficer>>();
+        List<int> pairedIds = new List<int>();
+        foreach (var officer in NewOfficers.Union(OldOfficers))
+        {
+            if (!pairedIds.Contains(officer.IdOfficer))
+            {
+                List<DBOfficer> pair = NewOfficers.Union(OldOfficers).Where(o => o.IdOfficer == officer.IdOfficer).ToList();
+                bool isPaired = false;
+                Tuple<DBOfficer, DBOfficer> pairing;
+                for (int i = 0; i < pair.Count; i++)
+                {
+                    if (pair[i] != officer)
+                    {
+                        if (NewOfficers.Contains(pair[i]))
+                        {
+                            pairing = new Tuple<DBOfficer, DBOfficer>(officer, pair[i]);
+                        }
+                        else //if oldOfficer contains it
+                        {
+                            pairing = new Tuple<DBOfficer, DBOfficer>(pair[i], officer);
+                        }
+                        Officers.Add(pairing);
+                        isPaired = true;
+                        pairedIds.AddRange(new int[] { officer.IdOfficer, pair[i].IdOfficer });
+                    }
+                }
+                if (isPaired == false)
+                {
+                    if (NewOfficers.Contains(officer))
+                    {
+                        pairing = new Tuple<DBOfficer?, DBOfficer?>(null, officer);
+                    }
+                    else //if oldOfficer contains it
+                    {
+                        pairing = new Tuple<DBOfficer?, DBOfficer?>(officer, new DBOfficer());
+                    }
+                    Officers.Add(pairing);
+                    pairedIds.Add(officer.IdOfficer);
+                } 
+            }
+        }
     }
 }

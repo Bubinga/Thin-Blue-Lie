@@ -36,7 +36,16 @@ a, .btn-link {
     transform: translate(-50%, -50%);
 }
 
+del, .deleted-li {
+    text-decoration: line-through;
+    background-color: #fbb;
+   /* color: #555;*/
+}
 
+ins, .inserted-li {
+    text-decoration: none;
+    background-color: #d4fcbc;
+}
 
 @media (min-width: 25em) {
 
