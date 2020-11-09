@@ -36,13 +36,13 @@ a, .btn-link {
     transform: translate(-50%, -50%);
 }
 
-del, .deleted-li {
+del, .deleted-li, .deleted-item {
     text-decoration: line-through;
     background-color: #fbb;
    /* color: #555;*/
 }
 
-ins, .inserted-li {
+ins, .inserted-li, .inserted-item {
     text-decoration: none;
     background-color: #d4fcbc;
 }

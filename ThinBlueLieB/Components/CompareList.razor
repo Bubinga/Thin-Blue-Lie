@@ -5,9 +5,9 @@
 {
     @foreach (Enum flag in Enum.GetValues(typeof(TEnum)))
     {
-        if (((Enum)Enum.ToObject(typeof(TEnum), Old)).HasFlag(flag))
+        if (Old != null && ((Enum)Enum.ToObject(typeof(TEnum), Old)).HasFlag(flag))
         {
-            if (((Enum)Enum.ToObject(typeof(TEnum), New)).HasFlag(flag))
+            if (New != null && ((Enum)Enum.ToObject(typeof(TEnum), New)).HasFlag(flag))
             {
                 <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
             }
@@ -23,9 +23,9 @@ else
 {
     @foreach (Enum flag in Enum.GetValues(typeof(TEnum)))
     {
-        if (((Enum)Enum.ToObject(typeof(TEnum), New)).HasFlag(flag))
+        if (New != null && ((Enum)Enum.ToObject(typeof(TEnum), New)).HasFlag(flag))
         {
-            if (((Enum)Enum.ToObject(typeof(TEnum), Old)).HasFlag(flag))
+            if (Old != null && ((Enum)Enum.ToObject(typeof(TEnum), Old)).HasFlag(flag))
             {
                 <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
             }
@@ -41,7 +41,7 @@ else
     public bool IsOriginal { get; set; }
 
     [Parameter]
-    public int Old { get; set; }
+    public int? Old { get; set; }
     [Parameter]
-    public int New { get; set; }
+    public int? New { get; set; }
 }

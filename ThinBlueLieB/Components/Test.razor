@@ -32,8 +32,8 @@
             </CascadingValue>
         </div>*@
     </div>
-    <div class="row">
-        <CompareOfficer Model="Officerdiff" NewOfficers="newOfficers" OldOfficers="oldOfficers"></CompareOfficer>
+    <div class="container-fluid d-inline-block">
+        <CompareOfficers NewOfficers="newOfficers" OldOfficers="oldOfficers"></CompareOfficers>
     </div>
 </div>
 
@@ -44,38 +44,19 @@
         officer.Race = TimelineinfoEnums.RaceEnum.Native;
         officer.Misconduct = new int[] { };
 
-        foreach (var officer in oldOfficers.Union(newOfficers))
-        {
-            try{
-                //try to compare officers with the same idOfficer and build a model off of that
-                Officerdiff.Add(sideBySide.BuildDiffModel(officer.Name, newOfficers.Where(o => o.IdOfficer == officer.IdOfficer).First().Name));
-            }
-            catch (Exception){
-                Officerdiff.Add(new SideBySideDiffModel());
-            }
-        }
-        foreach (var subject in oldSubjects)
-        {
-            try{
-                //try to compare officers with the same idOfficer and build a model off of that
-                Subjectdiff.Add(sideBySide.BuildDiffModel(subject.Name, newSubjects.Where(o => o.IdSubject == subject.IdSubject).First().Name));
-            }
-            catch (Exception){
-                Subjectdiff.Add(new SideBySideDiffModel());
-            }
-        }
+
     }
     List<DBOfficer> oldOfficers = new List<DBOfficer>
     {
-        //new DBOfficer{
-        //IdOfficer = 1,
-        //Name = "Man Smith",
-        //Age = 59,
-        //Race = TimelineinfoEnums.RaceEnum.White,
-        //Sex = TimelineinfoEnums.SexEnum.Unclear,
-        //Misconduct = 174,
-        //Weapon = 39
-        //},
+        new DBOfficer{
+        IdOfficer = 1,
+        Name = "Man Smith",
+        Age = 59,
+        Race = TimelineinfoEnums.RaceEnum.White,
+        Sex = TimelineinfoEnums.SexEnum.Unclear,
+        Misconduct = 174,
+        Weapon = 39
+        },
         new DBOfficer{
         IdOfficer = 2,
         Name = "John Aladda",
@@ -88,15 +69,15 @@
     };
     List<DBOfficer> newOfficers = new List<DBOfficer>
     {
-        //new DBOfficer{
-        //IdOfficer = 3,
-        //Name = "Dude Man",
-        //Age = 19,
-        //Race = TimelineinfoEnums.RaceEnum.White,
-        //Sex = TimelineinfoEnums.SexEnum.Unclear,
-        //Misconduct = 84,
-        //Weapon = 16
-        //},
+        new DBOfficer{
+        IdOfficer = 3,
+        Name = "Dude Man",
+        Age = 19,
+        Race = TimelineinfoEnums.RaceEnum.White,
+        Sex = TimelineinfoEnums.SexEnum.Unclear,
+        Misconduct = 84,
+        Weapon = 16
+        },
         new DBOfficer{
         IdOfficer = 2,
         Name = "Jonathan Aledda",
@@ -127,7 +108,7 @@
         Armed = false
         }
     };
-    private List<SideBySideDiffModel> Officerdiff = new List<SideBySideDiffModel>();
+    private List<SideBySideDiffModel?> Officerdiff = new List<SideBySideDiffModel?>();
     private List<SideBySideDiffModel> Subjectdiff = new List<SideBySideDiffModel>();
 
     public IEnumerable<string> Races = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.RaceEnum>();

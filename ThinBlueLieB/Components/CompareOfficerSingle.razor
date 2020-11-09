@@ -1,0 +1,122 @@
+﻿@using DiffPlex.DiffBuilder.Model;
+@using DiffPlex.DiffBuilder;
+@using ThinBlueLieB.Helper.Extensions
+@using static ThinBlueLieB.Helper.Extensions.StringExtensions
+@using static DataAccessLibrary.Enums.TimelineinfoEnums;
+
+<div class="row">
+    <div class="col-6 px-4 @((OfficerPair.Item1 != null && OfficerPair.Item2 == null)? "deleted-item" : "")">
+        @if (OfficerPair.Item1 != null)
+        {
+            <p>
+                @if (Model != null)
+                {
+                    <CompareLine Model="Model.OldText.Lines.FirstOrDefault()"></CompareLine>
+                }
+                else
+                {
+                    @(OfficerPair.Item1.Name != null? OfficerPair.Item1.Name : "Unnamed")
+                }
+            </p>
+            @if (OfficerPair.Item2 != null)
+            {
+                <span>
+                    @((MarkupString)(GetComparePersonSummary(
+                    new CommonPerson { Age = (int)OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
+                    new CommonPerson { Age = (int)OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
+                    true
+                    )))
+                </span>
+            }
+            else
+            {
+                <span>
+                    @((MarkupString)(GetComparePersonSummary(
+                    new CommonPerson { Age = (int)OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
+                    new CommonPerson { Age = (int)OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
+                    true
+                    )))
+                </span>
+            }
+
+            <label class="d-block font-weight-bold mt-1">
+                Misconduct(s)
+            </label>
+            <CompareList IsOriginal="true" TEnum="TimelineinfoEnums.MisconductEnum" New="OfficerPair.Item2 != null? OfficerPair.Item2.Misconduct : (int?)null" Old="OfficerPair.Item1 != null? OfficerPair.Item1.Misconduct : (int?)null"></CompareList>
+            <label class="d-block font-weight-bold mt-1">
+                Weapon(s)
+            </label>
+            @if ((OfficerPair.Item2 != null && OfficerPair.Item2.Weapon != 0) || OfficerPair.Item1.Weapon != 0)
+            {
+                <ul>
+                    <CompareList IsOriginal="true" TEnum="TimelineinfoEnums.WeaponEnum" New="OfficerPair.Item2 != null? OfficerPair.Item2.Weapon : (int?)null" Old="OfficerPair.Item1.Weapon"></CompareList>
+                </ul>
+            }
+            else
+            {
+                <span>There are no recorded Weapons</span>
+            }
+        }
+    </div>
+    <div class="col-6 px-4  @((OfficerPair.Item2 != null && OfficerPair.Item1 == null)? "inserted-item" : "")">
+        @if (OfficerPair.Item2 != null)
+        {
+            <p>
+                @if (Model != null)
+                {
+                    <CompareLine Model="Model.NewText.Lines.FirstOrDefault()"></CompareLine>
+                }
+                else
+                {
+                    @(OfficerPair.Item2.Name != null? OfficerPair.Item2.Name : "Unnamed")
+                }
+            </p>
+            @if (OfficerPair.Item1 != null)
+            {
+                <span>
+                    @((MarkupString)(GetComparePersonSummary(
+                    new CommonPerson { Age = (int)OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
+                    new CommonPerson { Age = (int)OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
+                    false
+                    )))
+                </span>
+            }
+            else
+            {
+                <span>
+                    @((MarkupString)(GetComparePersonSummary(
+                    new CommonPerson { Age = (int)OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
+                    new CommonPerson { Age = (int)OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
+                    false
+                    )))
+                </span>
+            }
+
+            <label class="d-block font-weight-bold mt-1">
+                Misconduct(s)
+            </label>
+            <CompareList IsOriginal="false" TEnum="TimelineinfoEnums.MisconductEnum" New="OfficerPair.Item2 != null? OfficerPair.Item2.Misconduct : (int?)null" Old="OfficerPair.Item1 != null? OfficerPair.Item1.Misconduct : (int?)null"></CompareList>
+            <label class="d-block font-weight-bold mt-1">
+                Weapon(s)
+            </label>
+            @if ((OfficerPair.Item1 != null && OfficerPair.Item1.Weapon != 0) || OfficerPair.Item2.Weapon != 0)
+            {
+                <ul>
+                    <CompareList IsOriginal="false" TEnum="TimelineinfoEnums.WeaponEnum" New="OfficerPair.Item2.Weapon" Old="OfficerPair.Item1 != null? OfficerPair.Item1.Weapon : (int?)null"></CompareList>
+                </ul>
+            }
+            else
+            {
+                <span>There are no recorded weapons</span>
+            }
+        }
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public Tuple<DBOfficer, DBOfficer> OfficerPair { get; set; }
+    [Parameter]
+    public SideBySideDiffModel? Model { get; set; }
+}
