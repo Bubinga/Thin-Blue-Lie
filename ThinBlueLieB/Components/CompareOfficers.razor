@@ -1,0 +1,94 @@
+﻿@using DiffPlex.DiffBuilder;
+@using DiffPlex.DiffBuilder.Model;
+@using ThinBlueLieB.Helper.Extensions 
+@using static ThinBlueLieB.Helper.Extensions.StringExtensions 
+@using static DataAccessLibrary.Enums.TimelineinfoEnums; 
+@using AutoMapper
+@inject IJSRuntime JSRuntime
+@inject ISideBySideDiffBuilder sideBySide
+@inject IMapper mapper
+
+@if (Done == false)
+{
+    <h6>Loading...</h6>
+}
+else
+{
+<div class="d-block">
+    <h5 class="border-bottom">Officer's information</h5>
+    @foreach ((var officerPair, Int32 i) in Officers.Select((officer, i) => (officer, i)))
+    {
+        <CompareOfficerSingle Model="Officerdiff[i]" OfficerPair="officerPair"></CompareOfficerSingle>
+    }
+</div>
+}
+
+@code {
+    [Parameter]
+    public List<Tuple<DBOfficer, DBOfficer>> Officers { get; set; }
+    [Parameter]
+    public List<DBOfficer> OldOfficers { get; set; }
+    [Parameter]
+    public List<DBOfficer> NewOfficers { get; set; }
+    List<bool> boolValues = new List<bool> { true, false };
+    bool Done = false;
+    private List<SideBySideDiffModel?> Officerdiff = new List<SideBySideDiffModel?>();
+
+    protected override void OnParametersSet()
+    {
+        Officers = new List<Tuple<DBOfficer, DBOfficer>>();
+        List<int> pairedIds = new List<int>();
+
+        foreach (var officer in NewOfficers.Union(OldOfficers))
+        {
+            if (!pairedIds.Contains(officer.IdOfficer))
+            {
+                List<DBOfficer> pair = NewOfficers.Union(OldOfficers).Where(o => o.IdOfficer == officer.IdOfficer).ToList();
+                bool isPaired = false;
+                Tuple<DBOfficer, DBOfficer> pairing;
+                for (int i = 0; i < pair.Count; i++)
+                {
+                    if (pair[i] != officer)
+                    {
+                        if (NewOfficers.Contains(pair[i]))
+                        {
+                            pairing = new Tuple<DBOfficer, DBOfficer>(officer, pair[i]);
+                        }
+                        else //if oldOfficer contains it
+                        {
+                            pairing = new Tuple<DBOfficer, DBOfficer>(pair[i], officer);
+                        }
+                        Officers.Add(pairing);
+                        isPaired = true;
+                        pairedIds.AddRange(new int[] { officer.IdOfficer, pair[i].IdOfficer });
+                    }
+                }
+                if (isPaired == false)
+                {
+                    if (NewOfficers.Contains(officer))
+                    {
+                        pairing = new Tuple<DBOfficer?, DBOfficer?>(null, officer);
+                    }
+                    else //if oldOfficer contains it
+                    {
+                        pairing = new Tuple<DBOfficer?, DBOfficer?>(officer, null);
+                    }
+                    Officers.Add(pairing);
+                    pairedIds.Add(officer.IdOfficer);
+                }
+            }
+        }
+        foreach (var pairing in Officers)
+        {
+            try{
+                //try to compare officers with the same idOfficer and build a model off of that
+                Officerdiff.Add(sideBySide.BuildDiffModel(pairing.Item1.Name, pairing.Item2.Name));
+            }
+            catch (Exception)
+            {
+                Officerdiff.Add(null);
+            }
+        }
+        Done = true;
+    }
+}
