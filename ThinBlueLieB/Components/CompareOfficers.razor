@@ -1,12 +1,6 @@
 ﻿@using DiffPlex.DiffBuilder;
 @using DiffPlex.DiffBuilder.Model;
-@using ThinBlueLieB.Helper.Extensions 
-@using static ThinBlueLieB.Helper.Extensions.StringExtensions 
-@using static DataAccessLibrary.Enums.TimelineinfoEnums; 
-@using AutoMapper
-@inject IJSRuntime JSRuntime
 @inject ISideBySideDiffBuilder sideBySide
-@inject IMapper mapper
 
 @if (Done == false)
 {
@@ -15,7 +9,7 @@
 else
 {
 <div class="d-block">
-    <h5 class="border-bottom">Officer's information</h5>
+    <h5 class="border-bottom">Officer@(Officers.Count > 1? "s'" : "'s") Information</h5>
     @foreach ((var officerPair, Int32 i) in Officers.Select((officer, i) => (officer, i)))
     {
         <CompareOfficerSingle Model="Officerdiff[i]" OfficerPair="officerPair"></CompareOfficerSingle>
@@ -30,7 +24,6 @@ else
     public List<DBOfficer> OldOfficers { get; set; }
     [Parameter]
     public List<DBOfficer> NewOfficers { get; set; }
-    List<bool> boolValues = new List<bool> { true, false };
     bool Done = false;
     private List<SideBySideDiffModel?> Officerdiff = new List<SideBySideDiffModel?>();
 
