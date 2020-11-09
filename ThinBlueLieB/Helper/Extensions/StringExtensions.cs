@@ -26,7 +26,30 @@ namespace ThinBlueLieB.Helper.Extensions
             return name;
         }
 
-              
+        static string ComparePersonProperties(object oldProperty, object newProperty, bool IsOriginal)
+        {
+            string summary = string.Empty;
+            if (newProperty == oldProperty)
+                summary += newProperty.ToString();
+            else
+            {
+                if (IsOriginal)
+                    summary += "<del>" + oldProperty + "</del> ";
+                else
+                    summary += "<ins>" + newProperty + "</ins> ";
+            }
+            return summary;
+        }
+
+        public static string GetComparePersonSummary(CommonPerson oldPerson, CommonPerson newPerson, bool IsOriginal)
+        {
+            string summary = string.Empty;
+            summary += ComparePersonProperties(oldPerson.Race, newPerson.Race, IsOriginal);
+            summary += ComparePersonProperties(oldPerson.Sex, newPerson.Sex, IsOriginal) + ", ";
+            summary += ComparePersonProperties(oldPerson.Age, newPerson.Age, IsOriginal) + " years old";
+            return summary;
+        }
+        
         internal static string GetPersonSummary(ViewSimilarPerson person)
         {
             var personSummary = person.Name;

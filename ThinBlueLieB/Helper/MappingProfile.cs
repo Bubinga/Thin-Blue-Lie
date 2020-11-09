@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ThinBlueLieB.Models;
 using ThinBlueLieB.ViewModels;
+using static ThinBlueLieB.Components.CompareOfficer;
 using static ThinBlueLieB.Helper.Extensions.IntExtensions;
 using static ThinBlueLieB.Models.ViewSimilar;
 
