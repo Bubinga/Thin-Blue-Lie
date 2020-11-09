@@ -1,0 +1,88 @@
+﻿@using DiffPlex.DiffBuilder;
+@using DiffPlex.DiffBuilder.Model;
+@inject ISideBySideDiffBuilder sideBySide
+
+@if (Done == false)
+{
+    <h6>Loading...</h6>
+}
+else
+{
+    <div class="d-block">
+        <h5 class="border-bottom">Subject@(Subjects.Count > 1? "s'" : "'s") Information</h5>
+        @foreach ((var subjectPair, Int32 i) in Subjects.Select((officer, i) => (officer, i)))
+        {
+            <CompareSubjectSingle Model="Subjectdiff[i]" SubjectPair="subjectPair"></CompareSubjectSingle>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<Tuple<DBSubject, DBSubject>> Subjects { get; set; }
+    [Parameter]
+    public List<DBSubject> OldSubjects { get; set; }
+    [Parameter]
+    public List<DBSubject> NewSubjects { get; set; }
+    bool Done = false;
+    private List<SideBySideDiffModel?> Subjectdiff = new List<SideBySideDiffModel?>();
+
+    protected override void OnParametersSet()
+    {
+        Subjects = new List<Tuple<DBSubject, DBSubject>>();
+        List<int> pairedIds = new List<int>();
+
+        foreach (var subject in NewSubjects.Union(OldSubjects))
+        {
+            if (!pairedIds.Contains(subject.IdSubject))
+            {
+                List<DBSubject> pair = NewSubjects.Union(OldSubjects).Where(o => o.IdSubject == subject.IdSubject).ToList();
+                bool isPaired = false;
+                Tuple<DBSubject, DBSubject> pairing;
+                for (int i = 0; i < pair.Count; i++)
+                {
+                    if (pair[i] != subject)
+                    {
+                        if (NewSubjects.Contains(pair[i]))
+                        {
+                            pairing = new Tuple<DBSubject, DBSubject>(subject, pair[i]);
+                        }
+                        else //if oldOfficer contains it
+                        {
+                            pairing = new Tuple<DBSubject, DBSubject>(pair[i], subject);
+                        }
+                        Subjects.Add(pairing);
+                        isPaired = true;
+                        pairedIds.AddRange(new int[] { subject.IdSubject, pair[i].IdSubject });
+                    }
+                }
+                if (isPaired == false)
+                {
+                    if (OldSubjects.Contains(subject))
+                    {
+                        pairing = new Tuple<DBSubject?, DBSubject?>(null, subject);
+                    }
+                    else //if oldOfficer contains it
+                    {
+                        pairing = new Tuple<DBSubject?, DBSubject?>(subject, null);
+                    }
+                    Subjects.Add(pairing);
+                    pairedIds.Add(subject.IdSubject);
+                }
+            }
+        }
+        foreach (var pairing in Subjects)
+        {
+            try
+            {
+                //try to compare officers with the same idOfficer and build a model off of that
+                Subjectdiff.Add(sideBySide.BuildDiffModel(pairing.Item1.Name, pairing.Item2.Name));
+            }
+            catch (Exception)
+            {
+                Subjectdiff.Add(null);
+            }
+        }
+        Done = true;
+    }
+}

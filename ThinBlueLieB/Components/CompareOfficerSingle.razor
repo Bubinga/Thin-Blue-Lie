@@ -4,11 +4,11 @@
 @using static ThinBlueLieB.Helper.Extensions.StringExtensions
 @using static DataAccessLibrary.Enums.TimelineinfoEnums;
 
-<div class="row">
-    <div class="col-6 px-4 @((OfficerPair.Item1 != null && OfficerPair.Item2 == null)? "deleted-item" : "")">
+<div class="row my-2 border-bottom">
+    <div class="col-6 px-4 border-right @((OfficerPair.Item1 != null && OfficerPair.Item2 == null)? "deleted-item" : "")">
         @if (OfficerPair.Item1 != null)
         {
-            <p>
+            <p class="font-weight-bold">
                 @if (Model != null)
                 {
                     <CompareLine Model="Model.OldText.Lines.FirstOrDefault()"></CompareLine>
@@ -39,12 +39,12 @@
                 </span>
             }
 
-            <label class="d-block font-weight-bold mt-1">
-                Misconduct(s)
+            <label class="d-block mt-1">
+                <u>Misconduct(s):</u>
             </label>
             <CompareList IsOriginal="true" TEnum="TimelineinfoEnums.MisconductEnum" New="OfficerPair.Item2 != null? OfficerPair.Item2.Misconduct : (int?)null" Old="OfficerPair.Item1 != null? OfficerPair.Item1.Misconduct : (int?)null"></CompareList>
-            <label class="d-block font-weight-bold mt-1">
-                Weapon(s)
+            <label class="d-block mt-1">
+                <u>Weapon(s):</u>
             </label>
             @if ((OfficerPair.Item2 != null && OfficerPair.Item2.Weapon != 0) || OfficerPair.Item1.Weapon != 0)
             {
@@ -58,10 +58,10 @@
             }
         }
     </div>
-    <div class="col-6 px-4  @((OfficerPair.Item2 != null && OfficerPair.Item1 == null)? "inserted-item" : "")">
+    <div class="col-6 px-4 border-left @((OfficerPair.Item2 != null && OfficerPair.Item1 == null)? "inserted-item" : "")">
         @if (OfficerPair.Item2 != null)
         {
-            <p>
+            <p class="font-weight-bold">
                 @if (Model != null)
                 {
                     <CompareLine Model="Model.NewText.Lines.FirstOrDefault()"></CompareLine>
@@ -92,12 +92,12 @@
                 </span>
             }
 
-            <label class="d-block font-weight-bold mt-1">
-                Misconduct(s)
+            <label class="d-block mt-1">
+                <u>Misconduct(s):</u>
             </label>
             <CompareList IsOriginal="false" TEnum="TimelineinfoEnums.MisconductEnum" New="OfficerPair.Item2 != null? OfficerPair.Item2.Misconduct : (int?)null" Old="OfficerPair.Item1 != null? OfficerPair.Item1.Misconduct : (int?)null"></CompareList>
-            <label class="d-block font-weight-bold mt-1">
-                Weapon(s)
+            <label class="d-block mt-1">
+                <u>Weapon(s):</u>
             </label>
             @if ((OfficerPair.Item1 != null && OfficerPair.Item1.Weapon != 0) || OfficerPair.Item2.Weapon != 0)
             {

@@ -22,7 +22,10 @@
         foreach (var character in Model.SubPieces)
         {
             if (character.Type == ChangeType.Imaginary) { continue; }
-
+            if (character.Type == ChangeType.Unchanged)
+            {
+                @character.Text
+            }
             if (character.Type == ChangeType.Inserted)
             {
                 <ins>

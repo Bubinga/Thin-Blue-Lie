@@ -1,0 +1,90 @@
+﻿@using DiffPlex.DiffBuilder.Model;
+@using DiffPlex.DiffBuilder;
+@using ThinBlueLieB.Helper.Extensions
+@using static ThinBlueLieB.Helper.Extensions.StringExtensions
+@using static DataAccessLibrary.Enums.TimelineinfoEnums;
+
+<div class="row">
+    <div class="col-6 px-4 @((SubjectPair.Item1 != null && SubjectPair.Item2 == null)? "deleted-item" : "")">
+        @if (SubjectPair.Item1 != null)
+        {
+            <p class="font-weight-bold">
+                @if (Model != null)
+                {
+                    <CompareLine Model="Model.OldText.Lines.FirstOrDefault()"></CompareLine>
+                }
+                else
+                {
+                    @(SubjectPair.Item1.Name != null? SubjectPair.Item1.Name : "Unnamed")
+                }
+            </p>
+            @if (SubjectPair.Item2 != null)
+            {
+                <span>
+                    @((MarkupString)(GetComparePersonSummary(
+                    new CommonPerson { Age = (int)SubjectPair.Item1.Age, Sex = SubjectPair.Item1.Sex, Race = SubjectPair.Item1.Race },
+                    new CommonPerson { Age = (int)SubjectPair.Item2.Age, Sex = SubjectPair.Item2.Sex, Race = SubjectPair.Item2.Race },
+                    true
+                    )))
+                </span>
+            }
+            else
+            {
+                <span>
+                    @((MarkupString)(GetComparePersonSummary(
+                    new CommonPerson { Age = (int)SubjectPair.Item1.Age, Sex = SubjectPair.Item1.Sex, Race = SubjectPair.Item1.Race },
+                    new CommonPerson { Age = (int)SubjectPair.Item1.Age, Sex = SubjectPair.Item1.Sex, Race = SubjectPair.Item1.Race },
+                    true
+                    )))
+                </span>
+            }
+            <p>
+                @(SubjectPair.Item1.Armed == true? "Armed" : "Unarmed")
+            </p>
+        }
+    </div>
+    <div class="col-6 px-4  @((SubjectPair.Item2 != null && SubjectPair.Item1 == null)? "inserted-item" : "")">
+        @if (SubjectPair.Item2 != null)
+        {
+            <p class="font-weight-bold">
+                @if (Model != null)
+                {
+                    <CompareLine Model="Model.NewText.Lines.FirstOrDefault()"></CompareLine>
+                }
+                else
+                {
+                    @(SubjectPair.Item2.Name != null? SubjectPair.Item2.Name : "Unnamed")
+                }
+            </p>
+            @if (SubjectPair.Item1 != null)
+            {
+                <span>
+                    @((MarkupString)(GetComparePersonSummary(
+                    new CommonPerson { Age = (int)SubjectPair.Item1.Age, Sex = SubjectPair.Item1.Sex, Race = SubjectPair.Item1.Race },
+                    new CommonPerson { Age = (int)SubjectPair.Item2.Age, Sex = SubjectPair.Item2.Sex, Race = SubjectPair.Item2.Race },
+                    false
+                    )))
+                </span>
+            }
+            else
+            {
+                <span>
+                    @((MarkupString)(GetComparePersonSummary(
+                    new CommonPerson { Age = (int)SubjectPair.Item2.Age, Sex = SubjectPair.Item2.Sex, Race = SubjectPair.Item2.Race },
+                    new CommonPerson { Age = (int)SubjectPair.Item2.Age, Sex = SubjectPair.Item2.Sex, Race = SubjectPair.Item2.Race },
+                    false
+                    )))
+                </span>
+            }
+            <p>
+                @(SubjectPair.Item2.Armed == true? "Armed" : "Unarmed")
+            </p>
+        }
+    </div>
+</div>
+@code {
+    [Parameter]
+    public Tuple<DBSubject, DBSubject> SubjectPair { get; set; }
+    [Parameter]
+    public SideBySideDiffModel? Model { get; set; }
+}
