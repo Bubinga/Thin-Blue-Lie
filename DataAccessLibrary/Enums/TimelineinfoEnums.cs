@@ -7,8 +7,8 @@ namespace DataAccessLibrary.Enums
     {      
         public enum ArmedEnum
         {
-            No, 
-            Yes
+            Unarmed, 
+            Armed
         }
 
         public enum StateEnum

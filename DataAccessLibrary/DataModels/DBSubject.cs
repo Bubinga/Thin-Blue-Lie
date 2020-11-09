@@ -9,8 +9,8 @@ namespace DataAccessLibrary.DataModels
     {
         public int IdSubject { get; set; }
         public string? Name { get; set; }
-        public TimelineinfoEnums.RaceEnum? Race { get; set; }
-        public TimelineinfoEnums.SexEnum? Sex { get; set; }
+        public TimelineinfoEnums.RaceEnum Race { get; set; }
+        public TimelineinfoEnums.SexEnum Sex { get; set; }
         public int? Age { get; set; }
         public bool Armed { get; set; }
     }

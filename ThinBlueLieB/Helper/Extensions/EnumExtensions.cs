@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using static DataAccessLibrary.Enums.TimelineinfoEnums;
 
 namespace ThinBlueLieB.Helper.Extensions
 {
@@ -52,6 +53,18 @@ namespace ThinBlueLieB.Helper.Extensions
         {
             public static IReadOnlyList<ListItem> Items { get; } = Enum.GetValues(typeof(TEnum)).Cast<TEnum>()
                             .Select(e => new ListItem() { Text = GetEnumDisplayName(e), Value = Convert.ToInt32(e) }).ToList();
+        }
+
+        public static ArmedEnum ToArmedEnum(bool boolean)
+        {
+            if (boolean)
+            {
+                return ArmedEnum.Armed;
+            }
+            else
+            {
+                return ArmedEnum.Unarmed;
+            }
         }
     }
 }
