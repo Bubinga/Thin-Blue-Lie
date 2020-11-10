@@ -36,6 +36,10 @@ a, .btn-link {
     transform: translate(-50%, -50%);
 }
 
+.imaginary-line {
+    background-color: #e8e8e8;
+}
+
 del, .deleted-li, .deleted-item {
     text-decoration: line-through;
     background-color: #fbb;

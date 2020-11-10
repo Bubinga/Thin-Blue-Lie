@@ -2,20 +2,10 @@
 
 @if (!string.IsNullOrEmpty(Model.Text))
 {
-    string spaceValue = "\u00B7";
-    string tabValue = "\u00B7\u00B7";
-
 
     if (Model.Type == ChangeType.Deleted || Model.Type == ChangeType.Inserted || Model.Type == ChangeType.Unchanged)
     {
-        if (ShowWhiteSpace)
-        {
-            @((MarkupString)Model.Text.Replace(" ", spaceValue).Replace("\t", tabValue).Trim())
-        }
-        else
-        {
-            @((MarkupString)Model.Text.Trim())
-        }
+        @((MarkupString)Model.Text.Trim())        
     }
     else if (Model.Type == ChangeType.Modified)
     {
@@ -24,18 +14,18 @@
             if (character.Type == ChangeType.Imaginary) { continue; }
             if (character.Type == ChangeType.Unchanged)
             {
-                @character.Text
+                @((MarkupString)character.Text.Trim())
             }
             if (character.Type == ChangeType.Inserted)
             {
                 <ins>
-                    @(ShowWhiteSpace ? character.Text.Replace(" ", spaceValue.ToString()).Trim() : character.Text.Trim())
+                    @((MarkupString)character.Text.Trim())
                 </ins>
             }
             else if (character.Type == ChangeType.Deleted)
             {
                 <del>
-                    @(ShowWhiteSpace ? character.Text.Replace(" ", spaceValue.ToString()).Trim() : character.Text.Trim())
+                    @((MarkupString)character.Text.Trim())
                 </del>
             }
         }
@@ -45,8 +35,5 @@
 
 
 @code {
-    [CascadingParameter(Name = "ShowWhiteSpace")]
-    bool ShowWhiteSpace { get; set; }
-
     [Parameter] public DiffPiece Model { get; set; }
 }

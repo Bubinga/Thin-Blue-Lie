@@ -33,6 +33,19 @@
         </div>*@
     </div>
     <div class="container-fluid d-inline-block">
+        <CompareContext OldContext="@left" NewContext="@right" CollapseContent="@collapsible">
+            <Header>
+                <h6 style="padding: 12px; margin: 0px;">                   
+                    <span class="badge badge-primary">@($"{context.LineModificationCount} Line Modifications")</span>
+                    <span class="badge badge-danger">@($"{context.LineDeletionCount} Line Deletions")</span>
+                    <span class="badge badge-success">@($"{context.LineAdditionCount} Line Additions")</span>
+
+                    <span class="badge badge-primary">@($"{context.WordModificationCount} Word Modifications")</span>
+                    <span class="badge badge-danger">@($"{context.WordDeletionCount} Word Deletions")</span>
+                    <span class="badge badge-success">@($"{context.WordAdditionCount} Word Additions")</span>
+                </h6>
+            </Header>
+        </CompareContext>        
         <CompareOfficers NewOfficers="newOfficers" OldOfficers="oldOfficers"></CompareOfficers>
         <CompareSubjects NewSubjects="newSubjects" OldSubjects="oldSubjects"></CompareSubjects>
     </div>
@@ -47,6 +60,26 @@
 
 
     }
+    string left = @"<div>
+                      <h1>h1 Bootstrap heading (36px)</h1>
+                      <h2>h2 Bootstrap heading (30px)</h2>
+                      <h3>h3 Bootstrap heading (24px)</h3>
+                      <h4>h4 Bootstrap heading (18px)</h4>
+                      <h5>h5 Bootstrap heading (14px)</h5>
+                      <h6>h6 Bootstrap heading (12px)</h6>
+                    </div>
+                    ";
+    string right = @"<div>
+                        <h1>h1 Bootstrap heading (36px)</h1>
+                        <h2>h2 Bootstrap heading (30px)</h2>
+                        <h3>h3 Replaced Text (24px)</h3>
+                        <h4>h4 Bootstrap heading (18px)</h4>
+                        <h5>h5 Bootstrap heading (14px)</h5>
+                        <h3>h3 Extra Text (24px)</h3>
+                        <h6>h6 Bootstrap heading (12px)</h6>
+                    </div>
+                    ";
+    bool collapsible = false;
     List<DBOfficer> oldOfficers = new List<DBOfficer>
     {
         new DBOfficer{
