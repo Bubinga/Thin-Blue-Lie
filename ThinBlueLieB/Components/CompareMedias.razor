@@ -1,5 +1,88 @@
-﻿<h3>CompareMedias</h3>
+﻿@using DiffPlex.DiffBuilder;
+@using DiffPlex.DiffBuilder.Model;
+@inject ISideBySideDiffBuilder sideBySide
+
+@if (Done == false)
+{
+    <h6>Loading...</h6>
+}
+else
+{
+<div class="d-block">
+    <h5 class="border-bottom">Media Information</h5>
+    @foreach ((var mediaPair, Int32 i) in Medias.Select((officer, i) => (officer, i)))
+    {
+        <CompareMediaSingle Model="Mediadiff[i]" Media="mediaPair"></CompareMediaSingle>
+    }
+</div>
+}
 
 @code {
+    private List<Tuple<Media, Media>> Medias { get; set; }
+    [Parameter]
+    public List<Media> OldMedias { get; set; }
+    [Parameter]
+    public List<Media> NewMedias { get; set; }
+    bool Done = false;
+    private List<SideBySideDiffModel?> Mediadiff = new List<SideBySideDiffModel?>();
 
+    //TODO this same code appears in CompareOfficers and CompareSubjects too, consolidate it into a generic method
+    protected override void OnParametersSet()
+    {
+        Medias = new List<Tuple<Media, Media>>();
+        List<int> pairedIds = new List<int>();
+
+        foreach (var Media in NewMedias.Union(OldMedias))
+        {
+            if (!pairedIds.Contains(Media.IdMedia))
+            {
+                List<Media> pair = NewMedias.Union(OldMedias).Where(o => o.IdMedia == Media.IdMedia).ToList();
+                bool isPaired = false;
+                Tuple<Media, Media> pairing;
+                for (int i = 0; i < pair.Count; i++)
+                {
+                    if (pair[i] != Media)
+                    {
+                        if (NewMedias.Contains(pair[i]))
+                        {
+                            pairing = new Tuple<Media, Media>(Media, pair[i]);
+                        }
+                        else //if oldMedia contains it
+                        {
+                            pairing = new Tuple<Media, Media>(pair[i], Media);
+                        }
+                        Medias.Add(pairing);
+                        isPaired = true;
+                        pairedIds.AddRange(new int[] { Media.IdMedia, pair[i].IdMedia });
+                    }
+                }
+                if (isPaired == false)
+                {
+                    if (NewMedias.Contains(Media))
+                    {
+                        pairing = new Tuple<Media?, Media?>(null, Media);
+                    }
+                    else //if oldMedia contains it
+                    {
+                        pairing = new Tuple<Media?, Media?>(Media, null);
+                    }
+                    Medias.Add(pairing);
+                    pairedIds.Add(Media.IdMedia);
+                }
+            }
+        }
+        foreach (var pairing in Medias)
+        {
+            try
+            {
+                //try to compare Medias with the same idMedia and build a model off of that
+                Mediadiff.Add(sideBySide.BuildDiffModel(pairing.Item1.Blurb, pairing.Item2.Blurb));
+            }
+            catch (NullReferenceException)
+            {
+                Mediadiff.Add(null);
+            }
+        }
+        Done = true;
+    }
 }

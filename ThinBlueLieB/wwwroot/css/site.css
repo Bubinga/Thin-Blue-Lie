@@ -50,7 +50,9 @@ ins, .inserted-li, .inserted-item {
     text-decoration: none;
     background-color: #d4fcbc;
 }
-
+.information span {
+    display: block;
+}
 @media (min-width: 25em) {
 
     /* html, body {
