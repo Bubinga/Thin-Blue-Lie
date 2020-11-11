@@ -9,6 +9,6 @@ namespace ThinBlueLieB.ViewModels
         public Timelineinfo Data { get; set; }
         public List<ViewOfficer> Officers { get; set; }
         public List<ViewSubject> Subjects { get; set; }
-        public List<DisplayMedia> Medias { get; set; }
+        public List<Media> Medias { get; set; }
     }
 }
