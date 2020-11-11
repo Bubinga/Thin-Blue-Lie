@@ -39,7 +39,16 @@
                 </span>
             }
             <p>
-                @(SubjectPair.Item1.Armed == true? "Armed" : "Unarmed")
+                @if (SubjectPair.Item2 != null ? SubjectPair.Item2.Armed == SubjectPair.Item1.Armed : false)
+                {                  
+                        @(SubjectPair.Item1.Armed == true? "Armed" : "Unarmed")                    
+                }
+                else
+                {
+                    <ins>
+                        @(SubjectPair.Item1.Armed == true? "Armed" : "Unarmed")
+                    </ins>
+                }
             </p>
         }
     </div>
@@ -77,7 +86,16 @@
                 </span>
             }
             <p>
-                @(SubjectPair.Item2.Armed == true? "Armed" : "Unarmed")
+               @if (SubjectPair.Item1 != null ? SubjectPair.Item1.Armed == SubjectPair.Item2.Armed : false)
+                {
+                        @(SubjectPair.Item2.Armed == true? "Armed" : "Unarmed")
+                }
+                else
+                {
+                    <ins>
+                        @(SubjectPair.Item2.Armed == true? "Armed" : "Unarmed")
+                    </ins>
+                }
             </p>
         }
     </div>

@@ -48,6 +48,7 @@
         </CompareContext>        
         <CompareOfficers NewOfficers="newOfficers" OldOfficers="oldOfficers"></CompareOfficers>
         <CompareSubjects NewSubjects="newSubjects" OldSubjects="oldSubjects"></CompareSubjects>
+        <CompareMediaSingle Media="new Tuple<EditMedia, EditMedia>(OldMedia, NewMedia)"></CompareMediaSingle>
     </div>
 </div>
 
@@ -58,6 +59,7 @@
         officer.Race = TimelineinfoEnums.RaceEnum.Native;
         officer.Misconduct = new int[] { };
 
+        //pair up and deal with media actions here
 
     }
     string left = @"<div>
@@ -73,7 +75,7 @@
                         <h1>h1 Bootstrap heading (36px)</h1>
                         <h2>h2 Bootstrap heading (30px)</h2>
                         <h3>h3 Replaced Text (24px)</h3>
-                        <h4>h4 Bootstrap heading (18px)</h4>
+                        <h4 style=""color:red;"">h4 Bootstrap heading (18px)</h4>
                         <h5>h5 Bootstrap heading (14px)</h5>
                         <h3>h3 Extra Text (24px)</h3>
                         <h6>h6 Bootstrap heading (12px)</h6>
@@ -142,8 +144,34 @@
         Armed = false
         }
     };
-    private List<SideBySideDiffModel?> Officerdiff = new List<SideBySideDiffModel?>();
-    private List<SideBySideDiffModel> Subjectdiff = new List<SideBySideDiffModel>();
+    EditMedia OldMedia = new EditMedia
+    {
+        IdEditMedia = 1,
+        IdEditHistory = 1,
+        IdTimelineinfo = 1,
+        Rank = 0,
+        MediaType = 1,
+        SourcePath = @"https://dynaimage.cdn.cnn.com/cnn/c_fill,g_auto,w_1200,h_675,ar_16:9/https%3A%2F%2Fcdn.cnn.com%2Fcnnnext%2Fdam%2Fassets%2F200605073632-01-buffalo-elderly-man-shoved.jpg",
+        Gore = 0,
+        SourceFrom = 5,
+        Blurb = "Martin Gugino is shoved by two officers",
+        Credit = "CNN",
+        Action = 0
+    };
+    EditMedia NewMedia = new EditMedia
+    {
+        IdEditMedia = 1,
+        IdEditHistory = 1,
+        IdTimelineinfo = 1,
+        Rank = 0,
+        MediaType = 1,
+        SourcePath = @"https://dynaimage.cdn.cnn.com/cnn/c_fill,g_auto,w_1200,h_675,ar_16:9/https%3A%2F%2Fcdn.cnn.com%2Fcnnnext%2Fdam%2Fassets%2F200605073632-01-buffalo-elderly-man-shoved.jpg",
+        Gore = 0,
+        SourceFrom = 5,
+        Blurb = "Martin Gugino is shoved by two officers",
+        Credit = "CNN",
+        Action = 0
+    };
 
     public IEnumerable<string> Races = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.RaceEnum>();
 }
