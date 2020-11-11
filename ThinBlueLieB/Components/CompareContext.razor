@@ -1,6 +1,5 @@
 ﻿@using AngleSharp.Html.Parser
 @using AngleSharp.Html
-@using HtmlAgilityPack 
 @using System.IO
 @using DiffPlex.DiffBuilder;
 @using DiffPlex.DiffBuilder.Model;
@@ -51,7 +50,6 @@
     private ElementReference pane;
     private int paneHeight;
 
-    string Html;
     string PrettifyHtmlString(string html)
     {
         var parser = new HtmlParser();

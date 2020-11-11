@@ -73,13 +73,13 @@ else
     <div class="swiper-wrapper hytPlayerWrapOuter">
         @foreach (var media in Media)
         {
-            if (media.MediaType == MediaEnums.MediaTypeEnum.Video)
+            if ((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Video)
             {
                 <div class="swiper-slide hytPlayerWrap">
                     <iframe src="@LinkConverter.GetLinkFromData(media, true)"frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             }
-            else if ((media.MediaType == MediaEnums.MediaTypeEnum.Image))
+            else if (((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Image))
             {
                 <div class="swiper-slide" style="
                    background-image: url(@LinkConverter.GetLinkFromData(media);">
@@ -95,14 +95,14 @@ else
     <div class="swiper-wrapper">        
         @foreach (var media in Media)
         {
-            if (media.MediaType == MediaEnums.MediaTypeEnum.Video)
+            if ((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Video)
             {
                 <div class="swiper-slide video"
                      style="background-image: url(@LinkConverter.GetLinkFromData(media)) ">
                     <img class="play-button" alt="play button overlay" src="/Assets/Play-Button.png" href="#" />
                 </div>
             }
-            else if((media.MediaType == MediaEnums.MediaTypeEnum.Image))
+            else if(((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Image))
             {
                 <div class="swiper-slide" style="
                    background-image: url(@LinkConverter.GetLinkFromData(media);">
@@ -115,7 +115,7 @@ else
 
 @code {
     [Parameter]
-    public List<DisplayMedia>? Media { get; set; }
+    public List<Media>? Media { get; set; }
 
     protected override void OnInitialized()
     {

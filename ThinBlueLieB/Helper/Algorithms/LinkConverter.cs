@@ -1,4 +1,5 @@
-﻿using DataAccessLibrary.Enums;
+﻿using DataAccessLibrary.DataModels;
+using DataAccessLibrary.Enums;
 using Syncfusion.Blazor.Gantt;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,11 @@ namespace ThinBlueLieB.Helper.Algorithms
 {
     public class LinkConverter
     {
-        public static string GetLinkFromData(DisplayMedia media, bool video = false)
+        public static string GetLinkFromData(Media media, bool video = false)
         {
-            if (media.MediaType == MediaEnums.MediaTypeEnum.Video)
+            if ((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Video)
             {
-                if (media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
+                if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
                 {
                     if (video)
                     {
@@ -31,14 +32,14 @@ namespace ThinBlueLieB.Helper.Algorithms
                 // image: https://i.redd.it/0u3pdpo3zgv51.jpg
                 //Add support for other sourcefroms
             }
-            if (media.MediaType == MediaEnums.MediaTypeEnum.Image)
+            if ((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Image)
             {
-                if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+                if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Device)
                 {
                     var path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + media.SourcePath;
                     return path;
                 }
-                else if (media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
+                else if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
                 {
                     var path = $"https://i.redd.it/{media.SourcePath}.jpg";
                     return path;
