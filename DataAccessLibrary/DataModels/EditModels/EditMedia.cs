@@ -13,6 +13,7 @@ namespace DataAccessLibrary.DataModels
         public int IdEditMedia { get; set; }
         public int IdEditHistory { get; set; }
         public int IdTimelineinfo { get; set; }
+        public int IdMedia { get; set; }
         public short Rank { get; set; }
         public byte MediaType { get; set; }
         [Required]
