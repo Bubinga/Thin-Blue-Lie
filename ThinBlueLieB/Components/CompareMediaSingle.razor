@@ -1,0 +1,112 @@
+﻿@using DiffPlex.DiffBuilder.Model;
+@using static DataAccessLibrary.Enums.MediaEnums
+@using static ThinBlueLieB.Helper.Algorithms.LinkConverter 
+@inject AutoMapper.IMapper mapper 
+<style>
+    .information span {
+        display: block;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+</style>
+<div class="row">
+    <div class="col-6 @(Media.Item1 == null && Media.Item2 != null? "imaginary-item" : "") @(Media.Item1 != null && Media.Item2 == null? "deleted-item" : "")">
+        @if (Media.Item1 != null)
+        {
+            <div class="row">
+                <div class="col-5 information">
+                    @if (Model != null)
+                    {
+                        <CompareLine Model="Model.OldText.Lines.FirstOrDefault()"></CompareLine>
+                    }
+                    else
+                    {
+                       @Media.Item1.Blurb
+                    }
+                    <div class="pl-4">
+                        <span><b>Credit:</b> @SimpleCompare(Media.Item1.Credit, Media.Item2?.Credit, true)</span>
+                        <span>
+                            <b>Source:</b>
+                            @if (Media.Item1.SourceFrom != (byte)SourceFromEnum.Device)
+                            {
+                                <a href="@Media.Item1.SourcePath">External Link</a>
+                            }
+                            else
+                            {
+                                 <a href="@(@"/Uploads/" + Media.Item1.SourcePath)">Internal Link</a>
+                            }
+                        </span>
+                        <span><b>Source Type:</b>@SimpleCompare(((SourceFromEnum)Media.Item1.SourceFrom).ToString(), ((SourceFromEnum)Media.Item2?.SourceFrom).ToString(), true)</span>
+                        <span><b>Gore:</b> @SimpleCompare(Media.Item1.Gore == 1? "Yes" : "No", Media.Item2?.Gore == 1 ? "Yes" : "No", true)</span>
+                        <span><b>Rank:</b> @SimpleCompare(Media.Item1.Rank.ToString(), Media.Item2?.Rank.ToString(),true)</span>
+                    </div>
+                </div>
+                <div class="col-7">
+                    @* If the link between the two is different, one side is null *@
+                    <img src="@GetLinkFromData(displayMedia)">
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-6 @(Media.Item2 == null && Media.Item1 != null? "imaginary-item" : "") @(Media.Item1 == null && Media.Item2 != null? "inserted-item" : "")">
+        <div class="row">
+            <div class="col-5 information">
+                <h6>
+                    Martin Gugino being pushed to the ground by officers Aaron Torgalski and Robert McCabe
+                </h6>
+                <div class="pl-4">
+                    <span><b>Credit:</b> MSNBC</span>
+                    <span><b>Source:</b> <a href="https://blazor.syncfusion.com/demos/card/horizontal-card?theme=bootstrap4">here</a></span>
+                    <span><b>Source Type:</b> News Website</span>
+                    <span><b>Gore:</b> No</span>
+                    <span><b>Rank:</b> 4</span>
+                </div>
+            </div>
+            <div class="col-7">
+                <img src="https://dynaimage.cdn.cnn.com/cnn/c_fill,g_auto,w_1200,h_675,ar_16:9/https%3A%2F%2Fcdn.cnn.com%2Fcnnnext%2Fdam%2Fassets%2F200605073632-01-buffalo-elderly-man-shoved.jpg">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public Tuple<EditMedia, EditMedia> Media { get; set; }
+
+    [Parameter]
+    public SideBySideDiffModel? Model { get; set; }
+    DisplayMedia displayMedia;
+    protected override void OnParametersSet()
+    {
+        if (Media.Item1 != null)
+        {
+            displayMedia = mapper.Map<EditMedia, DisplayMedia>(Media.Item1);
+        }
+        else
+        {
+            displayMedia = mapper.Map<EditMedia, DisplayMedia>(Media.Item2);
+        }
+    }
+
+    static string SimpleCompare(string? Old, string? New, bool IsOriginal)
+    {
+        if (Old == New)
+        {
+            return Old;
+        }
+        else
+        {
+            if (IsOriginal)
+            {
+                return "<del>" + Old + "</del>";
+            }
+            else
+            {
+                return "<ins>" + New + "</ins>";
+            }
+        }
+    }
+}
