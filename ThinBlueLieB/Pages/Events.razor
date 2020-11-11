@@ -87,7 +87,7 @@
                         <strong>News Articles</strong>
                      </h4>
                 </div>
-                @foreach (var newsItem in Case.Medias.Where(m => m.MediaType == MediaEnums.MediaTypeEnum.News))
+                @foreach (var newsItem in Case.Medias.Where(m => (MediaEnums.MediaTypeEnum)m.MediaType == MediaEnums.MediaTypeEnum.News))
                 {
                     <NewsCard newsUrl="@newsItem.SourcePath"></NewsCard>
                 }
@@ -192,7 +192,7 @@
                     "WHERE t.IdTimelineinfo = @id;";
 
             //get media, officers, and subjects using timelineinfo id
-            List<DisplayMedia> media = await data.LoadData<DisplayMedia, dynamic>(mediaQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
+            List<Media> media = await data.LoadData<Media, dynamic>(mediaQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
             List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
             List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
 

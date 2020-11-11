@@ -74,7 +74,7 @@ namespace ThinBlueLieB.Searches
                         "WHERE t.IdTimelineinfo = @id;";
 
                 //get media, officers, and subjects using timelineinfo id
-                List<DisplayMedia> media = await data.LoadData<DisplayMedia, dynamic>(mediaQuery, new { id = id }, GetConnectionString());
+                List<Media> media = await data.LoadData<Media, dynamic>(mediaQuery, new { id = id }, GetConnectionString());
                 List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = id }, GetConnectionString());
                 List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = id }, GetConnectionString());
 

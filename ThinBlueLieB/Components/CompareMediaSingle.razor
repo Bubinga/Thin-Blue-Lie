@@ -6,11 +6,6 @@
     .information span {
         display: block;
     }
-
-    img {
-        width: 100%;
-        height: auto;
-    }
 </style>
 <div class="row">
     <div class="col-6 @(Media.Item1 == null && Media.Item2 != null? "imaginary-item" : "") @(Media.Item1 != null && Media.Item2 == null? "deleted-item" : "")">
@@ -46,7 +41,7 @@
                 </div>
                 <div class="col-7">
                     @* If the link between the two is different, one side is null *@
-                    <img src="@GetLinkFromData(displayMedia)">
+                    <img class="img-fluid rounded" src="@GetLinkFromData(displayMedia)">
                 </div>
             </div>
         }
@@ -78,16 +73,16 @@
 
     [Parameter]
     public SideBySideDiffModel? Model { get; set; }
-    DisplayMedia displayMedia;
+    Media displayMedia;
     protected override void OnParametersSet()
     {
         if (Media.Item1 != null)
         {
-            displayMedia = mapper.Map<EditMedia, DisplayMedia>(Media.Item1);
+            displayMedia = mapper.Map<EditMedia, Media>(Media.Item1);
         }
         else
         {
-            displayMedia = mapper.Map<EditMedia, DisplayMedia>(Media.Item2);
+            displayMedia = mapper.Map<EditMedia, Media>(Media.Item2);
         }
     }
 
