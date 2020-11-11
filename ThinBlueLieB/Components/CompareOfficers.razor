@@ -17,9 +17,8 @@ else
 </div>
 }
 
-@code {
-    [Parameter]
-    public List<Tuple<DBOfficer, DBOfficer>> Officers { get; set; }
+@code {    
+    private List<Tuple<DBOfficer, DBOfficer>> Officers { get; set; }
     [Parameter]
     public List<DBOfficer> OldOfficers { get; set; }
     [Parameter]
@@ -77,7 +76,7 @@ else
                 //try to compare officers with the same idOfficer and build a model off of that
                 Officerdiff.Add(sideBySide.BuildDiffModel(pairing.Item1.Name, pairing.Item2.Name));
             }
-            catch (Exception)
+            catch (NullReferenceException)
             {
                 Officerdiff.Add(null);
             }
