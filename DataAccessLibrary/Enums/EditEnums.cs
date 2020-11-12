@@ -4,9 +4,9 @@ using System.Text;
 
 namespace DataAccessLibrary.Enums
 {
-    class EditEnums
+    public class EditEnums
     {
-        public enum Actions
+        public enum MediaActions
         {
             Addition,
             Update,

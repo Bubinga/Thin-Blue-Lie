@@ -28,10 +28,10 @@
                             }
                             else
                             {
-                                <a href="@(@"/Uploads/" + Media.Item1.SourcePath)"> Internal Link</a>
+                                <a href="@GetLinkFromData(Media.Item1)"> Internal Link</a>
                             }
                         </span>
-                        <span><b>Source Type:</b> @((MarkupString)SimpleCompare(GetEnumDisplayName((SourceFromEnum)Media.Item1.SourceFrom), GetEnumDisplayName((SourceFromEnum)Media.Item2?.SourceFrom), true))</span>
+                        <span><b>Source Type:</b> @((MarkupString)SimpleCompare(GetEnumDisplayName((SourceFromEnum)Media.Item1.SourceFrom), Media.Item2 != null ? GetEnumDisplayName((SourceFromEnum)Media.Item2?.SourceFrom) : null, true))</span>
                         <span><b>Gore:</b> @((MarkupString)SimpleCompare(Media.Item1.Gore == 1 ? "Yes" : "No", Media.Item2?.Gore == 1 ? "Yes" : "No", true))</span>
                         <span><b>Rank:</b> @((MarkupString)SimpleCompare(Media.Item1.Rank.ToString(), Media.Item2?.Rank.ToString(), true))</span>
                     </div>
@@ -58,7 +58,7 @@
                         @Media.Item2.Blurb
                     }
                     <div class="pl-4">
-                        <span><b>Credit:</b> @((MarkupString)SimpleCompare(Media.Item1.Credit, Media.Item2?.Credit, false))</span>
+                        <span><b>Credit:</b> @((MarkupString)SimpleCompare(Media.Item1?.Credit, Media.Item2.Credit, false))</span>
                         <span>
                             <b>Source:</b>
                             @if (Media.Item2.SourceFrom != (byte)SourceFromEnum.Device)
@@ -67,12 +67,12 @@
                             }
                             else
                             {
-                                <a href="@(@"/Uploads/" + Media.Item2.SourcePath)"> Internal Link</a>
+                                <a href="@GetLinkFromData(Media.Item2)"> Internal Link</a>
                             }
                         </span>
-                        <span><b>Source Type:</b> @((MarkupString)SimpleCompare(GetEnumDisplayName((SourceFromEnum)Media.Item1.SourceFrom), GetEnumDisplayName((SourceFromEnum)Media.Item2?.SourceFrom), false))</span>
-                        <span><b>Gore:</b> @((MarkupString)SimpleCompare(Media.Item1.Gore == 1 ? "Yes" : "No", Media.Item2?.Gore == 1 ? "Yes" : "No", false))</span>
-                        <span><b>Rank:</b> @((MarkupString)SimpleCompare(Media.Item1.Rank.ToString(), Media.Item2?.Rank.ToString(), false))</span>
+                        <span><b>Source Type:</b> @((MarkupString)SimpleCompare(Media.Item1 != null?GetEnumDisplayName((SourceFromEnum)Media.Item1?.SourceFrom) : null, GetEnumDisplayName((SourceFromEnum)Media.Item2.SourceFrom), false))</span>
+                        <span><b>Gore:</b> @((MarkupString)SimpleCompare(Media.Item1?.Gore == 1 ? "Yes" : "No", Media.Item2.Gore == 1 ? "Yes" : "No", false))</span>
+                        <span><b>Rank:</b> @((MarkupString)SimpleCompare(Media.Item1?.Rank.ToString(), Media.Item2.Rank.ToString(), false))</span>
                     </div>
                 </div>
                 <div class="col-7">

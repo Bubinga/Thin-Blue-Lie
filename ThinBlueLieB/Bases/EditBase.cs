@@ -32,11 +32,11 @@ namespace ThinBlueLieB.Bases
         //};
         internal uint Id;
         [Inject]
-        SignInManager<ApplicationUser> signInManager { get; set; }
+        SignInManager<ApplicationUser> SignInManager { get; set; }
         [Inject]
-        UserManager<ApplicationUser> userManager { get; set; }
+        UserManager<ApplicationUser> UserManager { get; set; }
         [Inject]
-        public IMapper mapper { get; set; }
+        public IMapper Mapper { get; set; }
 
         SubmitModel oldInfo = new SubmitModel();
   
@@ -74,9 +74,9 @@ namespace ThinBlueLieB.Bases
                     SubmittedBy = timelineinfo.Owner,
                     Verified = timelineinfo.Verified
                 };
-                var Media = mapper.Map<List<DisplayMedia>, List<ViewMedia>>(media);
-                var Officers = mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers);
-                var Subjects = mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects);
+                var Media = Mapper.Map<List<DisplayMedia>, List<ViewMedia>>(media);
+                var Officers = Mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers);
+                var Subjects = Mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects);
                 for (int i = 0; i < Media.Count; i++)
                 {
                     Media[i].ListIndex = i;
@@ -96,12 +96,12 @@ namespace ThinBlueLieB.Bases
         internal AuthenticationState userState;
         internal async void HandleValidSubmitAsync()
         {
-            var medias = mapper.Map<List<ViewMedia>, List<EditMedia>>(model.Medias);
+            var medias = Mapper.Map<List<ViewMedia>, List<EditMedia>>(model.Medias);
             DataAccess data = new DataAccess();
             //write to 
             // edits
             // editmedia
-            string userId = userManager.GetUserId(userState.User);
+            string userId = UserManager.GetUserId(userState.User);
             model.Timelineinfos.SubmittedBy = userId;
             
             var editSql = "INSERT INTO `edits` (`IdTimelineinfo`, `Date`, `State`, `City`, `Context`, `Locked`, `SubmittedBy`, `Confirmed`)" +

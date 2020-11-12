@@ -24,6 +24,10 @@ namespace ThinBlueLieB.Helper.Extensions
 
         public static string GetEnumDisplayName<T>(T value) where T : Enum
         {
+            if (value == null)
+            {
+                return string.Empty;
+            }
             string fieldName;
             DisplayAttribute displayAttr;
             try
