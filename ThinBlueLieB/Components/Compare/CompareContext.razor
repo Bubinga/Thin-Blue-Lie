@@ -73,10 +73,10 @@
     {
         //Make it tabbed nicely
         OldContext = PrettifyHtmlString(OldContext);
-        NewContext = PrettifyHtmlString(NewContext); 
+        NewContext = PrettifyHtmlString(NewContext);
         //remove first empty line
-        OldContext = OldContext.Remove(0,1);
-        NewContext = NewContext.Remove(0,1);
+        OldContext = OldContext.StartsWith("/n")?OldContext.Remove(0,1): OldContext;
+        NewContext = NewContext.StartsWith("/n") ? NewContext.Remove(0, 1) : NewContext;
         //swap out < with their ascii codes
         OldContext = OldContext.Replace("<", "&lt").Replace(">", "&gt");
         NewContext = NewContext.Replace("<", "&lt").Replace(">", "&gt");

@@ -36,7 +36,7 @@ namespace ThinBlueLieB.Helper.Algorithms
             {
                 if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Device)
                 {
-                    var path = @"C:\Programming\Projects\ThinBlueLieSolution\ThinBlueLieB\Uploads\" + media.SourcePath;
+                    var path = ConfigHelper.GetUploadsDirectory() + media.SourcePath;
                     return path;
                 }
                 else if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)

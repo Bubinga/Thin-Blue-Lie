@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataAccessLibrary.DataModels
 {
-    class EditOfficer
+    public class EditOfficer
     {
         public int IdEditOfficer { get; set; }
         public int IdEditHistory { get; set; }
@@ -13,6 +13,7 @@ namespace DataAccessLibrary.DataModels
         public string Name { get; set; }
         public byte Race { get; set; }
         public byte Sex { get; set; }
-
+        public string Image { get; set; }
+        public byte Local { get; set; }
     }
 }

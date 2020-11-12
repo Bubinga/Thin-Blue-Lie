@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataAccessLibrary.DataModels
 {
-    class EditTimelineinfoOfficer
+    public class EditTimelineinfoOfficer
     {
         public int IdEditsTimelineinfoOfficer { get; set; }
         public int IdEditHistory { get; set; }

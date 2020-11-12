@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataAccessLibrary.DataModels.EditModels
 {
-    class EditHistory
+    public class EditHistory
     {
         public int IdEditHistory { get; set; }
         public DateTime Timestamp { get; set; }
