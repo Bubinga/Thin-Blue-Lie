@@ -1,7 +1,8 @@
 ﻿@using DiffPlex.DiffBuilder.Model;
 @using static DataAccessLibrary.Enums.MediaEnums
 @using static ThinBlueLieB.Helper.Algorithms.LinkConverter
-@using static ThinBlueLieB.Helper.Extensions.EnumExtensions 
+@using static ThinBlueLieB.Helper.Extensions.EnumExtensions
+@using static ThinBlueLieB.Helper.Extensions.StringExtensions
 
 <div class="row">
     <div class="col-6 @(Media.Item1 == null && Media.Item2 != null? "imaginary-item" : "") @(Media.Item1 != null && Media.Item2 == null? "deleted-item" : "")">
@@ -98,24 +99,5 @@
         //{
         //    displayMedia = mapper.Map<EditMedia, Media>(Media.Item2);
         //}
-    }
-
-    static string SimpleCompare(string? Old, string? New, bool IsOriginal)
-    {
-        if (Old == New)
-        {
-            return Old;
-        }
-        else
-        {
-            if (IsOriginal)
-            {
-                return "<del>" + Old + "</del>";
-            }
-            else
-            {
-                return "<ins>" + New + "</ins>";
-            }
-        }
     }
 }
