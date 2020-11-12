@@ -40,7 +40,24 @@ namespace ThinBlueLieB.Helper.Extensions
             }
             return summary;
         }
-
+        public static string SimpleCompare(string? Old, string? New, bool IsOriginal)
+        {
+            if (Old == New)
+            {
+                return Old;
+            }
+            else
+            {
+                if (IsOriginal)
+                {
+                    return "<del>" + Old + "</del>";
+                }
+                else
+                {
+                    return "<ins>" + New + "</ins>";
+                }
+            }
+        }
         public static string GetComparePersonSummary(CommonPerson oldPerson, CommonPerson newPerson, bool IsOriginal)
         {
             string summary = string.Empty;
@@ -116,7 +133,7 @@ namespace ThinBlueLieB.Helper.Extensions
             }
         }
 
-        private static Random random = new Random();
+        private static readonly Random random = new Random();
         public static string RandomString(int length)
         {
             const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

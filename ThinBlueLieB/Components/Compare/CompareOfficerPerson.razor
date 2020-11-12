@@ -1,0 +1,25 @@
+﻿@inject AutoMapper.IMapper Mapper
+
+<div class="row">
+    <div class="col-6 ">
+        @* One side will only be null if displayed alone, on creation it will be displayed with the event it was created with *@
+        @if (OldOfficer != null)
+        {
+        <ComparePersonCommon IsOriginal="true" Person="Mapper.Map<Officers,CommonPerson>(OldOfficer)" OtherPerson="Mapper.Map<Officers, CommonPerson>(NewOfficer)"></ComparePersonCommon>
+        }
+    </div>
+    <div class="col-6">
+        @if (NewOfficer != null)
+        {
+            <ComparePersonCommon IsOriginal="false" Person="Mapper.Map<Officers, CommonPerson>(NewOfficer)" OtherPerson="Mapper.Map<Officers,CommonPerson>(OldOfficer)"></ComparePersonCommon>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Officers OldOfficer { get; set; }
+    [Parameter]
+    public Officers NewOfficer { get; set; }
+    
+}

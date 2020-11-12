@@ -1,0 +1,61 @@
+﻿@using ThinBlueLieB.Helper
+@using DiffPlex.DiffBuilder;
+@using DiffPlex.DiffBuilder.Model;
+@inject ISideBySideDiffBuilder sideBySide
+@using static ThinBlueLieB.Helper.Extensions.EnumExtensions
+@using static ThinBlueLieB.Helper.Extensions.StringExtensions
+@using static DataAccessLibrary.Enums.TimelineinfoEnums
+
+
+    <div class="mb-1 @(Person.Image != OtherPerson.Image? IsOriginal? "deleted-item" : "inserted-item" : "")">
+        <img class="mx-auto" src="@GetImageOfPerson(Person.Image, Person.Local == 1? true : false)" />
+    </div>
+    <hr />
+    <span class="d-md-block">
+        <b>Name:</b>
+        @if (IsOriginal)
+        {
+            <CompareLine Model="PersonDiff.OldText.Lines.FirstOrDefault()"></CompareLine>
+        }
+        else
+        {
+            <CompareLine Model="PersonDiff.NewText.Lines.FirstOrDefault()"></CompareLine>
+        }
+    </span>
+    <span class="d-md-block">
+        <b>Race:</b>  @((MarkupString)SimpleCompare(GetEnumDisplayName((RaceEnum)Person.Race), GetEnumDisplayName((RaceEnum)OtherPerson?.Race), IsOriginal))
+    </span>
+    <span class="d-md-block">
+        <b>Race:</b>  @((MarkupString)SimpleCompare(GetEnumDisplayName((SexEnum)Person.Sex), GetEnumDisplayName((SexEnum)OtherPerson?.Sex), IsOriginal))
+    </span>
+
+@code{
+    [Parameter]
+    public CommonPerson Person { get; set; }
+    [Parameter]
+    public CommonPerson OtherPerson { get; set; }
+    [Parameter]
+    public bool IsOriginal { get; set; }
+
+    private SideBySideDiffModel PersonDiff = new SideBySideDiffModel();
+
+    protected override void OnParametersSet()
+    {
+        PersonDiff = sideBySide.BuildDiffModel(Person.Name, OtherPerson.Name);
+    }
+
+    string GetImageOfPerson(string url, bool IsLocal)
+    {
+        if (IsLocal)
+        {
+            string imgLink = ConfigHelper.GetUploadsDirectory() + url + ".jpg";
+            return imgLink;
+        }
+        else
+        {
+            string imgLink = url;
+            return url;
+        }
+    }
+
+}
