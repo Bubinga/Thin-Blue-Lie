@@ -117,10 +117,15 @@ else
     [Parameter]
     public List<Media>? Media { get; set; }
 
-    protected override void OnInitialized()
+    string videoUrl = string.Empty;
+    string imageUrl = string.Empty;
+
+    protected override async Task OnParametersSetAsync()
     {
+
         //Media = Media.Where(m => m.MediaType == MediaEnums.MediaTypeEnum.Image || m.MediaType == MediaEnums.MediaTypeEnum.Video).ToList();
     }
+    
     //get list of images and videos
     //type of media and information
     //if video get thumbnail and overlay a triangle

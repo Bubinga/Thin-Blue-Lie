@@ -24,21 +24,21 @@
                             <b>Source:</b>
                             @if (Media.Item1.SourceFrom != (byte)SourceFromEnum.Device)
                             {
-                                <a href="@GetLinkFromData(Media.Item1)"> External Link</a>
+                                <a href="@SourceUrlOld"> External Link</a>
                             }
                             else
                             {
-                                <a href="@GetLinkFromData(Media.Item1)"> Internal Link</a>
+                                <a href="@SourceUrlOld"> Internal Link</a>
                             }
                         </span>
                         <span><b>Source Type:</b> @((MarkupString)SimpleCompare(GetEnumDisplayName((SourceFromEnum)Media.Item1.SourceFrom), Media.Item2 != null ? GetEnumDisplayName((SourceFromEnum)Media.Item2?.SourceFrom) : null, true))</span>
                         <span><b>Gore:</b> @((MarkupString)SimpleCompare(Media.Item1.Gore == 1 ? "Yes" : "No", Media.Item2?.Gore == 1 ? "Yes" : "No", true))</span>
-                        <span><b>Rank:</b> @((MarkupString)SimpleCompare(Media.Item1.Rank.ToString(), Media.Item2?.Rank.ToString(), true))</span>
+                        <span><b>Rank:</b> @((MarkupString)SimpleCompare((Media.Item1.Rank + 1).ToString(), (Media.Item2?.Rank + 1).ToString(), true))</span>
                     </div>
                 </div>
                 <div class="col-7">
                     @* If the link between the two is different, one side is null *@
-                    <img class="img-fluid rounded" src="@GetLinkFromData(Media.Item1)">
+                    <img class="img-fluid rounded" src="@imgUrlOld">
                 </div>
             </div>
         }
@@ -63,21 +63,21 @@
                             <b>Source:</b>
                             @if (Media.Item2.SourceFrom != (byte)SourceFromEnum.Device)
                             {
-                                <a href="@GetLinkFromData(Media.Item2)"> External Link</a>
+                                <a href="@SourceUrlNew"> External Link</a>
                             }
                             else
                             {
-                                <a href="@GetLinkFromData(Media.Item2)"> Internal Link</a>
+                                <a href="@SourceUrlNew"> Internal Link</a>
                             }
                         </span>
                         <span><b>Source Type:</b> @((MarkupString)SimpleCompare(Media.Item1 != null?GetEnumDisplayName((SourceFromEnum)Media.Item1?.SourceFrom) : null, GetEnumDisplayName((SourceFromEnum)Media.Item2.SourceFrom), false))</span>
                         <span><b>Gore:</b> @((MarkupString)SimpleCompare(Media.Item1?.Gore == 1 ? "Yes" : "No", Media.Item2.Gore == 1 ? "Yes" : "No", false))</span>
-                        <span><b>Rank:</b> @((MarkupString)SimpleCompare(Media.Item1?.Rank.ToString(), Media.Item2.Rank.ToString(), false))</span>
+                        <span><b>Rank:</b> @((MarkupString)SimpleCompare((Media.Item1?.Rank + 1).ToString(), (Media.Item2.Rank + 1).ToString(), false))</span>
                     </div>
                 </div>
                 <div class="col-7">
                     @* If the link between the two is different, one side is null *@
-                    <img class="img-fluid rounded" src="@GetLinkFromData(Media.Item2)">
+                    <img class="img-fluid rounded" src="@imgUrlNew">
                 </div>
             </div>
         }
@@ -89,15 +89,21 @@
 
     [Parameter]
     public SideBySideDiffModel? Model { get; set; }
-    protected override void OnParametersSet()
+    string? imgUrlOld = string.Empty;
+    string? imgUrlNew = string.Empty;
+    string? SourceUrlOld = string.Empty;
+    string? SourceUrlNew = string.Empty;
+    protected override async Task OnParametersSetAsync()
     {
-        //if (Media.Item1 != null)
-        //{
-        //    displayMedia = mapper.Map<EditMedia, Media>(Media.Item1);
-        //}
-        //else
-        //{
-        //    displayMedia = mapper.Map<EditMedia, Media>(Media.Item2);
-        //}
+        if (Media.Item1 != null)
+        {
+            imgUrlOld = await GetLinkFromDataEditAsync(Media.Item1);
+            SourceUrlOld = await GetLinkFromDataEditAsync(Media.Item1, true);
+        }
+        if (Media.Item2 != null)
+        {
+            imgUrlNew = await GetLinkFromDataEditAsync(Media.Item2);
+            SourceUrlNew = await GetLinkFromDataEditAsync(Media.Item2, true);
+        }
     }
 }
