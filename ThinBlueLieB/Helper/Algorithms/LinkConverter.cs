@@ -39,7 +39,7 @@ namespace ThinBlueLieB.Helper.Algorithms
         {
             if ((MediaTypeEnum)media.MediaType == MediaTypeEnum.Video)
             {
-                if ((SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
+                if ((SourceFromEnum)media.SourceFrom == SourceFromEnum.Youtube)
                 {
                     if (video)
                     {
