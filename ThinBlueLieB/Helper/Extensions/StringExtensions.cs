@@ -30,7 +30,10 @@ namespace ThinBlueLieB.Helper.Extensions
         {
             string summary = string.Empty;
             if (newProperty == oldProperty)
-                summary += newProperty.ToString();
+                if (newProperty == null)
+                    summary += "Unknown";                
+                else                
+                    summary += newProperty.ToString();                
             else
             {
                 if (IsOriginal)
@@ -61,9 +64,9 @@ namespace ThinBlueLieB.Helper.Extensions
         public static string GetComparePersonSummary(CommonPerson oldPerson, CommonPerson newPerson, bool IsOriginal)
         {
             string summary = string.Empty;
-            summary += ComparePersonProperties(oldPerson.Race, newPerson.Race, IsOriginal);
-            summary += ComparePersonProperties(oldPerson.Sex, newPerson.Sex, IsOriginal) + ", ";
-            summary += ComparePersonProperties(oldPerson.Age, newPerson.Age, IsOriginal) + " years old";
+            summary += ComparePersonProperties(oldPerson?.Race, newPerson?.Race, IsOriginal);
+            summary += ComparePersonProperties(oldPerson?.Sex, newPerson?.Sex, IsOriginal) + ", ";
+            summary += ComparePersonProperties(oldPerson?.Age, newPerson?.Age, IsOriginal) + " years old";
             return summary;
         }
         

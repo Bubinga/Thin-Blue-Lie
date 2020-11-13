@@ -9,7 +9,7 @@ namespace ThinBlueLieB.Models
     public class CommonPerson
     {
         public string Name { get; set; }
-        public int Age { get; set; }
+        public int? Age { get; set; }
         public SexEnum Sex { get; set; }
         public RaceEnum Race { get; set; }
         public string Image { get; set; }
