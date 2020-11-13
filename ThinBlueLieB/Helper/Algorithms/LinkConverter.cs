@@ -5,17 +5,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ThinBlueLieB.Helper.Algorithms.WebsiteProfiling;
 using ThinBlueLieB.Models;
+using static DataAccessLibrary.Enums.MediaEnums;
 
 namespace ThinBlueLieB.Helper.Algorithms
 {
     public class LinkConverter
     {
+        public static async Task<string> GetLinkFromDataEditAsync(Media media, bool IsSource = false)
+        {
+            var result = GetLinkFromData(media, IsSource);
+            if (result == "Error")
+            {
+                //var news = new MetaTags(media.SourcePath); //initialized with HasData = false
+                if (IsSource)
+                {
+                    return media.SourcePath;
+                }
+                else
+                {
+                    var news = await MetaScraper.GetMetaData(media.SourcePath);
+                    return news.Image;
+                }
+            }
+            else
+            {
+                return result;
+            }
+        }
+
         public static string GetLinkFromData(Media media, bool video = false)
         {
-            if ((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Video)
+            if ((MediaTypeEnum)media.MediaType == MediaTypeEnum.Video)
             {
-                if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
+                if ((SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
                 {
                     if (video)
                     {
@@ -32,14 +56,14 @@ namespace ThinBlueLieB.Helper.Algorithms
                 // image: https://i.redd.it/0u3pdpo3zgv51.jpg
                 //Add support for other sourcefroms
             }
-            if ((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Image)
+            if ((MediaTypeEnum)media.MediaType == MediaTypeEnum.Image)
             {
-                if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+                if ((SourceFromEnum)media.SourceFrom == SourceFromEnum.Device)
                 {
                     var path = ConfigHelper.GetUploadsDirectory() + media.SourcePath;
                     return path;
                 }
-                else if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
+                else if ((SourceFromEnum)media.SourceFrom == SourceFromEnum.Reddit)
                 {
                     var path = $"https://i.redd.it/{media.SourcePath}.jpg";
                     return path;
