@@ -12,7 +12,7 @@ namespace ThinBlueLieB.Models
         public int? Age { get; set; }
         public SexEnum Sex { get; set; }
         public RaceEnum Race { get; set; }
-        public string Image { get; set; }
-        public byte Local { get; set; }
+        public string? Image { get; set; }
+        public byte? Local { get; set; }
     }
 }

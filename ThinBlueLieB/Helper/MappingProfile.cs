@@ -43,8 +43,12 @@ namespace ThinBlueLieB.Helper
             CreateMap<DBSubject, ViewSubject>();
             CreateMap<ViewMedia, EditMedia>();
             CreateMap<EditMedia, Media>();
-            CreateMap<Officers, CommonPerson>();
-            CreateMap<Subjects, CommonPerson>();
+            CreateMap<Officers, CommonPerson>()
+               .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (RaceEnum?)src.Race))
+               .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (SexEnum?)src.Sex));
+            CreateMap<Subjects, CommonPerson>()
+               .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (RaceEnum?)src.Race))
+               .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (SexEnum?)src.Sex));
             CreateMap<EditReviewSegment, EditReviewSegment>();
             CreateMap<Timelineinfo, Timelineinfo>();
             CreateMap<Media, Media>();

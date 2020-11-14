@@ -31,8 +31,7 @@ namespace ThinBlueLieB.Searches
         }
 
         IMapper Mapper { get; set; }
-        //[Inject]
-        //public IMapper mapper { get; set; }
+
         //count total pending edits that the user can access and get their edithistory ids
         public async Task<List<FirstLoadEditHistory>> GetPendingEdits(ApplicationUser user, bool canReviewAll = false)
         {
@@ -48,7 +47,7 @@ namespace ThinBlueLieB.Searches
                 }
                 else
                 {
-                    getPendingEditsIdsSql = "SELECT e.IdEditHistory, e.IdTimelineinfo FROM edithistory e JOIN timelineinfo t ON e.IdTimelineinfo = t.IdTimelineinfo WHERE e.Confirmed = 0 AND t.Owner = @UserId;";
+                    getPendingEditsIdsSql = "SELECT e.IdEditHistory, e.IdTimelineinfo FROM edithistory e LEFT JOIN timelineinfo t ON e.IdTimelineinfo = t.IdTimelineinfo WHERE e.Confirmed = 0 AND (t.Owner = @UserId OR e.IdTimelineinfo is null);";
                     PendingIds = await connection.QueryAsync<FirstLoadEditHistory>(getPendingEditsIdsSql, new {UserId = user.Id});                  
                 }
                 return (List<FirstLoadEditHistory>)PendingIds;
@@ -74,7 +73,7 @@ namespace ThinBlueLieB.Searches
 
         async Task<EditReviewModel> GetPeopleChangesFromId(int id)
         {
-            EditReviewModel people = new EditReviewModel();
+            EditReviewModel people = new EditReviewModel {New = new EditReviewSegment(), Old = new EditReviewSegment() };
             DataAccess data = new DataAccess();
             var WhatChangedQuery = "Select * from edithistory e Where e.IdEditHistory = @id";
             EditHistory editChanges = await data.LoadDataSingle<EditHistory, dynamic>(WhatChangedQuery, new { id }, GetConnectionString());
