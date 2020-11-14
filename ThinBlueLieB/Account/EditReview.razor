@@ -3,6 +3,7 @@
 @using ThinBlueLieB.Bases
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Spinner
+@using ThinBlueLieB.Components.Compare
 
 <style>
     ul {
@@ -107,11 +108,11 @@
                              }
                             else if ((Edits[ActiveIdIndex].New.OfficerPerson != null || Edits[ActiveIdIndex].Old.OfficerPerson != null))
                             {
-                                <CompareOfficerPerson NewOfficer="Edits[ActiveIdIndex].New.OfficerPerson" OldOfficer="Edits[ActiveIdIndex].Old.OfficerPerson"></CompareOfficerPerson>
+                                <ComparePerson TPerson="Officers" NewPerson="Edits[ActiveIdIndex].New.OfficerPerson" OldPerson="Edits[ActiveIdIndex].Old.OfficerPerson"></ComparePerson>
                             }
                             else if ((Edits[ActiveIdIndex].New.SubjectPerson != null || Edits[ActiveIdIndex].Old.SubjectPerson != null))
                             {
-                                <CompareOfficerPerson NewOfficer="Edits[ActiveIdIndex].New.OfficerPerson" OldOfficer="Edits[ActiveIdIndex].Old.OfficerPerson"></CompareOfficerPerson>
+                                <ComparePerson TPerson="Subjects" NewPerson="Edits[ActiveIdIndex].New.SubjectPerson" OldPerson="Edits[ActiveIdIndex].Old.SubjectPerson"></ComparePerson>
                             }
                         }
                     </div>

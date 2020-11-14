@@ -7,27 +7,43 @@
 @using static DataAccessLibrary.Enums.TimelineinfoEnums
 
 
-    <div class="mb-1 @(Person.Image != OtherPerson.Image? IsOriginal? "deleted-item" : "inserted-item" : "")">
-        <img class="mx-auto" src="@GetImageOfPerson(Person.Image, Person.Local == 1? true : false)" />
-    </div>
-    <hr />
-    <span class="d-md-block">
-        <b>Name:</b>
-        @if (IsOriginal)
-        {
-            <CompareLine Model="PersonDiff.OldText.Lines.FirstOrDefault()"></CompareLine>
-        }
-        else
-        {
-            <CompareLine Model="PersonDiff.NewText.Lines.FirstOrDefault()"></CompareLine>
-        }
-    </span>
-    <span class="d-md-block">
-        <b>Race:</b>  @((MarkupString)SimpleCompare(GetEnumDisplayName((RaceEnum)Person.Race), GetEnumDisplayName((RaceEnum)OtherPerson?.Race), IsOriginal))
-    </span>
-    <span class="d-md-block">
-        <b>Race:</b>  @((MarkupString)SimpleCompare(GetEnumDisplayName((SexEnum)Person.Sex), GetEnumDisplayName((SexEnum)OtherPerson?.Sex), IsOriginal))
-    </span>
+<div class="mb-1 d-flex @(Person.Image != OtherPerson?.Image? IsOriginal? "deleted-item" : "inserted-item" : "")">
+    <img class="mx-auto" width="200px" height="200px" src="@GetImageOfPerson(Person.Image, Person.Local == 1? true : false)" />
+</div>
+<hr class="my-0" />
+<span class="d-md-block">
+    <b>Name:</b>
+    @if (IsOriginal)
+    {
+        <CompareLine Model="PersonDiff.OldText.Lines.FirstOrDefault()"></CompareLine>
+    }
+    else
+    {
+        <CompareLine Model="PersonDiff.NewText.Lines.FirstOrDefault()"></CompareLine>
+    }
+</span>
+<span class="d-md-block">
+    <b>Race:</b>
+    @if (IsOriginal)
+    {
+        @((MarkupString)SimpleCompare(GetEnumDisplayName((RaceEnum)Person.Race), OtherPerson != null? GetEnumDisplayName((RaceEnum)OtherPerson?.Race) : null, IsOriginal))
+    }
+    else
+    {
+        @((MarkupString)SimpleCompare(OtherPerson != null? GetEnumDisplayName((RaceEnum)OtherPerson?.Race) : null, GetEnumDisplayName((RaceEnum)Person.Race), IsOriginal))
+    }
+</span>
+<span class="d-md-block">
+    <b>Race:</b>
+    @if (IsOriginal)
+    {
+        @((MarkupString)SimpleCompare(GetEnumDisplayName((SexEnum)Person.Sex), OtherPerson != null? GetEnumDisplayName((SexEnum)OtherPerson?.Sex) : null, IsOriginal))
+    }
+    else
+    {
+        @((MarkupString)SimpleCompare(OtherPerson != null? GetEnumDisplayName((SexEnum)OtherPerson?.Sex) : null, GetEnumDisplayName((SexEnum)Person.Sex), IsOriginal))
+    }
+</span>
 
 @code{
     [Parameter]
@@ -41,20 +57,30 @@
 
     protected override void OnParametersSet()
     {
-        PersonDiff = sideBySide.BuildDiffModel(Person.Name, OtherPerson.Name);
+        if (IsOriginal)
+            PersonDiff = sideBySide.BuildDiffModel(Person.Name, OtherPerson != null ? OtherPerson.Name != null ? OtherPerson.Name : "Unknown Name" : string.Empty);
+        else
+            PersonDiff = sideBySide.BuildDiffModel(OtherPerson != null ? OtherPerson.Name != null ? OtherPerson.Name : "Unknown Name" : string.Empty, Person.Name);
     }
 
     string GetImageOfPerson(string url, bool IsLocal)
     {
-        if (IsLocal)
+        if (url == null)
         {
-            string imgLink = ConfigHelper.GetUploadsDirectory() + url + ".jpg";
-            return imgLink;
+            return "/Assets/Empty-Profile-Picture.jpg";
         }
         else
         {
-            string imgLink = url;
-            return url;
+            if (IsLocal)
+            {
+                string imgLink = ConfigHelper.GetUploadsDirectory() + url + ".jpg";
+                return imgLink;
+            }
+            else
+            {
+                string imgLink = url;
+                return url;
+            }
         }
     }
 
