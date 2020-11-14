@@ -73,17 +73,24 @@ namespace ThinBlueLieB.Bases
         public async Task GetNextEdit()
         {
             Loading = true;
-            if (Edits.Count < ActiveIdIndex)
+            //if it hasnt already been loaded
+            if (Edits.Count - 1 <= ActiveIdIndex)
             {
-                Edits.Add(await Review.GetEditFromId(Ids.ToArray()[ActiveIdIndex]));
+                Edits.Add(await Review.GetEditFromId(Ids.ToArray()[ActiveIdIndex == PendingEditsCount -1 ? 0 : ActiveIdIndex + 1]));
             }
-            ActiveIdIndex++;
+            if (ActiveIdIndex == PendingEditsCount - 1)
+                ActiveIdIndex = 0;
+            else
+                ActiveIdIndex++;
             Loading = false;
             this.StateHasChanged();
         }
         public void GetPreviousEdit()
         {
-            ActiveIdIndex--;
+            if (ActiveIdIndex == 0)
+                ActiveIdIndex = PendingEditsCount - 1;
+            else
+                ActiveIdIndex--;
             this.StateHasChanged();
         }
     }
