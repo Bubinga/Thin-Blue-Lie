@@ -92,6 +92,15 @@ namespace ThinBlueLieB.Bases
             else
                 ActiveIdIndex--;
             this.StateHasChanged();
+        }       
+
+        public void AcceptEdit()
+        {
+
+        }
+        public void RejectEdit()
+        {
+
         }
     }
 }
