@@ -3,6 +3,7 @@
 @using ThinBlueLieB.Bases
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Spinner
+@using Syncfusion.Blazor.Buttons 
 @using ThinBlueLieB.Components.Compare
 
 <style>
@@ -33,6 +34,36 @@
         content: '\e76a';
         cursor: pointer;
     }
+
+    .e-check:before {
+        content: '\e718';
+    }
+    .e-cross:before {
+        content: '\e745';
+    }
+
+    .e-accept-button {
+        border-color: #358838 !important;
+    }
+        .e-accept-button span {
+            color: #358838;
+        }
+        .e-accept-button:hover {
+            background-color: white !important;
+            border-color: #2b722d !important;
+            color: black !important;
+        }
+    .e-decline-button {
+        border-color: #f58c04 !important;
+    }
+        .e-decline-button span {
+            color: #f58c04 !important;
+        }
+        .e-decline-button:hover {
+            background-color: white !important;            
+            border-color: #dd7a00 !important;
+            color: black !important;
+        }
 </style>
 <AuthorizeView>
     <NotAuthorized>
@@ -61,7 +92,7 @@
             </SfSidebar>
             <div class="profile">
                 <div class="sidebar-content pl-2">
-                    <div class="d-flex border-bottom">
+                    <div class="d-flex justify-content-between border-bottom">
                         <div class="" style="font-size:1.2rem;">Edit Review</div>
                         <div style="left:47%;" class="position-absolute d-flex align-items-center">
                             <span @onclick="() => GetPreviousEdit()" class="e-icons e-chevron-left"></span>
@@ -71,10 +102,10 @@
                         @*<div class="d-flex">
                                <InputCheckbox>Display only Changes</InputCheckbox>
                             </div>*@
-                        <div class="float-right">
-                            <button class="btn btn-outline-primary">Accept</button>
-                            <button class="btn btn-outline-warning">Reject</button>
-                        </div>
+                    <div class="float-right">
+                        <SfButton CssClass="e-outline e-accept-button" OnClick="async () => await AcceptEdit()" IconCss="e-icons e-check">Accept</SfButton>
+                        <SfButton CssClass="e-outline e-decline-button" OnClick="async () => await RejectEdit()" IconCss="e-icons e-cross">Reject</SfButton>
+                    </div>
                     </div>
                     <div class="edit-wrapper">
                         @if (Loading)

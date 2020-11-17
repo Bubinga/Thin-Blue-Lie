@@ -54,24 +54,28 @@ namespace ThinBlueLieB.Searches
             }
         }
 
-        public async Task<EditReviewModel> GetEditFromId(FirstLoadEditHistory Ids)
+        public async Task<Tuple<EditReviewModel, EditHistory>> GetEditFromId(FirstLoadEditHistory Ids)
         {
             EditReviewSegment OldInfo;
             EditReviewSegment NewInfo;
+            EditHistory editHistory;
             if (Ids.IdTimelineinfo != null)
             {
                 OldInfo = await GetOldInfoFromId((int)Ids.IdTimelineinfo);
-                NewInfo = await GetNewInfoFromId(Ids, OldInfo);
+                var newInfo = await GetNewInfoFromId(Ids, OldInfo);
+                NewInfo = newInfo.Item1;
+                editHistory = newInfo.Item2;
             }
             else
             {
                 var peopleChanges = await GetPeopleChangesFromId(Ids.IdEditHistory);
                 return peopleChanges;
             }
-            return new EditReviewModel { Old = OldInfo, New = NewInfo };
+            var model = new EditReviewModel { Old = OldInfo, New = NewInfo };
+            return new Tuple<EditReviewModel, EditHistory>(model, editHistory);
         }
 
-        async Task<EditReviewModel> GetPeopleChangesFromId(int id)
+        async Task<Tuple<EditReviewModel, EditHistory>> GetPeopleChangesFromId(int id)
         {
             EditReviewModel people = new EditReviewModel {New = new EditReviewSegment(), Old = new EditReviewSegment() };
             DataAccess data = new DataAccess();
@@ -99,7 +103,7 @@ namespace ThinBlueLieB.Searches
                 people.Old.OfficerPerson = officersOld;
             }
 
-            return people;
+            return new Tuple<EditReviewModel, EditHistory>( people, editChanges);
         }
         public async Task<EditReviewSegment> GetOldInfoFromId(int id)
         {
@@ -137,7 +141,7 @@ namespace ThinBlueLieB.Searches
                 };            
         }
 
-        public async Task<EditReviewSegment> GetNewInfoFromId(FirstLoadEditHistory id, EditReviewSegment oldInfo)
+        public async Task<Tuple<EditReviewSegment, EditHistory>> GetNewInfoFromId(FirstLoadEditHistory id, EditReviewSegment oldInfo)
         {
             EditReviewSegment newInfo = new EditReviewSegment();
             Mapper.Map(oldInfo, newInfo);
@@ -158,19 +162,19 @@ namespace ThinBlueLieB.Searches
                 var changesToMedia = await data.LoadData<EditMedia, dynamic>(MediaChangedQuery, new { id = id.IdEditHistory }, GetConnectionString());
                 foreach (var change in changesToMedia)
                 {
-                    var action = (MediaActions)change.Action;
+                    var action = (EditActions)change.Action;
 
-                    if (action == MediaActions.Addition)
+                    if (action == EditActions.Addition)
                     {
                         var media = Mapper.Map<EditMedia, Media>(change);
                         newInfo.Medias.Add(media);
                     }
-                    else if (action == MediaActions.Update)
+                    else if (action == EditActions.Update)
                     {
                         var media = Mapper.Map<EditMedia, Media>(change);
                         newInfo.Medias.Where(m => m.IdMedia == change.IdMedia).ToList().ForEach(m => m = media);
                     }
-                    else if (action == MediaActions.Deletion)
+                    else if (action == EditActions.Deletion)
                     {
                         newInfo.Medias.RemoveAll(m => m.IdMedia == change.IdMedia);
                     }
@@ -198,7 +202,7 @@ namespace ThinBlueLieB.Searches
                 var changesToTimelineSubject = await data.LoadData<DBSubject, dynamic>(changesToTimelineSubjectQuery, new { id = id.IdEditHistory }, GetConnectionString());
                 newInfo.Subjects = changesToTimelineSubject;
             }           
-            return newInfo;
+            return new Tuple<EditReviewSegment, EditHistory>( newInfo, editChanges);
         }
     }
 }
