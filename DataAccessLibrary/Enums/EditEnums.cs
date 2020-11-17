@@ -6,7 +6,7 @@ namespace DataAccessLibrary.Enums
 {
     public class EditEnums
     {
-        public enum MediaActions
+        public enum EditActions
         {
             Addition,
             Update,
