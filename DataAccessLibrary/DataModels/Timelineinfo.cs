@@ -13,8 +13,7 @@ namespace DataAccessLibrary.DataModels
         public string City { get; set; }
         public string Context { get; set; }
         public byte Locked { get; set; }
-        public string Owner { get; set; }
-        public byte Verified { get; set; }
+        public int Owner { get; set; }
         public DateTime Updated { get; set; }
     }
 }

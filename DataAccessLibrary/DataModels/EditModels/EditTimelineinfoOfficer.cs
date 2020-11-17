@@ -9,7 +9,7 @@ namespace DataAccessLibrary.DataModels
         public int IdEditsTimelineinfoOfficer { get; set; }
         public int IdEditHistory { get; set; }
         public int IdTimelineinfo { get; set; }
-        public int IdEditsOfficer { get; set; }
+        public int IdOfficer { get; set; }
         public int Misconduct { get; set; }
         public int Weapon { get; set; }
         public int Age { get; set; }

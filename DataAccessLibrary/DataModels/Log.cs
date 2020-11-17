@@ -18,7 +18,7 @@ namespace DataAccessLibrary.DataModels
         [Column(TypeName = "tinytext")]
         public string IpAddress { get; set; }
         [Column(TypeName = "varchar(255)")]
-        public string UserId { get; set; }
+        public int? UserId { get; set; }
         public int? IdTimelineinfo { get; set; }
 
         [ForeignKey(nameof(IdTimelineinfo))]

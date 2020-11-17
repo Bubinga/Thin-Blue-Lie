@@ -16,7 +16,7 @@ namespace DataAccessLibrary.DataModels
         [Column(TypeName = "text")]
         public string Message { get; set; }
         [Column(TypeName = "varchar(255)")]
-        public string UserId { get; set; }
+        public int? UserId { get; set; }
 
         [ForeignKey(nameof(IdTimelineinfo))]
         [InverseProperty(nameof(TimelineinfoFull.Flagged))]

@@ -71,8 +71,7 @@ namespace ThinBlueLieB.Bases
                     City = timelineinfo.City,
                     Context = timelineinfo.Context,
                     Locked = timelineinfo.Locked,
-                    SubmittedBy = timelineinfo.Owner,
-                    Verified = timelineinfo.Verified
+                    SubmittedBy = timelineinfo.Owner
                 };
                 var Media = Mapper.Map<List<DisplayMedia>, List<ViewMedia>>(media);
                 var Officers = Mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers);
@@ -101,7 +100,7 @@ namespace ThinBlueLieB.Bases
             //write to 
             // edits
             // editmedia
-            string userId = UserManager.GetUserId(userState.User);
+            int userId = Convert.ToInt32(UserManager.GetUserId(userState.User));
             model.Timelineinfos.SubmittedBy = userId;
             
             var editSql = "INSERT INTO `edits` (`IdTimelineinfo`, `Date`, `State`, `City`, `Context`, `Locked`, `SubmittedBy`, `Confirmed`)" +

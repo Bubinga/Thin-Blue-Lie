@@ -27,7 +27,7 @@ namespace DataAccessLibrary.DataModels
         public string Credit { get; set; }
         [Required]
         [Column(TypeName = "varchar(255)")]
-        public string SubmittedBy { get; set; }
+        public int? SubmittedBy { get; set; }
         public DateTime Timestamp { get; set; }
         public byte Action { get; set; }
 
