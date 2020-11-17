@@ -8,6 +8,6 @@ namespace DataAccessLibrary.DataModels
     {
         public int IdEditHistory { get; set; }
         public int UserId { get; set; }
-        public byte Vote { get; set; }
+        public short? Vote { get; set; }
     }
 }

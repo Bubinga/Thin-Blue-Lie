@@ -1,0 +1,63 @@
+﻿.edit-wrapper {
+    padding: 0 40px;
+    min-height: 400px;
+}
+
+.e-chevron-left:before {
+    content: '\e70d';
+    cursor: pointer;
+}
+
+.e-chevron-right:before {
+    content: '\e76a';
+    cursor: pointer;
+}
+
+.e-check:before {
+    content: '\e718';
+}
+
+.e-cross:before {
+    content: '\e745';
+}
+
+.vote-buttons .e-accept-button {
+    border-color: #358838;
+    box-shadow: none;
+}
+
+.e-accept-button.active, .e-accept-button:active, .e-accept-button:focus {
+    background-color: #74ff79 !important;
+    color: black !important;
+    box-shadow: none !important;
+}
+
+.e-accept-button span {
+    color: #358838;
+}
+
+.vote-buttons .e-accept-button:hover {
+    background-color: white;
+    border-color: #2b722d;
+    color: black;
+}
+
+.vote-buttons .e-decline-button {
+    border-color: #f58c04;
+}
+
+.e-decline-button span {
+    color: #f58c04;
+}
+
+.e-decline-button.active, .e-decline-button:active, .e-decline-button:focus {
+    background-color: #ffcb88 !important;
+    color: black !important;
+    box-shadow: none !important;
+}
+
+.vote-buttons .e-decline-button:hover {
+    background-color: white;
+    border-color: #dd7a00;
+    color: black;
+}
