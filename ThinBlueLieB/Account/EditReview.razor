@@ -3,7 +3,7 @@
 @using ThinBlueLieB.Bases
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Spinner
-@using Syncfusion.Blazor.Buttons 
+@using Syncfusion.Blazor.Buttons
 @using ThinBlueLieB.Components.Compare
 
 <style>
@@ -15,55 +15,9 @@
         color: dimgray;
         font-size: 1rem;
     }
-
         li a:hover {
             color: black;
-        }
-
-    .edit-wrapper {
-        padding: 0 40px;
-        min-height: 400px;
-    }
-
-    .e-chevron-left:before {
-        content: '\e70d';
-        cursor: pointer;
-    }
-
-    .e-chevron-right:before {
-        content: '\e76a';
-        cursor: pointer;
-    }
-
-    .e-check:before {
-        content: '\e718';
-    }
-    .e-cross:before {
-        content: '\e745';
-    }
-
-    .e-accept-button {
-        border-color: #358838 !important;
-    }
-        .e-accept-button span {
-            color: #358838;
-        }
-        .e-accept-button:hover {
-            background-color: white !important;
-            border-color: #2b722d !important;
-            color: black !important;
-        }
-    .e-decline-button {
-        border-color: #f58c04 !important;
-    }
-        .e-decline-button span {
-            color: #f58c04 !important;
-        }
-        .e-decline-button:hover {
-            background-color: white !important;            
-            border-color: #dd7a00 !important;
-            color: black !important;
-        }
+        }  
 </style>
 <AuthorizeView>
     <NotAuthorized>
@@ -92,7 +46,7 @@
             </SfSidebar>
             <div class="profile">
                 <div class="sidebar-content pl-2">
-                    <div class="d-flex justify-content-between border-bottom">
+                    <div class="d-flex pt-2 justify-content-between border-bottom">
                         <div class="" style="font-size:1.2rem;">Edit Review</div>
                         <div style="left:47%;" class="position-absolute d-flex align-items-center">
                             <span @onclick="() => GetPreviousEdit()" class="e-icons e-chevron-left"></span>
@@ -102,10 +56,24 @@
                         @*<div class="d-flex">
                                <InputCheckbox>Display only Changes</InputCheckbox>
                             </div>*@
-                    <div class="float-right">
-                        <SfButton CssClass="e-outline e-accept-button" OnClick="async () => await AcceptEdit()" IconCss="e-icons e-check">Accept</SfButton>
-                        <SfButton CssClass="e-outline e-decline-button" OnClick="async () => await RejectEdit()" IconCss="e-icons e-cross">Reject</SfButton>
-                    </div>
+                        <div class="float-right vote-buttons">
+                            @if (Loading)
+                            {
+                                <SfButton CssClass="e-outline e-accept-button" IconCss="e-icons e-check">Accept</SfButton>
+                                <SfButton CssClass="e-outline e-decline-button" IconCss="e-icons e-cross">Reject</SfButton>
+                            }
+                            else
+                            {
+                                <SfButton CssClass="@("e-outline e-accept-button " + (Ids.ToArray()[ActiveIdIndex].Vote == 1? "active" : ""))"
+                                          OnClick="async () => await AcceptEdit()" IconCss="e-icons e-check">
+                                          @(Ids.ToArray()[ActiveIdIndex].Vote == 1? "Accepted" : "Accept")
+                                </SfButton>
+                                <SfButton CssClass="@("e-outline e-decline-button " + (Ids.ToArray()[ActiveIdIndex].Vote == -1? "active" : ""))"
+                                          OnClick="async () => await RejectEdit()" IconCss="e-icons e-cross">
+                                         @(Ids.ToArray()[ActiveIdIndex].Vote == -1? "Rejected" : "Reject")
+                                </SfButton>
+                            }
+                        </div>
                     </div>
                     <div class="edit-wrapper">
                         @if (Loading)
@@ -122,7 +90,7 @@
                         else
                         {
                             @if (Ids.ToArray()[ActiveIdIndex].IdTimelineinfo != null)
-                             {
+                            {
                                 <CompareBasic Info="new Tuple<Timelineinfo, Timelineinfo>(Edits[ActiveIdIndex].Old.Data, Edits[ActiveIdIndex].New.Data)"></CompareBasic>
                                 <CompareContext CollapseContent="false" OldContext="@Edits[ActiveIdIndex].Old.Data.Context" NewContext="@Edits[ActiveIdIndex].New.Data.Context">
                                     <Header Context="compare">
@@ -140,7 +108,7 @@
                                 <CompareMedias OldMedias="@Edits[ActiveIdIndex].Old.Medias" NewMedias="@Edits[ActiveIdIndex].New.Medias"></CompareMedias>
                                 <CompareOfficers OldOfficers="@Edits[ActiveIdIndex].Old.Officers" NewOfficers="@Edits[ActiveIdIndex].New.Officers"></CompareOfficers>
                                 <CompareSubjects OldSubjects="@Edits[ActiveIdIndex].Old.Subjects" NewSubjects="@Edits[ActiveIdIndex].New.Subjects"></CompareSubjects>
-                             }
+                            }
                             else if ((Edits[ActiveIdIndex].New.OfficerPerson != null || Edits[ActiveIdIndex].Old.OfficerPerson != null))
                             {
                                 <ComparePerson TPerson="Officers" NewPerson="Edits[ActiveIdIndex].New.OfficerPerson" OldPerson="Edits[ActiveIdIndex].Old.OfficerPerson"></ComparePerson>

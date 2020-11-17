@@ -112,20 +112,38 @@ namespace ThinBlueLieB.Bases
         {
             //TODO add check if the edit was already accepted, people could be sitting with a tab open for days
             //Add super accept option for trusted users that has a vote value of 2
-            string AcceptSql = @"INSERT INTO edit_votes (`IdEditHistory`, `UserId`, `Vote`) VALUES (@editId, @userId, 1);
-                                 SELECT e.Vote FROM edit_votes e where e.IdEditHistory = @editId; ";
-            int[] rows;
-            using (IDbConnection connection = new MySqlConnection(GetConnectionString()))
+
+            //if the vote was already accepted
+            if (Ids.ToArray()[ActiveIdIndex].Vote != 1)
             {
-                rows = (int[])await connection.QueryAsync<int>(AcceptSql, new { editId = Ids.ToArray()[ActiveIdIndex].IdEditHistory, User.Id });                
+                string AcceptSql = @"INSERT INTO edit_votes (IdEditHistory,UserId,Vote) 
+                                            VALUES (@IdEditHistory, @UserId, 1) AS new
+                                               ON DUPLICATE KEY UPDATE
+                                                   Vote = new.Vote;
+                                    SELECT e.Vote FROM edit_votes e where e.IdEditHistory = @IdEditHistory;";
+                IEnumerable<int> rows;
+                using (IDbConnection connection = new MySqlConnection(GetConnectionString()))
+                {
+                    rows = await connection.QueryAsync<int>(AcceptSql, new { IdEditHistory = Ids.ToArray()[ActiveIdIndex].IdEditHistory, UserId = User.Id });
+                }
+                Ids.ToArray()[ActiveIdIndex].Vote = 1;
+                if (rows.Sum() >= 2)
+                    await MergeEdit();
+                //StateHasChanged();
             }
-            if (rows.Sum() >= 2)
-                await MergeEdit(); 
+           
         }
         public async Task RejectEdit()
         {
-            string AcceptSql = "INSERT INTO edit_votes (`IdEditHistory`, `UserId`, `Vote`) VALUES (@editId, @userId, -1);";
-            await data.SaveData(AcceptSql, new { editId = Ids.ToArray()[ActiveIdIndex].IdEditHistory, User.Id }, GetConnectionString());
+            if (Ids.ToArray()[ActiveIdIndex].Vote != -1)
+            {
+                string AcceptSql = @"INSERT INTO edit_votes (IdEditHistory,UserId,Vote) 
+                                            VALUES(@IdEditHistory, @UserId, -1) AS new
+                                              ON DUPLICATE KEY UPDATE
+                                                  Vote = new.Vote; ";
+                await data.SaveData(AcceptSql, new { IdEditHistory = Ids.ToArray()[ActiveIdIndex].IdEditHistory, UserId = User.Id }, GetConnectionString());
+                Ids.ToArray()[ActiveIdIndex].Vote = -1;
+            }
         }
 
         public async Task MergeEdit()

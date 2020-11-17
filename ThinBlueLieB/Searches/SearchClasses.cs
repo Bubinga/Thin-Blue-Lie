@@ -9,6 +9,7 @@ namespace ThinBlueLieB.Searches
         {
             public int IdEditHistory { get; set; }
             public int? IdTimelineinfo { get; set; }
+            public short? Vote { get; set; }
         }
         public class FirstLoadOfficer
         {
