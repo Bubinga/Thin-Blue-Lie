@@ -41,13 +41,22 @@ namespace ThinBlueLieB.Searches
             {
                 if (canReviewAll)
                 {
-                    //no need to join
-                    getPendingEditsIdsSql = "SELECT e.IdEditHistory, e.IdTimelineinfo FROM edithistory e WHERE Confirmed = 0;";
-                    PendingIds = await connection.QueryAsync<FirstLoadEditHistory>(getPendingEditsIdsSql);                   
+                    //see what and if the person voted on
+                    //if null or 0 nothing else add active to buttons
+                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote 
+                                            FROM edithistory e
+                                            LEFT Join edit_votes ev on e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId 
+                                            WHERE Confirmed = 0;";
+                    PendingIds = await connection.QueryAsync<FirstLoadEditHistory>(getPendingEditsIdsSql, new {UserId = user.Id});                   
                 }
                 else
                 {
-                    getPendingEditsIdsSql = "SELECT e.IdEditHistory, e.IdTimelineinfo FROM edithistory e LEFT JOIN timelineinfo t ON e.IdTimelineinfo = t.IdTimelineinfo WHERE e.Confirmed = 0 AND (t.Owner = @UserId OR e.IdTimelineinfo is null);";
+                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote 
+                                             FROM edithistory e 
+                                             LEFT JOIN timelineinfo t ON e.IdTimelineinfo = t.IdTimelineinfo 
+                                             LEFT JOIN edit_votes ev ON e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId 
+                                             WHERE e.Confirmed = 0 
+                                             AND (t.Owner = @UserId OR e.IdTimelineinfo is null);";
                     PendingIds = await connection.QueryAsync<FirstLoadEditHistory>(getPendingEditsIdsSql, new {UserId = user.Id});                  
                 }
                 return (List<FirstLoadEditHistory>)PendingIds;
