@@ -24,7 +24,7 @@ namespace ThinBlueLieB.Models
         [MinLength(75, ErrorMessage = "Please type at least 75 characters")]
         public string Context { get; set; }
         public byte Locked { get; set; }
-        public string? SubmittedBy { get; set; }
+        public int? SubmittedBy { get; set; }
         public byte Verified { get; set; }
     }
 }

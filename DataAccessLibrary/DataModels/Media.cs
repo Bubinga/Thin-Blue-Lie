@@ -24,7 +24,7 @@ namespace DataAccessLibrary.DataModels
         public string Blurb { get; set; }
         public string Credit { get; set; }
         [Column(TypeName = "varchar(255)")]
-        public string? SubmittedBy { get; set; }
+        public int? SubmittedBy { get; set; }
         public short Rank { get; set; }
         public DateTime Timestamp { get; set; }
 

@@ -76,7 +76,7 @@
         //flagged.UserId = userManager.GetUserId(authentication.User);
         try
         {
-            flagged.UserId = userManager.GetUserId(userState.User);
+            flagged.UserId = Convert.ToInt32(userManager.GetUserId(userState.User));
         }
         catch (Exception)
         {
