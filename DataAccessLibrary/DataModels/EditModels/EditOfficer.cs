@@ -15,5 +15,6 @@ namespace DataAccessLibrary.DataModels
         public byte Sex { get; set; }
         public string Image { get; set; }
         public byte Local { get; set; }
+        public byte Action { get; set; }
     }
 }

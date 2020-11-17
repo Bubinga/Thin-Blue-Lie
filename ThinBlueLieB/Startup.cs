@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ThinBlueLieB.Identity;
-using ThinBlueLieB.Data;
 using DataAccessLibrary.DataAccess;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Syncfusion.Blazor;
@@ -41,7 +40,7 @@ namespace ThinBlueLieB
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                //.AddDefaultUI()
+                .AddDefaultUI()
                 .AddDefaultTokenProviders();
             services.Configure<IdentityOptions>(options =>
             {

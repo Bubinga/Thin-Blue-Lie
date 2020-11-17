@@ -10,7 +10,7 @@ namespace ThinBlueLieB.Models
     {
         public int IdMedia { get; set; }
         public int IdTimelineinfo { get; set; }
-        public string SubmittedBy { get; set; }
+        public int? SubmittedBy { get; set; }
 
     }
 }
