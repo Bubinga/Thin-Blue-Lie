@@ -1,17 +1,22 @@
 ﻿@page "/Account/Profile"
 @using Syncfusion.Blazor.ProgressBar
 @using Syncfusion.Blazor.Navigations
+@using Microsoft.AspNetCore.Identity
+@using DataAccessLibrary.UserModels
+@inject UserManager<ApplicationUser> userManager
 <style>
     ul {
         list-style-type: none;
     }
-    li a{
+
+    li a {
         color: dimgray;
         font-size: 1rem;
     }
-    li a:hover{
-        color:black;
-    }
+
+        li a:hover {
+            color: black;
+        }
 </style>
 <AuthorizeView>
     <NotAuthorized>
@@ -40,62 +45,69 @@
             </SfSidebar>
             <div class="profile">
                 <div class="sidebar-content pl-2">
-                <div class="d-flex justify-content-between border-bottom">
-                    <div class="pl-4 d-flex align-items-end" style="font-size:1.2rem;"> @context.User.Identity.Name</div>
-                    <div class="d-flex">
-                        <div class="d-flex align-items-end mb-1">Reputation</div>
-                        <div class="d-inline-block">
-                            <SfProgressBar @ref="Reputation" Type="ProgressType.Linear" Height="40"
-                                           Width="100%" ID="Percentage"
-                                           TrackThickness="24"
-                                           ProgressThickness="24" Role="ModeType.Success"
-                                           ShowProgressValue="true"
-                                           Value="40" Minimum="0" Maximum="100"
-                                           Theme="@ProgressTheme.Bootstrap4">
-                                <ProgressBarLabelStyle Text="40/150" TextAlignment="TextAlignmentType.Center" Color="#FFFFFF" />
-                                <ProgressBarAnimation Enable="true" Duration="2000" Delay="0" />
-                            </SfProgressBar>
+                    <div class="d-flex justify-content-between border-bottom">
+                        <div class="pl-4 d-flex align-items-end" style="font-size:1.2rem;"> @context.User.Identity.Name
+                        Member Since: Inception
+                        </div>
+                        <div class="d-flex">
+                            <div class="d-flex align-items-end mb-1">
+                                <div>
+                                    <span>Trusted User</span>
+                                    <span>  Reputation</span>
+                                </div>
+                            </div>
+                            <div class="d-inline-block">
+                                <SfProgressBar @ref="Reputation" Type="ProgressType.Linear" Height="40"
+                                               Width="100%" ID="Percentage"
+                                               TrackThickness="24"
+                                               ProgressThickness="24" Role="ModeType.Success"
+                                               ShowProgressValue="true"
+                                               Value="40" Minimum="0" Maximum="100"
+                                               Theme="@ProgressTheme.Bootstrap4">
+                                    <ProgressBarLabelStyle Text="40/150" TextAlignment="TextAlignmentType.Center" Color="#FFFFFF" />
+                                    <ProgressBarAnimation Enable="true" Duration="2000" Delay="0" />
+                                </SfProgressBar>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <p>
-                            <strong>Submissions:</strong>
-                        </p>
-                        <p>
-                            <strong>Edits:</strong>
-                        </p>
+                    <div class="row">
+                        <div class="col-6">
+                            <p>
+                                <strong>Submissions:</strong>
+                            </p>
+                            <p>
+                                <strong>Edits Accepted:</strong>
+                            </p>
+                        </div>
+                        <div lass="col-6">
+                            <p>
+                                <strong>Flags:</strong>
+                            </p>
+                            <p>
+                                <strong>Votes Cast:</strong>
+                            </p>
+                        </div>
                     </div>
-                    <div lass="col-6">
-                        <p>
-                            <strong>Verifications:</strong>
-                        </p>
-                        <p>
-                            <strong>Flags:</strong>
-                        </p>
-                    </div>
-                </div>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Uploaded</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Public</th>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Uploaded</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Public</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>10/18/2020</td>
-                            <td>6/4/2020</td>
-                            <td>This is an example title</td>
-                            <td>Delete</td>
-                        </tr>
-                    </tbody>
-                </table>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>10/18/2020</td>
+                                <td>6/4/2020</td>
+                                <td>This is an example title</td>
+                                <td>Delete</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -105,10 +117,18 @@
     SfProgressBar Reputation;
 
     List<Timelineinfo> Events { get; set; }
+    //[CascadingParameter]
+    //private Task<AuthenticationState> AuthState { get; set; }
+    //private AuthenticationState userState;
+    //ApplicationUser User;
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    userState = await AuthState;
+    //    User = await userManager.GetUserAsync(userState.User);
+    //}
 
-   
     //   user role status -context
-    //    
+    //
     //get stats of person
 
 }

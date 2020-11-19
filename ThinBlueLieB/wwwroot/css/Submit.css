@@ -63,3 +63,13 @@ form {
     .e-custom:hover {
         color: #314DB2 !important;
     }
+
+.e-acrdn-header-content {
+    width: 100% !important;
+    position: relative;
+}
+
+.e-acrdn-header:hover .e-icons, .e-acrdn-header, .e-acrdn-header-content {
+    text-decoration: none !important;
+    color: inherit !important;
+}
