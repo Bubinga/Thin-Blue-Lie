@@ -75,17 +75,33 @@
         content: '\e705';
     }
 
-    .e-custom {
+    .e-primary.e-custom {
         color: #221e1e !important;
-        background-color: white !important;
-        border-color: white !important;
-        padding-right: 0px;
+        background-color: #F8F9FA !important;
+        border-color: #F8F9FA !important;
+        padding-right: 5px;
         padding-left: 0px;
     }
 
-        .e-custom:hover {
+        .e-primary.e-custom:hover {
             color: #314DB2 !important;
         }
+
+        .e-primary.e-custom:focus, .e-primary.e-cuton:active {
+            box-shadow: none !important;
+        }
+
+    .e-acrdn-header-content {
+        width: 100% !important;
+        position: relative;
+    }
+    .e-acrdn-content {
+        padding-left: 0.6rem !important;
+    }
+    .e-acrdn-header:hover .e-icons, .e-acrdn-header, .e-acrdn-header-content {
+        text-decoration: none !important;
+        color: inherit !important;
+    }
 </style>
 <div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
     <EditForm Model="model" OnValidSubmit="HandleValidSubmitAsync">
@@ -177,7 +193,7 @@
         <div class="col-lg-5 col-md-6">
             <div class="row">
                 <div class="container-fluid d-block">
-                    <h4 class="pt-2">Similar Videos</h4>
+                    <h4 class="pt-2">Similar Events</h4>
                     <p class="mb-0 border-bottom" style="font-size:1em">
                         Here are Events that share the a date with the information you are filling out, please check to see if your event is a duplicate.
                     </p>
@@ -203,17 +219,12 @@
                 <div class="d-block border-top container-fluid border-bottom" @onclick:stopPropagation="false" @onclick:preventDefault>
                     <h4 class="pt-2">Add Media</h4>
                     <p class="mb-0" style="font-size:1em">
-                        Add Media relavent to the event, such as videos, images, news articles, etc.
-                        <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="AddMedia" IsPrimary="true" IconPosition=@IconPosition.Right>
-                            Media
-                        </SfButton>
+                        Add Media relavent to the event, such as videos, images, news articles, etc.                       
                     </p>
                 </div>
                 <div id="MediaList" class="container-fluid">
-                    @foreach (var media in model.Medias)
-                    {
-                        <MediaCard media="media" MoveMediaDown="MoveMediaDown" MoveMediaUp="MoveMediaUp" MoveMediaTop="MoveMediaTop" DeleteMedia="DeleteMedia"></MediaCard>
-                    }
+                    <MediaAccordion Medias="model.Medias" AddMedia="AddMedia" DeleteMedia="DeleteMedia" MoveMediaDown="MoveMediaDown" MoveMediaTop="MoveMediaTop" MoveMediaUp="MoveMediaUp">
+                    </MediaAccordion>
                 </div>
             </div>
         </div>

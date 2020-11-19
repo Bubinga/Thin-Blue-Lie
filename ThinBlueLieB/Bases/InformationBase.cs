@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ThinBlueLieB.Helper;
 using ThinBlueLieB.Helper.Extensions;
 using ThinBlueLieB.Models;
+using static DataAccessLibrary.Enums.MediaEnums;
 using static ThinBlueLieB.Models.SubmitBase;
 using static ThinBlueLieB.Searches.SearchClasses;
 
@@ -18,7 +19,11 @@ namespace ThinBlueLieB.Bases
         public SubmitModel model = new SubmitModel()
         {
             Timelineinfos = new ViewTimelineinfo(),
-            Medias = new List<ViewMedia> { new ViewMedia { ListIndex = 0 } },
+            Medias = new List<ViewMedia> { 
+                new ViewMedia { MediaType = MediaTypeEnum.Image, Blurb="Placeholder Image Media", ListIndex = 0 },
+               new ViewMedia { MediaType = MediaTypeEnum.Video, Blurb="Placeholder Image Video",ListIndex = 1 },
+                  new ViewMedia { MediaType = MediaTypeEnum.News, Blurb="Placeholder Image News", ListIndex = 2 }
+            },
             Officers = new List<ViewOfficer> { new ViewOfficer { ListIndex = 0 } },
             Subjects = new List<ViewSubject> { new ViewSubject { ListIndex = 0 } }
         };
@@ -63,24 +68,35 @@ namespace ThinBlueLieB.Bases
             model.Officers[tuple.Item2].SameAsId = tuple.Item1;
             SimilarOfficers[tuple.Item2] = new List<SimilarPersonGeneral>();
         }
-
-        internal void AddMedia()
+        const int MaximumMedia = 20;
+        internal void AddMedia(MediaTypeEnum mediaType)
         {
-            var newMediaItem = new ViewMedia { ListIndex = model.Medias.Count };
-            model.Medias.Add(newMediaItem);
+            if (model.Medias.Where(m => m.MediaType == mediaType).Count() < MaximumMedia)
+            {
+                var newMediaItem = new ViewMedia { ListIndex = model.Medias.Count, MediaType = mediaType };
+                model.Medias.Add(newMediaItem);
+            }           
         }
 
+        const int MaximumSubject = 10;
         internal void AddSubject()
         {
-            var newSubjectItem = new ViewSubject { ListIndex = model.Subjects.Count };
-            model.Subjects.Add(newSubjectItem);
-            SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
+            if (model.Subjects.Count < MaximumSubject)
+            {
+                var newSubjectItem = new ViewSubject { ListIndex = model.Subjects.Count };
+                model.Subjects.Add(newSubjectItem);
+                SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
+            }          
         }
+        const int MaximumOfficer = 10;
         internal void AddOfficer()
         {
-            var newOfficerItem = new ViewOfficer { ListIndex = model.Officers.Count };
-            model.Officers.Add(newOfficerItem);
-            SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
+            if (model.Officers.Count < MaximumOfficer)
+            {
+                var newOfficerItem = new ViewOfficer { ListIndex = model.Officers.Count };
+                model.Officers.Add(newOfficerItem);
+                SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
+            }           
         }
 
         public List<List<SimilarPersonGeneral>> SimilarSubjects { get; set; } = new List<List<SimilarPersonGeneral>>();

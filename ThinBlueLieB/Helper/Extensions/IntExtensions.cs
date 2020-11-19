@@ -8,27 +8,26 @@ namespace ThinBlueLieB.Helper.Extensions
 {
     public class IntExtensions
     {
-        public static int[] IntToArray(int? input)
+        public static int[] IntToArray(int? n)
         {
-            List<int> list = new List<int>();
-            if (input == null)
+            List<int> powers = new List<int>();
+            int power = 0;
+            if (n == null || n == 0)
             {
-                return new int[] {0};
+                return new int[] { 0 };
             }
-            else
+            while (n != 0)
             {
-                for (int i = 1; input > 0; i *= 2)
+                if ((n & 1) != 0)
                 {
-                    if ((input & i) != 0)
-                    {
-                        list.Add(i);
-                        input -= i;
-                    }
+                    powers.Add(1 << power);
+                    // or, if you just need the exponents:
+                    // powers.add(power);
                 }
-            }           
-                
-            var array = list.ToArray();
-            return array;
-        }
+                ++power;
+                n >>= 1;
+            }
+            return powers.ToArray();
+        }      
     }
 }
