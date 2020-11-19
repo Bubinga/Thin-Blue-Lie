@@ -190,7 +190,7 @@
                                 <h4 class="pt-2">Add Media</h4>
                                 <p class="mb-0" style="font-size:1em">
                                     Add Media relavent to the event, such as videos, images, news articles, etc.
-                                    <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="AddMedia" IsPrimary="true" IconPosition=@IconPosition.Right>
+                                    <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="() => AddMedia(MediaEnums.MediaTypeEnum.Image)" IsPrimary="true" IconPosition=@IconPosition.Right>
                                         Media
                                     </SfButton>
                                 </p>

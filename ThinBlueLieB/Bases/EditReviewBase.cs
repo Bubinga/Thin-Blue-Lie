@@ -114,7 +114,7 @@ namespace ThinBlueLieB.Bases
             //Add super accept option for trusted users that has a vote value of 2
 
             //if the vote was already accepted
-            if (Ids.ToArray()[ActiveIdIndex].Vote != 1)
+            if (Ids.ToArray()[ActiveIdIndex].Vote < 1)
             {
                 string AcceptSql = @"INSERT INTO edit_votes (IdEditHistory,UserId,Vote) 
                                             VALUES (@IdEditHistory, @UserId, 1) AS new
@@ -135,7 +135,7 @@ namespace ThinBlueLieB.Bases
         }
         public async Task RejectEdit()
         {
-            if (Ids.ToArray()[ActiveIdIndex].Vote != -1)
+            if (Ids.ToArray()[ActiveIdIndex].Vote > -1)
             {
                 string AcceptSql = @"INSERT INTO edit_votes (IdEditHistory,UserId,Vote) 
                                             VALUES(@IdEditHistory, @UserId, -1) AS new

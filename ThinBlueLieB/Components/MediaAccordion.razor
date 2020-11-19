@@ -1,0 +1,131 @@
+﻿@using ThinBlueLieB.Bases
+@using Syncfusion.Blazor.Navigations
+@using ThinBlueLieB.Components
+@using Syncfusion.Blazor.Buttons
+@using ThinBlueLieB.Models;
+@using static ThinBlueLieB.Models.SubmitBase;
+@using static ThinBlueLieB.Helper.Extensions.IntExtensions
+@using static DataAccessLibrary.Enums.MediaEnums
+<SfAccordion>
+    <AccordionItems>
+        <AccordionItem Expanded="true">
+            <HeaderTemplate>
+                <div class="justify-content-between">
+                    <div class="d-inline" style="color:black;">
+                        Images
+                    </div>
+                    <div class="d-inline" @onclick:stopPropagation="true" @onclick:preventDefault>
+                        <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right mr-4" @onclick="() => AddMedia.InvokeAsync(MediaTypeEnum.Image)" IsPrimary="true" IconPosition=@IconPosition.Right>
+                            Media
+                        </SfButton>
+                    </div>
+                </div>
+            </HeaderTemplate>
+            <ContentTemplate>
+                <SfAccordion DataSource="@Medias.Where(m => m.MediaType == MediaTypeEnum.Image).ToList()">
+                    <AccordionTemplates>
+                        <HeaderTemplate Context="header">
+                            @{
+                                ViewMedia media = header as ViewMedia;
+                                <div style="color:black;">@(string.IsNullOrEmpty(media.Blurb)? "Missing Description" : media.Blurb)</div>
+                                <div class="position-absolute d-inline-flex" style="right: 5px; top: -5px; z-index:1000;" @onclick:stopPropagation="true" @onclick:preventDefault>
+                                    <SfButton @onclick="@(() => MoveMediaUp.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-up-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
+                                    <SfButton @onclick="@(() => MoveMediaDown.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-down-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
+                                    <SfButton @onclick="@(() => MoveMediaTop.InvokeAsync(media.ListIndex))" IconCss="e-icons e-double-arrow-up-icon" IsPrimary="true" CssClass="e-flat mr-lg-3 mr-2 e-custom"></SfButton>
+                                    <SfButton @onclick="@(() => DeleteMedia.InvokeAsync(media.ListIndex))" IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
+                                </div>
+                            }
+                        </HeaderTemplate>
+                        <ItemTemplate Context="item">
+                            <MediaCard media="item as ViewMedia"></MediaCard>
+                        </ItemTemplate>
+                    </AccordionTemplates>
+                </SfAccordion>
+            </ContentTemplate>
+        </AccordionItem>
+        <AccordionItem Expanded="true">
+            <HeaderTemplate>
+                <div class="justify-content-between">
+                    <div class="d-inline" style="color:black;">
+                        Videos
+                    </div>
+                    <div class="d-inline" @onclick:stopPropagation="true" @onclick:preventDefault>
+                        <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right mr-4" @onclick="() => AddMedia.InvokeAsync(MediaTypeEnum.Video)" IsPrimary="true" IconPosition=@IconPosition.Right>
+                            Media
+                        </SfButton>
+                    </div>
+                </div>
+            </HeaderTemplate>
+            <ContentTemplate>
+                <SfAccordion DataSource="@Medias.Where(m => m.MediaType == MediaTypeEnum.Video).ToList()">
+                    <AccordionTemplates>
+                        <HeaderTemplate Context="header">
+                            @{
+                                ViewMedia media = header as ViewMedia;
+                                <div style="color:black;">@(string.IsNullOrEmpty(media.Blurb)? "Missing Description" : media.Blurb)</div>
+                                <div class="position-absolute d-inline-flex" style="right: 5px; top: -5px; z-index:1000;" @onclick:stopPropagation="true" @onclick:preventDefault>
+                                    <SfButton @onclick="@(() => MoveMediaUp.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-up-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
+                                    <SfButton @onclick="@(() => MoveMediaDown.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-down-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
+                                    <SfButton @onclick="@(() => MoveMediaTop.InvokeAsync(media.ListIndex))" IconCss="e-icons e-double-arrow-up-icon" IsPrimary="true" CssClass="e-flat mr-lg-3 mr-2 e-custom"></SfButton>
+                                    <SfButton @onclick="@(() => DeleteMedia.InvokeAsync(media.ListIndex))" IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
+                                </div>
+                            }
+                        </HeaderTemplate>
+                        <ItemTemplate Context="item">
+                            <MediaCard media="item as ViewMedia"></MediaCard>
+                        </ItemTemplate>
+                    </AccordionTemplates>
+                </SfAccordion>
+            </ContentTemplate>
+        </AccordionItem>
+        <AccordionItem Expanded="true">
+            <HeaderTemplate>
+                <div class="justify-content-between">
+                    <div class="d-inline" style="color:black;">
+                        News
+                    </div>
+                    <div class="d-inline" @onclick:stopPropagation="true" @onclick:preventDefault>
+                        <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right mr-4" @onclick="() => AddMedia.InvokeAsync(MediaTypeEnum.News)" IsPrimary="true" IconPosition=@IconPosition.Right>
+                            Media
+                        </SfButton>
+                    </div>
+                </div>
+            </HeaderTemplate>
+            <ContentTemplate>
+                <SfAccordion DataSource="@Medias.Where(m => m.MediaType == MediaTypeEnum.News).ToList()">
+                    <AccordionTemplates>
+                        <HeaderTemplate Context="header">
+                            @{
+                                ViewMedia media = header as ViewMedia;
+                                <div style="color:black;">@(string.IsNullOrEmpty(media.Blurb)? "Missing Description" : media.Blurb)</div>
+                                <div class="position-absolute d-inline-flex" style="right: 5px; top: -5px; z-index:1000;" @onclick:stopPropagation="true" @onclick:preventDefault>
+                                    <SfButton @onclick="@(() => MoveMediaUp.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-up-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
+                                    <SfButton @onclick="@(() => MoveMediaDown.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-down-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
+                                    <SfButton @onclick="@(() => MoveMediaTop.InvokeAsync(media.ListIndex))" IconCss="e-icons e-double-arrow-up-icon" IsPrimary="true" CssClass="e-flat mr-lg-3 mr-2 e-custom"></SfButton>
+                                    <SfButton @onclick="@(() => DeleteMedia.InvokeAsync(media.ListIndex))" IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
+                                </div>
+                            }
+                        </HeaderTemplate>
+                        <ItemTemplate Context="item">
+                            <MediaCard media="item as ViewMedia"></MediaCard>
+                        </ItemTemplate>
+                    </AccordionTemplates>
+                </SfAccordion>
+            </ContentTemplate>
+        </AccordionItem>
+    </AccordionItems>
+</SfAccordion>
+@code {
+    [Parameter]
+    public EventCallback<int> MoveMediaUp { get; set; }
+    [Parameter]
+    public EventCallback<int> MoveMediaDown { get; set; }
+    [Parameter]
+    public EventCallback<int> MoveMediaTop { get; set; }
+    [Parameter]
+    public EventCallback<int> DeleteMedia { get; set; }
+    [Parameter]
+    public EventCallback<MediaTypeEnum> AddMedia { get; set; }
+    [Parameter]
+    public List<ViewMedia> Medias { get; set; }
+}
