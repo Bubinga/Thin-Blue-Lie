@@ -39,14 +39,15 @@ namespace ThinBlueLieB.Bases
         public IMapper Mapper { get; set; }
 
         SubmitModel oldInfo = new SubmitModel();
-  
+
+        public bool EventExists;
         //TODO only add to junction tables is something changes. 
         internal async Task<SubmitModel> FetchDataAsync()
         {
             DataAccess data = new DataAccess();
             var query = "SELECT * From timelineinfo t where t.IdTimelineinfo = @id;";
             Timelineinfo timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { id = Id }, GetConnectionString());
-            if (timelineinfo.Date != null)
+            if (timelineinfo != null)
             {
                 var mediaQuery = "SELECT m.MediaType, m.SourcePath, m.Gore, m.SourceFrom, m.Blurb, m.Credit, m.SubmittedBy, m.Rank From media m where m.IdTimelineinfo = @id Order By m.Rank;";
                 var officerQuery = "SELECT o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
@@ -88,8 +89,10 @@ namespace ThinBlueLieB.Bases
                     Officers = Officers,
                     Subjects = Subjects
                 };
+                EventExists = true;
                 return model;
             }
+            EventExists = false;
             return new SubmitModel{ Timelineinfos = new ViewTimelineinfo()};
         }
         internal AuthenticationState userState;
