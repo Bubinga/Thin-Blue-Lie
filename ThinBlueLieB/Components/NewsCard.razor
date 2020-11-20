@@ -22,9 +22,11 @@
     <p>Loading</p>
 }
 else{
-    <SfCard ID="SideCard">
-        <CardImage Image="@news.Image.ToString()" />
-        <CardHeader Title="@news.Title" />
+<SfCard ID="SideCard">
+    <CardImage Image="@news.Image.ToString()" />
+    <CardHeader Title="@news.Title" />
+    @if (ShortVersion == false)
+    {
         <CardContent Content="@news.Description" />
         <CardFooter>
             <CardFooterContent>
@@ -32,14 +34,17 @@ else{
                 <span class="float-right">@news.SiteName</span>
             </CardFooterContent>
         </CardFooter>
-    </SfCard>
+    }
+</SfCard>
 }
 
 @code {
     [Parameter]
     public string newsUrl { get; set; }
+    [Parameter]
+    public bool ShortVersion { get; set; }
     public MetaTags news { get; set; }
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         news = new MetaTags(newsUrl); //initialized with HasData = false
         news = await MetaScraper.GetMetaData(newsUrl); //Filling out with data later. 
