@@ -72,19 +72,37 @@
         content: '\e705';
     }
 
-    .e-custom {
+    .e-primary.e-custom {
         color: #221e1e !important;
-        background-color: white !important;
-        border-color: white !important;
-        padding-right: 0px;
+        background-color: #F8F9FA !important;
+        border-color: #F8F9FA !important;
+        padding-right: 5px;
         padding-left: 0px;
     }
 
-        .e-custom:hover {
+        .e-primary.e-custom:hover {
             color: #314DB2 !important;
         }
+
+        .e-primary.e-custom:focus, .e-primary.e-cuton:active {
+            box-shadow: none !important;
+        }
+
+    .e-acrdn-header-content {
+        width: 100% !important;
+        position: relative;
+    }
+
+    .e-acrdn-content .e-acrdn-content {
+        padding-left: 0.6rem !important;
+    }
+
+    .e-acrdn-header:hover .e-icons, .e-acrdn-header, .e-acrdn-header-content {
+        text-decoration: none !important;
+        color: inherit !important;
+    }
 </style>
-@if (model.Timelineinfos.Date != null && !string.IsNullOrWhiteSpace(id))
+@if (EventExists && !string.IsNullOrWhiteSpace(id))
 {
     <AuthorizeView>
         <NotAuthorized>
@@ -190,16 +208,16 @@
                                 <h4 class="pt-2">Add Media</h4>
                                 <p class="mb-0" style="font-size:1em">
                                     Add Media relavent to the event, such as videos, images, news articles, etc.
-                                    <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="() => AddMedia(MediaEnums.MediaTypeEnum.Image)" IsPrimary="true" IconPosition=@IconPosition.Right>
+                                    @*<SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="() => AddMedia(MediaEnums.MediaTypeEnum.Image)" IsPrimary="true" IconPosition=@IconPosition.Right>
                                         Media
-                                    </SfButton>
+                                    </SfButton>*@
                                 </p>
                             </div>
                             <div id="MediaList" class="container-fluid">
-                                @foreach (var media in model.Medias)
-                                {
-                                    <MediaCard media="media" MoveMediaDown="MoveMediaDown" MoveMediaUp="MoveMediaUp" MoveMediaTop="MoveMediaTop" DeleteMedia="DeleteMedia"></MediaCard>
-                                }
+                                <CascadingValue Value="true">
+                                    <MediaAccordion Medias="model.Medias" AddMedia="AddMedia" DeleteMedia="DeleteMedia" MoveMediaDown="MoveMediaDown" MoveMediaTop="MoveMediaTop" MoveMediaUp="MoveMediaUp">
+                                    </MediaAccordion>
+                                </CascadingValue>
                             </div>
                         </div>
                     </div>
@@ -208,9 +226,9 @@
         </Authorized>
     </AuthorizeView>
 }
-else if (!string.IsNullOrWhiteSpace(id))
+else if (!string.IsNullOrWhiteSpace(id) || EventExists == false)
 {
-    <div class="container container-fluid mt-5">
+    <div class="container text-center container-fluid mt-5">
         <h4>Opps, this is not a valid url</h4>
     </div>
 }
@@ -228,18 +246,20 @@ else if (!string.IsNullOrWhiteSpace(id))
         {
             Id = Convert.ToUInt32(id);
             model = await FetchDataAsync();
-
-            for (int i = 0; i < model.Officers.Count; i++)
+            if (model.Officers != null)
             {
-                SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
-            };
-            for (int i = 0; i < model.Subjects.Count; i++)
-            {
-                SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
-            };
+                for (int i = 0; i < model.Officers.Count; i++)
+                {
+                    SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
+                };
+                for (int i = 0; i < model.Subjects.Count; i++)
+                {
+                    SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
+                };
 
-            DateValue = Convert.ToDateTime(model.Timelineinfos.Date);
-            userState = await _authState;
+                DateValue = Convert.ToDateTime(model.Timelineinfos.Date);
+                userState = await _authState;
+            }
             this.StateHasChanged();
         }
     }
