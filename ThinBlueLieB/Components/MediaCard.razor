@@ -9,6 +9,9 @@
         height: auto;
         width: 100%;
     }
+    .e-card > .e-card-image {
+        min-height: 100px !important;
+    }
 </style>
 <div class="AddMedia">
             <div name="mediaAdd" class="container-fluid d-flex px-0 mr-0">               
@@ -62,10 +65,10 @@
                             <ValidationMessage For="@(() => media.Gore)"></ValidationMessage>
                         </label>
                         <div class="d-inline">
-                            <div class="form-check m-2 d-inline">
+                            <div class="form-check d-inline">
                                 <SfRadioButton Label="No" Name="@Guid" Value="0" Checked="@media.Gore"></SfRadioButton>
                             </div>
-                            <div class="form-check m-2 d-inline">
+                            <div class="form-check d-inline">
                                 <SfRadioButton Label="Yes" Name="@Guid" Value="1" Checked="@media.Gore"></SfRadioButton>
                             </div>
                         </div>
@@ -77,6 +80,10 @@
                         {
                             @*<img class="preview-image" src="@((media.Source?.FileInfo as Syncfusion.Blazor.Inputs.FileInfo)?.RawFile)" />*@
                             <h5>There is currently no support for previews of uploaded images, but we are working on it</h5>
+                        }
+                        else if (media.MediaType == MediaEnums.MediaTypeEnum.News)
+                        {
+                            <NewsCard ShortVersion="true" newsUrl="@(string.IsNullOrEmpty(media.SourcePath)? "http://example.com" : media.SourcePath)"></NewsCard>
                         }
                         else
                         {
