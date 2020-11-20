@@ -40,7 +40,7 @@ namespace ThinBlueLieB.Bases
 
         SubmitModel oldInfo = new SubmitModel();
 
-        public bool EventExists;
+        public bool EventExists = false;
         //TODO only add to junction tables is something changes. 
         internal async Task<SubmitModel> FetchDataAsync()
         {
