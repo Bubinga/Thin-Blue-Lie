@@ -95,7 +95,7 @@
         width: 100% !important;
         position: relative;
     }
-    .e-acrdn-content {
+    .e-acrdn-content .e-acrdn-content {
         padding-left: 0.6rem !important;
     }
     .e-acrdn-header:hover .e-icons, .e-acrdn-header, .e-acrdn-header-content {
@@ -223,8 +223,10 @@
                     </p>
                 </div>
                 <div id="MediaList" class="container-fluid">
-                    <MediaAccordion Medias="model.Medias" AddMedia="AddMedia" DeleteMedia="DeleteMedia" MoveMediaDown="MoveMediaDown" MoveMediaTop="MoveMediaTop" MoveMediaUp="MoveMediaUp">
-                    </MediaAccordion>
+                    <CascadingValue Name="IsEdit" Value="false">
+                        <MediaAccordion Medias="model.Medias" AddMedia="AddMedia" DeleteMedia="DeleteMedia" MoveMediaDown="MoveMediaDown" MoveMediaTop="MoveMediaTop" MoveMediaUp="MoveMediaUp">
+                        </MediaAccordion>
+                    </CascadingValue>                 
                 </div>
             </div>
         </div>

@@ -2,6 +2,7 @@
 @using Syncfusion.Blazor.Buttons
 @using ThinBlueLieB.Helper.Extensions
 @using System.IO
+@using static ThinBlueLieB.Helper.ConfigHelper
 
 <style>
     .preview-image {
@@ -72,7 +73,22 @@
                 </div>
                 <div class="col-4">
                     <div class="d-flex h-100 justify-content-center align-items-center">
-                        <img class="preview-image" src="@(media.SourcePath != null? media.SourcePath : "/Assets/Placeholder-Image.png")"/>
+                        @if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+                        {
+                            @*<img class="preview-image" src="@((media.Source?.FileInfo as Syncfusion.Blazor.Inputs.FileInfo)?.RawFile)" />*@
+                            <h5>There is currently no support for previews of uploaded images, but we are working on it</h5>
+                        }
+                        else
+                        {
+                            @if (media.SourcePath != null && media.SourceFrom == MediaEnums.SourceFromEnum.Facebook && IsEdit)
+                            {
+                                <img class="preview-image" src="@(GetUploadsDirectory() + media.SourcePath + ".jpg")" />
+                            }
+                            else
+                            {
+                                <img class="preview-image" src="@(media.SourcePath != null ? media.SourcePath : "/Assets/Placeholder-Image.png")" />
+                            }
+                        }
                     </div>
                 </div>
     </div>
@@ -80,6 +96,8 @@
 @code {
     [Parameter]
     public ViewMedia media { get; set; }
+    [CascadingParameter]
+    public bool IsEdit { get; set; }
     private bool deviceMedia = true;
     [Parameter]
     public EventCallback<int> MoveMediaUp { get; set; }

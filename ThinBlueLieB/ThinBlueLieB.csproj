@@ -37,6 +37,9 @@
 
   <ItemGroup>
     <None Include="wwwroot\favicon.ico" />
+    <None Include="wwwroot\Uploads\Aaron-Torgalski-Bi3Un8.jpg" />
+    <None Include="wwwroot\Uploads\Robert-McCabe-57lUaK.jpg" />
+    <None Include="wwwroot\Uploads\Shelf Closeup.jpg" />
   </ItemGroup>
 
   <ItemGroup>
