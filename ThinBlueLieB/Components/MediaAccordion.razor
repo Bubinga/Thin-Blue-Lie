@@ -27,7 +27,7 @@
                         <HeaderTemplate Context="header">
                             @{
                                 ViewMedia media = header as ViewMedia;
-                                <div style="color:black;">@(string.IsNullOrEmpty(media.Blurb)? "Missing Description" : media.Blurb)</div>
+                                <div style="color:black; text-overflow: ellipsis; overflow: hidden;">@(string.IsNullOrEmpty(media.Blurb)? "Missing Description" : media.Blurb)</div>
                                 <div class="position-absolute d-inline-flex" style="right: 5px; top: -5px; z-index:1000;" @onclick:stopPropagation="true" @onclick:preventDefault>
                                     <SfButton @onclick="@(() => MoveMediaUp.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-up-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
                                     <SfButton @onclick="@(() => MoveMediaDown.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-down-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
@@ -62,7 +62,7 @@
                         <HeaderTemplate Context="header">
                             @{
                                 ViewMedia media = header as ViewMedia;
-                                <div style="color:black;">@(string.IsNullOrEmpty(media.Blurb)? "Missing Description" : media.Blurb)</div>
+                                <div style="color: black; text-overflow: ellipsis; overflow: hidden;">@(string.IsNullOrEmpty(media.Blurb)? "Missing Description" : media.Blurb)</div>
                                 <div class="position-absolute d-inline-flex" style="right: 5px; top: -5px; z-index:1000;" @onclick:stopPropagation="true" @onclick:preventDefault>
                                     <SfButton @onclick="@(() => MoveMediaUp.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-up-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
                                     <SfButton @onclick="@(() => MoveMediaDown.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-down-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
@@ -97,7 +97,7 @@
                         <HeaderTemplate Context="header">
                             @{
                                 ViewMedia media = header as ViewMedia;
-                                <div style="color:black;">@(string.IsNullOrEmpty(media.Blurb)? "Missing Description" : media.Blurb)</div>
+                                <div style="color: black; text-overflow: ellipsis; overflow: hidden;">@(string.IsNullOrEmpty(media.Blurb)? "Missing Description" : media.Blurb)</div>
                                 <div class="position-absolute d-inline-flex" style="right: 5px; top: -5px; z-index:1000;" @onclick:stopPropagation="true" @onclick:preventDefault>
                                     <SfButton @onclick="@(() => MoveMediaUp.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-up-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
                                     <SfButton @onclick="@(() => MoveMediaDown.InvokeAsync(media.ListIndex))" IconCss="e-icons e-chevron-down-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>

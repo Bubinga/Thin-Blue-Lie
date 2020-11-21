@@ -14,6 +14,8 @@ namespace ThinBlueLieB.Models
         public TimelineinfoEnums.RaceEnum? Race { get; set; }
         [Required(ErrorMessage = "The Subject's Sex field is required")]
         public TimelineinfoEnums.SexEnum? Sex { get; set; }
+        public string Image { get; set; }
+        public byte Local { get; set; }
         [Range(0, 130,
         ErrorMessage = "Age must be between {1} and {2}.")]
         public int? Age { get; set; }
