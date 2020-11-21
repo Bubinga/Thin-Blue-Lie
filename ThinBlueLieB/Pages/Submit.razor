@@ -134,6 +134,10 @@
                     <ValidationMessage For="@(() => model.Timelineinfos.City)"></ValidationMessage>
                 </div>
             </div>
+            <div class="w-100 pt-3">
+                <SfTextBox CssClass="e-filled" Placeholder="Title" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.Title"></SfTextBox>
+                <ValidationMessage For="@(() => model.Timelineinfos.Title)"></ValidationMessage>
+            </div>
             <hr />
             <div class="d-flex">
                 <h6 class="d-inline">

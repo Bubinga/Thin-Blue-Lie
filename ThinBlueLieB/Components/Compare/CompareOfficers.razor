@@ -1,5 +1,6 @@
 ﻿@using DiffPlex.DiffBuilder;
 @using DiffPlex.DiffBuilder.Model;
+@using ThinBlueLieB.Helper.Algorithms 
 @inject ISideBySideDiffBuilder sideBySide
 
 @if (Done == false)
@@ -29,47 +30,9 @@ else
     protected override void OnParametersSet()
     {
         Officers = new List<Tuple<DBOfficer, DBOfficer>>();
-        List<int> pairedIds = new List<int>();
 
-        foreach (var officer in NewOfficers.Union(OldOfficers))
-        {
-            if (!pairedIds.Contains(officer.IdOfficer))
-            {
-                List<DBOfficer> pair = NewOfficers.Union(OldOfficers).Where(o => o.IdOfficer == officer.IdOfficer).ToList();
-                bool isPaired = false;
-                Tuple<DBOfficer, DBOfficer> pairing;
-                for (int i = 0; i < pair.Count; i++)
-                {
-                    if (pair[i] != officer)
-                    {
-                        if (NewOfficers.Contains(pair[i]))
-                        {
-                            pairing = new Tuple<DBOfficer, DBOfficer>(officer, pair[i]);
-                        }
-                        else //if oldOfficer contains it
-                        {
-                            pairing = new Tuple<DBOfficer, DBOfficer>(pair[i], officer);
-                        }
-                        Officers.Add(pairing);
-                        isPaired = true;
-                        pairedIds.AddRange(new int[] { officer.IdOfficer, pair[i].IdOfficer });
-                    }
-                }
-                if (isPaired == false)
-                {
-                    if (NewOfficers.Contains(officer))
-                    {
-                        pairing = new Tuple<DBOfficer?, DBOfficer?>(null, officer);
-                    }
-                    else //if oldOfficer contains it
-                    {
-                        pairing = new Tuple<DBOfficer?, DBOfficer?>(officer, null);
-                    }
-                    Officers.Add(pairing);
-                    pairedIds.Add(officer.IdOfficer);
-                }
-            }
-        }
+        var PairOfficers = new PairVersions();
+        Officers = PairOfficers.PairOfficers(OldOfficers, NewOfficers);
         foreach (var pairing in Officers)
         {
             try{
