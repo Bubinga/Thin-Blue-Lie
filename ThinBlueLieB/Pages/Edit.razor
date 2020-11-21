@@ -9,6 +9,7 @@
 @using Syncfusion.Blazor.Buttons
 @using static ThinBlueLieB.Searches.SearchClasses;
 @using System.IO
+@using Syncfusion.Blazor.Spinner
 @using Syncfusion.Blazor.Calendars
 @inject NavigationManager navManager
 
@@ -112,8 +113,14 @@
                 </h5>
             </div>
         </NotAuthorized>
-        <Authorized Context="Auth">
+        <Authorized Context="Auth">           
             <div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
+                @if (SavingData)
+                {
+                <div style="z-index: 100;">
+                    <SfSpinner Visible="SavingData" CssClass="e-spin-overlay" />
+                </div>
+                }
                 <EditForm Model="model" OnValidSubmit="HandleValidSubmitAsync">
                     <ObjectGraphDataAnnotationsValidator />
                     <div class="col-lg-5 col-md-6 border-left border-right border-bottom">
@@ -142,6 +149,10 @@
                                 <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.City"></SfTextBox>
                                 <ValidationMessage For="@(() => model.Timelineinfos.City)"></ValidationMessage>
                             </div>
+                        </div>
+                        <div class="w-100 pt-3">
+                            <SfTextBox CssClass="e-filled" Placeholder="Title" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.Title"></SfTextBox>
+                            <ValidationMessage For="@(() => model.Timelineinfos.Title)"></ValidationMessage>
                         </div>
                         <hr />
                         <div class="d-flex">
@@ -206,8 +217,8 @@
                                 <p class="mb-0" style="font-size:1em">
                                     Add Media relavent to the event, such as videos, images, news articles, etc.
                                     @*<SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" @onclick="() => AddMedia(MediaEnums.MediaTypeEnum.Image)" IsPrimary="true" IconPosition=@IconPosition.Right>
-                                        Media
-                                    </SfButton>*@
+                                Media
+                            </SfButton>*@
                                 </p>
                             </div>
                             <div id="MediaList" class="container-fluid">
