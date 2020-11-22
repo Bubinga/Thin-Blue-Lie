@@ -60,7 +60,7 @@ namespace ThinBlueLieB.Helper.Algorithms
             {
                 if ((SourceFromEnum)media.SourceFrom == SourceFromEnum.Device)
                 {
-                    var path = ConfigHelper.GetUploadsDirectory() + media.SourcePath;
+                    var path = ConfigHelper.GetUploadsDirectory() + media.SourcePath + ".jpg";
                     return path;
                 }
                 else if ((SourceFromEnum)media.SourceFrom == SourceFromEnum.Reddit)
