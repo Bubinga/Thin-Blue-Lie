@@ -3,6 +3,7 @@ using DataAccessLibrary.DataModels.EditModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using ThinBlueLieB.Models;
 
@@ -12,10 +13,10 @@ namespace ThinBlueLieB.Helper.Extensions
     {
         public static bool ContainsChange(this EditHistory editHistory)
         {
-            if (editHistory.Edits != 0 ||
-                editHistory.EditMedia != 0 ||
-                editHistory.Timelineinfo_Subject != 0 ||
-                editHistory.Timelineinfo_Officer != 0)
+            if (!((editHistory?.Edits ?? 0 ) == 0) ||
+                !((editHistory?.EditMedia ?? 0) == 0) ||
+                !((editHistory?.Timelineinfo_Subject ?? 0) == 0) ||
+                !((editHistory?.Timelineinfo_Officer ?? 0) == 0))
             {
                 return true;
             }
