@@ -21,8 +21,8 @@ namespace ThinBlueLieB.Bases
             Timelineinfos = new ViewTimelineinfo(),
             Medias = new List<ViewMedia> { 
                 new ViewMedia { MediaType = MediaTypeEnum.Image, Blurb="Placeholder Image Media", ListIndex = 0 },
-               new ViewMedia { MediaType = MediaTypeEnum.Video, Blurb="Placeholder Image Video",ListIndex = 1 },
-                  new ViewMedia { MediaType = MediaTypeEnum.News, Blurb="Placeholder Image News", ListIndex = 2 }
+               new ViewMedia { MediaType = MediaTypeEnum.Video, Blurb="Placeholder Video Media",ListIndex = 1 },
+                  new ViewMedia { MediaType = MediaTypeEnum.News, Blurb="Placeholder Image Media", ListIndex = 2 }
             },
             Officers = new List<ViewOfficer> { new ViewOfficer { ListIndex = 0 } },
             Subjects = new List<ViewSubject> { new ViewSubject { ListIndex = 0 } }
