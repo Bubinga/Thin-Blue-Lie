@@ -3,6 +3,11 @@
 @using ThinBlueLieB.Helper.Extensions
 @using System.IO
 @using static ThinBlueLieB.Helper.ConfigHelper
+@using static DataAccessLibrary.Enums.MediaEnums
+@using static ThinBlueLieB.Helper.Extensions.EnumExtensions
+@using static ThinBlueLieB.Helper.Algorithms.LinkConverter
+@using AutoMapper 
+@inject IMapper Mapper  
 
 <style>
     .preview-image {
@@ -22,7 +27,7 @@
                             {
                                 deviceMedia = false;
                                 <div class="form-group MediaFile">
-                                    <SfUploader Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
+                                    <SfUploader Enabled="!IsEdit" Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
                                         <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>
                                     </SfUploader>
                                 </div>
@@ -31,7 +36,7 @@
                             {
                                 deviceMedia = true;
                                 <div class="form-group MediaLink">
-                                    <SfTextBox CssClass="e-filled" Placeholder="Link to Media" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
+                                    <SfTextBox Enabled="!IsEdit" CssClass="e-filled" Placeholder="Link to Media" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
                                     <ValidationMessage For="@(() => media.SourcePath)"></ValidationMessage>
                                 </div>
                             }
@@ -44,22 +49,26 @@
                         </div>
                     </div>
                     <div class="form-row align-middle mb-2">
+                        @if (media.MediaType != MediaTypeEnum.News) { 
                         <div class="col-8 dropdown pl-0">
                             <label class="mb-1">
                                 Source's Location
                             </label>
-                            <SfDropDownList TItem="string" TValue="MediaEnums.SourceFromEnum?" PopupHeight="230px" Placeholder="Source Location" @bind-Value="@media.SourceFrom" DataSource="@SourceFromOptions">
+                            <SfDropDownList Enabled="!IsEdit" TItem="SourceFromDropDown" Text="@(media.SourceFrom != null? GetEnumDisplayName((SourceFromEnum)media.SourceFrom).ToString() : "Source Location")" TValue="SourceFromEnum?" PopupHeight="230px" Placeholder="Source Location" @bind-Value="@media.SourceFrom" DataSource="@(media.MediaType == MediaTypeEnum.Image? ImageSourceLocations : VideoSourceLocations)">
+                                <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                             </SfDropDownList>
                             <ValidationMessage For="@(() => media.SourceFrom)"></ValidationMessage>
                         </div>
-                        <div class="col-4">
+                        }
+                        <div class="@(media.MediaType == MediaTypeEnum.News? "col-12" : "col-4")">
                             <label class="mb-1">
                                 Credit
                             </label>
                             <SfTextBox CssClass="e-filled" Placeholder="Credit" FloatLabelType="@FloatLabelType.Never" @bind-Value="media.Credit"></SfTextBox>
                         </div>
                     </div>
-                    <div class="">
+                    @if (media.MediaType != MediaTypeEnum.News) { 
+                    <div>
                         <label class="form-check-label d-inline">
                             Any blood or gore?<span class="text-danger ml-1">*</span>
                             <ValidationMessage For="@(() => media.Gore)"></ValidationMessage>
@@ -73,6 +82,7 @@
                             </div>
                         </div>
                     </div>
+                    }
                 </div>
                 <div class="col-4">
                     <div class="d-flex h-100 justify-content-center align-items-center">
@@ -87,13 +97,13 @@
                         }
                         else
                         {
-                            @if (media.SourcePath != null && media.SourceFrom == MediaEnums.SourceFromEnum.Facebook && IsEdit)
+                            @if (media.SourcePath != null)
                             {
-                                <img class="preview-image" src="@(GetUploadsDirectory() + media.SourcePath + ".jpg")" />
+                                <img class="preview-image" src="@(GetLinkFromData(Mapper.Map<ViewMedia, Media>(media)))" />
                             }
                             else
                             {
-                                <img class="preview-image" src="@(media.SourcePath != null ? media.SourcePath : "/Assets/Placeholder-Image.png")" />
+                                <img class="preview-image" src="/Assets/Placeholder-Image.png" />
                             }
                         }
                     </div>
@@ -116,8 +126,43 @@
     public EventCallback<int> DeleteMedia { get; set; }
     string Guid = StringExtensions.RandomString(12);
 
-    public IEnumerable<string> MediaTypes = EnumExtensions.GetEnumDisplayNames<MediaEnums.MediaTypeEnum>();
-    public IEnumerable<string> SourceFromOptions = EnumExtensions.GetEnumDisplayNames<MediaEnums.SourceFromEnum>();    
+    class SourceFromDropDown
+    {
+        public string Text { get; set; }
+        public SourceFromEnum Value { get; set; }
+    }
+
+    List<SourceFromDropDown> ImageSourceLocations = new List<SourceFromDropDown>
+    {
+        new SourceFromDropDown
+        {
+            Text = GetEnumDisplayName(SourceFromEnum.Device),
+            Value = SourceFromEnum.Device
+        },
+        new SourceFromDropDown
+        {
+            Text = GetEnumDisplayName(SourceFromEnum.Link),
+            Value = SourceFromEnum.Link
+        }
+    };
+    List<SourceFromDropDown> VideoSourceLocations = new List<SourceFromDropDown>
+    {
+        new SourceFromDropDown
+        {
+            Text = GetEnumDisplayName(SourceFromEnum.Youtube),
+            Value = SourceFromEnum.Youtube
+        },
+        new SourceFromDropDown
+        {
+            Text = GetEnumDisplayName(SourceFromEnum.Reddit) + " (Unsupported)",
+            Value = SourceFromEnum.Reddit
+        }
+    };
+
+    protected override void OnInitialized()
+    {
+
+    }
 
     public void OnFileChange(UploadChangeEventArgs args)
     {

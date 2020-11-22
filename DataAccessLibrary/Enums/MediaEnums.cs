@@ -25,7 +25,8 @@ namespace DataAccessLibrary.Enums
             [Display(Name = "News Website")]
             NewsSite,
             [Display(Name = "Phone or Computer")]
-            Device,           
+            Device,
+            Link
         }
     }
 }
