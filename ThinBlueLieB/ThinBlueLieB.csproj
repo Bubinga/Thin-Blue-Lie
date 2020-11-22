@@ -10,6 +10,7 @@
     <PackageReference Include="AngleSharp" Version="0.14.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+    <PackageReference Include="CompareNETObjects" Version="4.67.0" />
     <PackageReference Include="DiffPlex" Version="1.6.3" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.26" />
     <PackageReference Include="HtmlSanitizer" Version="5.0.355" />

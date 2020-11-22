@@ -5,7 +5,7 @@
 <div class="AddOfficer mt-2">
     <div class="card border-dark mb-3 mx-auto">
         <div class="card-body text-dark pt-2">
-            <div @onclick="@(() => DeleteOfficer.InvokeAsync(officer.ListIndex))" @onclick:stopPropagation="false" @onclick:preventDefault class="position-absolute d-inline-flex" style="right: 5px; top:0px; z-index:1000;">
+            <div @onclick="@(() => DeleteOfficer.InvokeAsync(officer.ListIndex))" @onclick:stopPropagation="false" @onclick:preventDefault class="position-absolute d-inline-flex" style="right: 5px; top:0px; z-index:2;">
                 <SfButton IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
             </div>
             <div class="form-row position-relative">

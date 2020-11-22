@@ -117,7 +117,9 @@
             <div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
                 @if (SavingData)
                 {
-                <div style="z-index: 100;">
+                <div style="        z-index: 102;
+        margin-bottom: 100px;
+">
                     <SfSpinner Visible="SavingData" CssClass="e-spin-overlay" />
                 </div>
                 }
@@ -267,8 +269,8 @@ else if (!string.IsNullOrWhiteSpace(id) || EventExists == false)
 
                 DateValue = Convert.ToDateTime(model.Timelineinfos.Date);
                 userState = await _authState;
+                this.StateHasChanged();
             }
-            this.StateHasChanged();
         }
     }
 }
