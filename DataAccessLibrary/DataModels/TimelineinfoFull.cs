@@ -12,7 +12,7 @@ namespace DataAccessLibrary.DataModels
         public TimelineinfoFull()
         {
             Edits = new HashSet<Edits>();
-            Flagged = new HashSet<Flagged>();
+            Flagged = new HashSet<Flags>();
             Log = new HashSet<Log>();
             Media = new HashSet<Media>();
             TimelineinfoOfficer = new HashSet<TimelineinfoOfficer>();
@@ -45,7 +45,7 @@ namespace DataAccessLibrary.DataModels
         [InverseProperty("IdTimelineinfoNavigation")]
         public virtual ICollection<Edits> Edits { get; set; }
         [InverseProperty("IdTimelineinfoNavigation")]
-        public virtual ICollection<Flagged> Flagged { get; set; }
+        public virtual ICollection<Flags> Flagged { get; set; }
         [InverseProperty("IdTimelineinfoNavigation")]
         public virtual ICollection<Log> Log { get; set; }
         [InverseProperty("IdTimelineinfoNavigation")]

@@ -322,7 +322,7 @@ namespace ThinBlueLieB.Bases
             }
 
             string updateEditHistory = @$"UPDATE edithistory SET 
-                                               `Confirmed` = '1',`Edits` = @Edits, `EditMedia` = @EditMedia,
+                                               `Confirmed` = '0',`Edits` = @Edits, `EditMedia` = @EditMedia,
                                                 `Officers` = @Officers, Subjects` = @Subjects, `Timelineinfo_Officer` = @Timelineinfo_Officer, 
                                                 `Timelineinfo_Subject` = @Timelineinfo_Subject 
                                          WHERE (`IdEditHistory` = '{EditHistoryId}');";
