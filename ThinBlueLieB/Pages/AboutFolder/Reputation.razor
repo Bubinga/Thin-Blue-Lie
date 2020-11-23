@@ -1,0 +1,133 @@
+﻿@page "/About/Reputation"
+
+<style>
+    ul {
+        list-style-type: none;
+    }
+
+    li a {
+        color: dimgray;
+        font-size: 1rem;
+    }
+
+        li a:hover {
+            color: black;
+        }
+
+    .e-lock:before{
+        content: '\e735'
+    }
+</style>
+<div class="container mt-4">   
+    <div class="main-content" style="height: 250px;">
+        <div class="main-content">
+            <div class="sidebar-content pl-2">
+                <div class="border-bottom">
+                    <h4>Reputation System</h4>
+                    <hr class="mt-0" />
+                    <p>
+                        Thin Blue Lie uses a Reputation system to moderate the website. The more reputation you have, which you can get from
+                        contributing to the database, the more you can do. Each time you hit a milestone you get a new privledge. You can also
+                        lose reputation if you deliberately misuse or abuse the website. As long as you aren't doing anything malicious, don't
+                        worry about it! 
+                    </p>                   
+                    <div class="row">
+                        <div class="col-6">
+                            <p>
+                                <strong>Submission:</strong><span class="text-success">+10</span>
+                                You submitted a new event to our database.
+                            </p>
+                            <p>
+                                <strong>Edits Accepted:</strong><span class="text-success">+10</span>
+                                One of your edits(not to your own post) got accepted
+                            </p>
+                            <p>
+                                <strong>Helpful Flags:</strong><span class="text-success">+10</span>
+                                You flagged something troublesome and brought it to the attention
+                                of a moderator! Thank you!
+                            </p>
+                        </div>
+                        <div class="col-6">
+                            <p>
+                                <strong>Thorough Post</strong><span class="text-success">+10</span>
+                                One of your posts is well fleshed out. It has a long enough context, 
+                                enough media, and is accurate.
+                            </p>
+                            <p>
+                                <strong>Bad Post Deleted:</strong><span class="text-danger">-5</span>
+                                A post of yours got deleted by a moderator for breaking a rule.
+                            </p>
+                            <p>
+                                <strong>Post Gets 6 Violent, Spam, or Fake Flags:</strong><span class="text-danger">+10</span>
+                                Only going to happen to malicous posts. 
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-column pt-2 justify-content-between border-bottom">
+                    <div class="d-block">
+                        <div>
+                            <span class="e-icons e-lock"></span>
+                            <span class="reputation">2000</span>
+                            <span>Friend: Can delete posts</span>
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <div>
+                            <span class="e-icons e-lock"></span>
+                            <span class="reputation">1000</span>
+                            <span>Self verify edits</span>
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <div>
+                            <span class="e-icons e-lock"></span>
+                            <span class="reputation">750</span>
+                            <span>Mark posts as locked</span>
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <div>
+                            <span class="e-icons e-lock"></span>
+                            <span class="reputation">500</span>
+                            <span>Review all Edits</span>
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <div>
+                            <span class="e-icons e-lock"></span>
+                            <span class="reputation">300</span>
+                            <span>New Events are auto-verified</span>
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <div>
+                            <span class="e-icons e-lock"></span>
+                            <span class="reputation">200</span>
+                            <span>Edit notable events</span>
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <div>
+                            <span class="e-icons e-lock"></span>
+                            <span class="reputation">50</span>
+                            <span>Edit Officer and Subject Information</span>
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <div>
+                            <span class="e-icons e-lock"></span>
+                            <span class="reputation">1</span>
+                            <span>Edit and Flag posts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+}
