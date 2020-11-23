@@ -63,7 +63,7 @@
     [Parameter]
     public int IdTimelineinfo { get; set; }
 
-    Flagged flagged = new Flagged();
+    Flags flagged = new Flags();
     bool submitted = false;
 
     protected async override Task OnInitializedAsync()
@@ -83,7 +83,7 @@
             flagged.UserId = null;
         }
         flagged.IdTimelineinfo = IdTimelineinfo;
-        string flaggedSql = "INSERT INTO flagged (`IdTimelineinfo`, `FlagType`, `Message`, `UserId`) VALUES (@idTimelineinfo, @flagType, @message, @userId);";
+        string flaggedSql = "INSERT INTO flags (`IdTimelineinfo`, `FlagType`, `Message`, `UserId`) VALUES (@idTimelineinfo, @flagType, @message, @userId);";
         DataAccess data = new DataAccess();
         await data.SaveData(flaggedSql, new {
             idTimelineinfo = flagged.IdTimelineinfo,

@@ -6,8 +6,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLibrary.DataModels
 {
-    [Table("flagged")]
-    public partial class Flagged
+    [Table("flags")]
+    public partial class Flags
     {
         [Key]
         public int IdFlagged { get; set; }
