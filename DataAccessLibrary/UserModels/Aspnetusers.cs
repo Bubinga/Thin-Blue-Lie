@@ -13,7 +13,7 @@ namespace DataAccessLibrary.UserModels
         {
             EditMedia = new HashSet<EditMedia>();
             Edits = new HashSet<Edits>();
-            Flagged = new HashSet<Flagged>();
+            Flagged = new HashSet<Flags>();
             Log = new HashSet<Log>();
             Media = new HashSet<Media>();
             Timelineinfo = new HashSet<TimelineinfoFull>();
@@ -66,7 +66,7 @@ namespace DataAccessLibrary.UserModels
         [InverseProperty("SubmittedByNavigation")]
         public virtual ICollection<Edits> Edits { get; set; }
         [InverseProperty("UserIdNavigation")]
-        public virtual ICollection<Flagged> Flagged { get; set; }
+        public virtual ICollection<Flags> Flagged { get; set; }
         [InverseProperty("UserIdNavigation")]
         public virtual ICollection<Log> Log { get; set; }
         [InverseProperty("SubmittedByNavigation")]
