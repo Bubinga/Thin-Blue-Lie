@@ -7,14 +7,10 @@ using System.Threading.Tasks;
 namespace ThinBlueLieB.Models
 {
     public class ProfileModel
-    {     
-
-        //personmodel
-        //  list of events
-        //    -date uploaded
-        //    -date of event
-        //    -blurb
-        //    
-       
+    {
+        public List<Timelineinfo> Submissions { get; set; }
+        public int AcceptedEdits { get; set; }
+        public int Flags { get; set; }
+        public int VotesCast { get; set; }
     }
 }
