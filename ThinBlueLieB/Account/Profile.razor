@@ -45,9 +45,9 @@
                     <li>
                         <NavLink class="nav-link" href="/Account/ReviewEdits">Review Edits</NavLink>
                     </li>
-                    <li>
+                    @*<li>
                         <NavLink class="nav-link" href="/Account/Reputation">Reputation</NavLink>
-                    </li>
+                    </li>*@
                 </ul>
             </div>
         </ChildContent>
@@ -59,23 +59,24 @@
                     @userState.User.Identity.Name                  
                 </div>
             </div>
-            <div class="border-bottom row px-3 pt-2">
+            <div class="border-bottom row px-3 pt-2">              
                 @if (Loading == false)
                 {
-                    <div class="col-6">
-                        <h6>Granted Perms</h6>
-                        <ul>
-                            @foreach (Privledges privledge in Enum.GetValues(typeof(Privledges)))
+                <div class="col-6">
+                    <h5><a href="/About/Reputation">Reputation</a></h5>
+                    <h6>Granted Perms</h6>
+                    <ul>
+                        @foreach (Privledges privledge in Enum.GetValues(typeof(Privledges)))
+                        {
+                            @if (User.Reputation > (int)privledge)
                             {
-                                @if (User.Reputation > (int)privledge)
-                                {
-                                    <li>
-                                        @GetEnumDisplayName(privledge)
-                                    </li>
-                                }
+                                <li>
+                                    @GetEnumDisplayName(privledge)
+                                </li>
                             }
-                        </ul>
-                    </div>
+                        }
+                    </ul>
+                </div>
                     <div class="col-6">
                         <div>
                             <div>

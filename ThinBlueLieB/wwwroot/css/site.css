@@ -168,6 +168,21 @@ a.navbar-brand {
     text-decoration: underline !important;
 }
 
+
+.nav-item .btn-dark.dropdown-toggle:hover, .nav-item .btn-dark.dropdown-toggle:focus, .nav-item .btn-dark.dropdown-toggle,
+.nav-item .btn.nav-link:active, .nav-item .btn.nav-link:focus {
+    background-color: inherit !important;
+    box-shadow: none !important;
+    border: inherit !important;
+    transition: none !important;
+    -webkit-transition: none !important;
+}
+.nav-item .nav-link.onpage + .btn.dropdown-toggle {
+    text-decoration: none !important;
+    background-color: #2B3035 !important;
+    border-radius: 3px !important;
+}
+
 /* depressing navbar link based on what page user is on */
 .onpage {
     text-decoration: none;
