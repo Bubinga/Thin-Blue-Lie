@@ -25,7 +25,7 @@ function InitializeSwiper() {
         //}
     });
     galleryTop = new Swiper(".gallery-top", {
-        spaceBetween: 10,
+        spaceBetween: 2,
         slidesPerView: 'auto',
         loop: true,
         loopedSlides: $(".swiper-wrapper").length,

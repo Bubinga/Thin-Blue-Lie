@@ -36,7 +36,7 @@
         <Timeline Date="(DateTime)Date" @ref="Timeline"></Timeline>
     </div>   
     <div class="ml-4 mt-auto">
-        <SfTooltip CssClass="e-tooltip-css" OpensOn="Click">
+        <SfTooltip CssClass="e-tooltip-css"  OpensOn="Click">
             <TooltipTemplates>
                 <Content>
                     <SfCalendar TValue="DateTime?" Max="DateTime.Today" @bind-Value="Date">
@@ -125,6 +125,7 @@
         {
             await JsRuntime.InvokeVoidAsync("InitializeSwiper");
         }
+        await JsRuntime.InvokeVoidAsync("InitializeSwiper");
     }
 
     //When the url changes, rerun the changeday on the new date
@@ -196,7 +197,7 @@
             List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
             List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
 
-           
+
             Event.Add(new ViewEvent
             {
                 Data = Case,

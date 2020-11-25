@@ -79,7 +79,7 @@ namespace ThinBlueLieB
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzQ1MTQwQDMxMzgyZTMzMmUzMG9lRXhYSk9LZWNnZzczSjB0M1hLZzJpY1ZwZ1p2c2JCdy8vczdaNU9Qb0k9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzU3NDc4QDMxMzgyZTMzMmUzMGQ0LzlKL3J3MjcvL3FVSHF6L1JudWxyblFrU2VOTDF2L2xUMEZaSHpwcXM9");
             ConnectionString = Configuration["ConnectionStrings:DataDB"];
 
             if (env.IsDevelopment())
