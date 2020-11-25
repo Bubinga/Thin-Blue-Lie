@@ -1,177 +1,55 @@
 ﻿@page "/test"
-@using Syncfusion.Blazor.Buttons
-@using System.ComponentModel.DataAnnotations;
-@using Microsoft.AspNetCore.Mvc
 @using ThinBlueLieB.Helper.Extensions
 @using Syncfusion.Blazor.DropDowns
-@using Microsoft.AspNetCore.Identity
-@using DiffPlex.DiffBuilder;
-@using DiffPlex.DiffBuilder.Model;
-@inject ISideBySideDiffBuilder sideBySide
-@inject RoleManager<IdentityRole> roleManager
+@using System.Linq;
+@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
 
 <div class="w-75 mt-5 container">
-    @*<SfDropDownList TItem="string" TValue="TimelineinfoEnums.RaceEnum?" PopupHeight="230px" Placeholder="Race" @bind-Value="@officer.Race" DataSource="@Races">
+    <Syncfusion.Blazor.Buttons.SfButton OnClick="resetColor">rtxdctfv</Syncfusion.Blazor.Buttons.SfButton>
+    <SfDropDownList TItem="string" TValue="Colors?" PopupHeight="230px" Placeholder="Color" @bind-Value="@person.FavoriteColor" DataSource="@colors">
     </SfDropDownList>
-    <h3>@officer.Race</h3>*@    
-    <div class="row">
-        @*<div class="col-6 px-4">
-            <CascadingValue Value="true">
-                <h5 class="border-bottom">Officer's information</h5>
-                <CompareOfficer Model="Officerdiff.OldText" NewOfficer="newOfficer" OldOfficer="oldOfficer"></CompareOfficer>
-                <h5 class="border-bottom">Subject's information</h5>
-                <CompareSubject Model="Subjectdiff.OldText" NewSubject="newSubject" OldSubject="oldSubject"></CompareSubject>
-            </CascadingValue>
-        </div>
-        <div class="col-6 px-4">
-            <CascadingValue Value="false">
-                <h5 class="border-bottom">Officer's information</h5>
-                <CompareOfficer Model="Officerdiff.NewText" NewOfficer="newOfficer" OldOfficer="oldOfficer"></CompareOfficer>
-                <h5 class="border-bottom">Subject's information</h5>
-                <CompareSubject Model="Subjectdiff.NewText" OldSubject="oldSubject" NewSubject="newSubject"></CompareSubject>
-            </CascadingValue>
-        </div>*@
-    </div>
-    <div class="container-fluid d-inline-block">
-        <CompareContext OldContext="@left" NewContext="@right" CollapseContent="@collapsible">
-            <Header>
-                <h6 style="padding: 12px; margin: 0px;">                   
-                    <span class="badge badge-primary">@($"{context.LineModificationCount} Line Modifications")</span>
-                    <span class="badge badge-danger">@($"{context.LineDeletionCount} Line Deletions")</span>
-                    <span class="badge badge-success">@($"{context.LineAdditionCount} Line Additions")</span>
-
-                    <span class="badge badge-primary">@($"{context.WordModificationCount} Word Modifications")</span>
-                    <span class="badge badge-danger">@($"{context.WordDeletionCount} Word Deletions")</span>
-                    <span class="badge badge-success">@($"{context.WordAdditionCount} Word Additions")</span>
-                </h6>
-            </Header>
-        </CompareContext>        
-        <CompareOfficers NewOfficers="newOfficers" OldOfficers="oldOfficers"></CompareOfficers>
-        <CompareSubjects NewSubjects="newSubjects" OldSubjects="oldSubjects"></CompareSubjects>
-        <CompareMedias NewMedias="NewMedia" OldMedias="OldMedia"></CompareMedias>
-    </div>
+    <h3>@person.FavoriteColor</h3>
 </div>
-
 @code{
-    public ViewOfficer officer { get; set; } = new ViewOfficer();
+    public Person person { get; set; } = new Person();
     protected override void OnInitialized()
     {
-        officer.Race = TimelineinfoEnums.RaceEnum.Native;
-        officer.Misconduct = new int[] { };
-
-        //pair up and deal with media actions here
-
+        person.FavoriteColor = Colors.Orange;
+        resetColor();
     }
-    string left = @"<div>
-                      <h1>h1 Bootstrap heading (36px)</h1>
-                      <h2>h2 Bootstrap heading (30px)</h2>
-                      <h3>h3 Bootstrap heading (24px)</h3>
-                      <h4>h4 Bootstrap heading (18px)</h4>
-                      <h5>h5 Bootstrap heading (14px)</h5>
-                      <h6>h6 Bootstrap heading (12px)</h6>
-                    </div>
-                    ";
-    string right = @"<div>
-                        <h1>h1 Bootstrap heading (36px)</h1>
-                        <h2>h2 Bootstrap heading (30px)</h2>
-                        <h3>h3 Replaced Text (24px)</h3>
-                        <h4 style=""color:red;"">h4 Bootstrap heading (18px)</h4>
-                        <h5>h5 Bootstrap heading (14px)</h5>
-                        <h3>h3 Extra Text (24px)</h3>
-                        <h6>h6 Bootstrap heading (12px)</h6>
-                    </div>
-                    ";
-    bool collapsible = false;
-    List<DBOfficer> oldOfficers = new List<DBOfficer>
+    void resetColor()
     {
-        new DBOfficer{
-        IdOfficer = 1,
-        Name = "Man Smith",
-        Age = 59,
-        Race = TimelineinfoEnums.RaceEnum.White,
-        Sex = TimelineinfoEnums.SexEnum.Unclear,
-        Misconduct = 174,
-        Weapon = 39
-        },
-        new DBOfficer{
-        IdOfficer = 2,
-        Name = "John Aladda",
-        Age = 29,
-        Race = TimelineinfoEnums.RaceEnum.White,
-        Sex = TimelineinfoEnums.SexEnum.Unclear,
-        Misconduct = 135,
-        Weapon = 65
-        }
-    };
-    List<DBOfficer> newOfficers = new List<DBOfficer>
-    {
-        new DBOfficer{
-        IdOfficer = 3,
-        Name = "Dude Man",
-        Age = 19,
-        Race = TimelineinfoEnums.RaceEnum.White,
-        Sex = TimelineinfoEnums.SexEnum.Unclear,
-        Misconduct = 84,
-        Weapon = 16
-        },
-        new DBOfficer{
-        IdOfficer = 2,
-        Name = "Jonathan Aledda",
-        Age = 30,
-        Race = TimelineinfoEnums.RaceEnum.Hispanic,
-        Sex = TimelineinfoEnums.SexEnum.Male,
-        Misconduct = 89,
-        Weapon = 64
-         }
-    };
-    List<DBSubject> oldSubjects = new List<DBSubject>
-    {
-        new DBSubject{
-        Name = "Charles Kensley",
-        Age = 46,
-        Race = TimelineinfoEnums.RaceEnum.Black,
-        Sex = TimelineinfoEnums.SexEnum.Male,
-        Armed = true
-        }
-    };
-    List<DBSubject> newSubjects = new List<DBSubject>
-    {
-        new DBSubject{
-        Name = "Charles Kinsey",
-        Age = 47,
-        Race = TimelineinfoEnums.RaceEnum.Black,
-        Sex = TimelineinfoEnums.SexEnum.Male,
-        Armed = false
-        }
-    };
-    List<Media> OldMedia = new List<Media>
-    {
-        new Media{
-        IdMedia = 1,
-        IdTimelineinfo = 1,
-        Rank = 0,
-        MediaType = 1,
-        SourcePath = @"https://dynaimage.cdn.cnn.com/cnn/c_fill,g_auto,w_1200,h_675,ar_16:9/https%3A%2F%2Fcdn.cnn.com%2Fcnnnext%2Fdam%2Fassets%2F200605073632-01-buffalo-elderly-man-shoved.jpg",
-        Gore = 0,
-        SourceFrom = 5,
-        Blurb = "Martin Gugino is shoved by two officers",
-        Credit = "CNN"
-        }
-    };
-    List<Media> NewMedia = new List<Media>
-    {
-        new Media{
-        IdMedia = 1,
-        IdTimelineinfo = 1,
-        Rank = 0,
-        MediaType = 1,
-        SourcePath = @"https://dynaimage.cdn.cnn.com/cnn/c_fill,g_auto,w_1200,h_675,ar_16:9/https%3A%2F%2Fcdn.cnn.com%2Fcnnnext%2Fdam%2Fassets%2F200605073632-01-buffalo-elderly-man-shoved.jpg",
-        Gore = 1,
-        SourceFrom = 4,
-        Blurb = "Martin Gugino is pushed to the ground by two officers",
-        Credit = "CNNN"
-        }
-    };
+        person.FavoriteColor = Colors.Orange;
+    }
 
-    public IEnumerable<string> Races = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.RaceEnum>();
+    public class Person
+    {
+        public string Name { get; set; }
+        public Colors? FavoriteColor { get; set; }
+    }
+    public enum Colors
+    {
+        [Display(Name = "The Color Red")]
+        Red,
+        [Display(Name = "The Color Orange")]
+        Orange,
+        [Display(Name = "The Color Green")]
+        Green,
+        [Display(Name = "The Color Blue")]
+        Blue
+    }
+
+    public IEnumerable<string> colors = GetEnumDisplayNames<Colors>();
+
+    public static List<string> GetEnumDisplayNames<T>()
+    {
+        var type = typeof(T);
+        return Enum.GetValues(type)
+                   .Cast<T>()
+                   .Select(x => type.GetMember(x.ToString())
+                   .First()
+                   .GetCustomAttribute<DisplayAttribute>()?.Name ?? x.ToString())
+                   .ToList();
+    }
 }
