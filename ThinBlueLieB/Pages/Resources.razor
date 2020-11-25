@@ -3,31 +3,22 @@
 <link rel="stylesheet" href="~/css/content.css">
 <div class="header-image" style="background-image: url(Assets/Protests-Wallpaper.jpg) !important;">
     <div class="my-auto text-center">
-        <h1 style="font-family: MillerItalic, Georgia, serif; font-size: 4em;" class="text-primary font-italic">Resources</h1>
+        <h1 style="font-family: 'Crimson Text', serif; font-size: 4em;" class="text-white d-inline-block">
+            Resources
+        </h1>
     </div>
 </div>
 <div id="wrapper">
     <div class="col-lg-12 col-sm-12 col-md-12">
-        <!--header-section  declaration -->
-        @*<div class="main-header" id="header-section">
-                <ul class="header-list">
-                    <li class="float-left header-style icon-menu" id="hamburger" @onclick="@Toggle"></li>
-                    <li class="float-left header-style nav-pane"><b>Navigation Pane</b></li>
-                    <li class="header-style float-right support border-left"><b>Support</b></li>
-                </ul>
-            </div>*@
-        <!-- end of header-section -->
-        <!-- sidebar element declaration -->
         <SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" EnableGestures="false" Animate="false" Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)">
             <ChildContent>
                 <div class="main-menu">
                     <div class="table-content">
-                        @*<input type="text" placeholder="Search..." class="search-icon">*@
                         <p class="main-menu-header sidebar-heading">Navigation</p>
                     </div>
                     <div>
                         <SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
-                            <TreeViewFieldsSettings Id="nodeId" Text="nodeText" IconCss="iconCss" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
+                            <TreeViewFieldsSettings Id="nodeId" Text="nodeText" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
                             </TreeViewFieldsSettings>
                         </SfTreeView>
                     </div>
@@ -58,8 +49,11 @@
             <div class="sidebar-content">
                 <div class="pr-0" style="min-height:1500px;">
                     <div class="pt-3 pb-2 mb-0 pl-2">
-                        <h4>Purpose</h4>
-                        <p>Here we have listed various books, podcasts, artists, and more that we belive are great ways to learn more about the issue.</p>
+                        <p>
+                            <em>Policing is an incredibly complex topic</em>. Thin Blue Lie can only go so far, and so we would like to recommend
+                            some other resources for those who want to learn more. So, we have complied a list of books, podcasts, musicans, and more
+                            that we believe provide a valuable insight. 
+                        </p>
                     </div>
                     <hr class="blueline nogap" />
                     <br />
@@ -92,16 +86,16 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        treedata.Add(new TreeData { nodeId = "01", nodeText = "Books", iconCss = "icon-microchip icon", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "01", nodeText = "Books", hasChild = true });
 
-        treedata.Add(new TreeData { nodeId = "02", nodeText = "Podcasts", iconCss = "icon-thumbs-up-alt icon", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "02", nodeText = "Podcasts", hasChild = true });
 
-        treedata.Add(new TreeData { nodeId = "03", nodeText = "Public Figures", iconCss = "icon-docs icon", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "03", nodeText = "Public Figures", hasChild = true });
 
-        treedata.Add(new TreeData { nodeId = "04", nodeText = "Musicians", iconCss = "icon-th icon", hasChild = true });
-        treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Kendrick Lamar", iconCss = "icon-circle-thin icon", pid = "04" });
+        treedata.Add(new TreeData { nodeId = "04", nodeText = "Musicians",  hasChild = true });
+        treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Kendrick Lamar", pid = "04" });
 
-        treedata.Add(new TreeData { nodeId = "05", nodeText = "Artists", iconCss = "icon-code icon", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "05", nodeText = "Artists",  hasChild = true });
 
     }
 }

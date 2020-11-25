@@ -51,7 +51,7 @@ namespace ThinBlueLieB
 
             });
             services.AddOptions();
-
+            services.AddSignalR();
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
             {

@@ -25,7 +25,6 @@
                         <div class="col-12 pl-0">
                             @if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
                             {
-                                deviceMedia = false;
                                 <div class="form-group MediaFile">
                                     <SfUploader Enabled="!IsEdit" Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
                                         <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>
@@ -34,7 +33,6 @@
                             }
                             else
                             {
-                                deviceMedia = true;
                                 <div class="form-group MediaLink">
                                     <SfTextBox Enabled="!IsEdit" CssClass="e-filled" Placeholder="Link to Media" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
                                     <ValidationMessage For="@(() => media.SourcePath)"></ValidationMessage>
@@ -115,7 +113,6 @@
     public ViewMedia media { get; set; }
     [CascadingParameter]
     public bool IsEdit { get; set; }
-    private bool deviceMedia = true;
     [Parameter]
     public EventCallback<int> MoveMediaUp { get; set; }
     [Parameter]
