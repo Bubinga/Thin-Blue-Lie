@@ -2,8 +2,10 @@
 @using static ThinBlueLieB.Helper.Extensions.EnumExtensions
 @using static ThinBlueLieB.Helper.Extensions.StringExtensions
 @using static ThinBlueLieB.Models.ViewSimilar;
+@using static DataAccessLibrary.Enums.TimelineinfoEnums
 @using Syncfusion.Blazor.Spinner
 @using Syncfusion.Blazor.Popups 
+@using Syncfusion.Blazor.Buttons
 @inject AutoMapper.IMapper mapper
 
 <style>
@@ -22,7 +24,7 @@
 }
 else
 {
-<div class="col-md-2 h-100 mx-auto mx-md-0 p-md-0" style="max-width:400px;">
+<div class="col-lg-2 h-100 mx-auto mx-lg-0 p-lg-0">
     <div class="dataCard h-100 card border-dark mb-3 w-100" style="min-width:175px;">
         <div class="card-header text-black">
             @(Information.Date.ToString("MMMM d") + GetDaySuffix(Information.Date.Day) + ", " + Information.Date.Year.ToString())
@@ -40,17 +42,34 @@ else
                 @if (subjectsDetails.Count > 1)
                 {
                     <ul class="people-list">
-                        @foreach (var subject in subjectsDetails)
+                        @for (int i = 0; i < subjectsDetails.Count; i++)                        
                         {
                             <li>
-                                @subject
+                                @subjectsDetails[i]
+                                @{
+                                    var subject = Subjects[i];
+                                 }
+                                <SfChip Selection="SelectionType.None">
+                                    <ChipItems>
+                                        <ChipItem CssClass="@(!subject.Armed? "e-success" : "e-danger")"
+                                                  Text="@(!subject.Armed? "Unarmed" : "Armed")"></ChipItem>
+                                    </ChipItems>                                  
+                                </SfChip>
                             </li>
                         }
                     </ul>
                 }
                 else
                 {
-                    <span class="single-person">@subjectsDetails[0]</span>
+                    <div class="single-person">@subjectsDetails[0]</div>
+                    <div>
+                        <SfChip Selection="SelectionType.None">
+                            <ChipItems>
+                                <ChipItem CssClass="@(!Subjects[0].Armed? "e-success" : "e-danger")"
+                                          Text="@(!Subjects[0].Armed? "Unarmed" : "Armed")"></ChipItem>
+                            </ChipItems>
+                        </SfChip>
+                    </div>
                 }
             </div>
             @*<h6 class="text-left mb-0">Officers's Information</h6>*@
@@ -60,18 +79,43 @@ else
                 </span>
                 @if (officersDetails.Count > 1)
                 {
-                    <ul class="people-list">
-                        @foreach (var officer in officersDetails)
-                        {
-                            <li>
-                                @officer
-                            </li>
-                        }
-                    </ul>
+            <ul class="people-list">
+                @for (int i = 0; i < officersDetails.Count; i++)
+                {
+                    <li>
+                        @officersDetails[i]
+                    </li>                    
+                        var officer = Officers[i];                    
+                    <SfChip Selection="SelectionType.None">
+                      <ChipItems>
+                          @foreach (MisconductEnum misconduct in Enum.GetValues(typeof(MisconductEnum)))
+                          {
+                              if (officer.Misconduct.Contains((int)misconduct))
+                              {
+                                  <ChipItem Text="@GetEnumDisplayName(misconduct)"></ChipItem>
+                              }
+                          }
+                      </ChipItems>
+                    </SfChip>
+                }
+            </ul>
                 }
                 else
                 {
-                    <span class="single-person">@officersDetails[0]</span>
+                    <div class="single-person">@officersDetails[0]</div>
+                    <div>
+                        <SfChip Selection="SelectionType.None">
+                            <ChipItems>
+                                @foreach (MisconductEnum misconduct in Enum.GetValues(typeof(MisconductEnum)))
+                                {
+                                    if (Officers[0].Misconduct.Contains((int)misconduct))
+                                    {
+                                        <ChipItem Text="@GetEnumDisplayName(misconduct)"></ChipItem>
+                                    }
+                                }
+                            </ChipItems>
+                        </SfChip>
+                    </div>
                 }
             </div>
         </div>
@@ -87,7 +131,6 @@ else
                       <Flag IdTimelineinfo="Information.IdTimelineinfo"></Flag>
                     </Content>
                 </DialogTemplates>
-                <DialogPositionData X="center" Y="center"></DialogPositionData>
             </SfDialog>
         </div>
     </div>

@@ -23,7 +23,7 @@ else
     {
         <div class="week btn @(DateTime.Compare(Dates[i], DateTime.Today.Date) <= 0 ? "" : "disabled") " onclick='location.href = "/Events?d=@Dates[i].Year-@Dates[i].Month.ToString().PadLeft(2, '0')-@Dates[i].Day.ToString().PadLeft(2, '0')"'>
             <div class="timeline-label">
-                <span>@Dates[i].DayOfWeek</span>
+                <span class="d-none d-lg-inline">@Dates[i].DayOfWeek</span>
                 <span> @Dates[i].Month/@Dates[i].Day</span>
             </div>
             @*<div class="badge-bar">
