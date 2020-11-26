@@ -15,10 +15,17 @@ namespace DataAccessLibrary.DataModels
         public string Context { get; set; }
         public byte Locked { get; set; }
         public int Owner { get; set; }
+        /// <summary>
+        /// Last time edits for this event was updated
+        /// </summary> 
         public DateTime Updated { get; set; }
         /// <summary>
         /// Comes from EditHistory
         /// </summary> 
         public DateTime Timestamp { get; set; }
+        /// <summary>
+        /// For when quering edithistory, EventUpdated contains last time the event was updated
+        /// </summary> 
+        public DateTime EventUpdated { get; set; }
     }
 }

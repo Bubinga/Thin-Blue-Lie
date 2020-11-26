@@ -1,6 +1,13 @@
 ﻿@page "/Resources"
 @using Syncfusion.Blazor.Navigations
-<link rel="stylesheet" href="~/css/content.css">
+
+<Title>Resources - Thin Blue Lie</Title>
+<Meta Property="og:type" Content="article" />
+<Meta Property="og:title" Content="Resources on Police Brutality" />
+<Meta Name="description" Content="Policing is an incredibly complex topic; we would like to recommend some other resources for those who want to learn more.
+                            So, we have complied a list of books, podcasts, musicans, and more that we believe provide a valuable insight." />
+<Link Rel="stylesheet" Href="~/css/content.css" />
+
 <div class="header-image" style="background-image: url(Assets/Protests-Wallpaper.jpg) !important;">
     <div class="my-auto text-center">
         <h1 style="font-family: 'Crimson Text', serif; font-size: 4em;" class="text-white d-inline-block">
@@ -52,7 +59,7 @@
                         <p>
                             <em>Policing is an incredibly complex topic</em>. Thin Blue Lie can only go so far, and so we would like to recommend
                             some other resources for those who want to learn more. So, we have complied a list of books, podcasts, musicans, and more
-                            that we believe provide a valuable insight. 
+                            that we believe provide a valuable insight.
                         </p>
                     </div>
                     <hr class="blueline nogap" />
@@ -92,10 +99,10 @@
 
         treedata.Add(new TreeData { nodeId = "03", nodeText = "Public Figures", hasChild = true });
 
-        treedata.Add(new TreeData { nodeId = "04", nodeText = "Musicians",  hasChild = true });
+        treedata.Add(new TreeData { nodeId = "04", nodeText = "Musicians", hasChild = true });
         treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Kendrick Lamar", pid = "04" });
 
-        treedata.Add(new TreeData { nodeId = "05", nodeText = "Artists",  hasChild = true });
+        treedata.Add(new TreeData { nodeId = "05", nodeText = "Artists", hasChild = true });
 
     }
 }
