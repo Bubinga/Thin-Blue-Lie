@@ -17,6 +17,7 @@ using DataAccessLibrary.UserModels;
 using ThinBlueLieB.Searches;
 using DiffPlex.DiffBuilder;
 using DiffPlex;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 namespace ThinBlueLieB
 {
@@ -58,6 +59,8 @@ namespace ThinBlueLieB
                 mc.AddProfile(new MappingProfile());
             });
 
+            services.AddHeadElementHelper();
+
             services.AddHttpContextAccessor();
 
             IMapper mapper = mapperConfig.CreateMapper();
@@ -96,6 +99,7 @@ namespace ThinBlueLieB
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseHeadElementServerPrerendering();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

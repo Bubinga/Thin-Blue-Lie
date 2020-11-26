@@ -14,9 +14,8 @@ namespace ThinBlueLieB.Helper.Extensions
     public class StringExtensions
     {        
 
-        public static string TruncateString(string str)
+        public static string TruncateString(string str, int MaxLength = 100)
         {
-            const int MaxLength = 100;
             var name = str;
             if (name.Length > MaxLength)
             {

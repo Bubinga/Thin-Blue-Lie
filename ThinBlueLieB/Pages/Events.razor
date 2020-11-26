@@ -8,35 +8,59 @@
 @using Syncfusion.Blazor.Spinner
 @using static ThinBlueLieB.Helper.ConfigHelper
 @using Microsoft.AspNetCore.WebUtilities
+@using HtmlAgilityPack
+@using static ThinBlueLieB.Helper.Extensions.StringExtensions
+@using static ThinBlueLieB.Helper.Algorithms.LinkConverter
 @inject IJSRuntime JsRuntime
 @implements IDisposable
 @inject NavigationManager navManager
 @inject AutoMapper.IMapper mapper
 
+<Meta Property="og:type" Content="article" />
+@if (Event.Any() && !string.IsNullOrEmpty(Event.FirstOrDefault()?.Data?.Title))
+{
+    <Title>@Event.FirstOrDefault().Data.Title - Thin Blue Lie</Title>
+    <Meta Property="og:title" Content="@(Event.FirstOrDefault().Data.Title + " - Thin Blue Lie")" />
+    <Meta Property="og:image" Content="@GetLinkFromData(Event.FirstOrDefault().Medias.FirstOrDefault())" />
+
+    HtmlDocument htmlDoc = new HtmlDocument();
+    htmlDoc.LoadHtml(Event.FirstOrDefault().Data.Context);
+    string result = htmlDoc.DocumentNode.InnerText;
+    <Meta Name="description" Content="@(TruncateString(result, 165))" />
+
+    <Meta Property="article:published_time" Content="@Event.FirstOrDefault().Data.Timestamp.ToUniversalTime().ToString()" />
+    <Meta Property="article:modified_time" Content="@Event.FirstOrDefault().Data.EventUpdated.ToUniversalTime().ToString()"/>
+}
+
+
 <style>
     .context {
         font-size: 1.1rem;
     }
-    .event-main-row{
+
+    .event-main-row {
         min-height: 550px;
     }
+
     .brokencard {
         border: none;
     }
-    .e-tip-content .e-calendar{
+
+    .e-tip-content .e-calendar {
         border: none !important;
         background-color: white !important;
     }
-    .e-popup{
+
+    .e-popup {
         background-color: white !important;
     }
 </style>
 <div class="d-flex my-2">
     <div class="col-10">
         <Timeline Date="(DateTime)Date" @ref="Timeline"></Timeline>
-    </div>   
+    </div>
     <div class="ml-4 mt-auto">
-        <SfTooltip CssClass="e-tooltip-css"  OpensOn="Click">
+        <SfTooltip CssClass="e-tooltip-css" OpensOn="Click">
             <TooltipTemplates>
                 <Content>
                     <SfCalendar TValue="DateTime?" Max="DateTime.Today" @bind-Value="Date">
@@ -49,7 +73,7 @@
     </div>
     @**@
 </div>
-@foreach (var Case in Event)
+@foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
 {
     <div class="mx-3">
         <div class="row">
@@ -76,16 +100,18 @@
                 }
                 else
                 {
-                    <p class="context indent">
-                        @((MarkupString)Case.Data.Context)
-                    </p>
+                    <article>
+                        <p class="context indent">
+                            @((MarkupString)Case.Data.Context)
+                        </p>
+                    </article>
                 }
             </div>
             <div class="col-lg-3">
                 <div class="container-fluid border-bottom mb-2">
                     <h4 class="mt-3 mb-0">
                         <strong>News Articles</strong>
-                     </h4>
+                    </h4>
                 </div>
                 @foreach (var newsItem in Case.Medias.Where(m => (MediaEnums.MediaTypeEnum)m.MediaType == MediaEnums.MediaTypeEnum.News))
                 {
@@ -176,7 +202,10 @@
         DataAccess data = new DataAccess();
 
         //get new information from DB
-        var query = "SELECT * From timelineinfo t where t.date = @date;";
+        var query = @"SELECT t.*, Max(e.Timestamp) As EventUpdated, Min(e.Timestamp) as Timestamp
+                        From timelineinfo t 
+                        Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
+                        where t.date = @date and Confirmed = 1;";
         List<Timelineinfo> timelineinfo = await data.LoadData<Timelineinfo, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd") }, GetConnectionString());
         foreach ((var Case, Int32 i) in timelineinfo.Select((Case, i) => (Case, i)))
         {

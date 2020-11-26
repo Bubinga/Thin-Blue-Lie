@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager navManager 
 
+<Meta Property="og:url" Content="@navManager.Uri"/>
 
 <div>
     <NavMenu />
