@@ -20,6 +20,12 @@
 @using Syncfusion.Blazor.Calendars
 @using Ganss.XSS;
 
+
+<Title>Post Event - Thin Blue Lie</Title>
+<Meta Property="og:type" Content="website" />
+<Meta Property="og:title" Content="Create a new Event" />
+<Meta Name="description" Content="Create a new Event to be stored in our database and presented on our website" />
+
 <style>
     body {
         overflow-x: hidden;
@@ -95,9 +101,11 @@
         width: 100% !important;
         position: relative;
     }
+
     .e-acrdn-content .e-acrdn-content {
         padding-left: 0.6rem !important;
     }
+
     .e-acrdn-header:hover .e-icons, .e-acrdn-header, .e-acrdn-header-content {
         text-decoration: none !important;
         color: inherit !important;
@@ -223,22 +231,22 @@
                 <div class="d-block border-top container-fluid border-bottom" @onclick:stopPropagation="false" @onclick:preventDefault>
                     <h4 class="pt-2">Add Media</h4>
                     <p class="mb-0" style="font-size:1em">
-                        Add Media relavent to the event, such as videos, images, news articles, etc.                       
+                        Add Media relavent to the event, such as videos, images, news articles, etc.
                     </p>
                 </div>
                 <div id="MediaList" class="container-fluid">
                     <CascadingValue Name="IsEdit" Value="false">
                         <MediaAccordion Medias="model.Medias" AddMedia="AddMedia" DeleteMedia="DeleteMedia" MoveMediaDown="MoveMediaDown" MoveMediaTop="MoveMediaTop" MoveMediaUp="MoveMediaUp">
                         </MediaAccordion>
-                    </CascadingValue>                 
+                    </CascadingValue>
                 </div>
             </div>
         </div>
     </EditForm>
 </div>
 @code {
-        [CascadingParameter]
-        private Task<AuthenticationState> _authState { get; set; }
+    [CascadingParameter]
+    private Task<AuthenticationState> _authState { get; set; }
     private AuthenticationState userState;
     protected async Task HandleValidSubmitAsync()
     {
@@ -298,104 +306,104 @@
                 }
                 string mediaSql = "INSERT INTO media (`IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`) " +
                                   "VALUES (@idtimelineinfo, @mediatype, @sourcepath, @gore, @sourcefrom, @blurb, @credit, @submittedby, @rank);";
-               await connection.ExecuteAsync(mediaSql, new
-                    {
-                        idtimelineinfo = IdTimelineinfo,
-                        mediatype = media.MediaType,
-                        sourcepath = path,
-                        gore = media.Gore,
-                        sourcefrom = media.SourceFrom,
-                        blurb = media.Blurb,
-                        credit = (string)media.Credit, //nullable
-                        submittedby = (string)userId, //nullable
-                        rank = media.ListIndex
-                    });                
+                await connection.ExecuteAsync(mediaSql, new
+                {
+                    idtimelineinfo = IdTimelineinfo,
+                    mediatype = media.MediaType,
+                    sourcepath = path,
+                    gore = media.Gore,
+                    sourcefrom = media.SourceFrom,
+                    blurb = media.Blurb,
+                    credit = (string)media.Credit, //nullable
+                    submittedby = (string)userId, //nullable
+                    rank = media.ListIndex
+                });
             }
 
             //Subject Table
             foreach (var subject in model.Subjects)
             {
-                    if (subject.SameAsId == null)
+                if (subject.SameAsId == null)
+                {
+                    //Create new subject
+                    var subjectSql = "INSERT INTO subjects (`Name`, `Race`, `Sex`) " +
+                                 "VALUES (@name, @race, @sex);" +
+                                 "SELECT LAST_INSERT_ID();";
+                    //Add to subjects table and return id
+                    var IdSubject = connection.QuerySingle<int>(subjectSql, new
                     {
-                        //Create new subject
-                        var subjectSql = "INSERT INTO subjects (`Name`, `Race`, `Sex`) " +
-                                     "VALUES (@name, @race, @sex);" +
-                                     "SELECT LAST_INSERT_ID();";
-                        //Add to subjects table and return id
-                        var IdSubject = connection.QuerySingle<int>(subjectSql, new
-                        {
-                            name = subject.Name,
-                            race = subject.Race,
-                            sex = subject.Sex
-                        });
+                        name = subject.Name,
+                        race = subject.Race,
+                        sex = subject.Sex
+                    });
 
-                        //Add to junction table
-                        var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
-                                          "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
-                        connection.Execute(junctionSql, new
-                        {
-                            idtimelineinfo = IdTimelineinfo,
-                            idsubject = IdSubject,
-                            armed = Convert.ToByte(subject.Armed),
-                            age = subject.Age
-                        });
-                    }
-                    else
+                    //Add to junction table
+                    var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
+                                      "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
+                    connection.Execute(junctionSql, new
                     {
-                        var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
-                                         "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
-                        connection.Execute(junctionSql, new
-                        {
-                            idtimelineinfo = IdTimelineinfo,
-                            idsubject = subject.SameAsId,
-                            armed = Convert.ToByte(subject.Armed),
-                            age = (byte?)subject.Age
-                        });
-                    }
-                
+                        idtimelineinfo = IdTimelineinfo,
+                        idsubject = IdSubject,
+                        armed = Convert.ToByte(subject.Armed),
+                        age = subject.Age
+                    });
+                }
+                else
+                {
+                    var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
+                                     "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
+                    connection.Execute(junctionSql, new
+                    {
+                        idtimelineinfo = IdTimelineinfo,
+                        idsubject = subject.SameAsId,
+                        armed = Convert.ToByte(subject.Armed),
+                        age = (byte?)subject.Age
+                    });
+                }
+
             }
             //Officer Table
             foreach (var officer in model.Officers)
-            {  
-                    if (officer.SameAsId == null)
+            {
+                if (officer.SameAsId == null)
+                {
+                    //Create new officer
+                    var officerSql = "INSERT INTO officers (`Name`, `Race`, `Sex`)" +
+                                 "VALUES (@name, @race, @sex);" +
+                                 "SELECT LAST_INSERT_ID();";
+                    //Add to officers table and return id
+                    var IdOfficer = connection.QuerySingle<int>(officerSql, new
                     {
-                        //Create new officer
-                        var officerSql = "INSERT INTO officers (`Name`, `Race`, `Sex`)" +
-                                     "VALUES (@name, @race, @sex);" +
-                                     "SELECT LAST_INSERT_ID();";
-                        //Add to officers table and return id
-                        var IdOfficer = connection.QuerySingle<int>(officerSql, new
-                        {
-                            name = officer.Name,
-                            race = officer.Race,
-                            sex = officer.Sex
-                        });
+                        name = officer.Name,
+                        race = officer.Race,
+                        sex = officer.Sex
+                    });
 
-                        //Add to junction table
-                        var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
-                                        "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
-                        connection.Execute(junctionSql, new
-                        {
-                            idtimelineinfo = IdTimelineinfo,
-                            idofficer = IdOfficer,
-                            age = (byte)officer.Age,
-                            misconduct = officer.Misconduct.Sum(),
-                            weapon = (int)officer.Weapon.Sum(),
-                        });
-                    }
-                    else
+                    //Add to junction table
+                    var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
+                                    "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
+                    connection.Execute(junctionSql, new
                     {
-                        var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
-                                         "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
-                        connection.Execute(junctionSql, new
-                        {
-                            idtimelineinfo = IdTimelineinfo,
-                            idofficer = officer.SameAsId,
-                            age = (byte?)officer.Age,
-                            misconduct = officer.Misconduct.Sum(),
-                            weapon = officer.Weapon.Sum(),
-                        });
-                    }                
+                        idtimelineinfo = IdTimelineinfo,
+                        idofficer = IdOfficer,
+                        age = (byte)officer.Age,
+                        misconduct = officer.Misconduct.Sum(),
+                        weapon = (int)officer.Weapon.Sum(),
+                    });
+                }
+                else
+                {
+                    var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
+                                     "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
+                    connection.Execute(junctionSql, new
+                    {
+                        idtimelineinfo = IdTimelineinfo,
+                        idofficer = officer.SameAsId,
+                        age = (byte?)officer.Age,
+                        misconduct = officer.Misconduct.Sum(),
+                        weapon = officer.Weapon.Sum(),
+                    });
+                }
             }
         }
         if (true) //if successful submit

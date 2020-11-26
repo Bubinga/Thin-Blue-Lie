@@ -1,6 +1,11 @@
 ﻿@page "/"
 @page "/Index"
 
+<Title>Thin Blue Lie</Title>
+<Meta property="og:type" content="website" />
+<Meta Name="description" Content="Every year, police kill roughly 1,000 people and harass countless people, but much of it gets buried
+    in documents and hidden from public view. Thin Blue Lie seeks to reveal this injustice." />
+
 <style>
     .bluestrikethrough {
         z-index: 5;
@@ -19,6 +24,9 @@
         position: relative;
         width: 100%;
     }
+    ul {
+        list-style-type: none;
+    }
 </style>
 <div class="header-image" style="background-image: url(Assets/Protests-Wallpaper.jpg) !important;">
     <div class="line"> <hr class="position-absolute bluestrikethrough"></div>
@@ -27,8 +35,32 @@
     </div>
     <div class="line"><hr class="position-absolute bluestrikethrough"></div>
 </div>
-<div class="py-3 px-5 border-bottom container">
-    <h6>Every year, police kill roughly <strong>1,000</strong> people and commit countless misconducts. </h6>
+<div class="container">
+    <div class="py-3 px-5 border-bottom">
+        <h6>
+            Every year, police kill roughly <strong>1,000</strong> people and harass countless people, but much of it gets buried
+            in documents and hidden from public view
+        </h6>
+    </div>
+    <div class="text-center">
+        <h5>
+            Since we were focusing on getting functionality working, the home page is a bit bare bones, explore the below links. 
+        </h5>
+    </div>
+    <div>
+        <ul>
+            <li>
+                <a href="/Events">Events</a>
+            </li>
+             <li>
+                <a href="/Submit">Submit an Event</a>
+            </li>
+             <li>
+                <a href="/About">About Us</a>
+
+            </li>
+        </ul>
+    </div>
 </div>
 
 
