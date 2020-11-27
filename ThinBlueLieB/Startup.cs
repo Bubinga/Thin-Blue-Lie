@@ -18,6 +18,9 @@ using ThinBlueLieB.Searches;
 using DiffPlex.DiffBuilder;
 using DiffPlex;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
+using ThinBlueLieB.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using ThinBlueLieB.Helper.Services;
 
 namespace ThinBlueLieB
 {
@@ -46,12 +49,13 @@ namespace ThinBlueLieB
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
+                options.SignIn.RequireConfirmedAccount = true;
                 options.User.AllowedUserNameCharacters =
-                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
+                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._ ";
                 options.User.RequireUniqueEmail = true;
-
             });
             services.AddOptions();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddSignalR();
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
@@ -75,6 +79,8 @@ namespace ThinBlueLieB
            
             services.AddSingleton<IDataAccess, DataAccess>();
             services.AddSingleton<SearchesEditReview>();
+
+            services.AddSingleton<Helper.Services.IEmailSender, EmailSender>();
 
             services.AddSyncfusionBlazor();
         }
