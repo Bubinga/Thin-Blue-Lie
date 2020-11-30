@@ -293,8 +293,8 @@
                 //if there is a file for the media save it to disk
                 if (media.Source != null & media.SourceFrom == MediaEnums.SourceFromEnum.Device)
                 {
-                    var rand = StringExtensions.RandomString(12); //random string of 12 characters
-                    path = ConfigHelper.GetUploadsDirectory() + rand;
+                    var rand = StringExtensions.RandomString(20); //random string of 20 characters
+                    path = ConfigHelper.GetUploadsDirectory() + rand + ".jpg";
                     FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
                     media.Source.Stream.WriteTo(filestream);
                     filestream.Close();
@@ -406,6 +406,7 @@
                 }
             }
         }
+        //TODO move all into querymultiple
         if (true) //if successful submit
         {
             NavManager.NavigateTo("/Index");
