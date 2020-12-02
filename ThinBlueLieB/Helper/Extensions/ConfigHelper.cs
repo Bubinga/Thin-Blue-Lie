@@ -11,7 +11,7 @@ namespace ThinBlueLieB.Helper
 
         public static string GetUploadsDirectory()
         {
-            return Startup.UploadsDirectory; //returns DataDB connection string
+            return "/Uploads"; //returns DataDB connection string
         }
 
         public static string GetConnectionString()
