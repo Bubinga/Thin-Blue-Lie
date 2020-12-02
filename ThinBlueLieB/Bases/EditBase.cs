@@ -59,7 +59,9 @@ namespace ThinBlueLieB.Bases
             DataAccess data = new DataAccess();
             var query = "SELECT * From timelineinfo t where t.IdTimelineinfo = @id;";
             Timelineinfo timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { id = Id }, GetConnectionString());
-            if (timelineinfo != null)
+            if (timelineinfo != null && 
+                //if post is not empty and not both locked and user missing perm to edit locked
+                !(timelineinfo.Locked == 1 && (User.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) == false)))
             {
                 var mediaQuery = "SELECT m.IdMedia, m.MediaType, m.SourcePath, m.Gore, m.SourceFrom, m.Blurb, m.Credit, m.SubmittedBy, m.Rank From media m where m.IdTimelineinfo = @id Order By m.Rank;";
                 var officerQuery = "SELECT o.IdOfficer, o.Name, o.Race, o.Sex, o.Local, o.Image, t_o.Age, t_o.Misconduct, t_o.Weapon " +
@@ -108,7 +110,7 @@ namespace ThinBlueLieB.Bases
                 return model;
             }
             EventExists = false;
-            return new SubmitModel { Timelineinfos = new ViewTimelineinfo() };
+            return new SubmitModel { Timelineinfos = new ViewTimelineinfo {Locked = timelineinfo.Locked } };
         }
 
 
@@ -133,6 +135,7 @@ namespace ThinBlueLieB.Bases
         DataAccess data = new DataAccess();
         int userId;
         int EditHistoryId;
+        public ApplicationUser User;
         //TODO only add to junction tables is something changes. 
         internal async void HandleValidSubmitAsync()
         {

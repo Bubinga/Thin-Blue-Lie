@@ -19,6 +19,8 @@ namespace DataAccessLibrary.Enums
             ReviewAll = 300,
             [Display(Name = "Edits Auto-Verified")]
             AutoVerified = 500,
+            [Display(Name = "Edit Locked Posts")]
+            EditLocked = 650,
             [Display(Name = "Mark posts as Locked")]
             MarkLocked = 750,
             [Display(Name = "Self Verify Edits")]

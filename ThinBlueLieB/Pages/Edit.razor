@@ -11,6 +11,9 @@
 @using System.IO
 @using Syncfusion.Blazor.Spinner
 @using Syncfusion.Blazor.Calendars
+@using Microsoft.AspNetCore.Identity
+@using DataAccessLibrary.UserModels
+@inject UserManager<ApplicationUser> userManager
 @inject NavigationManager navManager
 @attribute [Authorize]
 
@@ -219,12 +222,19 @@
         </EditForm>
     </div>
 }
+else if (model.Timelineinfos.Locked == 1 && (User.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) == false))
+{
+    <div class="container text-center container-fluid mt-5">
+        <h4>How did you get here? You need the <a href="/About/Reputation">"Edit Locked Posts"</a> privledge to edit this post</h4>
+    </div>
+}
 else if (!string.IsNullOrWhiteSpace(id) || EventExists == false)
 {
     <div class="container text-center container-fluid mt-5">
         <h4>Opps, this is not a valid url</h4>
     </div>
 }
+
 
 @code {
     string id;
@@ -238,6 +248,8 @@ else if (!string.IsNullOrWhiteSpace(id) || EventExists == false)
         if (!string.IsNullOrWhiteSpace(id))
         {
             Id = Convert.ToUInt32(id);
+            userState = await _authState;
+            User = await userManager.GetUserAsync(userState.User);
             model = await FetchDataAsync();
             if (model.Officers != null)
             {
@@ -251,7 +263,6 @@ else if (!string.IsNullOrWhiteSpace(id) || EventExists == false)
                 };
 
                 DateValue = Convert.ToDateTime(model.Timelineinfos.Date);
-                userState = await _authState;
                 this.StateHasChanged();
             }
         }
