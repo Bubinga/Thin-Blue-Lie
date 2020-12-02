@@ -31,7 +31,6 @@ namespace ThinBlueLieB
             Configuration = configuration;
         }
         public static string ConnectionString { get; private set; }
-        public static string UploadsDirectory { get; private set; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -93,14 +92,12 @@ namespace ThinBlueLieB
 
             if (env.IsDevelopment())
             {
-                UploadsDirectory = Configuration["Directories:DevUploads"];
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
             }
             else
-            {
-                UploadsDirectory = Configuration["Directories:PubUploads"];
+            {               
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
