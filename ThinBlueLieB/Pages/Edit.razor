@@ -222,6 +222,13 @@
         </EditForm>
     </div>
 }
+else if (EventPendingEdit)
+{
+    <div class="container text-center container-fluid mt-5">
+        <h4>This Event currently has a pending edit and cannot be editted</h4>
+        <h5>In the future we will allow users to edit a pending edit</h5>
+    </div>
+}
 else if (model.Timelineinfos.Locked == 1 && (User.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) == false))
 {
     <div class="container text-center container-fluid mt-5">
