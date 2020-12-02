@@ -54,11 +54,19 @@ namespace ThinBlueLieB.Bases
 
         public bool EventExists = false;
 
+        public bool EventPendingEdit = false;
         internal async Task<SubmitModel> FetchDataAsync()
         {
             DataAccess data = new DataAccess();
+            string checkPending = "SELECT e.Confirmed FROM edithistory e where e.IdTimelineinfo = @id Order by e.Timestamp desc Limit 1;";
+            int Confirmed = await data.LoadDataSingle<int, dynamic>(checkPending, new { id = Id }, GetConnectionString());
+            if (Confirmed == 0) { 
+                EventPendingEdit = true;
+                return new SubmitModel { Timelineinfos = new ViewTimelineinfo { } }; 
+            }
             var query = "SELECT * From timelineinfo t where t.IdTimelineinfo = @id;";
             Timelineinfo timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { id = Id }, GetConnectionString());
+            //TODO change to multipleQueryAsync
             if (timelineinfo != null && 
                 //if post is not empty and not both locked and user missing perm to edit locked
                 !(timelineinfo.Locked == 1 && (User.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) == false)))
