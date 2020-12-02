@@ -9,28 +9,15 @@
 @using static ThinBlueLieB.Helper.ConfigHelper
 @using Microsoft.AspNetCore.WebUtilities
 @using HtmlAgilityPack
+@using DataAccessLibrary.UserModels;
 @using static ThinBlueLieB.Helper.Extensions.StringExtensions
 @using static ThinBlueLieB.Helper.Algorithms.LinkConverter
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> userManager
 @inject IJSRuntime JsRuntime
 @implements IDisposable
 @inject NavigationManager navManager
 @inject AutoMapper.IMapper mapper
-
-<Meta Property="og:type" Content="article" />
-@if (Event.Any() && !string.IsNullOrEmpty(Event.FirstOrDefault()?.Data?.Title))
-{
-    <Title>@Event.FirstOrDefault().Data.Title - Thin Blue Lie</Title>
-    <Meta Property="og:title" Content="@(Event.FirstOrDefault().Data.Title + " - Thin Blue Lie")" />
-    <Meta Property="og:image" Content="@GetLinkFromData(Event.FirstOrDefault().Medias.FirstOrDefault())" />
-
-    HtmlDocument htmlDoc = new HtmlDocument();
-    htmlDoc.LoadHtml(Event.FirstOrDefault().Data.Context);
-    string result = htmlDoc.DocumentNode.InnerText;
-    <Meta Name="description" Content="@(TruncateString(result, 165))" />
-
-    <Meta Property="article:published_time" Content="@Event.FirstOrDefault().Data.Timestamp.ToUniversalTime().ToString()" />
-    <Meta Property="article:modified_time" Content="@Event.FirstOrDefault().Data.EventUpdated.ToUniversalTime().ToString()"/>
-}
 
 
 <style>
@@ -55,6 +42,25 @@
         background-color: white !important;
     }
 </style>
+
+
+<Meta Property="og:type" Content="article" />
+@if (Event.Any() && !string.IsNullOrEmpty(Event.FirstOrDefault()?.Data?.Title))
+{
+    <Title>@Event.FirstOrDefault().Data.Title - Thin Blue Lie</Title>
+    <Meta Property="og:title" Content="@(Event.FirstOrDefault().Data.Title + " - Thin Blue Lie")" />
+    <Meta Property="og:image" Content="@GetLinkFromData(Event.FirstOrDefault().Medias.FirstOrDefault())" />
+
+    HtmlDocument htmlDoc = new HtmlDocument();
+    htmlDoc.LoadHtml(Event.FirstOrDefault().Data.Context);
+    string result = htmlDoc.DocumentNode.InnerText;
+    <Meta Name="description" Content="@(TruncateString(result, 165))" />
+
+    <Meta Property="article:published_time" Content="@Event.FirstOrDefault().Data.Timestamp.ToUniversalTime().ToString()" />
+    <Meta Property="article:modified_time" Content="@Event.FirstOrDefault().Data.EventUpdated.ToUniversalTime().ToString()" />
+}
+
+
 <div class="d-flex my-2">
     <div class="col-10">
         <Timeline Date="(DateTime)Date" @ref="Timeline"></Timeline>
@@ -71,7 +77,6 @@
             <SfButton CssClass="e-outline text" IsPrimary="true" Content="Calendar"></SfButton>
         </SfTooltip>
     </div>
-    @**@
 </div>
 @foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
 {
@@ -81,7 +86,9 @@
                 <MediaCarousel Media="Case.Medias"></MediaCarousel>
             </div>
             <div class="col-lg-3">
-                <DataCard Information="Case.Data" Officers="Case.Officers" Subjects="Case.Subjects"></DataCard>
+                <CascadingValue Value="@(User?.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked))">
+                    <DataCard Information="Case.Data" Officers="Case.Officers" Subjects="Case.Subjects"></DataCard>
+                </CascadingValue>
             </div>
         </div>
         <div class="row">
@@ -127,13 +134,18 @@
     public DateTime? Date { get; set; }
     string newUri;
     Timeline Timeline;
-
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+    public AuthenticationState userState;
+    public ApplicationUser User;
 
     protected override async Task OnInitializedAsync()
     {
         navManager.LocationChanged += LocationChanged;
         Event = new List<ViewEvent>();
         var uri = new Uri(navManager.Uri);
+        userState = await AuthState;
+        User = await userManager.GetUserAsync(userState.User);
         if (string.IsNullOrWhiteSpace(QueryHelpers.ParseQuery(uri.Query).TryGetValue("d", out var type) ? type.First() : ""))
         {
             Date = DateTime.Today;
@@ -203,9 +215,9 @@
 
         //get new information from DB
         var query = @"SELECT t.*, Max(e.Timestamp) As EventUpdated, Min(e.Timestamp) as Timestamp
-                        From timelineinfo t 
-                        Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
-                        where t.date = @date and Confirmed = 1;";
+                From timelineinfo t
+                Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
+                where t.date = @date and Confirmed = 1;";
         List<Timelineinfo> timelineinfo = await data.LoadData<Timelineinfo, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd") }, GetConnectionString());
         foreach ((var Case, Int32 i) in timelineinfo.Select((Case, i) => (Case, i)))
         {

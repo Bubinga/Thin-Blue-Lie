@@ -1,4 +1,6 @@
 ﻿@page "/About/Reputation"
+@using static DataAccessLibrary.Enums.PrivledgeEnum
+@using static ThinBlueLieB.Helper.Extensions.EnumExtensions 
 
 <Title>Reputation System - Thin Blue Lie</Title>
 <Meta Property="og:type" Content="article" />
@@ -20,7 +22,7 @@
             color: black;
         }
 
-    .e-lock:before{
+    .e-MarkLocked:before, .e-EditLocked:before {
         content: '\e735'
     }
 </style>
@@ -71,62 +73,14 @@
                     </div>
                 </div>
                 <div class="flex-column pt-2 justify-content-between border-bottom">
-                    <div class="d-block">
-                        <div>
-                            <span class="e-icons e-lock"></span>
-                            <span class="reputation">2000</span>
-                            <span>Friend: Can delete posts</span>
+                    @foreach (var privledge in Enum.GetValues(typeof(Privledges)))
+                    {
+                        <div class="d-block">
+                            <span class="e-icons e-@(Convert.ToString(privledge))"></span>
+                            <span class="reputation">@(Convert.ToInt32(privledge))</span>
+                            <span>@GetEnumDisplayName((Privledges)privledge)</span>
                         </div>
-                    </div>
-                    <div class="d-block">
-                        <div>
-                            <span class="e-icons e-lock"></span>
-                            <span class="reputation">1000</span>
-                            <span>Self verify edits</span>
-                        </div>
-                    </div>
-                    <div class="d-block">
-                        <div>
-                            <span class="e-icons e-lock"></span>
-                            <span class="reputation">750</span>
-                            <span>Mark posts as locked</span>
-                        </div>
-                    </div>
-                    <div class="d-block">
-                        <div>
-                            <span class="e-icons e-lock"></span>
-                            <span class="reputation">500</span>
-                            <span>Review all Edits</span>
-                        </div>
-                    </div>
-                    <div class="d-block">
-                        <div>
-                            <span class="e-icons e-lock"></span>
-                            <span class="reputation">300</span>
-                            <span>New Events are auto-verified</span>
-                        </div>
-                    </div>
-                    <div class="d-block">
-                        <div>
-                            <span class="e-icons e-lock"></span>
-                            <span class="reputation">200</span>
-                            <span>Edit notable events</span>
-                        </div>
-                    </div>
-                    <div class="d-block">
-                        <div>
-                            <span class="e-icons e-lock"></span>
-                            <span class="reputation">50</span>
-                            <span>Edit Officer and Subject Information</span>
-                        </div>
-                    </div>
-                    <div class="d-block">
-                        <div>
-                            <span class="e-icons e-lock"></span>
-                            <span class="reputation">1</span>
-                            <span>Edit and Flag posts</span>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>

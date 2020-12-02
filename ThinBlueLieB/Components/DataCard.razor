@@ -120,7 +120,10 @@ else
             </div>
         </div>
         <div class="card-footer">
-            <a href="/Edit?id=@Information.IdTimelineinfo">Edit</a>
+            @if (Information.Locked != 1 && CanEditLocked)
+            {
+                <a href="/Edit?id=@Information.IdTimelineinfo">Edit</a>
+            }
             <a href="javascript:void" @onclick="@(() => showFlagPopover = true)">Flag</a>
             <SfDialog ShowCloseIcon="true" ID="prompt_dialog" @bind-Visible="@showFlagPopover" Target="#target" Width="240px">
                 <DialogTemplates>
@@ -128,7 +131,7 @@ else
                         Flag Content
                     </Header>
                     <Content>
-                      <Flag IdTimelineinfo="Information.IdTimelineinfo"></Flag>
+                        <Flag IdTimelineinfo="Information.IdTimelineinfo"></Flag>
                     </Content>
                 </DialogTemplates>
             </SfDialog>
@@ -143,6 +146,8 @@ else
     public List<ViewOfficer> Officers { get; set; }
     [Parameter]
     public List<ViewSubject> Subjects { get; set; }
+    [CascadingParameter]
+    public bool CanEditLocked { get; set; }
 
     List<string> subjectsDetails;
     List<string> officersDetails;
