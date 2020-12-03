@@ -1,24 +1,15 @@
 ﻿@page "/Submit"
 @inherits SubmitBase
-@inject NavigationManager NavManager
-@inject SignInManager<ApplicationUser> signInManager
-@inject UserManager<ApplicationUser> userManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject AutoMapper.IMapper mapper
 
-@using DataAccessLibrary.UserModels
-@using Dapper
-@using MySql.Data.MySqlClient
-@using Microsoft.AspNetCore.Identity;
 @using Syncfusion.Blazor.DropDowns
-@using ThinBlueLieB.Helper.Extensions
 @using ThinBlueLieB.Helper
+@using ThinBlueLieB.Helper.Extensions
 @using Syncfusion.Blazor.RichTextEditor
 @using Syncfusion.Blazor.Buttons
 @using static ThinBlueLieB.Searches.SearchClasses;
-@using System.IO
 @using Syncfusion.Blazor.Calendars
-@using Ganss.XSS;
 
 
 <Title>Post Event - Thin Blue Lie</Title>
@@ -132,7 +123,8 @@
                 <div class="col-5 dropdown" style="position:relative;">
                     <div class="align">
                         <div class="position-relative mb-1 mb-md-0"> <br /> <label class="position-absolute" style="top:-6px; font-size:14px; line-height:24px;">State</label></div>
-                        <SfDropDownList TItem="string" TValue="TimelineinfoEnums.StateEnum?" PopupHeight="230px" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                        <SfDropDownList TItem="EnumExtensions.ListItem" TValue="TimelineinfoEnums.StateEnum?" PopupHeight="230px" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                            <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                         </SfDropDownList>
                         <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>
                     </div>
@@ -198,6 +190,7 @@
                 <ValidationMessage For="@(() => model.Timelineinfos.Context)"></ValidationMessage>
             </div>
             <div class="form-group">
+                <ValidationSummary />
                 <button id="submit" type="submit" class="btn btn-primary">Submit</button>
                 <a asp-page="/Index" style="float:right">Back to Home</a>
             </div>
@@ -247,181 +240,15 @@
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> _authState { get; set; }
-    private AuthenticationState userState;
-    protected async Task HandleValidSubmitAsync()
-    {
-        //display loading gif in modal while doing the processing
-
-        //TODO add locked option in form for authed users with perms
-        model.Timelineinfos.Locked = 0;
-        string? userId;
-        if (signInManager.IsSignedIn(userState.User))
-        {
-            userId = userManager.GetUserId(userState.User);
-            //model.Timelineinfos.SubmittedBy = userId;
-        }
-        else
-        {
-            userId = null;
-        }
-        //TODO if user is has perms auto verify
-        model.Timelineinfos.Verified = 1;
-        int IdTimelineinfo;
-        var sanitizer = new HtmlSanitizer();
-        using (var connection = new MySqlConnection(ConfigHelper.GetConnectionString()))
-        {
-            var timelineSave = "INSERT INTO timelineinfo (`Date`, `State`, `City`, `Context`, `Locked`, `SubmittedBy`, `Verified`)" +
-                               "VALUES (@date, @state, @city, @context, @locked, @submittedby, @verified);" +
-                               "SELECT LAST_INSERT_ID();";
-
-            //Set IdTimelineinfo and insert data into `timelineinfo` table
-            IdTimelineinfo = connection.QuerySingle<int>(timelineSave, new
-            {
-                date = model.Timelineinfos.Date,
-                state = model.Timelineinfos.State,
-                city = model.Timelineinfos.City,
-                context = sanitizer.Sanitize(model.Timelineinfos.Context),
-                locked = model.Timelineinfos.Locked,
-                submittedby = (string)userId, //nullable
-                verified = model.Timelineinfos.Verified
-            });
-
-
-            foreach (var media in model.Medias)
-            {
-                string path;
-                //if there is a file for the media save it to disk
-                if (media.Source != null & media.SourceFrom == MediaEnums.SourceFromEnum.Device)
-                {
-                    var rand = StringExtensions.RandomString(20); //random string of 20 characters
-                    path = ConfigHelper.GetUploadsDirectory() + rand + ".jpg";
-                    FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
-                    media.Source.Stream.WriteTo(filestream);
-                    filestream.Close();
-                    media.Source.Stream.Close();
-                }
-                else
-                {
-                    path = media.SourcePath;
-                }
-                string mediaSql = "INSERT INTO media (`IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`) " +
-                                  "VALUES (@idtimelineinfo, @mediatype, @sourcepath, @gore, @sourcefrom, @blurb, @credit, @submittedby, @rank);";
-                await connection.ExecuteAsync(mediaSql, new
-                {
-                    idtimelineinfo = IdTimelineinfo,
-                    mediatype = media.MediaType,
-                    sourcepath = path,
-                    gore = media.Gore,
-                    sourcefrom = media.SourceFrom,
-                    blurb = media.Blurb,
-                    credit = (string)media.Credit, //nullable
-                    submittedby = (string)userId, //nullable
-                    rank = media.ListIndex
-                });
-            }
-
-            //Subject Table
-            foreach (var subject in model.Subjects)
-            {
-                if (subject.SameAsId == null)
-                {
-                    //Create new subject
-                    var subjectSql = "INSERT INTO subjects (`Name`, `Race`, `Sex`) " +
-                                 "VALUES (@name, @race, @sex);" +
-                                 "SELECT LAST_INSERT_ID();";
-                    //Add to subjects table and return id
-                    var IdSubject = connection.QuerySingle<int>(subjectSql, new
-                    {
-                        name = subject.Name,
-                        race = subject.Race,
-                        sex = subject.Sex
-                    });
-
-                    //Add to junction table
-                    var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
-                                      "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
-                    connection.Execute(junctionSql, new
-                    {
-                        idtimelineinfo = IdTimelineinfo,
-                        idsubject = IdSubject,
-                        armed = Convert.ToByte(subject.Armed),
-                        age = subject.Age
-                    });
-                }
-                else
-                {
-                    var junctionSql = "INSERT INTO timelineinfo_subject (`IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
-                                     "VALUES (@idtimelineinfo, @idsubject, @armed, @age);";
-                    connection.Execute(junctionSql, new
-                    {
-                        idtimelineinfo = IdTimelineinfo,
-                        idsubject = subject.SameAsId,
-                        armed = Convert.ToByte(subject.Armed),
-                        age = (byte?)subject.Age
-                    });
-                }
-
-            }
-            //Officer Table
-            foreach (var officer in model.Officers)
-            {
-                if (officer.SameAsId == null)
-                {
-                    //Create new officer
-                    var officerSql = "INSERT INTO officers (`Name`, `Race`, `Sex`)" +
-                                 "VALUES (@name, @race, @sex);" +
-                                 "SELECT LAST_INSERT_ID();";
-                    //Add to officers table and return id
-                    var IdOfficer = connection.QuerySingle<int>(officerSql, new
-                    {
-                        name = officer.Name,
-                        race = officer.Race,
-                        sex = officer.Sex
-                    });
-
-                    //Add to junction table
-                    var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
-                                    "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
-                    connection.Execute(junctionSql, new
-                    {
-                        idtimelineinfo = IdTimelineinfo,
-                        idofficer = IdOfficer,
-                        age = (byte)officer.Age,
-                        misconduct = officer.Misconduct.Sum(),
-                        weapon = (int)officer.Weapon.Sum(),
-                    });
-                }
-                else
-                {
-                    var junctionSql = "INSERT INTO timelineinfo_officer (`IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
-                                     "VALUES (@idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
-                    connection.Execute(junctionSql, new
-                    {
-                        idtimelineinfo = IdTimelineinfo,
-                        idofficer = officer.SameAsId,
-                        age = (byte?)officer.Age,
-                        misconduct = officer.Misconduct.Sum(),
-                        weapon = officer.Weapon.Sum(),
-                    });
-                }
-            }
-        }
-        //TODO move all into querymultiple
-        if (true) //if successful submit
-        {
-            NavManager.NavigateTo("/Index");
-        }
-    }
 
     public List<ViewSimilar>? SimilarEvents { get; set; } = new List<ViewSimilar>();
     protected async void FindEvents(ChangedEventArgs<DateTime?> args)
     {
-        model.Timelineinfos.Date = DateValue?.ToString("yyyy-MM-dd");
+        model.Timelineinfos.Date = Convert.ToDateTime(DateValue);
         SearchesSubmit searchesSubmit = new SearchesSubmit();
         SimilarEvents = await searchesSubmit.GetSimilar(args.Value?.ToString("yyyy-MM-dd"));
         this.StateHasChanged();
     }
-
     protected override async Task OnInitializedAsync()
     {
         userState = await _authState;

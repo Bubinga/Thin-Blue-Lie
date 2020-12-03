@@ -27,12 +27,5 @@ namespace DataAccessLibrary.DataModels
         public int? SubmittedBy { get; set; }
         public short Rank { get; set; }
         public DateTime Timestamp { get; set; }
-
-        [ForeignKey(nameof(IdTimelineinfo))]
-        [InverseProperty(nameof(TimelineinfoFull.Media))]
-        public virtual TimelineinfoFull IdTimelineinfoNavigation { get; set; }
-        [ForeignKey(nameof(SubmittedBy))]
-        [InverseProperty(nameof(Aspnetusers.Media))]
-        public virtual Aspnetusers SubmittedByNavigation { get; set; }
     }
 }

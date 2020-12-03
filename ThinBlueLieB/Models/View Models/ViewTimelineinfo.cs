@@ -14,8 +14,7 @@ namespace ThinBlueLieB.Models
         [MaxLength(70, ErrorMessage = "Please enter less than 70 characters")]
         public string Title { get; set; }
         [Required(ErrorMessage = "Please enter a Date")]
-        [MaxLength(10, ErrorMessage = "Please enter a date in the format 'yyyy-MM-dd'")]
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         [Required(ErrorMessage = "Please select a State")]
         public TimelineinfoEnums.StateEnum? State { get; set; }
         [Required(ErrorMessage ="Please enter a City")]
@@ -26,6 +25,5 @@ namespace ThinBlueLieB.Models
         public string Context { get; set; }
         public byte Locked { get; set; }
         public int? SubmittedBy { get; set; }
-        public byte Verified { get; set; }
     }
 }

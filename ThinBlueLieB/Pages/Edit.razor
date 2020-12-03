@@ -133,7 +133,8 @@
                     <div class="col-5 dropdown" style="position:relative;">
                         <div class="align">
                             <div class="position-relative mb-1 mb-md-0"> <br /> <label class="position-absolute" style="top:-6px; font-size:14px; line-height:24px;">State</label></div>
-                            <SfDropDownList TItem="string" TValue="TimelineinfoEnums.StateEnum?" PopupHeight="230px" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                            <SfDropDownList TItem="EnumExtensions.ListItem" TValue="TimelineinfoEnums.StateEnum?" PopupHeight="230px" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                                <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                             </SfDropDownList>
                             <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>
                         </div>

@@ -45,7 +45,7 @@
 
 
 <Meta Property="og:type" Content="article" />
-@if (Event.Any() && !string.IsNullOrEmpty(Event.FirstOrDefault()?.Data?.Title))
+@if (EventExists)
 {
     <Title>@Event.FirstOrDefault().Data.Title - Thin Blue Lie</Title>
     <Meta Property="og:title" Content="@(Event.FirstOrDefault().Data.Title + " - Thin Blue Lie")" />
@@ -58,6 +58,10 @@
 
     <Meta Property="article:published_time" Content="@Event.FirstOrDefault().Data.Timestamp.ToUniversalTime().ToString()" />
     <Meta Property="article:modified_time" Content="@Event.FirstOrDefault().Data.EventUpdated.ToUniversalTime().ToString()" />
+}
+else
+{
+    <Title>Events - Thin Blue Lie</Title>
 }
 
 
@@ -78,7 +82,9 @@
         </SfTooltip>
     </div>
 </div>
-@foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
+@if (EventExists)
+{
+foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
 {
     <div class="mx-3">
         <div class="row">
@@ -128,7 +134,7 @@
         </div>
     </div>
 }
-
+}
 @code {
     public List<ViewEvent> Event { get; set; }
     public DateTime? Date { get; set; }
@@ -138,9 +144,10 @@
     public Task<AuthenticationState> AuthState { get; set; }
     public AuthenticationState userState;
     public ApplicationUser User;
-
+    public bool EventExists = false;
     protected override async Task OnInitializedAsync()
     {
+        EventExists = false;
         navManager.LocationChanged += LocationChanged;
         Event = new List<ViewEvent>();
         var uri = new Uri(navManager.Uri);
@@ -159,11 +166,10 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (!firstRender && EventExists)
         {
             await JsRuntime.InvokeVoidAsync("InitializeSwiper");
         }
-        await JsRuntime.InvokeVoidAsync("InitializeSwiper");
     }
 
     //When the url changes, rerun the changeday on the new date
@@ -215,37 +221,41 @@
 
         //get new information from DB
         var query = @"SELECT t.*, Max(e.Timestamp) As EventUpdated, Min(e.Timestamp) as Timestamp
-                From timelineinfo t
-                Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
-                where t.date = @date and Confirmed = 1;";
-        List<Timelineinfo> timelineinfo = await data.LoadData<Timelineinfo, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd") }, GetConnectionString());
-        foreach ((var Case, Int32 i) in timelineinfo.Select((Case, i) => (Case, i)))
+            From timelineinfo t
+            Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
+            where t.date = @date and Confirmed = 1;";
+        List<Timelineinfo?> timelineinfo = await data.LoadData<Timelineinfo?, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd") }, GetConnectionString());
+        if (timelineinfo.FirstOrDefault()?.City != null)
         {
-            var mediaQuery = "SELECT m.MediaType, m.SourcePath, m.Gore, m.SourceFrom, m.Blurb, m.Credit, m.SubmittedBy, m.Rank From media m where m.IdTimelineinfo = @id Order By m.Rank;";
-            var officerQuery = "SELECT o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
-                    "FROM timelineinfo t " +
-                    "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
-                    "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
-                    "WHERE t.IdTimelineinfo = @id ;";
-            var subjectQuery = "SELECT s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed " +
-                    "FROM timelineinfo t " +
-                    "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
-                    "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
-                    "WHERE t.IdTimelineinfo = @id;";
-
-            //get media, officers, and subjects using timelineinfo id
-            List<Media> media = await data.LoadData<Media, dynamic>(mediaQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
-            List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
-            List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
-
-
-            Event.Add(new ViewEvent
+            foreach ((var Case, Int32 i) in timelineinfo.Select((Case, i) => (Case, i)))
             {
-                Data = Case,
-                Medias = media,
-                Officers = mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers),
-                Subjects = mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects)
-            });
+                var mediaQuery = "SELECT m.MediaType, m.SourcePath, m.Gore, m.SourceFrom, m.Blurb, m.Credit, m.SubmittedBy, m.Rank From media m where m.IdTimelineinfo = @id Order By m.Rank;";
+                var officerQuery = "SELECT o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
+                        "FROM timelineinfo t " +
+                        "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
+                        "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
+                        "WHERE t.IdTimelineinfo = @id ;";
+                var subjectQuery = "SELECT s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed " +
+                        "FROM timelineinfo t " +
+                        "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
+                        "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
+                        "WHERE t.IdTimelineinfo = @id;";
+
+                //get media, officers, and subjects using timelineinfo id
+                List<Media> media = await data.LoadData<Media, dynamic>(mediaQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
+                List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
+                List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
+
+
+                Event.Add(new ViewEvent
+                {
+                    Data = Case,
+                    Medias = media,
+                    Officers = mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers),
+                    Subjects = mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects)
+                });
+                EventExists = true;
+            }
         }
         this.StateHasChanged();
     }

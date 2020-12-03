@@ -84,10 +84,21 @@
                 </div>
                 <div class="col-4">
                     <div class="d-flex h-100 justify-content-center align-items-center">
-                        @if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+                        @if (media.MediaType == MediaEnums.MediaTypeEnum.Image)
                         {
-                            @*<img class="preview-image" src="@((media.Source?.FileInfo as Syncfusion.Blazor.Inputs.FileInfo)?.RawFile)" />*@
-                            <h5>There is currently no support for previews of uploaded images, but we are working on it</h5>
+                            if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+                            {
+                                @*<img class="preview-image" src="@((media.Source?.FileInfo as Syncfusion.Blazor.Inputs.FileInfo)?.RawFile)" />*@
+                                <h5>There is currently no support for previews of uploaded images, but we are working on it</h5>
+                            }
+                            else if (!string.IsNullOrWhiteSpace(media.SourcePath))
+                            {
+                                <img class="preview-image" src="@media.SourcePath" />
+                            }
+                            else
+                            {
+                                <img class="preview-image" src="/Assets/Placeholder-Image.png" />
+                            }
                         }
                         else if (media.MediaType == MediaEnums.MediaTypeEnum.News)
                         {
@@ -95,9 +106,24 @@
                         }
                         else
                         {
-                            @if (media.SourcePath != null)
+                            if (!string.IsNullOrWhiteSpace(media.SourcePath))
                             {
-                                <img class="preview-image" src="@(GetLinkFromData(Mapper.Map<ViewMedia, Media>(media)))" />
+                                Uri myUri = new Uri(media.SourcePath);
+                                string host = myUri.Host;
+                                if (host.Contains("youtube"))
+                                    media.SourceFrom = SourceFromEnum.Youtube;
+                                else if (host.Contains("reddit") || host.Contains("v.redd.it"))
+                                    media.SourceFrom = SourceFromEnum.Reddit;
+                                else
+                                    media.SourceFrom = null;
+                                if (media.SourceFrom != null)
+                                {
+                                    <img class="preview-image" src="@(GetLinkFromData(new Media {MediaType = (byte)media.MediaType, SourcePath = media.SourcePath, SourceFrom = (byte)media.SourceFrom}, false, false))" />
+                                }
+                                else
+                                {
+                                    <h5>There is currently no support for videos off of "@host"</h5>
+                                }
                             }
                             else
                             {

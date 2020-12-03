@@ -66,7 +66,6 @@ namespace ThinBlueLieB.Helper
                 .ForMember(dest => dest.Rank, opt => opt.MapFrom(src => (short)src.ListIndex))
                 .ForMember(dest => dest.MediaType, opt => opt.MapFrom(src => (byte)src.MediaType))
                 .ForMember(dest => dest.SourceFrom, opt => opt.MapFrom(src => (byte)src.SourceFrom));
-            CreateMap<DisplayMedia, ViewMedia>();
             CreateMap<EditMedia, Media>();
             CreateMap<ViewTimelineinfo, Timelineinfo>();
             CreateMap<Timelineinfo, ViewTimelineinfo>();
