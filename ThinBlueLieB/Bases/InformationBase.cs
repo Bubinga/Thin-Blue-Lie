@@ -9,6 +9,8 @@ using ThinBlueLieB.Helper;
 using ThinBlueLieB.Helper.Extensions;
 using ThinBlueLieB.Models;
 using static DataAccessLibrary.Enums.MediaEnums;
+using static ThinBlueLieB.Components.SimilarPeople;
+using static ThinBlueLieB.Helper.Extensions.EnumExtensions;
 using static ThinBlueLieB.Models.SubmitBase;
 using static ThinBlueLieB.Searches.SearchClasses;
 
@@ -20,9 +22,9 @@ namespace ThinBlueLieB.Bases
         {
             Timelineinfos = new ViewTimelineinfo(),
             Medias = new List<ViewMedia> { 
-                new ViewMedia { MediaType = MediaTypeEnum.Image, Blurb="Placeholder Image Media", ListIndex = 0 },
-               new ViewMedia { MediaType = MediaTypeEnum.Video, Blurb="Placeholder Video Media",ListIndex = 1 },
-                  new ViewMedia { MediaType = MediaTypeEnum.News, Blurb="Placeholder News Media", ListIndex = 2 }
+                new ViewMedia { MediaType = MediaTypeEnum.Image, Blurb="Placeholder Image", ListIndex = 0 },
+               new ViewMedia { MediaType = MediaTypeEnum.Video, Blurb="Placeholder Video",ListIndex = 1 },
+                  new ViewMedia { MediaType = MediaTypeEnum.News, Blurb="Placeholder News", ListIndex = 2, SourceFrom = SourceFromEnum.Link }
             },
             Officers = new List<ViewOfficer> { new ViewOfficer { ListIndex = 0 } },
             Subjects = new List<ViewSubject> { new ViewSubject { ListIndex = 0 } }
@@ -52,29 +54,47 @@ namespace ThinBlueLieB.Bases
             new ToolbarItemModel() { Command = ToolbarCommand.Redo }
          };
 
-        public IEnumerable<string> States = EnumExtensions.GetEnumDisplayNames<TimelineinfoEnums.StateEnum>();
+        public IEnumerable<ListItem> States = GetEnumDisplayNames<TimelineinfoEnums.StateEnum>();
 
         public DateTime Today { get; set; } =  DateTime.Today;
         public DateTime MinDate { get; set; } = new DateTime(1776, 6, 4);
         public DateTime? DateValue { get; set; } = DateTime.Today;
 
-        internal void SetSameAsSubject(Tuple<int, int> tuple)
+        internal void SetSameAsSubject(SimilarPeopleModel person)
         {
-            model.Subjects[tuple.Item2].SameAsId = tuple.Item1;
-            SimilarSubjects[tuple.Item2] = new List<SimilarPersonGeneral>();
+            model.Subjects[person.PersonListIndex].SameAsId = person.IdPerson;
+            model.Subjects[person.PersonListIndex].Age = person.Age == 0 ? null : person.Age;
+            model.Subjects[person.PersonListIndex].Name = person.Name;
+            model.Subjects[person.PersonListIndex].Sex = person.Sex;
+            model.Subjects[person.PersonListIndex].Race = person.Race;
+            SimilarSubjects[person.PersonListIndex] = new List<SimilarPersonGeneral>();
         }
-        internal void SetSameAsOfficer(Tuple<int, int> tuple)
+        internal void SetSameAsOfficer(SimilarPeopleModel person)
         {
-            model.Officers[tuple.Item2].SameAsId = tuple.Item1;
-            SimilarOfficers[tuple.Item2] = new List<SimilarPersonGeneral>();
+            model.Officers[person.PersonListIndex].SameAsId = person.IdPerson;
+            model.Officers[person.PersonListIndex].Age = person.Age == 0? null : person.Age;
+            model.Officers[person.PersonListIndex].Name = person.Name;
+            model.Officers[person.PersonListIndex].Sex = person.Sex;
+            model.Officers[person.PersonListIndex].Race = person.Race;
+            SimilarOfficers[person.PersonListIndex] = new List<SimilarPersonGeneral>();
         }
         const int MaximumMedia = 20;
         internal void AddMedia(MediaTypeEnum mediaType)
         {
+            //if the given media is below the maximum total
             if (model.Medias.Where(m => m.MediaType == mediaType).Count() < MaximumMedia)
             {
-                var newMediaItem = new ViewMedia { ListIndex = model.Medias.Count, MediaType = mediaType };
-                model.Medias.Add(newMediaItem);
+                if (mediaType != MediaTypeEnum.News)
+                {
+                    var newMediaItem = new ViewMedia { ListIndex = model.Medias.Count, MediaType = mediaType };
+                    model.Medias.Add(newMediaItem);
+                }
+                else
+                {
+                    var newMediaItem = new ViewMedia { ListIndex = model.Medias.Count, MediaType = mediaType, SourceFrom = SourceFromEnum.Link };
+                    model.Medias.Add(newMediaItem);
+                }
+             
             }           
         }
 

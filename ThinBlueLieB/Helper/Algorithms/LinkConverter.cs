@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using ThinBlueLieB.Helper.Algorithms.WebsiteProfiling;
 using ThinBlueLieB.Models;
 using static DataAccessLibrary.Enums.MediaEnums;
@@ -35,7 +36,7 @@ namespace ThinBlueLieB.Helper.Algorithms
             }
         }
 
-        public static string GetLinkFromData(Media media, bool video = false)
+        public static string GetLinkFromData(Media media, bool video = false, bool procressed = true)
         {
             if ((MediaTypeEnum)media.MediaType == MediaTypeEnum.Video)
             {
@@ -48,8 +49,14 @@ namespace ThinBlueLieB.Helper.Algorithms
                     }
                     else
                     {
+                        if (procressed == false)
+                        {
+                            Uri uri = new Uri(media.SourcePath, UriKind.Absolute);
+                            media.SourcePath = HttpUtility.ParseQueryString(uri.Query).Get("v");                           
+                        }
                         var path = $"https://i.ytimg.com/vi/{media.SourcePath}/0.jpg";
                         return path;
+
                     }
                 }
                 //Add support for reddit

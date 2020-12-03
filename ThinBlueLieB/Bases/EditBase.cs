@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Dapper;
 using DataAccessLibrary.DataAccess;
 using DataAccessLibrary.DataModels;
 using DataAccessLibrary.DataModels.EditModels;
@@ -10,20 +9,13 @@ using KellermanSoftware.CompareNetObjects;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
-using MySql.Data.MySqlClient;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using ThinBlueLieB.Helper;
 using ThinBlueLieB.Helper.Algorithms;
 using ThinBlueLieB.Helper.Extensions;
 using ThinBlueLieB.Models;
-using ThinBlueLieB.ViewModels;
 using static DataAccessLibrary.Enums.EditEnums;
 using static ThinBlueLieB.Helper.ConfigHelper;
 using static ThinBlueLieB.Models.SubmitBase;
@@ -89,7 +81,7 @@ namespace ThinBlueLieB.Bases
                 List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Id }, GetConnectionString());
                 var Info = new ViewTimelineinfo
                 {
-                    Date = timelineinfo.Date.ToString("yyyy-MM-dd"),
+                    Date = timelineinfo.Date,
                     State = (TimelineinfoEnums.StateEnum?)timelineinfo.State,
                     City = timelineinfo.City,
                     Title = timelineinfo.Title,
@@ -322,6 +314,7 @@ namespace ThinBlueLieB.Bases
                 sanitizer.AllowedCssProperties.Remove("color");
                 sanitizer.AllowedCssProperties.Remove("display");
                 sanitizer.AllowedCssProperties.Remove("font-style");
+                sanitizer.AllowedCssProperties.Remove("font-family");
                 sanitizer.AllowedCssProperties.Remove("background-color");
                 sanitizer.AllowedCssProperties.Remove("whitespace");
                 model.Timelineinfos.Context = sanitizer.Sanitize(model.Timelineinfos.Context);

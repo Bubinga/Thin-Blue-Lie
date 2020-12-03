@@ -40,6 +40,7 @@ namespace ThinBlueLieB.Searches
             public string Name { get; set; }
             public byte Race { get; set; }
             public byte Sex { get; set; }
+            public byte Age { get; set; }
             public List<SimilarPersonEvents> Events { get; set; }
 
         }

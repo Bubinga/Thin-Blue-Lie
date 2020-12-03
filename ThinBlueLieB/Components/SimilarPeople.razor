@@ -25,7 +25,10 @@
                     <div>
                         <span class="name">@Person.Name</span>
                     </div>
-                    <div @onclick="@(() => SetSameAs.InvokeAsync(new Tuple<int,int>(Person.IdPerson, PersonListIndex)))" @onclick:stopPropagation="false" @onclick:preventDefault class="d-inline-flex ml-2">
+                    <div @onclick="@(() => SetSameAs.InvokeAsync(
+                                         new SimilarPeopleModel {IdPerson = Person.IdPerson, PersonListIndex = PersonListIndex, Name = Person.Name,
+                                                                Age = Person.Age, Race = (TimelineinfoEnums.RaceEnum)Person.Race, Sex = (TimelineinfoEnums.SexEnum)Person.Sex}))"
+                         @onclick:stopPropagation="false" @onclick:preventDefault class="d-inline-flex ml-2">
                         <SfButton CssClass="e-small e-flat float-right" IsPrimary="true">
                             Same Person
                         </SfButton>
@@ -60,5 +63,11 @@
     [Parameter]
     public int PersonListIndex { get; set; }
     [Parameter]
-    public EventCallback<Tuple<int, int>> SetSameAs { get; set; }
+    public EventCallback<SimilarPeopleModel> SetSameAs { get; set; }
+
+    public class SimilarPeopleModel : CommonPerson
+    {
+        public int IdPerson { get; set; }
+        public int PersonListIndex { get; set; }
+    }
 }
