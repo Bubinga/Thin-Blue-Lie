@@ -13,7 +13,8 @@
         font-size: 1.1rem;
         padding-bottom: 0 !important;
     }
-    #SideCard{
+
+    #SideCard {
         margin-top: .8rem;
     }
 </style>
@@ -21,21 +22,26 @@
 {
     <p>Loading</p>
 }
-else{
-<SfCard ID="SideCard">
-    <CardImage Image="@news.Image.ToString()" />
-    <CardHeader Title="@news.Title" />
-    @if (ShortVersion == false)
-    {
-        <CardContent Content="@news.Description" />
-        <CardFooter>
-            <CardFooterContent>
-                <a class="e-btn e-outline e-primary" href="@news.Url.ToString()">Read More</a>
-                <span class="float-right">@news.SiteName</span>
-            </CardFooterContent>
-        </CardFooter>
-    }
-</SfCard>
+else if (news.Error == true)
+{
+    <p class="text-danger">Something went wrong, check your link</p>
+}
+else
+{
+    <SfCard ID="SideCard">
+        <CardImage Image="@news.Image?.ToString()" />
+        <CardHeader Title="@news.Title" />
+        @if (ShortVersion == false)
+        {
+            <CardContent Content="@news.Description" />
+            <CardFooter>
+                <CardFooterContent>
+                    <a class="e-btn e-outline e-primary" href="@news.Url.ToString()">Read More</a>
+                    <span class="float-right">@news.SiteName</span>
+                </CardFooterContent>
+            </CardFooter>
+        }
+    </SfCard>
 }
 
 @code {
@@ -47,6 +53,6 @@ else{
     protected override async Task OnParametersSetAsync()
     {
         news = new MetaTags(newsUrl); //initialized with HasData = false
-        news = await MetaScraper.GetMetaData(newsUrl); //Filling out with data later. 
+        news = await MetaScraper.GetMetaData(newsUrl); //Filling out with data later.
     }
 }

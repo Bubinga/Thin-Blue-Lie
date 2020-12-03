@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using ThinBlueLieB.Models;
@@ -9,7 +10,7 @@ using ThinBlueLieB.Models;
 namespace ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
 {
     public partial class MetaScraper
-    {        
+    {
         /// <summary>
         /// Uses HtmlAgilityPack to get the meta information from a url
         /// </summary>
@@ -19,7 +20,16 @@ namespace ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
         {
             // Get the URL specified
             var webGet = new HtmlWeb();
-            var document = await webGet.LoadFromWebAsync(url);
+            HtmlDocument document;
+            try
+            {
+                document = await webGet.LoadFromWebAsync(url);
+            }
+            catch (Exception)
+            {
+                return new MetaTags { Error = true, Url = url, HasData = true };
+            }
+         
             var metaTags = document.DocumentNode.SelectNodes("//meta");
             MetaTags metaInfo = new MetaTags(url);
             if (metaTags != null)
@@ -35,72 +45,75 @@ namespace ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
                     {
                         content = HttpUtility.HtmlDecode(tagContent.Value);
                     }
-                    if (tagName != null && tagContent != null)
+                    if (tagContent != null)
                     {
-                        switch (tagName.Value.ToLower())
+                        if (tagName != null)
                         {
-                            case "title":
-                                metaInfo.Title = content;
-                                matchCount++;
-                                break;
-                            case "description":
-                                metaInfo.Description = content;
-                                matchCount++;
-                                break;
-                            case "og:site_name":
-                                metaInfo.SiteName = content;
-                                matchCount++;
-                                break;
-                            case "article:published_time":
-                                metaInfo.Date = Convert.ToDateTime(content);
-                                matchCount++;
-                                break;
-                            case "article:modified_time":
-                                metaInfo.Date = Convert.ToDateTime(content);
-                                matchCount++;
-                                break;
-                            case "article:published":
-                                metaInfo.Date = Convert.ToDateTime(content);
-                                matchCount++;
-                                break;
-                            case "article:modified":
-                                metaInfo.Date = Convert.ToDateTime(content);
-                                matchCount++;
-                                break;
-                            case "twitter:title":
-                                metaInfo.Title = string.IsNullOrEmpty(metaInfo.Title) ? content : metaInfo.Title;
-                                matchCount++;
-                                break;
-                            case "twitter:description":
-                                metaInfo.Description = string.IsNullOrEmpty(metaInfo.Description) ? content : metaInfo.Description;
-                                matchCount++;
-                                break;
-                            //case "keywords":
-                            //    metaInfo.Keywords = tagContent.Value;
-                            //    matchCount++;
-                            //    break;
-                            case "twitter:image":
-                                metaInfo.Image = string.IsNullOrEmpty(metaInfo.Image) ? content : metaInfo.Image;
-                                matchCount++;
-                                break;
+                            switch (tagName.Value.ToLower())
+                            {
+                                case "title":
+                                    metaInfo.Title = content;
+                                    matchCount++;
+                                    break;
+                                case "description":
+                                    metaInfo.Description = content;
+                                    matchCount++;
+                                    break;                                                          
+                                case "twitter:title":
+                                    metaInfo.Title = string.IsNullOrEmpty(metaInfo.Title) ? content : metaInfo.Title;
+                                    matchCount++;
+                                    break;
+                                case "twitter:description":
+                                    metaInfo.Description = string.IsNullOrEmpty(metaInfo.Description) ? content : metaInfo.Description;
+                                    matchCount++;
+                                    break;
+                                //case "keywords":
+                                //    metaInfo.Keywords = tagContent.Value;
+                                //    matchCount++;
+                                //    break;
+                                case "twitter:image":
+                                    metaInfo.Image = string.IsNullOrEmpty(metaInfo.Image) ? content : metaInfo.Image;
+                                    matchCount++;
+                                    break;
+                            }
                         }
-                    }
-                    else if (tagProperty != null && tagContent != null)
-                    {
-                        switch (tagProperty.Value.ToLower())
+                        else if (tagProperty != null)
                         {
-                            case "og:title":
-                                metaInfo.Title = string.IsNullOrEmpty(metaInfo.Title) ? content : metaInfo.Title;
-                                matchCount++;
-                                break;
-                            case "og:description":
-                                metaInfo.Description = string.IsNullOrEmpty(metaInfo.Description) ? content : metaInfo.Description;
-                                matchCount++;
-                                break;
-                            case "og:image":
-                                metaInfo.Image = string.IsNullOrEmpty(metaInfo.Image) ? content : metaInfo.Image;
-                                matchCount++;
-                                break;
+                            switch (tagProperty.Value.ToLower())
+                            {
+                                case "og:title":
+                                    metaInfo.Title = string.IsNullOrEmpty(metaInfo.Title) ? content : metaInfo.Title;
+                                    matchCount++;
+                                    break;
+                                case "og:description":
+                                    metaInfo.Description = string.IsNullOrEmpty(metaInfo.Description) ? content : metaInfo.Description;
+                                    matchCount++;
+                                    break;
+                                case "og:image":
+                                    metaInfo.Image = string.IsNullOrEmpty(metaInfo.Image) ? content : metaInfo.Image;
+                                    matchCount++;
+                                    break;
+                                case "og:site_name":
+                                    metaInfo.SiteName = content;
+                                    matchCount++;
+                                    break;
+                                case "article:published_time":
+                                    metaInfo.Date = Convert.ToDateTime(content);
+                                    matchCount++;
+                                    break;
+                                case "article:modified_time":
+                                    metaInfo.Date = Convert.ToDateTime(content);
+                                    matchCount++;
+                                    break;
+                                case "article:published":
+                                    metaInfo.Date = Convert.ToDateTime(content);
+                                    matchCount++;
+                                    break;
+                                case "article:modified":
+                                    metaInfo.Date = Convert.ToDateTime(content);
+                                    matchCount++;
+                                    break;
+                            }
                         }
                     }
                 }

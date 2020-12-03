@@ -11,15 +11,17 @@ namespace ThinBlueLieB.Helper.Extensions
     public static class EnumExtensions      
     {     
 
-        public static List<string> GetEnumDisplayNames<T>()
+        public static List<ListItem> GetEnumDisplayNames<T>() where T : Enum
         {
             var type = typeof(T);
             return Enum.GetValues(type)
                        .Cast<T>()
-                       .Select(x => type.GetMember(x.ToString())
-                       .First()
-                       .GetCustomAttribute<DisplayAttribute>()?.Name ?? x.ToString())
-                       .ToList();
+                       .Select(x => new ListItem
+                       {
+                           Text = type.GetMember(x.ToString()).First().GetCustomAttribute<DisplayAttribute>()?.Name ?? x.ToString(),
+                           Value = x
+                       })
+                   .ToList();
         }
 
         public static string GetEnumDisplayName<T>(T value) where T : Enum
@@ -49,7 +51,7 @@ namespace ThinBlueLieB.Helper.Extensions
 
         public class ListItem
         {
-            public int Value { get; set; }
+            public dynamic Value { get; set; }
             public string Text { get; set; }
         }
         public static class GetDropdownList<TEnum>

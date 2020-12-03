@@ -8,13 +8,17 @@ namespace ThinBlueLieB.Models
     public class MetaTags
     {
         public bool HasData { get; set; }
+        public bool Error { get; set; }
         public string Title { get; set; }
         public string? Description { get; set; }
         public string Image { get; set; }
         public DateTime? Date { get; set; }
         public string? SiteName { get; set; }
         public string Url { get; set; }
+        public MetaTags()
+        {
 
+        }
         public MetaTags(string url)
         {
             Url = url;

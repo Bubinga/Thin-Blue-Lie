@@ -24,8 +24,9 @@ namespace ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
             }
             if (media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
             {
-                //TODO security vulnurability, user could do http://thierdomain.com/reddit.com and send me shitty json
-                if (media.SourcePath.Contains("reddit.com")) //in comments not in image
+                Uri myUri = new Uri(media.SourcePath);
+                string host = myUri.Host;
+                if (host.Contains("reddit.com")) //in comments not in image
                 {
                     //download json data and search for url_overridden_by_dest
                     var jsonPath = media.SourcePath.Remove(media.SourcePath.Length - 1, 1).Insert(media.SourcePath.Length -1 , ".json");
