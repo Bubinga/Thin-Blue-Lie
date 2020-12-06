@@ -137,11 +137,11 @@ namespace ThinBlueLie.Bases
         {
             if (Ids.ToArray()[ActiveIdIndex].Vote > -1)
             {
-                string AcceptSql = @"INSERT INTO edit_votes (IdEditHistory,UserId,Vote) 
+                string AcceptSql = @"INSERT INTO edit_votes (`IdEditHistory`, `UserId`, `Vote`) 
                                             VALUES(@IdEditHistory, @UserId, -1) AS new
                                               ON DUPLICATE KEY UPDATE
                                                   Vote = new.Vote; ";
-                await data.SaveData(AcceptSql, new { IdEditHistory = Ids.ToArray()[ActiveIdIndex].IdEditHistory, UserId = User.Id }, GetConnectionString());
+                await data.SaveData(AcceptSql, new { Ids.ToArray()[ActiveIdIndex].IdEditHistory, UserId = User.Id }, GetConnectionString());
                 Ids.ToArray()[ActiveIdIndex].Vote = -1;
             }
         }
@@ -156,17 +156,19 @@ namespace ThinBlueLie.Bases
             {
                 if (change.Edits == 1)
                 {
-                    string EditChangedQuery = @"UPDATE timelineinfo SET
-                                           `Title` = @Title, `Date` = @Date, `State` = @State, 
-                                           `City` = @City, `Context` = @Context, 
-                                           `Locked` = @Locked, `Owner` = @Owner
-                                            WHERE (`IdTimelineinfo` = @IdTimelineinfo);";
+                    string EditChangedQuery = @"
+                                            INSERT INTO timelineinfo(`IdTimelineinfo`, `Title`, `Date`, `State`, `City`, `Context`, `Locked`)
+                                                VALUES(@IdTimelineinfo, @Title, @Date, @State, @City, @context, @Locked);
+                                            ON DUPLICATE KEY UPDATE
+                                               `Title` = @Title, `Date` = @Date, `State` = @State, 
+                                               `City` = @City, `Context` = @Context, 
+                                               `Locked` = @Locked, `Owner` = @Owner
+                                                WHERE (`IdTimelineinfo` = @IdTimelineinfo);";
                     await connection.ExecuteAsync(EditChangedQuery, newInfo);
                 }
                 if (change.EditMedia == 1)
                 {
-                    string MediaChangedQuery = @"Select *
-                                          From editmedia m Where m.IdEditHistory = @id;";
+                    string MediaChangedQuery = @"Select * From editmedia m Where m.IdEditHistory = @id;";
                     var changesToMedia = await data.LoadData<EditMedia, dynamic>(MediaChangedQuery, new { id = change.IdEditHistory }, GetConnectionString());
                     string mediaQuery = string.Empty;
                     foreach (var media in changesToMedia)

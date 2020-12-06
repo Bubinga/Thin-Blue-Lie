@@ -1,4 +1,5 @@
-﻿@page "/Submit"
+﻿
+@page "/Submit"
 @inherits SubmitBase
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject AutoMapper.IMapper mapper
@@ -102,144 +103,252 @@
         color: inherit !important;
     }
 </style>
-<div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
-    <EditForm Model="model" OnValidSubmit="HandleValidSubmitAsync">
-        <ObjectGraphDataAnnotationsValidator />
-        <div class="col-lg-5 col-md-6 border-left border-right border-bottom">
-            <div class="d-block mb-0 pt-3 border-bottom mb-2">
-                <h4 class="mb-0 align-te">Information Submission Form</h4>
-            </div>
-            <div>
-                <div class="form-group">
-                    <div id="datepicker-control">
-                        <SfDatePicker TValue="DateTime?" @bind-Value="@DateValue" Min="@MinDate" Max="@Today" Format="yyyy-MM-dd" Placeholder="Select a date" StrictMode="true">
-                            <DatePickerEvents TValue="DateTime?" ValueChange="@FindEvents"></DatePickerEvents>
-                        </SfDatePicker>
-                        <ValidationMessage For="@(() => model.Timelineinfos.Date)"></ValidationMessage>
+<AuthorizeView>
+    <NotAuthorized>
+        <h5 class="text-center mt-5">
+            Either 
+            <a href="/Account/Login">Login</a> or
+            <a href="/Account/Register">Register</a>
+            to create a new Event
+        </h5>
+    </NotAuthorized>
+    <Authorized Context="Auth">
+        <div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
+            <EditForm Model="model" OnValidSubmit="HandleValidSubmitAsync">
+                <ObjectGraphDataAnnotationsValidator />
+                <div class="col-lg-5 col-md-6 border-left border-right border-bottom">
+                    <div class="d-block mb-0 pt-3 border-bottom mb-2">
+                        <h4 class="mb-0 align-te">Information Submission Form</h4>
                     </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="col-5 dropdown" style="position:relative;">
-                    <div class="align">
-                        <div class="position-relative mb-1 mb-md-0"> <br /> <label class="position-absolute" style="top:-6px; font-size:14px; line-height:24px;">State</label></div>
-                        <SfDropDownList TItem="EnumExtensions.ListItem" TValue="TimelineinfoEnums.StateEnum?" PopupHeight="230px" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
-                            <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
-                        </SfDropDownList>
-                        <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>
-                    </div>
-                </div>
-                <div class="col-7">
-                    <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.City"></SfTextBox>
-                    <ValidationMessage For="@(() => model.Timelineinfos.City)"></ValidationMessage>
-                </div>
-            </div>
-            <div class="w-100 pt-3">
-                <SfTextBox CssClass="e-filled" Placeholder="Title" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.Title"></SfTextBox>
-                <ValidationMessage For="@(() => model.Timelineinfos.Title)"></ValidationMessage>
-            </div>
-            <hr />
-            <div class="d-flex">
-                <h6 class="d-inline">
-                    Fill out the following information for the Subject
-                </h6>
-                <div class="d-inline ml-auto" @onclick="AddSubject" @onclick:stopPropagation="false" @onclick:preventDefault>
-                    <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
-                        Subject
-                    </SfButton>
-                </div>
-            </div>
-            <div id="SubjectList">
-                @foreach ((var subject, Int32 i) in model.Subjects.Select((subject, i) => (subject, i)))
-                {
-                    <Subject subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></Subject>
-                    if (SimilarSubjects[i] != null)
-                    {
-                        <SimilarPeople PersonListIndex="i" SetSameAs="SetSameAsSubject" People="SimilarSubjects[i]"></SimilarPeople>
-                    }
-                }
-            </div>
-            <hr />
-            <div class="d-flex">
-                <h6 class="d-inline">
-                    Fill out the following information for the Officer
-                </h6>
-                <div class="d-inline ml-auto" @onclick="AddOfficer" @onclick:stopPropagation="false" @onclick:preventDefault>
-                    <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
-                        Officer
-                    </SfButton>
-                </div>
-            </div>
-            <div id="OfficerList">
-                @foreach ((var officer, Int32 i) in model.Officers.Select((officer, i) => (officer, i)))
-                {
-                    <Officer isSubmit="true" officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
-                    if (SimilarOfficers[i] != null)
-                    {
-                        <SimilarPeople PersonListIndex="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>
-                    }
-                }
-            </div>
-            <hr />
-            <div class="form-group">
-                <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, and anything related to the event that happened off-screen.</label>
-                <SfRichTextEditor CssClass="w-100" @bind-Value="@model.Timelineinfos.Context" EnableResize="true" EnableHtmlSanitizer="true" ShowCharCount="true">
-                    <RichTextEditorPasteCleanupSettings></RichTextEditorPasteCleanupSettings>
-                    <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
-                </SfRichTextEditor>
-                <ValidationMessage For="@(() => model.Timelineinfos.Context)"></ValidationMessage>
-            </div>
-            <div class="form-group">
-                <ValidationSummary />
-                <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-                <a asp-page="/Index" style="float:right">Back to Home</a>
-            </div>
-        </div>
-        <div class="col-lg-5 col-md-6">
-            <div class="row">
-                <div class="container-fluid d-block">
-                    <h4 class="pt-2">Similar Events</h4>
-                    <p class="mb-0 border-bottom" style="font-size:1em">
-                        Here are Events that share a date with your event, check to see if your event is a duplicate.
-                    </p>
-                    <div id="VideoList">
-                        @if (SimilarEvents.Count == 0)
-                        {
-                            <div class="container mt-2" style="min-height:100px;">
-                                <h5>There are no similar or duplicate Events!</h5>
+                    <div>
+                        <div class="form-group">
+                            <div id="datepicker-control">
+                                <SfDatePicker TValue="DateTime?" @bind-Value="@DateValue" Min="@MinDate" Max="@Today" Format="yyyy-MM-dd" Placeholder="Select a date" StrictMode="true">
+                                    <DatePickerEvents TValue="DateTime?" ValueChange="@FindEvents"></DatePickerEvents>
+                                </SfDatePicker>
+                                <ValidationMessage For="@(() => model.Timelineinfos.Date)"></ValidationMessage>
                             </div>
-                        }
-                        else
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-5 dropdown" style="position:relative;">
+                            <div class="align">
+                                <div class="position-relative mb-1 mb-md-0"> <br /> <label class="position-absolute" style="top:-6px; font-size:14px; line-height:24px;">State</label></div>
+                                <SfDropDownList TItem="EnumExtensions.ListItem" TValue="TimelineinfoEnums.StateEnum?" PopupHeight="230px" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                                    <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                                </SfDropDownList>
+                                <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.City"></SfTextBox>
+                            <ValidationMessage For="@(() => model.Timelineinfos.City)"></ValidationMessage>
+                        </div>
+                    </div>
+                    <div class="w-100 pt-3">
+                        <SfTextBox CssClass="e-filled" Placeholder="Title" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.Title"></SfTextBox>
+                        <ValidationMessage For="@(() => model.Timelineinfos.Title)"></ValidationMessage>
+                    </div>
+                    <hr />
+                    <div class="d-flex">
+                        <h6 class="d-inline">
+                            Fill out the following information for the Subject
+                        </h6>
+                        <div class="d-inline ml-auto" @onclick="AddSubject" @onclick:stopPropagation="false" @onclick:preventDefault>
+                            <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
+                                Subject
+                            </SfButton>
+                        </div>
+                    </div>
+                    <div id="SubjectList">
+                        @foreach ((var subject, Int32 i) in model.Subjects.Select((subject, i) => (subject, i)))
                         {
-                            foreach (var Event in SimilarEvents)
+                            <Subject subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></Subject>
+                            if (SimilarSubjects[i] != null)
                             {
-                                <SimilarEvents Event="Event"></SimilarEvents>
+                                <SimilarPeople PersonListIndex="i" SetSameAs="SetSameAsSubject" People="SimilarSubjects[i]"></SimilarPeople>
                             }
                         }
                     </div>
-                    @*<br />*@
+                    <hr />
+                    <div class="d-flex">
+                        <h6 class="d-inline">
+                            Fill out the following information for the Officer
+                        </h6>
+                        <div class="d-inline ml-auto" @onclick="AddOfficer" @onclick:stopPropagation="false" @onclick:preventDefault>
+                            <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
+                                Officer
+                            </SfButton>
+                        </div>                        
+                    </div>
+                    <div id="OfficerList">
+                        @foreach ((var officer, Int32 i) in model.Officers.Select((officer, i) => (officer, i)))
+                        {
+                            <Officer isSubmit="true" officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
+                            if (SimilarOfficers[i] != null)
+                            {
+                                <SimilarPeople PersonListIndex="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>
+                            }
+                        }
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, and anything related to the event that happened off-screen.</label>
+                        <SfRichTextEditor CssClass="w-100" @bind-Value="@model.Timelineinfos.Context" EnableResize="true" EnableHtmlSanitizer="true" ShowCharCount="true">
+                            <RichTextEditorPasteCleanupSettings></RichTextEditorPasteCleanupSettings>
+                            <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
+                        </SfRichTextEditor>
+                        <ValidationMessage For="@(() => model.Timelineinfos.Context)"></ValidationMessage>
+                    </div>
+                    <div class="form-group">
+                        <ValidationSummary />
+                        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                        <div class="d-inline ml-auto" @onclick="FillWithData" @onclick:stopPropagation="false" @onclick:preventDefault>
+                            <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
+                                Fill me with Data
+                            </SfButton>
+                        </div>
+                        <a asp-page="/Index" style="float:right">Back to Home</a>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="d-block border-top container-fluid border-bottom" @onclick:stopPropagation="false" @onclick:preventDefault>
-                    <h4 class="pt-2">Add Media</h4>
-                    <p class="mb-0" style="font-size:1em">
-                        Add Media relavent to the event, such as videos, images, news articles, etc.
-                    </p>
+                <div class="col-lg-5 col-md-6">
+                    <div class="row">
+                        <div class="container-fluid d-block">
+                            <h4 class="pt-2">Similar Events</h4>
+                            <p class="mb-0 border-bottom" style="font-size:1em">
+                                Here are Events that share a date with your event, check to see if your event is a duplicate.
+                            </p>
+                            <div id="VideoList">
+                                @if (SimilarEvents.Count == 0)
+                                {
+                                    <div class="container mt-2" style="min-height:100px;">
+                                        <h5>There are no similar or duplicate Events!</h5>
+                                    </div>
+                                }
+                                else
+                                {
+                                    foreach (var Event in SimilarEvents)
+                                    {
+                                        <SimilarEvents Event="Event"></SimilarEvents>
+                                    }
+                                }
+                            </div>
+                            @*<br />*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-block border-top container-fluid border-bottom" @onclick:stopPropagation="false" @onclick:preventDefault>
+                            <h4 class="pt-2">Add Media</h4>
+                            <p class="mb-0" style="font-size:1em">
+                                Add Media relavent to the event, such as videos, images, news articles, etc.
+                            </p>
+                        </div>
+                        <div id="MediaList" class="container-fluid">
+                            <CascadingValue Name="IsEdit" Value="false">
+                                <MediaAccordion Medias="model.Medias" AddMedia="AddMedia" DeleteMedia="DeleteMedia" MoveMediaDown="MoveMediaDown" MoveMediaTop="MoveMediaTop" MoveMediaUp="MoveMediaUp">
+                                </MediaAccordion>
+                            </CascadingValue>
+                        </div>
+                    </div>
                 </div>
-                <div id="MediaList" class="container-fluid">
-                    <CascadingValue Name="IsEdit" Value="false">
-                        <MediaAccordion Medias="model.Medias" AddMedia="AddMedia" DeleteMedia="DeleteMedia" MoveMediaDown="MoveMediaDown" MoveMediaTop="MoveMediaTop" MoveMediaUp="MoveMediaUp">
-                        </MediaAccordion>
-                    </CascadingValue>
-                </div>
-            </div>
+            </EditForm>
         </div>
-    </EditForm>
-</div>
+    </Authorized>
+</AuthorizeView>
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> _authState { get; set; }
+
+    void FillWithData()
+    {
+        model.Timelineinfos = new ViewTimelineinfo
+        {
+            City = "PlaceHolder Entered City",
+            State = TimelineinfoEnums.StateEnum.Arizona,
+            Title = "PlaceHolder Title",
+            Date = DateTime.Today,
+            Locked = 0,
+            Context = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
+        };
+        model.Officers = new List<ViewOfficer>
+        {
+            new ViewOfficer
+            {
+                SameAsId = 1,
+                Age = 55,
+                Race = TimelineinfoEnums.RaceEnum.White,
+                Sex = TimelineinfoEnums.SexEnum.Male,
+                Name = "Aaron Torgalski",
+                ListIndex = 0,
+                Misconduct = new int[] {1, 2, 8, 32},
+                Weapon = (new int[] {1, 4}),
+            },
+            new ViewOfficer
+            {
+                Age = 27,
+                Race = TimelineinfoEnums.RaceEnum.Black,
+                Sex = TimelineinfoEnums.SexEnum.Unclear,
+                Name = "Officer Man Two",
+                ListIndex = 1,
+                Misconduct = new int[] {1, 2, 4},
+                Weapon = (new int[] {2, 8}),
+            }
+        };
+        SimilarOfficers.Add(new List<SimilarPersonGeneral>());
+        model.Subjects = new List<ViewSubject>
+        {
+            new ViewSubject
+            {
+                Age = 38,
+                Race = TimelineinfoEnums.RaceEnum.Asian,
+                Sex = TimelineinfoEnums.SexEnum.Female,
+                Armed = true,
+                Name = "Subject One",
+                ListIndex = 0,
+            },
+            new ViewSubject
+            {
+                Age = 24,
+                Race = TimelineinfoEnums.RaceEnum.Native,
+                Sex = TimelineinfoEnums.SexEnum.Male,
+                Armed = false,
+                ListIndex = 1,
+            }
+        };
+        SimilarSubjects.Add(new List<SimilarPersonGeneral>());
+        model.Medias = new List<ViewMedia>()
+        {
+            new ViewMedia
+            {
+                ListIndex = 0,
+                Blurb = "Image of Cat",
+                Gore = 0,
+                MediaType = MediaEnums.MediaTypeEnum.Image,
+                Credit = "idk cat website",
+                SourcePath = @"https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                SourceFrom = MediaEnums.SourceFromEnum.Link
+            },
+             new ViewMedia
+            {
+                ListIndex = 1,
+                Blurb = "Really good video",
+                Gore = 0,
+                MediaType = MediaEnums.MediaTypeEnum.Video,
+                Credit = "Kurgesagt",
+                SourcePath = @"https://www.youtube.com/watch?v=YbgnlkJPga4",
+                SourceFrom = MediaEnums.SourceFromEnum.Youtube
+            },
+              new ViewMedia
+            {
+                ListIndex = 2,
+                Blurb = "Unrelated news article",
+                MediaType = MediaEnums.MediaTypeEnum.News,
+                Credit = "New york times",
+                SourcePath = @"https://www.nytimes.com/2019/05/27/opinion/ted-chiang-future-genetic-engineering.html",
+                SourceFrom = MediaEnums.SourceFromEnum.NewsSite
+            },
+        };
+    }
 
     public List<ViewSimilar>? SimilarEvents { get; set; } = new List<ViewSimilar>();
     protected async void FindEvents(ChangedEventArgs<DateTime?> args)
@@ -252,13 +361,16 @@
     protected override async Task OnInitializedAsync()
     {
         userState = await _authState;
-        SearchesSubmit searchesSubmit = new SearchesSubmit();
-        SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
-        SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
-        Today = DateTime.Today;
-        MinDate = new DateTime(1776, 6, 4);
-        DateValue = DateTime.Today;
-        SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
+        if (userState.User.Identity.IsAuthenticated)
+        {
+            SearchesSubmit searchesSubmit = new SearchesSubmit();
+            SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
+            SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
+            Today = DateTime.Today;
+            MinDate = new DateTime(1776, 6, 4);
+            DateValue = DateTime.Today;
+            SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
+        }
     }
 
 }
