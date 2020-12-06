@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using DataAccessLibrary.UserModels;
 
-namespace ThinBlueLieB.Areas.Identity.Pages.Account.Manage
+namespace ThinBlueLie.Areas.Identity.Pages.Account.Manage
 {
     public class EnableAuthenticatorModel : PageModel
     {
@@ -149,7 +149,7 @@ namespace ThinBlueLieB.Areas.Identity.Pages.Account.Manage
         {
             return string.Format(
                 AuthenticatorUriFormat,
-                _urlEncoder.Encode("ThinBlueLieB"),
+                _urlEncoder.Encode("ThinBlueLie"),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }

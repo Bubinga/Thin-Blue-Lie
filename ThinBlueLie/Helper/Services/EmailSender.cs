@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using ThinBlueLieB.Models;
+using ThinBlueLie.Models;
 
-namespace ThinBlueLieB.Helper.Services
+namespace ThinBlueLie.Helper.Services
 {
     public interface IEmailSender
     {

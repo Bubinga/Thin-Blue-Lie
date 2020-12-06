@@ -8,10 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLieB.Models;
-using static ThinBlueLieB.Helper.ConfigHelper;
+using ThinBlueLie.Models;
+using static ThinBlueLie.Helper.ConfigHelper;
 
-namespace ThinBlueLieB.Bases
+namespace ThinBlueLie.Bases
 {
     public class ProfileBase : ComponentBase
     {

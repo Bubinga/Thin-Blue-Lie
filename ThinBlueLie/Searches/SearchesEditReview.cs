@@ -11,17 +11,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ThinBlueLieB.Bases;
-using ThinBlueLieB.Helper;
-using ThinBlueLieB.Models;
-using ThinBlueLieB.Models.View_Models;
-using ThinBlueLieB.ViewModels;
+using ThinBlueLie.Bases;
+using ThinBlueLie.Helper;
+using ThinBlueLie.Models;
+using ThinBlueLie.Models.View_Models;
+using ThinBlueLie.ViewModels;
 using static DataAccessLibrary.Enums.EditEnums;
-using static ThinBlueLieB.Helper.ConfigHelper;
-using static ThinBlueLieB.Models.View_Models.EditReviewModel;
-using static ThinBlueLieB.Searches.SearchClasses;
+using static ThinBlueLie.Helper.ConfigHelper;
+using static ThinBlueLie.Models.View_Models.EditReviewModel;
+using static ThinBlueLie.Searches.SearchClasses;
 
-namespace ThinBlueLieB.Searches
+namespace ThinBlueLie.Searches
 {
     public class SearchesEditReview
     {

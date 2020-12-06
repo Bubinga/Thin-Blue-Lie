@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using ThinBlueLieB.Models;
+using ThinBlueLie.Models;
 
-namespace ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
+namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
 {
     public partial class WebsiteProfile
     {

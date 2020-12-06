@@ -6,16 +6,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLieB.Models;
-using ThinBlueLieB.Models.View_Models;
-using ThinBlueLieB.ViewModels;
+using ThinBlueLie.Models;
+using ThinBlueLie.Models.View_Models;
+using ThinBlueLie.ViewModels;
 using static DataAccessLibrary.Enums.TimelineinfoEnums;
-using static ThinBlueLieB.Helper.Extensions.IntExtensions;
-using static ThinBlueLieB.Models.SubmitBase;
-using static ThinBlueLieB.Models.View_Models.EditReviewModel;
-using static ThinBlueLieB.Models.ViewSimilar;
+using static ThinBlueLie.Helper.Extensions.IntExtensions;
+using static ThinBlueLie.Models.SubmitBase;
+using static ThinBlueLie.Models.View_Models.EditReviewModel;
+using static ThinBlueLie.Models.ViewSimilar;
 
-namespace ThinBlueLieB.Helper
+namespace ThinBlueLie.Helper
 {
     public class MappingProfile : Profile
     {

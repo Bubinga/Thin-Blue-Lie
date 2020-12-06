@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using ThinBlueLieB.Models;
+using ThinBlueLie.Models;
 
-namespace ThinBlueLieB.Helper.Extensions
+namespace ThinBlueLie.Helper.Extensions
 {
     public static class ClassExtensions
     {

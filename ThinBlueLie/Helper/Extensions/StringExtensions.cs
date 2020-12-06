@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Text;
 using DataAccessLibrary.Enums;
 using Microsoft.AspNetCore.Components;
-using ThinBlueLieB.Models;
-using static ThinBlueLieB.Models.ViewSimilar;
+using ThinBlueLie.Models;
+using static ThinBlueLie.Models.ViewSimilar;
 
-namespace ThinBlueLieB.Helper.Extensions
+namespace ThinBlueLie.Helper.Extensions
 {
     public class StringExtensions
     {        

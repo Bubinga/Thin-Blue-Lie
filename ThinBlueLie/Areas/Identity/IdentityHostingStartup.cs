@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-[assembly: HostingStartup(typeof(ThinBlueLieB.Areas.Identity.IdentityHostingStartup))]
-namespace ThinBlueLieB.Areas.Identity
+[assembly: HostingStartup(typeof(ThinBlueLie.Areas.Identity.IdentityHostingStartup))]
+namespace ThinBlueLie.Areas.Identity
 {
     public class IdentityHostingStartup : IHostingStartup
     {

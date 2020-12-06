@@ -10,20 +10,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLieB.Helper;
-using ThinBlueLieB.Models;
-using ThinBlueLieB.Models.View_Models;
-using ThinBlueLieB.Searches;
-using ThinBlueLieB.ViewModels;
-using static ThinBlueLieB.Searches.SearchClasses;
-using static ThinBlueLieB.Helper.ConfigHelper;
+using ThinBlueLie.Helper;
+using ThinBlueLie.Models;
+using ThinBlueLie.Models.View_Models;
+using ThinBlueLie.Searches;
+using ThinBlueLie.ViewModels;
+using static ThinBlueLie.Searches.SearchClasses;
+using static ThinBlueLie.Helper.ConfigHelper;
 using System.Data;
 using Dapper;
 using DataAccessLibrary.DataModels.EditModels;
 using static DataAccessLibrary.Enums.EditEnums;
 using DataAccessLibrary.DataModels;
 
-namespace ThinBlueLieB.Bases
+namespace ThinBlueLie.Bases
 {
     public class EditReviewBase : ComponentBase
     {

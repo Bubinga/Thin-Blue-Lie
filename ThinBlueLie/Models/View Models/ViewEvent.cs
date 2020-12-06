@@ -1,8 +1,8 @@
 ﻿using DataAccessLibrary.DataModels;
 using System.Collections.Generic;
-using ThinBlueLieB.Models;
+using ThinBlueLie.Models;
 
-namespace ThinBlueLieB.ViewModels
+namespace ThinBlueLie.ViewModels
 {
     public class ViewEvent
     {

@@ -5,16 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLieB.Helper;
-using ThinBlueLieB.Helper.Extensions;
-using ThinBlueLieB.Models;
+using ThinBlueLie.Helper;
+using ThinBlueLie.Helper.Extensions;
+using ThinBlueLie.Models;
 using static DataAccessLibrary.Enums.MediaEnums;
-using static ThinBlueLieB.Components.SimilarPeople;
-using static ThinBlueLieB.Helper.Extensions.EnumExtensions;
-using static ThinBlueLieB.Models.SubmitBase;
-using static ThinBlueLieB.Searches.SearchClasses;
+using static ThinBlueLie.Components.SimilarPeople;
+using static ThinBlueLie.Helper.Extensions.EnumExtensions;
+using static ThinBlueLie.Models.SubmitBase;
+using static ThinBlueLie.Searches.SearchClasses;
 
-namespace ThinBlueLieB.Bases
+namespace ThinBlueLie.Bases
 {
     public class InformationBase : ComponentBase
     {

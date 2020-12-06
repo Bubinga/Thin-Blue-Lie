@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ThinBlueLieB.Helper.Algorithms
+namespace ThinBlueLie.Helper.Algorithms
 {
     public class ProfanityFilter : ValidationAttribute
     {

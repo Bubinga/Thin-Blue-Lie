@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ThinBlueLieB.Areas.Identity.Pages.Account.Manage
+namespace ThinBlueLie.Areas.Identity.Pages.Account.Manage
 {
     public class SetPasswordModel : PageModel
     {

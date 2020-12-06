@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static DataAccessLibrary.Enums.PrivledgeEnum;
 
-namespace ThinBlueLieB.Helper.Extensions
+namespace ThinBlueLie.Helper.Extensions
 {
     public static class IdentityExtensions
     {

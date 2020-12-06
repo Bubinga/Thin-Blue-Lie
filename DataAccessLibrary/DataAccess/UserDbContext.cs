@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 
-namespace ThinBlueLieB.Data
+namespace ThinBlueLie.Data
 {
     //public class UserDbContext : IdentityDbContext<ApplicationUser>
     //{
