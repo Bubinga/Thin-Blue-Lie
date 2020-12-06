@@ -35,10 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\favicon.ico" />
     <None Include="wwwroot\Uploads\Aaron-Torgalski-Bi3Un8.jpg" />
     <None Include="wwwroot\Uploads\Robert-McCabe-57lUaK.jpg" />
@@ -50,6 +46,10 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
   </ItemGroup>
 
 </Project>
