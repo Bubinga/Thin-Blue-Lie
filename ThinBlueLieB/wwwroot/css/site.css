@@ -169,16 +169,18 @@ a.navbar-brand {
 }
 
 
-.nav-item .btn-dark.dropdown-toggle:hover, .nav-item .btn-dark.dropdown-toggle:focus, .nav-item .btn-dark.dropdown-toggle,
-.nav-item .btn.nav-link:active, .nav-item .btn.nav-link:focus, .nav-item .btn.nav-link {
+.nav-item .btn-dark.dropdown-toggle:hover, .nav-item .btn-dark.dropdown-toggle:focus,
+.nav-item .btn-dark.dropdown-toggle, .nav-item .btn.nav-link:active,
+.nav-item .btn.nav-link:focus, .nav-item .btn.nav-link {
     box-shadow: none !important;
     border: none !important;
     transition: none !important;
     -webkit-transition: none !important;
 }
-.nav-item .btn-dark.dropdown-toggle:hover{
-    background-color: inherit;
-}
+    .nav-item .btn-dark.dropdown-toggle:hover, .nav-item .btn-dark.dropdown-toggle:active,
+    .nav-item .btn-dark.dropdown-toggle {
+        background-color: inherit;
+    }
 .nav-item .nav-link.onpage + .btn.dropdown-toggle {
     text-decoration: none !important;
     background-color: #2B3035 !important;
