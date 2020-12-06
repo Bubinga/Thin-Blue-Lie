@@ -5,10 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLieB.Models;
-using static ThinBlueLieB.Models.ViewSimilar;
+using ThinBlueLie.Models;
+using static ThinBlueLie.Models.ViewSimilar;
 
-namespace ThinBlueLieB.Helper.Algorithms
+namespace ThinBlueLie.Helper.Algorithms
 {
     public static class JaroWinklerDistance
     {

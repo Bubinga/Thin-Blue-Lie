@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Syncfusion.Blazor.Inputs.Internal;
 using DataAccessLibrary.Enums;
 
-namespace ThinBlueLieB.Models
+namespace ThinBlueLie.Models
 {
     public class ViewMedia
     {

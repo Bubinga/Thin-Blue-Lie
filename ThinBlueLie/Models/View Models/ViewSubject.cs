@@ -1,7 +1,7 @@
 ﻿using DataAccessLibrary.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace ThinBlueLieB.Models
+namespace ThinBlueLie.Models
 {
     public class ViewSubject
     {

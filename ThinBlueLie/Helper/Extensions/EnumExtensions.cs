@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using static DataAccessLibrary.Enums.TimelineinfoEnums;
 
-namespace ThinBlueLieB.Helper.Extensions
+namespace ThinBlueLie.Helper.Extensions
 {
     public static class EnumExtensions      
     {     

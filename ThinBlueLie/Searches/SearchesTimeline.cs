@@ -5,10 +5,10 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ThinBlueLieB.Helper.Extensions;
-using static ThinBlueLieB.Helper.ConfigHelper;
+using ThinBlueLie.Helper.Extensions;
+using static ThinBlueLie.Helper.ConfigHelper;
 
-namespace ThinBlueLieB.Searches
+namespace ThinBlueLie.Searches
 {
     public class SearchesTimeline
     {      

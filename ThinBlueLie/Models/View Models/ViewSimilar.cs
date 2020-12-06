@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataAccessLibrary.Enums;
 
-namespace ThinBlueLieB.Models
+namespace ThinBlueLie.Models
 {
     public class ViewSimilar
     {       

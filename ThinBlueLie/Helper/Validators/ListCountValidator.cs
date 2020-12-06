@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ThinBlueLieB.Helper.Validators
+namespace ThinBlueLie.Helper.Validators
 {
     public class ListCountValidator : ValidationAttribute
     {

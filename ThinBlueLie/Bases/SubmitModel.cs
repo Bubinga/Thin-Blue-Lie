@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ThinBlueLieB.Helper.Validators;
+using ThinBlueLie.Helper.Validators;
 
-namespace ThinBlueLieB.Models
+namespace ThinBlueLie.Models
 {
     public partial class SubmitBase
     {

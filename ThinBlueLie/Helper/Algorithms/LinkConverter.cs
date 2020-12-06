@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using ThinBlueLieB.Helper.Algorithms.WebsiteProfiling;
-using ThinBlueLieB.Models;
+using ThinBlueLie.Helper.Algorithms.WebsiteProfiling;
+using ThinBlueLie.Models;
 using static DataAccessLibrary.Enums.MediaEnums;
 
-namespace ThinBlueLieB.Helper.Algorithms
+namespace ThinBlueLie.Helper.Algorithms
 {
     public class LinkConverter
     {

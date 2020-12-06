@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Text;
 
-namespace ThinBlueLieB.Helper
+namespace ThinBlueLie.Helper
 {
     public class ConfigHelper
     {

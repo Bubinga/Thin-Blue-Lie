@@ -6,13 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLieB.Models;
-using static ThinBlueLieB.Models.ViewSimilar;
-using static ThinBlueLieB.Searches.SearchClasses;
-using static ThinBlueLieB.Helper.ConfigHelper;
-using ThinBlueLieB.Helper.Algorithms;
+using ThinBlueLie.Models;
+using static ThinBlueLie.Models.ViewSimilar;
+using static ThinBlueLie.Searches.SearchClasses;
+using static ThinBlueLie.Helper.ConfigHelper;
+using ThinBlueLie.Helper.Algorithms;
 
-namespace ThinBlueLieB.Helper
+namespace ThinBlueLie.Helper
 {
     public class SearchesSubmit
     {      
