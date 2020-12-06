@@ -7,22 +7,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ThinBlueLieB.Identity;
+using ThinBlueLie.Identity;
 using DataAccessLibrary.DataAccess;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Syncfusion.Blazor;
-using ThinBlueLieB.Helper;
+using ThinBlueLie.Helper;
 using AutoMapper;
 using DataAccessLibrary.UserModels;
-using ThinBlueLieB.Searches;
+using ThinBlueLie.Searches;
 using DiffPlex.DiffBuilder;
 using DiffPlex;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
-using ThinBlueLieB.Models;
+using ThinBlueLie.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using ThinBlueLieB.Helper.Services;
+using ThinBlueLie.Helper.Services;
 
-namespace ThinBlueLieB
+namespace ThinBlueLie
 {
     public class Startup
     {

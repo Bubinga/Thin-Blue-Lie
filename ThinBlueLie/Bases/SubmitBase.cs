@@ -13,11 +13,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLieB.Bases;
-using ThinBlueLieB.Helper;
-using ThinBlueLieB.Helper.Extensions;
+using ThinBlueLie.Bases;
+using ThinBlueLie.Helper;
+using ThinBlueLie.Helper.Extensions;
 
-namespace ThinBlueLieB.Models
+namespace ThinBlueLie.Models
 {
     public partial class SubmitBase : InformationBase
     {

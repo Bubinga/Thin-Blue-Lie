@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ThinBlueLieB.Models
+namespace ThinBlueLie.Models
 {
     public class LoginModel
     {

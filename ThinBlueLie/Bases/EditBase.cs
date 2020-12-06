@@ -13,14 +13,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLieB.Helper.Algorithms;
-using ThinBlueLieB.Helper.Extensions;
-using ThinBlueLieB.Models;
+using ThinBlueLie.Helper.Algorithms;
+using ThinBlueLie.Helper.Extensions;
+using ThinBlueLie.Models;
 using static DataAccessLibrary.Enums.EditEnums;
-using static ThinBlueLieB.Helper.ConfigHelper;
-using static ThinBlueLieB.Models.SubmitBase;
+using static ThinBlueLie.Helper.ConfigHelper;
+using static ThinBlueLie.Models.SubmitBase;
 
-namespace ThinBlueLieB.Bases
+namespace ThinBlueLie.Bases
 {
     public class EditBase : InformationBase
     {

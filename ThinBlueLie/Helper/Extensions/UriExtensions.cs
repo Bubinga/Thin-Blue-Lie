@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace ThinBlueLieB.Helper.Extensions
+namespace ThinBlueLie.Helper.Extensions
 {
     public class UriExtensions
     {

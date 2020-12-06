@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLieB.Models;
+using ThinBlueLie.Models;
 using DataAccessLibrary.Enums;
 using Syncfusion.Blazor.CircularGauge.Internal;
 using System.Web;
 using System.Net.Http;
 using Newtonsoft.Json;
 
-namespace ThinBlueLieB.Helper.Algorithms.WebsiteProfiling
+namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
 {
     public partial class WebsiteProfile
     {

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using DataAccessLibrary.UserModels;
 
-namespace ThinBlueLieB.Areas.Identity.Pages.Account
+namespace ThinBlueLie.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel

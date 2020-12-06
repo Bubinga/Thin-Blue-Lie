@@ -6,10 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLieB.Helper;
+using ThinBlueLie.Helper;
 
 
-namespace ThinBlueLieB.Components.Bases
+namespace ThinBlueLie.Components.Bases
 {
     public class SimilarPeopleBase : ComponentBase
     {

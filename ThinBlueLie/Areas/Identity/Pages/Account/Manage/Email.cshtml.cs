@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using DataAccessLibrary.UserModels;
 
-namespace ThinBlueLieB.Areas.Identity.Pages.Account.Manage
+namespace ThinBlueLie.Areas.Identity.Pages.Account.Manage
 {
     public partial class EmailModel : PageModel
     {
