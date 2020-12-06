@@ -56,24 +56,25 @@ namespace ThinBlueLie.Models
                 using (var multi = await connection.QueryMultipleAsync(createNewEditHistory, new { userId }))
                 {
                     EditHistoryId = editHistory.IdEditHistory = multi.Read<int>().FirstOrDefault();
-                    IdTimelineinfo = multi.Read<int>().FirstOrDefault();
+                    IdTimelineinfo = (int)(editHistory.IdTimelineinfo = multi.Read<int>().FirstOrDefault());
                 }
 
 
-                var timelineSave = $@"INSERT INTO edits (`IdTimelineinfo`, `IdEditHistory`,`Date`, `State`, `City`, `Context`, `Locked`)
-                                       VALUES ('{IdTimelineinfo}', '{EditHistoryId}', @Date, @State, @City, @context, @Locked);";
+                string timelineSave = $@"INSERT INTO edits (`IdTimelineinfo`, `IdEditHistory`, `Title`, `Date`, `State`, `City`, `Context`, `Locked`)
+                                       VALUES ('{IdTimelineinfo}', '{EditHistoryId}', @Title, @Date, @State, @City, @context, @Locked);";   
 
                 //Insert data into edits table
-                connection.QuerySingle<int>(timelineSave, new
-                {
+                await connection.QueryAsync<int>(timelineSave, new
+                {                    
+                    model.Timelineinfos.Title,
                     model.Timelineinfos.Date,
                     model.Timelineinfos.State,
                     model.Timelineinfos.City,
                     context = sanitizer.Sanitize(model.Timelineinfos.Context),
                     model.Timelineinfos.Locked,
                     submittedby = userId, //nullable
-                });               
-
+                });
+                editHistory.Edits = 1;
 
                 foreach (var media in model.Medias)
                 {
@@ -87,13 +88,11 @@ namespace ThinBlueLie.Models
                         media.Source.Stream.WriteTo(filestream);
                         filestream.Close();
                         media.Source.Stream.Close();
+                        media.SourcePath = rand;
                     }
-                    else
-                    {
-                        path = media.SourcePath;
-                    }
-                    string mediaSql = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`)
-                                    VALUES ('{EditHistoryId}', @IdTimelineinfo, @MediaType, @SourcePath, @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', '{media.ListIndex}');";
+                    media.IdTimelineinfo = IdTimelineinfo;
+                    string mediaSql = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`, `Action`)
+                                    VALUES ('{EditHistoryId}', @IdTimelineinfo, @MediaType, @SourcePath, @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', '{media.ListIndex}', '0');";
                     await connection.ExecuteAsync(mediaSql, media);
                     editHistory.EditMedia = 1;
                 }
@@ -105,25 +104,26 @@ namespace ThinBlueLie.Models
                     if (subject.SameAsId == null)
                     {
                         //Create new subject
-                        var subjectSql = $@"INSERT INTO edits_subject 
-                                            (`IdEditHistory`, `Name`, `Race`, `Sex`, `Action`)
-                                            VALUES ('{EditHistoryId}', @Name, @Race, @Sex, '0');
-                                          SELECT LAST_INSERT_ID();";
+                        var subjectSql = $@"SET @v1 = (SELECT Max(e.IdSubject +1) FROM edits_subject e);                                               
+                                            INSERT INTO edits_subject 
+                                              (`IdEditHistory`, `IdSubject`, `Name`, `Race`, `Sex`, `Action`)
+                                               VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, '0');
+                                            SELECT @v1;";
                         //Add to subjects table and return id
-                        IdSubject = connection.QuerySingle<int>(subjectSql, subject);
+                        IdSubject = await connection.QuerySingleAsync<int>(subjectSql, subject);
                         editHistory.Subjects = 1;
                     }
-                        //Add to junction table    
-                        var junctionSql = "INSERT INTO edits_timelineinfo_subject (`IdEditHistory`, `IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)" +
-                                         "VALUES (@EditHistoryId, @IdTimelineinfo, @IdSubject, @Armed, @Age);";
-                        connection.Execute(junctionSql, new
-                        {
-                            EditHistoryId,
-                            IdTimelineinfo,
-                            IdSubject = subject.SameAsId == null? IdSubject : subject.SameAsId,
-                            Armed = Convert.ToByte(subject.Armed),
-                            subject.Age
-                        });
+                    //Add to junction table    
+                    var junctionSql = @"INSERT INTO edits_timelineinfo_subject (`IdEditHistory`, `IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)
+                                        VALUES (@EditHistoryId, @IdTimelineinfo, @IdSubject, @Armed, @Age);";
+                    await connection.ExecuteAsync(junctionSql, new
+                    {
+                        EditHistoryId,
+                        IdTimelineinfo,
+                        IdSubject = subject.SameAsId == null? IdSubject : subject.SameAsId,
+                        Armed = Convert.ToByte(subject.Armed),
+                        subject.Age
+                    });
                     editHistory.Timelineinfo_Subject = 1;
                 }
                 //Officer Table
@@ -133,37 +133,36 @@ namespace ThinBlueLie.Models
                     if (officer.SameAsId == null)
                     {
                         //Create new officer
-                        var officerSql = "INSERT INTO edits_officers (`IdEditHistory`, `Name`, `Race`, `Sex`, `Action`)" +
-                                     "VALUES ('{EditHistoryId}', @Name, @Race, @Sex, '0');" +
-                                     "SELECT LAST_INSERT_ID();";
+                        var officerSql = $@"SET @v1 = (SELECT Max(e.IdOfficer + 1) FROM edits_officer e);                                              
+                                            INSERT INTO edits_officer (`IdEditHistory`, `IdOfficer`, `Name`, `Race`, `Sex`, `Action`)
+                                               VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, '0');
+                                            SELECT @v1;";
                         //Add to officers table and return id
-                        IdOfficer = connection.QuerySingle<int>(officerSql, officer);
+                        IdOfficer = await connection.QuerySingleAsync<int>(officerSql, officer);
                         editHistory.Officers = 1;
                     }
-                        //Add to junction table
-                        var junctionSql = "INSERT INTO edits_timelineinfo_officer (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
-                                        "VALUES (@EditHistoryId, @idtimelineinfo, @idofficer, @age, @misconduct, @weapon);";
-                        connection.Execute(junctionSql, new
-                        {
-                            EditHistoryId,
-                            idtimelineinfo = IdTimelineinfo,
-                            idofficer = officer.SameAsId == null? IdOfficer : officer.SameAsId,
-                            age = officer.Age,
-                            misconduct = officer.Misconduct.Sum(),
-                            weapon = officer.Weapon?.Sum(),
-                        });
+                    //Add to junction table
+                    var junctionSql = "INSERT INTO edits_timelineinfo_officer (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
+                                    "VALUES (@EditHistoryId, @IdTimelineinfo, @idofficer, @age, @misconduct, @weapon);";
+                    await connection.ExecuteAsync(junctionSql, new
+                    {
+                        EditHistoryId,
+                        IdTimelineinfo,
+                        idofficer = officer.SameAsId == null? IdOfficer : officer.SameAsId,
+                        age = officer.Age,
+                        misconduct = officer.Misconduct.Sum(),
+                        weapon = officer.Weapon?.Sum(),
+                    });
                     editHistory.Timelineinfo_Officer = 1;
                 }
                 string updateEditHistory = @$"UPDATE edithistory SET 
-                                               `IdTimelineinfo` = @IdTimelineinfo,
-                                               `Confirmed` = '0',`Edits` = @Edits, `EditMedia` = @EditMedia,
-                                                `Officers` = @Officers, Subjects` = @Subjects, `Timelineinfo_Officer` = @Timelineinfo_Officer, 
+                                                `IdTimelineinfo` = @IdTimelineinfo,
+                                                `Confirmed` = '0',`Edits` = @Edits, `EditMedia` = @EditMedia,
+                                                `Officers` = @Officers, `Subjects` = @Subjects, `Timelineinfo_Officer` = @Timelineinfo_Officer, 
                                                 `Timelineinfo_Subject` = @Timelineinfo_Subject 
-                                         WHERE (`IdEditHistory` = '{EditHistoryId}');";
+                                            WHERE (`IdEditHistory` = '{EditHistoryId}');";
                 await connection.ExecuteAsync(updateEditHistory, editHistory);
-            }
-           
-
+            }    
 
             //TODO move all into querymultiple
             if (true) //TODO check if successful submit
