@@ -98,20 +98,18 @@ namespace ThinBlueLieB.Bases
             }           
         }
 
-        const int MaximumSubject = 10;
         internal void AddSubject()
         {
-            if (model.Subjects.Count < MaximumSubject)
+            if (model.Subjects.Count < SubmitModel.MaximumSubjects)
             {
                 var newSubjectItem = new ViewSubject { ListIndex = model.Subjects.Count };
                 model.Subjects.Add(newSubjectItem);
                 SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
             }          
         }
-        const int MaximumOfficer = 10;
         internal void AddOfficer()
         {
-            if (model.Officers.Count < MaximumOfficer)
+            if (model.Officers.Count < SubmitModel.MaximumOfficers)
             {
                 var newOfficerItem = new ViewOfficer { ListIndex = model.Officers.Count };
                 model.Officers.Add(newOfficerItem);
