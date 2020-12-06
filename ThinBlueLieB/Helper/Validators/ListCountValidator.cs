@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ThinBlueLieB.Helper.Validators
 {
-    public class PersonValidator : ValidationAttribute
+    public class ListCountValidator : ValidationAttribute
     {
-        public PersonValidator(int minimum, int maximum, string property)
+        public ListCountValidator(int minimum, int maximum, string property)
         {
             Maximum = maximum;
             Minimum = minimum;

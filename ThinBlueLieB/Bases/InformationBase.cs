@@ -78,11 +78,10 @@ namespace ThinBlueLieB.Bases
             model.Officers[person.PersonListIndex].Race = person.Race;
             SimilarOfficers[person.PersonListIndex] = new List<SimilarPersonGeneral>();
         }
-        const int MaximumMedia = 20;
         internal void AddMedia(MediaTypeEnum mediaType)
         {
             //if the given media is below the maximum total
-            if (model.Medias.Where(m => m.MediaType == mediaType).Count() < MaximumMedia)
+            if (model.Medias.Where(m => m.MediaType == mediaType).Count() < SubmitModel.MaximumMedia)
             {
                 if (mediaType != MediaTypeEnum.News)
                 {
