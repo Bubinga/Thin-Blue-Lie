@@ -4,23 +4,18 @@ using DataAccessLibrary.DataAccess;
 using DataAccessLibrary.DataModels;
 using DataAccessLibrary.DataModels.EditModels;
 using DataAccessLibrary.UserModels;
-using Microsoft.AspNetCore.Components;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using ThinBlueLie.Bases;
-using ThinBlueLie.Helper;
-using ThinBlueLie.Models;
 using ThinBlueLie.Models.View_Models;
-using ThinBlueLie.ViewModels;
 using static DataAccessLibrary.Enums.EditEnums;
 using static ThinBlueLie.Helper.ConfigHelper;
 using static ThinBlueLie.Models.View_Models.EditReviewModel;
 using static ThinBlueLie.Searches.SearchClasses;
-
+using static ThinBlueLie.Helper.Extensions.IdentityExtensions;
+using DataAccessLibrary.Enums;
 namespace ThinBlueLie.Searches
 {
     public class SearchesEditReview
@@ -33,25 +28,26 @@ namespace ThinBlueLie.Searches
         IMapper Mapper { get; set; }
 
         //count total pending edits that the user can access and get their edithistory ids
-        public async Task<List<FirstLoadEditHistory>> GetPendingEdits(ApplicationUser user, bool canReviewAll = false)
+        public async Task<List<FirstLoadEditHistory>> GetPendingEdits(ApplicationUser user)
         {
             string getPendingEditsIdsSql;
+            bool canReviewAll = user.RepAuthorizer(PrivledgeEnum.Privledges.ReviewAll);
             IEnumerable<FirstLoadEditHistory> PendingIds;
             using (var connection = new MySqlConnection(GetConnectionString()))
             {
                 if (canReviewAll)
                 {
-                    //see what and if the person voted on
-                    //if null or 0 nothing else add active to buttons
-                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote 
+                    //If idTimelineinfo does not exist in timelineinfo, it's a new event. 
+                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote, (t.IdTimelineinfo is null) as IsNewEvent
                                             FROM edithistory e
+                                            Left Join timelineinfo t on e.IdTimelineinfo = t.IdTimelineinfo
                                             LEFT Join edit_votes ev on e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId 
                                             WHERE Confirmed = 0;";
                     PendingIds = await connection.QueryAsync<FirstLoadEditHistory>(getPendingEditsIdsSql, new {UserId = user.Id});                   
                 }
                 else
                 {
-                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote 
+                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote, (t.IdTimelineinfo is null) as IsNewEvent 
                                              FROM edithistory e 
                                              LEFT JOIN timelineinfo t ON e.IdTimelineinfo = t.IdTimelineinfo 
                                              LEFT JOIN edit_votes ev ON e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId 
@@ -158,6 +154,7 @@ namespace ThinBlueLie.Searches
             string WhatChangedQuery = "Select * from edithistory e Where e.IdEditHistory = @id";
             EditHistory editChanges = await data.LoadDataSingle<EditHistory, dynamic>(WhatChangedQuery, new {id = id.IdEditHistory}, GetConnectionString());
             //If Timelineinfo changed
+            //TODO move to querymultipleasync
             if (editChanges.Edits == 1)
             {
                 string EditChangedQuery = @"Select e.IdTimelineinfo, e.Title, e.Date, e.State, e.City, e.Context, e.Locked 
@@ -192,21 +189,21 @@ namespace ThinBlueLie.Searches
             if (editChanges.Timelineinfo_Officer == 1)
             {
                 string changesToTimelineOfficerQuery = 
-                    @"SELECT o.IdOfficer, o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon 
+                    $@"SELECT o.IdOfficer, o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon 
                         FROM edithistory e
                         JOIN edits_timelineinfo_officer t_o ON e.IdEditHistory = t_o.IdEditHistory 
-                        JOIN edits_officer o ON t_o.IdEditsOfficer = o.IdEditsOfficer 
-                        WHERE e.IdEditHistory = @id;";
-                var changesToTimelineOfficer = await data.LoadData<DBOfficer, dynamic>(changesToTimelineOfficerQuery, new { id = id.IdEditHistory }, GetConnectionString());
+                        JOIN edits_officer o ON t_o.IdOfficer = o.IdOfficer 
+                        WHERE e.IdEditHistory = {id.IdEditHistory};";
+                var changesToTimelineOfficer = await data.LoadData<DBOfficer, dynamic>(changesToTimelineOfficerQuery, new { }, GetConnectionString());
                 newInfo.Officers = changesToTimelineOfficer;
             }
             if (editChanges.Timelineinfo_Subject == 1)
             {
                 string changesToTimelineSubjectQuery =
-                   @"SELECT s.IdSubject, s.Name, s.Race, s.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon 
+                   @"SELECT s.IdSubject, s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed
                         FROM edithistory e
-                        JOIN edits_timelineinfo_subject t_o ON e.IdEditHistory = t_o.IdEditHistory 
-                        JOIN edits_subject s ON t_o.IdEditsSubject = o.IdEditsSubject 
+                        JOIN edits_timelineinfo_subject t_s ON e.IdEditHistory = t_s.IdEditHistory 
+                        JOIN edits_subject s ON t_s.IdSubject = s.IdSubject 
                         WHERE e.IdEditHistory = @id;";
                 var changesToTimelineSubject = await data.LoadData<DBSubject, dynamic>(changesToTimelineSubjectQuery, new { id = id.IdEditHistory }, GetConnectionString());
                 newInfo.Subjects = changesToTimelineSubject;

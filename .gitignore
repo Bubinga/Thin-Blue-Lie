@@ -18,6 +18,8 @@ appsettings.Production.json
 Test.razor
 Test2.razor
 
+Uploads/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

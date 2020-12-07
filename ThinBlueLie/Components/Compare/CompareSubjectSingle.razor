@@ -1,58 +1,58 @@
 ﻿@using DiffPlex.DiffBuilder.Model;
-@using DiffPlex.DiffBuilder;
-@using ThinBlueLie.Helper.Extensions
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
-@using static DataAccessLibrary.Enums.TimelineinfoEnums;
 
 <div class="row">
-    <div class="col-6 px-4 @((SubjectPair.Item1 != null && SubjectPair.Item2 == null)? "deleted-item" : "")">
-        @if (SubjectPair.Item1 != null)
-        {
-            <p class="font-weight-bold">
-                @if (Model != null)
-                {
-                    <CompareLine Model="Model.OldText.Lines.FirstOrDefault()"></CompareLine>
-                }
-                else
-                {
-                    @(SubjectPair.Item1.Name != null? SubjectPair.Item1.Name : "Unnamed")
-                }
-            </p>
-            @if (SubjectPair.Item2 != null)
+    @if (IsNewEvent == false)
+    {
+        <div class="col-6 px-4 @((SubjectPair.Item1 != null && SubjectPair.Item2 == null)? "deleted-item" : "")">
+            @if (SubjectPair.Item1 != null)
             {
-                <span>
-                    @((MarkupString)(GetComparePersonSummary(
+                <p class="font-weight-bold">
+                    @if (Model != null)
+                    {
+                        <CompareLine Model="Model.OldText.Lines.FirstOrDefault()"></CompareLine>
+                    }
+                    else
+                    {
+                        @(SubjectPair.Item1.Name != null? SubjectPair.Item1.Name : "Unnamed")
+                    }
+                </p>
+                @if (SubjectPair.Item2 != null)
+                {
+                    <span>
+                        @((MarkupString)(GetComparePersonSummary(
                     new CommonPerson { Age = (int)SubjectPair.Item1.Age, Sex = SubjectPair.Item1.Sex, Race = SubjectPair.Item1.Race },
                     new CommonPerson { Age = (int)SubjectPair.Item2.Age, Sex = SubjectPair.Item2.Sex, Race = SubjectPair.Item2.Race },
                     true
                     )))
-                </span>
-            }
-            else
-            {
-                <span>
-                    @((MarkupString)(GetComparePersonSummary(
+                    </span>
+                }
+                else
+                {
+                    <span>
+                        @((MarkupString)(GetComparePersonSummary(
                     new CommonPerson { Age = (int)SubjectPair.Item1.Age, Sex = SubjectPair.Item1.Sex, Race = SubjectPair.Item1.Race },
                     new CommonPerson { Age = (int)SubjectPair.Item1.Age, Sex = SubjectPair.Item1.Sex, Race = SubjectPair.Item1.Race },
                     true
                     )))
-                </span>
-            }
-            <p>
-                @if (SubjectPair.Item2 != null ? SubjectPair.Item2.Armed == SubjectPair.Item1.Armed : false)
-                {                  
-                        @(SubjectPair.Item1.Armed == true? "Armed" : "Unarmed")                    
+                    </span>
                 }
-                else
-                {
-                    <ins>
+                <p>
+                    @if (SubjectPair.Item2 != null ? SubjectPair.Item2.Armed == SubjectPair.Item1.Armed : false)
+                    {
                         @(SubjectPair.Item1.Armed == true? "Armed" : "Unarmed")
-                    </ins>
-                }
-            </p>
-        }
-    </div>
-    <div class="col-6 px-4  @((SubjectPair.Item2 != null && SubjectPair.Item1 == null)? "inserted-item" : "")">
+                    }
+                    else
+                    {
+                        <ins>
+                            @(SubjectPair.Item1.Armed == true? "Armed" : "Unarmed")
+                        </ins>
+                    }
+                </p>
+            }
+        </div>
+    }
+    <div class="@(IsNewEvent? "col-12" : "col-6") px-4 @((SubjectPair.Item2 != null && SubjectPair.Item1 == null && !IsNewEvent)? "inserted-item" : "")">
         @if (SubjectPair.Item2 != null)
         {
             <p class="font-weight-bold">
@@ -86,9 +86,9 @@
                 </span>
             }
             <p>
-               @if (SubjectPair.Item1 != null ? SubjectPair.Item1.Armed == SubjectPair.Item2.Armed : false)
+                @if (SubjectPair.Item1 != null ? SubjectPair.Item1.Armed == SubjectPair.Item2.Armed : false)
                 {
-                        @(SubjectPair.Item2.Armed == true? "Armed" : "Unarmed")
+                    @(SubjectPair.Item2.Armed == true? "Armed" : "Unarmed")
                 }
                 else
                 {
@@ -105,4 +105,6 @@
     public Tuple<DBSubject, DBSubject> SubjectPair { get; set; }
     [Parameter]
     public SideBySideDiffModel? Model { get; set; }
+    [CascadingParameter]
+    public bool IsNewEvent { get; set; }
 }

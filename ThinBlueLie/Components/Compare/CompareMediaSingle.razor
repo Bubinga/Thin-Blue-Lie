@@ -5,46 +5,50 @@
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
 
 <div class="row">
-    <div class="col-6 @(Media.Item1 == null && Media.Item2 != null? "imaginary-item" : "") @(Media.Item1 != null && Media.Item2 == null? "deleted-item" : "")">
-        @if (Media.Item1 != null)
-        {
-            <div class="row">
-                <div class="col-5 information">
-                    @if (Model != null)
-                    {
-                        <CompareLine Model="Model.OldText.Lines.FirstOrDefault()"></CompareLine>
-                    }
-                    else
-                    {
-                        @Media.Item1.Blurb
-                    }
-                    <div class="pl-4">
-                        <span><b>Credit:</b> @((MarkupString)SimpleCompare(Media.Item1.Credit, Media.Item2?.Credit, true))</span>
-                        <span>
-                            <b>Source:</b>
-                            @if (Media.Item1.SourceFrom != (byte)SourceFromEnum.Device)
-                            {
-                                <a href="@SourceUrlOld"> External Link</a>
-                            }
-                            else
-                            {
-                                <a href="@SourceUrlOld"> Internal Link</a>
-                            }
-                        </span>
-                        <span><b>Source Type:</b> @((MarkupString)SimpleCompare(GetEnumDisplayName((SourceFromEnum)Media.Item1.SourceFrom), Media.Item2 != null ? GetEnumDisplayName((SourceFromEnum)Media.Item2?.SourceFrom) : null, true))</span>
-                        <span><b>Gore:</b> @((MarkupString)SimpleCompare(Media.Item1.Gore == 1 ? "Yes" : "No", Media.Item2?.Gore == 1 ? "Yes" : "No", true))</span>
-                        <span><b>Rank:</b> @((MarkupString)SimpleCompare((Media.Item1.Rank + 1).ToString(), (Media.Item2?.Rank + 1).ToString(), true))</span>
+    @if (IsNewEvent == false)
+    {
+        <div class="col-6 @(Media.Item1 == null && Media.Item2 != null? "imaginary-item" : "")
+                            @(Media.Item1 != null && Media.Item2 == null? "deleted-item" : "")">
+            @if (Media.Item1 != null)
+            {
+                <div class="row">
+                    <div class="col-5 information">
+                        @if (Model != null)
+                        {
+                            <CompareLine Model="Model.OldText.Lines.FirstOrDefault()"></CompareLine>
+                        }
+                        else
+                        {
+                            @Media.Item1.Blurb
+                        }
+                        <div class="pl-4">
+                            <span><b>Credit:</b> @((MarkupString)SimpleCompare(Media.Item1.Credit, Media.Item2?.Credit, true))</span>
+                            <span>
+                                <b>Source:</b>
+                                @if (Media.Item1.SourceFrom != (byte)SourceFromEnum.Device)
+                                {
+                                    <a href="@SourceUrlOld"> External Link</a>
+                                }
+                                else
+                                {
+                                    <a href="@SourceUrlOld"> Internal Link</a>
+                                }
+                            </span>
+                            <span><b>Source Type:</b> @((MarkupString)SimpleCompare(GetEnumDisplayName((SourceFromEnum)Media.Item1.SourceFrom), Media.Item2 != null ? GetEnumDisplayName((SourceFromEnum)Media.Item2?.SourceFrom) : null, true))</span>
+                            <span><b>Gore:</b> @((MarkupString)SimpleCompare(Media.Item1.Gore == 1 ? "Yes" : "No", Media.Item2?.Gore == 1 ? "Yes" : "No", true))</span>
+                            <span><b>Rank:</b> @((MarkupString)SimpleCompare((Media.Item1.Rank + 1).ToString(), (Media.Item2?.Rank + 1).ToString(), true))</span>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        @* If the link between the two is different, one side is null *@
+                        <img class="img-fluid rounded" src="@imgUrlOld">
                     </div>
                 </div>
-                <div class="col-7">
-                    @* If the link between the two is different, one side is null *@
-                    <img class="img-fluid rounded" src="@imgUrlOld">
-                </div>
-            </div>
-        }
-    </div>
-    <div class="col-6 @(Media.Item2 == null && Media.Item1 != null? "imaginary-item" : "") @(Media.Item1 == null && Media.Item2 != null? "inserted-item" : "")">
-
+            }
+        </div>
+    }
+    <div class="@(IsNewEvent? "col-12" : "col-6") @((Media.Item2 == null && Media.Item1 != null && !IsNewEvent)? "imaginary-item" : "") 
+                        @((Media.Item1 == null && Media.Item2 != null && !IsNewEvent)? "inserted-item" : "")">
         @if (Media.Item2 != null)
         {
             <div class="row">
@@ -70,7 +74,8 @@
                                 <a href="@SourceUrlNew"> Internal Link</a>
                             }
                         </span>
-                        <span><b>Source Type:</b> @((MarkupString)SimpleCompare(Media.Item1 != null?GetEnumDisplayName((SourceFromEnum)Media.Item1?.SourceFrom) : null, GetEnumDisplayName((SourceFromEnum)Media.Item2.SourceFrom), false))</span>
+                        <span><b>Source Type:</b> @((MarkupString)SimpleCompare(Media.Item1 != null?GetEnumDisplayName((SourceFromEnum)Media.Item1?.SourceFrom) : null,
+                                                                                GetEnumDisplayName((SourceFromEnum)Media.Item2.SourceFrom), false))</span>
                         <span><b>Gore:</b> @((MarkupString)SimpleCompare(Media.Item1?.Gore == 1 ? "Yes" : "No", Media.Item2.Gore == 1 ? "Yes" : "No", false))</span>
                         <span><b>Rank:</b> @((MarkupString)SimpleCompare((Media.Item1?.Rank + 1).ToString(), (Media.Item2.Rank + 1).ToString(), false))</span>
                     </div>
@@ -93,6 +98,8 @@
     string? imgUrlNew = string.Empty;
     string? SourceUrlOld = string.Empty;
     string? SourceUrlNew = string.Empty;
+    [CascadingParameter]
+    public bool IsNewEvent { get; set; }
     protected override async Task OnParametersSetAsync()
     {
         if (Media.Item1 != null)

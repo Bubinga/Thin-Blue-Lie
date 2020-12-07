@@ -6,33 +6,43 @@
 @inject IJSRuntime JSRuntime
 @inject ISideBySideDiffBuilder sideBySide
 
-<div class="diff-container">
-    <div class="diff-header">
-        @Header(new DiffStats(diff.NewText))
+@if (IsNewEvent)
+{
+    <div class="border p-3">
+        @((MarkupString)NewContext)
     </div>
-    <CascadingValue Value="CollapseContent" Name="CollapseContent">
-        <div class="diff-panes" @ref="pane" style="@(CollapseContent ? $"max-height: {MaxHeight}px; overflow: hidden;" : "max-height: auto; overflow: auto;")">
-            <div class="diff-pane">
-                <TextDiffPane Model="diff.OldText" PanePosition="@PanePosition.Left"></TextDiffPane>
-            </div>
-            <div class="diff-pane">
-                <TextDiffPane Model="diff.NewText" PanePosition="@PanePosition.Right"></TextDiffPane>
-            </div>
-        </div>
-    </CascadingValue>
-    @if (CollapseContent && paneHeight >= MaxHeight)
-    {
-        <p class="diff-expand-notice">...</p>
-    }
-</div>
+}
+else
+{
+    <div class="diff-container">
 
+        <div class="diff-header">
+            @Header(new DiffStats(diff.NewText))
+        </div>
+        <CascadingValue Value="CollapseContent" Name="CollapseContent">
+            <div class="diff-panes" @ref="pane" style="@(CollapseContent ? $"max-height: {MaxHeight}px; overflow: hidden;" : "max-height: auto; overflow: auto;")">
+                <div class="diff-pane">
+                    <TextDiffPane Model="diff.OldText" PanePosition="@PanePosition.Left"></TextDiffPane>
+                </div>
+                <div class="diff-pane">
+                    <TextDiffPane Model="diff.NewText" PanePosition="@PanePosition.Right"></TextDiffPane>
+                </div>
+            </div>
+        </CascadingValue>
+        @if (CollapseContent && paneHeight >= MaxHeight)
+        {
+            <p class="diff-expand-notice">...</p>
+        }
+    </div>
+}
 @code {
     [Parameter]
     public int MaxHeight { get; set; } = 300;
 
     [Parameter]
     public bool CollapseContent { get; set; }
-
+    [CascadingParameter]
+    public bool IsNewEvent { get; set; }
     /// <summary>
     /// The text before any changes.
     /// </summary>
@@ -71,21 +81,24 @@
     /// <returns></returns>
     protected override async Task OnParametersSetAsync()
     {
-        //Make it tabbed nicely
-        OldContext = PrettifyHtmlString(OldContext);
-        NewContext = PrettifyHtmlString(NewContext);
-        //remove first empty line
-        OldContext = OldContext.StartsWith("/n")?OldContext.Remove(0,1): OldContext;
-        NewContext = NewContext.StartsWith("/n") ? NewContext.Remove(0, 1) : NewContext;
-        //swap out < with their ascii codes
-        OldContext = OldContext.Replace("<", "&lt").Replace(">", "&gt");
-        NewContext = NewContext.Replace("<", "&lt").Replace(">", "&gt");
-
-        diff = sideBySide.BuildDiffModel(OldContext, NewContext);
-
-        if (pane.Id != null)
+        if (IsNewEvent == false)
         {
-            paneHeight = await JSRuntime.InvokeAsync<int>("blazorTextDiff.getHeight", pane);
+            //Make it tabbed nicely
+            OldContext = PrettifyHtmlString(OldContext);
+            NewContext = PrettifyHtmlString(NewContext);
+            //remove first empty line
+            OldContext = OldContext.StartsWith("/n") ? OldContext.Remove(0, 1) : OldContext;
+            NewContext = NewContext.StartsWith("/n") ? NewContext.Remove(0, 1) : NewContext;
+            //swap out < with their ascii codes
+            OldContext = OldContext.Replace("<", "&lt").Replace(">", "&gt");
+            NewContext = NewContext.Replace("<", "&lt").Replace(">", "&gt");
+
+            diff = sideBySide.BuildDiffModel(OldContext, NewContext);
+
+            if (pane.Id != null)
+            {
+                paneHeight = await JSRuntime.InvokeAsync<int>("blazorTextDiff.getHeight", pane);
+            }
         }
     }
 

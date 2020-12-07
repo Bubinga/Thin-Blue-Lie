@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ThinBlueLie.Helper.Algorithms
 {
@@ -38,7 +37,7 @@ namespace ThinBlueLie.Helper.Algorithms
                     }
                     if (isPaired == false)
                     {
-                        if (OldSubjects.Contains(subject))
+                        if (NewSubjects.Contains(subject))
                         {
                             pairing = new Tuple<DBSubject?, DBSubject?>(null, subject);
                         }
