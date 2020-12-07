@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NewFolder\**" />
+    <Content Remove="NewFolder\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <None Remove="NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.14.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
@@ -39,6 +46,7 @@
     <None Include="wwwroot\Uploads\Aaron-Torgalski-Bi3Un8.jpg" />
     <None Include="wwwroot\Uploads\Robert-McCabe-57lUaK.jpg" />
     <None Include="wwwroot\Uploads\Shelf Closeup.jpg" />
+    <None Include="wwwroot\Uploads\ZgapxWQGqOLDfHUrkeOi.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,10 +58,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
   </ItemGroup>
 
 </Project>

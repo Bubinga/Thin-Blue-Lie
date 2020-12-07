@@ -1,13 +1,8 @@
 ﻿using DataAccessLibrary.DataModels;
-using DataAccessLibrary.Enums;
-using Syncfusion.Blazor.Gantt;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using ThinBlueLie.Helper.Algorithms.WebsiteProfiling;
-using ThinBlueLie.Models;
 using static DataAccessLibrary.Enums.MediaEnums;
 
 namespace ThinBlueLie.Helper.Algorithms
@@ -67,7 +62,7 @@ namespace ThinBlueLie.Helper.Algorithms
             {
                 if ((SourceFromEnum)media.SourceFrom == SourceFromEnum.Device)
                 {
-                    var path = ConfigHelper.GetUploadsDirectory() + media.SourcePath + ".jpg";
+                    var path = "/Uploads/" + media.SourcePath + ".jpg";
                     return path;
                 }
                 else if ((SourceFromEnum)media.SourceFrom == SourceFromEnum.Reddit)

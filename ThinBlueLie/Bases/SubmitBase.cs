@@ -7,15 +7,14 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MySql.Data.MySqlClient;
-using Syncfusion.Blazor.RichTextEditor;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ThinBlueLie.Bases;
 using ThinBlueLie.Helper;
 using ThinBlueLie.Helper.Extensions;
+using static ThinBlueLie.Helper.Algorithms.WebsiteProfiling.WebsiteProfile;
 
 namespace ThinBlueLie.Models
 {
@@ -83,12 +82,16 @@ namespace ThinBlueLie.Models
                     if (media.Source != null & media.SourceFrom == MediaEnums.SourceFromEnum.Device)
                     {
                         var rand = StringExtensions.RandomString(20); //random string of 20 characters
-                        path = ConfigHelper.GetUploadsDirectory() + rand + ".jpg";
+                        path = @".\wwwroot\Uploads\" + rand + ".jpg";
                         FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
                         media.Source.Stream.WriteTo(filestream);
                         filestream.Close();
                         media.Source.Stream.Close();
                         media.SourcePath = rand;
+                    }
+                    else
+                    {
+                        media.SourcePath = await PrepareStoreData(media);
                     }
                     media.IdTimelineinfo = IdTimelineinfo;
                     string mediaSql = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`, `Action`)

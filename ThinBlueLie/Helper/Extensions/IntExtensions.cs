@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ThinBlueLie.Helper.Extensions
 {
-    public class IntExtensions
+    public static class IntExtensions
     {
         public static int[] IntToArray(int? n)
         {
@@ -29,5 +29,19 @@ namespace ThinBlueLie.Helper.Extensions
             }
             return powers.ToArray();
         }      
+        public static bool ToBool(this int value)
+        {
+            if (value == 0)
+                return false;
+            else
+                return true;
+        }
+        public static bool ToBool(this byte value)
+        {
+            if (value == 0)
+                return false;
+            else
+                return true;
+        }
     }
 }
