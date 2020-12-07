@@ -62,11 +62,7 @@ namespace ThinBlueLie.Bases
         }
         async Task GetEdits()
         {
-            bool canReviewAll = await UserManager.IsInRoleAsync(User, "GreatUser");
-            if (canReviewAll == false)
-                Ids = await Review.GetPendingEdits(User);               
-            else 
-                Ids = await Review.GetPendingEdits(User, true);
+            Ids = await Review.GetPendingEdits(User);               
 
             //get number of all the unconfirmed edits that user can access
             var firstId = Ids.FirstOrDefault().IdTimelineinfo;
@@ -95,7 +91,7 @@ namespace ThinBlueLie.Bases
             else
                 ActiveIdIndex++;
             Loading = false;
-            this.StateHasChanged();
+            StateHasChanged();
         }
         public void GetPreviousEdit()
         {
@@ -103,7 +99,7 @@ namespace ThinBlueLie.Bases
                 ActiveIdIndex = PendingEditsCount - 1;
             else
                 ActiveIdIndex--;
-            this.StateHasChanged();
+            StateHasChanged();
         }
 
         DataAccess data = new DataAccess();

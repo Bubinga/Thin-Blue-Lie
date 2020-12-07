@@ -5,6 +5,7 @@
 @using Syncfusion.Blazor.Spinner
 @using Syncfusion.Blazor.Buttons
 @using ThinBlueLie.Components.Compare
+@using static ThinBlueLie.Helper.Extensions.IntExtensions 
 @attribute [Authorize]
 <Title>Edit Review - Thin Blue Lie</Title>
 <Meta Name="robots" Content="noindex" />
@@ -57,7 +58,7 @@
                         <SfButton CssClass="e-outline e-accept-button" IconCss="e-icons e-check">Accept</SfButton>
                         <SfButton CssClass="e-outline e-decline-button" IconCss="e-icons e-cross">Reject</SfButton>
                     }
-                    else
+                    else if (Ids.ToArray()[ActiveIdIndex].IdTimelineinfo != null)
                     {
                         <SfButton CssClass="@("e-outline e-accept-button " + (Ids.ToArray()[ActiveIdIndex].Vote == 1? "active" : ""))"
                                   OnClick="async () => await AcceptEdit()" IconCss="e-icons e-check">
@@ -86,31 +87,40 @@
                 {
                     @if (Ids.ToArray()[ActiveIdIndex].IdTimelineinfo != null)
                     {
-                        <CompareBasic Info="new Tuple<Timelineinfo, Timelineinfo>(Edits[ActiveIdIndex].Old.Data, Edits[ActiveIdIndex].New.Data)"></CompareBasic>
-                        <CompareContext CollapseContent="false" OldContext="@Edits[ActiveIdIndex].Old.Data.Context" NewContext="@Edits[ActiveIdIndex].New.Data.Context">
-                            <Header Context="compare">
-                                <h6 style="padding: 12px; margin: 0px;">
-                                    <span class="badge badge-primary">@($"{compare.LineModificationCount} Line Modifications")</span>
-                                    <span class="badge badge-danger">@($"{compare.LineDeletionCount} Line Deletions")</span>
-                                    <span class="badge badge-success">@($"{compare.LineAdditionCount} Line Additions")</span>
+                        if (Ids.ToArray()[ActiveIdIndex].IsNewEvent.ToBool() == true)
+                        {
+                            <div class="text-center my-3"><h5>New Event</h5></div>
+                        }
+                        <CascadingValue Value="@(Ids.ToArray()[ActiveIdIndex].IsNewEvent.ToBool())">
+                            <CompareBasic Info="new Tuple<Timelineinfo, Timelineinfo>(Edits[ActiveIdIndex].Old.Data, Edits[ActiveIdIndex].New.Data)"></CompareBasic>
+                            <CompareContext CollapseContent="false" OldContext="@Edits[ActiveIdIndex].Old.Data?.Context" NewContext="@Edits[ActiveIdIndex].New.Data.Context">
+                                <Header Context="compare">
+                                    <h6 style="padding: 12px; margin: 0px;">
+                                        <span class="badge badge-primary">@($"{compare.LineModificationCount} Line Modifications")</span>
+                                        <span class="badge badge-danger">@($"{compare.LineDeletionCount} Line Deletions")</span>
+                                        <span class="badge badge-success">@($"{compare.LineAdditionCount} Line Additions")</span>
 
-                                    <span class="badge badge-primary">@($"{compare.WordModificationCount} Word Modifications")</span>
-                                    <span class="badge badge-danger">@($"{compare.WordDeletionCount} Word Deletions")</span>
-                                    <span class="badge badge-success">@($"{compare.WordAdditionCount} Word Additions")</span>
-                                </h6>
-                            </Header>
-                        </CompareContext>
-                        <CompareMedias OldMedias="@Edits[ActiveIdIndex].Old.Medias" NewMedias="@Edits[ActiveIdIndex].New.Medias"></CompareMedias>
-                        <CompareOfficers OldOfficers="@Edits[ActiveIdIndex].Old.Officers" NewOfficers="@Edits[ActiveIdIndex].New.Officers"></CompareOfficers>
-                        <CompareSubjects OldSubjects="@Edits[ActiveIdIndex].Old.Subjects" NewSubjects="@Edits[ActiveIdIndex].New.Subjects"></CompareSubjects>
+                                        <span class="badge badge-primary">@($"{compare.WordModificationCount} Word Modifications")</span>
+                                        <span class="badge badge-danger">@($"{compare.WordDeletionCount} Word Deletions")</span>
+                                        <span class="badge badge-success">@($"{compare.WordAdditionCount} Word Additions")</span>
+                                    </h6>
+                                </Header>
+                            </CompareContext>
+                            <CompareMedias OldMedias="@Edits[ActiveIdIndex].Old.Medias" NewMedias="@Edits[ActiveIdIndex].New.Medias"></CompareMedias>
+                            <CompareOfficers OldOfficers="@Edits[ActiveIdIndex].Old.Officers" NewOfficers="@Edits[ActiveIdIndex].New.Officers"></CompareOfficers>
+                            <CompareSubjects OldSubjects="@Edits[ActiveIdIndex].Old.Subjects" NewSubjects="@Edits[ActiveIdIndex].New.Subjects"></CompareSubjects>
+                        </CascadingValue>
                     }
-                    else if ((Edits[ActiveIdIndex].New.OfficerPerson != null || Edits[ActiveIdIndex].Old.OfficerPerson != null))
+                    else if (Ids.ToArray()[ActiveIdIndex].IsNewEvent.ToBool() == false)
                     {
-                        <ComparePerson TPerson="Officers" NewPerson="Edits[ActiveIdIndex].New.OfficerPerson" OldPerson="Edits[ActiveIdIndex].Old.OfficerPerson"></ComparePerson>
-                    }
-                    else if ((Edits[ActiveIdIndex].New.SubjectPerson != null || Edits[ActiveIdIndex].Old.SubjectPerson != null))
-                    {
-                        <ComparePerson TPerson="Subjects" NewPerson="Edits[ActiveIdIndex].New.SubjectPerson" OldPerson="Edits[ActiveIdIndex].Old.SubjectPerson"></ComparePerson>
+                        if ((Edits[ActiveIdIndex].New.OfficerPerson != null || Edits[ActiveIdIndex].Old.OfficerPerson != null))
+                        {
+                            <ComparePerson TPerson="Officers" NewPerson="Edits[ActiveIdIndex].New.OfficerPerson" OldPerson="Edits[ActiveIdIndex].Old.OfficerPerson"></ComparePerson>
+                        }
+                        if ((Edits[ActiveIdIndex].New.SubjectPerson != null || Edits[ActiveIdIndex].Old.SubjectPerson != null))
+                        {
+                            <ComparePerson TPerson="Subjects" NewPerson="Edits[ActiveIdIndex].New.SubjectPerson" OldPerson="Edits[ActiveIdIndex].Old.SubjectPerson"></ComparePerson>
+                        }
                     }
                 }
             </div>

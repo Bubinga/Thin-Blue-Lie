@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ThinBlueLie.Models;
-using DataAccessLibrary.Enums;
-using Syncfusion.Blazor.CircularGauge.Internal;
-using System.Web;
-using System.Net.Http;
+﻿using DataAccessLibrary.Enums;
 using Newtonsoft.Json;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
+using ThinBlueLie.Models;
 
 namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
 {
-    public partial class WebsiteProfile
+    public static partial class WebsiteProfile
     {
-        public async Task<string> PrepareStoreData(ViewMedia media)
+        public static async Task<string> PrepareStoreData(ViewMedia media)
         {
             string path; 
             if (media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)

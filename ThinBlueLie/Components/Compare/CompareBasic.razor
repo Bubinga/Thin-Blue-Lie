@@ -2,37 +2,44 @@
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
 @using static DataAccessLibrary.Enums.TimelineinfoEnums
 <div class="row">
-    <div class="col-6">
-        @if (Info.Item1 != null)
+    @if (IsNewEvent == false)
+    {
+        <div class="col-6">
+            @if (Info.Item1 != null)
+            {
+                <span class="d-md-block">
+                    <b>Title:</b> @((MarkupString)SimpleCompare(Info.Item1.Title, Info.Item2?.Title, true))
+                </span>
+                <span class="d-md-block">
+                    <b>Date:</b> @((MarkupString)SimpleCompare(Info.Item1.Date.ToLongDateString(), Info.Item2?.Date.ToLongDateString(), true))
+                </span>
+                <span class="d-md-block">
+                    <b>State:</b> @((MarkupString)SimpleCompare(GetEnumDisplayName((StateEnum)Info.Item1.State), GetEnumDisplayName((StateEnum)Info.Item2?.State), true))
+                </span>
+                <span class="d-md-block">
+                    <b>City:</b> @((MarkupString)SimpleCompare(Info.Item1.City, Info.Item2?.City, true))
+                </span>
+            }
+        </div>
+    }
+    <div class="@(IsNewEvent? "col-12" : "col-6")">
+        @if (Info.Item2 != null)
         {
             <span class="d-md-block">
-                <b>Title:</b> @((MarkupString)SimpleCompare(Info.Item1.Title, Info.Item2?.Title, true))
+                <b>Title:</b> @((MarkupString)SimpleCompare(Info.Item1?.Title, 
+                                                            Info.Item2.Title, false))
             </span>
             <span class="d-md-block">
-                <b>Date:</b> @((MarkupString)SimpleCompare(Info.Item1.Date.ToLongDateString(), Info.Item2?.Date.ToLongDateString(), true))
+                <b>Date:</b> @((MarkupString)SimpleCompare(Info.Item1?.Date.ToLongDateString(), 
+                                                            Info.Item2.Date.ToLongDateString(), false))
             </span>
             <span class="d-md-block">
-                <b>State:</b> @((MarkupString)SimpleCompare(GetEnumDisplayName((StateEnum)Info.Item1.State), GetEnumDisplayName((StateEnum)Info.Item2?.State), true))
+                <b>State:</b> @((MarkupString)SimpleCompare(IsNewEvent? "" : (GetEnumDisplayName((StateEnum)Info.Item1?.State)),
+                                                            GetEnumDisplayName((StateEnum)Info.Item2.State), false))
             </span>
             <span class="d-md-block">
-                <b>City:</b> @((MarkupString)SimpleCompare(Info.Item1.City, Info.Item2?.City, true))
-            </span>
-        }
-    </div>
-    <div class="col-6">
-        @if (Info.Item1 != null)
-        {
-            <span class="d-md-block">
-                <b>Title:</b> @((MarkupString)SimpleCompare(Info.Item1.Title, Info.Item2?.Title, false))
-            </span>
-            <span class="d-md-block">
-                <b>Date:</b> @((MarkupString)SimpleCompare(Info.Item1.Date.ToLongDateString(), Info.Item2?.Date.ToLongDateString(), false))
-            </span>
-            <span class="d-md-block">
-                <b>State:</b> @((MarkupString)SimpleCompare(GetEnumDisplayName((StateEnum)Info.Item1.State), GetEnumDisplayName((StateEnum)Info.Item2?.State), false))
-            </span>
-            <span class="d-md-block">
-                <b>City:</b> @((MarkupString)SimpleCompare(Info.Item1.City, Info.Item2?.City, false))
+                <b>City:</b> @((MarkupString)SimpleCompare(Info.Item1?.City, 
+                                                            Info.Item2.City, false))
             </span>
         }
     </div>
@@ -43,6 +50,8 @@
 @code {
     [Parameter]
     public Tuple<Timelineinfo, Timelineinfo> Info { get; set; }
+    [CascadingParameter]
+    public bool IsNewEvent { get; set; }
     //Title
     //Date
     //State
