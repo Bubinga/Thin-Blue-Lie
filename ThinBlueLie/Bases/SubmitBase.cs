@@ -66,7 +66,7 @@ namespace ThinBlueLie.Models
                 await connection.QueryAsync<int>(timelineSave, new
                 {                    
                     model.Timelineinfos.Title,
-                    model.Timelineinfos.Date,
+                    Date = DateValue,
                     model.Timelineinfos.State,
                     model.Timelineinfos.City,
                     context = sanitizer.Sanitize(model.Timelineinfos.Context),

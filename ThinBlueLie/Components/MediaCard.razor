@@ -72,12 +72,7 @@
                             <ValidationMessage For="@(() => media.Gore)"></ValidationMessage>
                         </label>
                         <div class="d-inline">
-                            <div class="form-check d-inline">
-                                <SfRadioButton Label="No" Name="@Guid" Value="0" Checked="@media.Gore"></SfRadioButton>
-                            </div>
-                            <div class="form-check d-inline">
-                                <SfRadioButton Label="Yes" Name="@Guid" Value="1" Checked="@media.Gore"></SfRadioButton>
-                            </div>
+                            <SfCheckBox CssClass="armed-checkbox" Name="@Guid" @bind-Checked="@media.Gore" Label="Armed"></SfCheckBox>                            
                         </div>
                     </div>
                     }

@@ -11,6 +11,7 @@ namespace ThinBlueLie.Searches
             public int? IdTimelineinfo { get; set; }
             public short? Vote { get; set; }
             public byte IsNewEvent { get; set; }
+            public int SubmittedBy { get; set; }
         }
         public class FirstLoadOfficer
         {

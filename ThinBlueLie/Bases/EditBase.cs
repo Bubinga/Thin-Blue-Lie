@@ -17,6 +17,7 @@ using ThinBlueLie.Helper.Algorithms;
 using ThinBlueLie.Helper.Extensions;
 using ThinBlueLie.Models;
 using static DataAccessLibrary.Enums.EditEnums;
+using static ThinBlueLie.Helper.Algorithms.WebsiteProfiling.WebsiteProfile;
 using static ThinBlueLie.Helper.ConfigHelper;
 using static ThinBlueLie.Models.SubmitBase;
 
@@ -277,6 +278,8 @@ namespace ThinBlueLie.Bases
                         if (pair.Item2 != null && pair.Item1 == null)
                         {
                             Action = EditActions.Addition;
+                            //TODO add support for editted uploaded images
+                            pair.Item2.SourcePath = await PrepareStoreData(Mapper.Map<Media, ViewMedia>(pair.Item2));
                             string saveNewMedia = @$"INSERT INTO editmedia 
                                                       (`IdEditHistory`, `IdTimelineinfo`, `Rank`, `MediaType`, `SourcePath`,
                                                         `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Action`)

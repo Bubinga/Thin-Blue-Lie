@@ -1,27 +1,21 @@
-﻿using AutoMapper;
+﻿using Dapper;
 using DataAccessLibrary.DataAccess;
+using DataAccessLibrary.DataModels;
+using DataAccessLibrary.DataModels.EditModels;
 using DataAccessLibrary.UserModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MySql.Data.MySqlClient;
-using Syncfusion.Blazor.PdfViewer;
-using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLie.Helper;
-using ThinBlueLie.Models;
 using ThinBlueLie.Models.View_Models;
 using ThinBlueLie.Searches;
-using ThinBlueLie.ViewModels;
-using static ThinBlueLie.Searches.SearchClasses;
-using static ThinBlueLie.Helper.ConfigHelper;
-using System.Data;
-using Dapper;
-using DataAccessLibrary.DataModels.EditModels;
 using static DataAccessLibrary.Enums.EditEnums;
-using DataAccessLibrary.DataModels;
+using static ThinBlueLie.Helper.ConfigHelper;
+using static ThinBlueLie.Searches.SearchClasses;
 
 namespace ThinBlueLie.Bases
 {
@@ -108,9 +102,9 @@ namespace ThinBlueLie.Bases
         {
             //TODO add check if the edit was already accepted, people could be sitting with a tab open for days
             //Add super accept option for trusted users that has a vote value of 2
-
+            var Vote = Ids.ToArray()[ActiveIdIndex].Vote;
             //if the vote was already accepted
-            if (Ids.ToArray()[ActiveIdIndex].Vote < 1)
+            if (Vote < 1 || Vote == null)
             {
                 string AcceptSql = @"INSERT INTO edit_votes (IdEditHistory,UserId,Vote) 
                                             VALUES (@IdEditHistory, @UserId, 1) AS new
@@ -123,7 +117,7 @@ namespace ThinBlueLie.Bases
                     rows = await connection.QueryAsync<int>(AcceptSql, new { IdEditHistory = Ids.ToArray()[ActiveIdIndex].IdEditHistory, UserId = User.Id });
                 }
                 Ids.ToArray()[ActiveIdIndex].Vote = 1;
-                if (rows.Sum() >= 2)
+                if (rows.Sum() <= 2)
                     await MergeEdit();
                 //StateHasChanged();
             }
@@ -131,7 +125,8 @@ namespace ThinBlueLie.Bases
         }
         public async Task RejectEdit()
         {
-            if (Ids.ToArray()[ActiveIdIndex].Vote > -1)
+            var Vote = Ids.ToArray()[ActiveIdIndex].Vote;
+            if (Vote > -1 || Vote == null)
             {
                 string AcceptSql = @"INSERT INTO edit_votes (`IdEditHistory`, `UserId`, `Vote`) 
                                             VALUES(@IdEditHistory, @UserId, -1) AS new
@@ -146,47 +141,46 @@ namespace ThinBlueLie.Bases
         {
             var change = EditChanges.ToArray()[ActiveIdIndex];
             var newInfo = Edits.ToArray()[ActiveIdIndex].New;
-            var oldInfo = Edits.ToArray()[ActiveIdIndex].Old;
+
             //TODO change system so that I don't have to query this information twice
             using (IDbConnection connection = new MySqlConnection(GetConnectionString()))
             {
                 if (change.Edits == 1)
                 {
-                    string EditChangedQuery = @"
-                                            INSERT INTO timelineinfo(`IdTimelineinfo`, `Title`, `Date`, `State`, `City`, `Context`, `Locked`)
-                                                VALUES(@IdTimelineinfo, @Title, @Date, @State, @City, @context, @Locked);
-                                            ON DUPLICATE KEY UPDATE
-                                               `Title` = @Title, `Date` = @Date, `State` = @State, 
-                                               `City` = @City, `Context` = @Context, 
-                                               `Locked` = @Locked, `Owner` = @Owner
-                                                WHERE (`IdTimelineinfo` = @IdTimelineinfo);";
-                    await connection.ExecuteAsync(EditChangedQuery, newInfo);
+                    string EditChangedQuery = "INSERT INTO timelineinfo(`IdTimelineinfo`, `Title`, `Date`, `State`, `City`, `Context`, `Locked`, `Owner`)"+
+                                                   $"VALUES(@IdTimelineinfo, @Title, @Date, @State, @City, @context, @Locked, '{Ids.ToArray()[ActiveIdIndex].SubmittedBy}')" +
+                                                "ON DUPLICATE KEY UPDATE " +
+                                                   "`Title` = @Title, `Date` = @Date, `State` = @State, " +
+                                                   "`City` = @City, `Context` = @Context, " +
+                                                   $"`Locked` = @Locked, `Owner` = '{Ids.ToArray()[ActiveIdIndex].SubmittedBy}';";
+                    await connection.ExecuteAsync(EditChangedQuery, newInfo.Data);
                 }
                 if (change.EditMedia == 1)
                 {
                     string MediaChangedQuery = @"Select * From editmedia m Where m.IdEditHistory = @id;";
-                    var changesToMedia = await data.LoadData<EditMedia, dynamic>(MediaChangedQuery, new { id = change.IdEditHistory }, GetConnectionString());
-                    string mediaQuery = string.Empty;
+                    var changesToMedia = await data.LoadData<EditMedia, dynamic>(MediaChangedQuery, new { id = change.IdEditHistory }, GetConnectionString());                   
+                    //TODO find way to do all at once. 
                     foreach (var media in changesToMedia)
                     {
                         var action = (EditActions)media.Action;
-
+                        string mediaQuery = string.Empty;
                         if (action == EditActions.Addition)
-                            mediaQuery += @$"Insert into media (`IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, 
-                                            `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`)
-                                            VALUES ({media.IdTimelineinfo}, {media.MediaType}, {media.SourcePath}, {media.Gore},
-                                            {media.SourceFrom}, {media.Blurb}, {media.Credit}, {media.SubmittedBy}, {media.Rank}); ";
+                            mediaQuery = "Insert into media (`IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, " +
+                                             "`SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`) " +
+                                             $"VALUES (@IdTimelineinfo, @MediaType, @SourcePath, @Gore, " +
+                                             $"@SourceFrom, @Blurb, @Credit, @SubmittedBy, @Rank); ";
 
                         else if (action == EditActions.Update)
-                            mediaQuery += @$"UPDATE media SET 
-                                            `MediaType` = {media.MediaType}, `Gore` = {media.Gore}, `SourceFrom` = {media.SourceFrom}, 
-                                            `Blurb` = {media.Blurb}, `Credit` = {media.Credit}, `SubmittedBy` = {media.SubmittedBy},
-                                            `Rank` = {media.Rank} WHERE (`IdMedia` = {media.IdMedia});";
+                            mediaQuery = @$"UPDATE media SET 
+                                            `MediaType` = @MediaType, `Gore` = @Gore, `SourceFrom` = @SourceFrom, 
+                                            `Blurb` = @Blurb, `Credit` = @Credit, `SubmittedBy` = @SubmittedBy,
+                                            `Rank` = @Rank WHERE (`IdMedia` = @IdMedia);";
 
                         else if (action == EditActions.Deletion)
-                            mediaQuery += $"DELETE FROM media WHERE (`IdMedia` = {media.IdMedia});";
+                            mediaQuery = $"DELETE FROM media WHERE (`IdMedia` = @IdMedia);";
+
+                        await connection.ExecuteAsync(mediaQuery, media);
                     }
-                    await connection.ExecuteAsync(mediaQuery);
                 }
                 if (change.Officers == 1)
                 {
@@ -196,8 +190,8 @@ namespace ThinBlueLie.Bases
                     var firstAction = (EditActions)changes.FirstOrDefault().Action;
                     if (changes.Count > 1 || firstAction == EditActions.Addition)
                     {
-                        string AddOfficer = @"INSERT INTO officers (`Name`, `Race`, `Sex`, `Image`, `Local`) 
-                                              VALUES(@Name, @Race, @Sex, @Image, @Local);" ;
+                        string AddOfficer = "INSERT INTO officers (`IdOfficer`, `Name`, `Race`, `Sex`, `Image`, `Local`) " +
+                                              "VALUES(@IdOfficer, @Name, @Race, @Sex, @Image, @Local);" ;
                         await connection.ExecuteAsync(AddOfficer, changes);
                     }
                     //can only have one
@@ -205,8 +199,8 @@ namespace ThinBlueLie.Bases
                     {
                         if (firstAction == EditActions.Update)
                         {
-                            string UpdateOfficer = @"UPDATE officers SET `Name` = @Name, `Race` = @Race, `Sex` = @Sex, 
-                                                    `Image` = @Image, `Local` = @Local WHERE (`IdOfficer` = @IdOfficer);";
+                            string UpdateOfficer = "UPDATE officers SET `Name` = @Name, `Race` = @Race, `Sex` = @Sex, " +
+                                                      "`Image` = @Image, `Local` = @Local WHERE (`IdOfficer` = @IdOfficer);";
                             await connection.ExecuteAsync(UpdateOfficer, changes.FirstOrDefault());
                         }                       
                         if (firstAction == EditActions.Deletion)
@@ -224,8 +218,8 @@ namespace ThinBlueLie.Bases
                     var firstAction = (EditActions)changes.FirstOrDefault().Action;
                     if (changes.Count > 1 || firstAction == EditActions.Addition)
                     {
-                        string AddSubject = @"INSERT INTO subjects (`Name`, `Race`, `Sex`, `Image`, `Local`) 
-                                              VALUES(@Name, @Race, @Sex, @Image, @Local);";
+                        string AddSubject = @"INSERT INTO subjects (`IdSubject`, `Name`, `Race`, `Sex`, `Image`, `Local`) 
+                                              VALUES(@IdSubject, @Name, @Race, @Sex, @Image, @Local);";
                         await connection.ExecuteAsync(AddSubject, changes);
                     }
                     //can only have one
@@ -248,9 +242,9 @@ namespace ThinBlueLie.Bases
                 {
                     string getTOChanges = "Select * from edits_timelineinfo_officer e Where e.IdEditHistory = @id";
                     var changes = await connection.QueryAsync<EditTimelineinfoOfficer>(getTOChanges, new { id = change.IdEditHistory});
-                    string deleteEverything = "Delete * from timelineinfo_officer to where to.IdOfficer = @IdOfficer and to.IdTimelineinfo = @IdTimelineinfo; ";
+                    string deleteEverything = "Delete from timelineinfo_officer t_o where t_o.IdOfficer = @IdOfficer and t_o.IdTimelineinfo = @IdTimelineinfo;";
                     await connection.ExecuteAsync(deleteEverything);
-                    string applyChanges = @"INSERT INTO timelineinfo_officer (IdTimelineinfo,IdOfficer,Age,Misconduct,Weapon) 
+                    string applyChanges = @"INSERT INTO timelineinfo_officer (IdTimelineinfo, IdOfficer, Age, Misconduct, Weapon) 
                                             VALUES (@IdTimelineinfo, @IdOfficer, @Age, @Misconduct, @Weapon);";
                     await connection.ExecuteAsync(applyChanges, changes);
                 }
@@ -258,12 +252,19 @@ namespace ThinBlueLie.Bases
                 {
                     string getTOChanges = "Select * from edits_timelineinfo_subject e Where e.IdEditHistory = @id";
                     var changes = await connection.QueryAsync<EditTimelineinfoSubject>(getTOChanges, new { id = change.IdEditHistory });
-                    string deleteEverything = "Delete * from timelineinfo_subject to where to.IdSubject = @IdSubject and to.IdTimelineinfo = @IdTimelineinfo; ";
+                    string deleteEverything = "Delete from timelineinfo_subject ts where ts.IdSubject = @IdSubject and ts.IdTimelineinfo = @IdTimelineinfo;";
                     await connection.ExecuteAsync(deleteEverything);
-                    string applyChanges = @"INSERT INTO timelineinfo_subject (IdTimelineinfo,IdSubject,Age,Misconduct,Weapon) 
-                                            VALUES (@IdTimelineinfo, @IdSubject, @Age, @Misconduct, @Weapon);";
+                    string applyChanges = @"INSERT INTO timelineinfo_subject (IdTimelineinfo, IdSubject, Age, Armed) 
+                                            VALUES (@IdTimelineinfo, @IdSubject, @Age, @Armed);";
                     await connection.ExecuteAsync(applyChanges, changes);
                 }
+
+                string changeToConfirmed = "UPDATE edithistory SET `Confirmed` = '1' WHERE (`IdEditHistory` = @IdEditHistory);";
+                await connection.ExecuteAsync(changeToConfirmed, new {Ids.ToArray()[ActiveIdIndex].IdEditHistory});
+
+                //var confirmedEditId = Ids.ToArray()[ActiveIdIndex].IdEditHistory;
+                //Ids = Ids.Where(i => i.IdEditHistory != confirmedEditId).ToList();
+
             }         
         }
     }
