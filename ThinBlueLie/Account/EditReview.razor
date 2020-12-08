@@ -62,11 +62,11 @@
                     {
                         <SfButton CssClass="@("e-outline e-accept-button " + (Ids.ToArray()[ActiveIdIndex].Vote == 1? "active" : ""))"
                                   OnClick="async () => await AcceptEdit()" IconCss="e-icons e-check">
-                            @(Ids.ToArray()[ActiveIdIndex].Vote == 1? "Accepted" : "Accept")
+                            @(Ids.ToArray()[ActiveIdIndex].Vote >= 1? "Accepted" : "Accept")
                         </SfButton>
                         <SfButton CssClass="@("e-outline e-decline-button " + (Ids.ToArray()[ActiveIdIndex].Vote == -1? "active" : ""))"
                                   OnClick="async () => await RejectEdit()" IconCss="e-icons e-cross">
-                            @(Ids.ToArray()[ActiveIdIndex].Vote == -1? "Rejected" : "Reject")
+                            @(Ids.ToArray()[ActiveIdIndex].Vote <= -1? "Rejected" : "Reject")
                         </SfButton>
                     }
                 </div>
