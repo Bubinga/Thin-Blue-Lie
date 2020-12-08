@@ -38,21 +38,22 @@ namespace ThinBlueLie.Searches
                 if (canReviewAll)
                 {
                     //If idTimelineinfo does not exist in timelineinfo, it's a new event. 
-                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote, (t.IdTimelineinfo is null) as IsNewEvent
-                                            FROM edithistory e
-                                            Left Join timelineinfo t on e.IdTimelineinfo = t.IdTimelineinfo
-                                            LEFT Join edit_votes ev on e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId 
-                                            WHERE Confirmed = 0;";
+                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote, e.SubmittedBy, (t.IdTimelineinfo is null) as IsNewEvent
+                                                FROM edithistory e
+                                                Left Join timelineinfo t on e.IdTimelineinfo = t.IdTimelineinfo
+                                                LEFT Join edit_votes ev on e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId 
+                                                WHERE Confirmed = 0 and e.SubmittedBy != @UserId;";
                     PendingIds = await connection.QueryAsync<FirstLoadEditHistory>(getPendingEditsIdsSql, new {UserId = user.Id});                   
                 }
                 else
                 {
-                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote, (t.IdTimelineinfo is null) as IsNewEvent 
-                                             FROM edithistory e 
-                                             LEFT JOIN timelineinfo t ON e.IdTimelineinfo = t.IdTimelineinfo 
-                                             LEFT JOIN edit_votes ev ON e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId 
-                                             WHERE e.Confirmed = 0 
-                                             AND (t.Owner = @UserId OR e.IdTimelineinfo is null);";
+                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote, e.SubmittedBy, (t.IdTimelineinfo is null) as IsNewEvent 
+                                                 FROM edithistory e 
+                                                 LEFT JOIN timelineinfo t ON e.IdTimelineinfo = t.IdTimelineinfo 
+                                                 LEFT JOIN edit_votes ev ON e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId 
+                                                 WHERE e.Confirmed = 0 
+                                                 And e.SubmittedBy != @UserId
+                                                 AND (t.Owner = @UserId OR e.IdTimelineinfo is null);";
                     PendingIds = await connection.QueryAsync<FirstLoadEditHistory>(getPendingEditsIdsSql, new {UserId = user.Id});                  
                 }
                 return (List<FirstLoadEditHistory>)PendingIds;
