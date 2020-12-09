@@ -4,15 +4,14 @@
 @using static ThinBlueLie.Models.ViewSimilar;
 @using static DataAccessLibrary.Enums.TimelineinfoEnums
 @using Syncfusion.Blazor.Spinner
-@using Syncfusion.Blazor.Popups 
+@using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Buttons
 @inject AutoMapper.IMapper mapper
 
 <style>
-    .card-title{
+    .card-title {
         margin-bottom: .5rem;
     }
-   
 </style>
 @if (Information == null)
 {
@@ -24,120 +23,150 @@
 }
 else
 {
-<div class="h-100 mx-auto mx-lg-0 p-lg-0">
-    <div class="dataCard h-100 card border-dark mb-3 w-100" style="min-width:175px;">
-        <div class="card-header text-black">
-            @(Information.Date.ToString("MMMM d") + GetDaySuffix(Information.Date.Day) + ", " + Information.Date.Year.ToString())
-        </div>
-        <div class="card-body text-dark pb-0">
-           <div> <h5 class="card-title mb-0"> @Information.City, @GetEnumDisplayName((TimelineinfoEnums.StateEnum)Information.State)</h5>
-            <hr class="mt-0 pb-0 mb-2 pt-0" /></div>
+    <div class="h-100 mx-auto mx-lg-0 p-lg-0">
+        <div class="dataCard h-100 card border-dark mb-3 w-100" style="min-width:175px;">
+            <div class="card-header text-black">
+                @(Information.Date.ToString("MMMM d") + GetDaySuffix(Information.Date.Day) + ", " + Information.Date.Year.ToString())
+            </div>
+            <div class="card-body text-dark pb-0">
+                <div>
+                    <h5 class="card-title mb-0"> @Information.City, @GetEnumDisplayName((TimelineinfoEnums.StateEnum)Information.State)</h5>
+                    <hr class="mt-0 pb-0 mb-2 pt-0" />
+                </div>
 
-            @*<h6 class="text-left mb-0">Subject's Information</h6>
-            <hr style="height:1px;" class="mt-0 pb-0 mb-0 pt-0" />*@
-            <div class="people">
-                <span class="similar-bold">
-                    <strong>Subject@(subjectsDetails.Count != 1? "s:" : ":")</strong>
-                </span>
-                @if (subjectsDetails.Count > 1)
-                {
-                    <ul class="people-list">
-                        @for (int i = 0; i < subjectsDetails.Count; i++)                        
-                        {
-                            <li>
-                                @subjectsDetails[i]
-                                @{
-                                    var subject = Subjects[i];
-                                 }
+                @*<h6 class="text-left mb-0">Subject's Information</h6>
+                    <hr style="height:1px;" class="mt-0 pb-0 mb-0 pt-0" />*@
+                <div class="people">
+                    <span class="similar-bold">
+                        <strong>Subject@(subjectsDetails.Count != 1? "s:" : ":")</strong>
+                    </span>
+                    @if (subjectsDetails.Count > 1)
+                    {
+                        <ul class="people-list">
+                            @for (int i = 0; i < subjectsDetails.Count; i++)
+                            {
+                                <li>
+                                    @subjectsDetails[i]
+                                    @{
+                                        var subject = Subjects[i];
+                                    }
+                                    <SfChip Selection="SelectionType.None">
+                                        <ChipItems>
+                                            <ChipItem CssClass="@(!subject.Armed? "e-success" : "e-danger")"
+                                                      Text="@(!subject.Armed? "Unarmed" : "Armed")"></ChipItem>
+                                        </ChipItems>
+                                    </SfChip>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="single-person">@subjectsDetails[0]</div>
+                        <div>
+                            <SfChip Selection="SelectionType.None">
+                                <ChipItems>
+                                    <ChipItem CssClass="@(!Subjects[0].Armed? "e-success" : "e-danger")"
+                                              Text="@(!Subjects[0].Armed? "Unarmed" : "Armed")"></ChipItem>
+                                </ChipItems>
+                            </SfChip>
+                        </div>
+                    }
+                </div>
+                @*<h6 class="text-left mb-0">Officers's Information</h6>*@
+                <div class="people">
+                    <span class="similar-bold">
+                        <strong>Officer@(officersDetails.Count != 1? "s:" : ":")</strong>
+                    </span>
+                    @if (officersDetails.Count > 1)
+                    {
+                        <ul class="people-list">
+                            @for (int i = 0; i < officersDetails.Count; i++)
+                            {
+                                <li>
+                                    @officersDetails[i]
+                                </li>
+
+                                var officer = Officers[i];
                                 <SfChip Selection="SelectionType.None">
                                     <ChipItems>
-                                        <ChipItem CssClass="@(!subject.Armed? "e-success" : "e-danger")"
-                                                  Text="@(!subject.Armed? "Unarmed" : "Armed")"></ChipItem>
-                                    </ChipItems>                                  
+                                        @foreach (MisconductEnum misconduct in Enum.GetValues(typeof(MisconductEnum)))
+                                        {
+                                            if (officer.Misconduct.Contains((int)misconduct))
+                                            {
+                                                <ChipItem Text="@GetEnumDisplayName(misconduct)"></ChipItem>
+                                            }
+                                        }
+                                        @if (officer.Weapon?.Length != 0)
+                                        {
+                                            @foreach (WeaponEnum weapon in Enum.GetValues(typeof(WeaponEnum)))
+                                            {
+                                                if (officer.Weapon.Contains((int)weapon))
+                                                {
+                                                    <ChipItem CssClass="e-danger" Text="@GetEnumDisplayName(weapon)"></ChipItem>
+                                                }
+                                            }
+                                        }
+                                    </ChipItems>
                                 </SfChip>
-                            </li>
-                        }
-                    </ul>
-                }
-                else
-                {
-                    <div class="single-person">@subjectsDetails[0]</div>
-                    <div>
-                        <SfChip Selection="SelectionType.None">
-                            <ChipItems>
-                                <ChipItem CssClass="@(!Subjects[0].Armed? "e-success" : "e-danger")"
-                                          Text="@(!Subjects[0].Armed? "Unarmed" : "Armed")"></ChipItem>
-                            </ChipItems>
-                        </SfChip>
-                    </div>
-                }
-            </div>
-            @*<h6 class="text-left mb-0">Officers's Information</h6>*@
-            <div class="people">
-                <span class="similar-bold">
-                    <strong>Officer@(officersDetails.Count != 1? "s:" : ":")</strong>
-                </span>
-                @if (officersDetails.Count > 1)
-                {
-            <ul class="people-list">
-                @for (int i = 0; i < officersDetails.Count; i++)
-                {
-                    <li>
-                        @officersDetails[i]
-                    </li>                    
-                        var officer = Officers[i];                    
-                    <SfChip Selection="SelectionType.None">
-                      <ChipItems>
-                          @foreach (MisconductEnum misconduct in Enum.GetValues(typeof(MisconductEnum)))
-                          {
-                              if (officer.Misconduct.Contains((int)misconduct))
-                              {
-                                  <ChipItem Text="@GetEnumDisplayName(misconduct)"></ChipItem>
-                              }
-                          }
-                      </ChipItems>
-                    </SfChip>
-                }
-            </ul>
-                }
-                else
-                {
-                    <div class="single-person">@officersDetails[0]</div>
-                    <div>
-                        <SfChip Selection="SelectionType.None">
-                            <ChipItems>
-                                @foreach (MisconductEnum misconduct in Enum.GetValues(typeof(MisconductEnum)))
-                                {
-                                    if (Officers[0].Misconduct.Contains((int)misconduct))
+
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="single-person">@officersDetails[0]</div>
+                        <div>
+                            <SfChip Selection="SelectionType.None">
+                                <ChipItems>
+                                    @foreach (MisconductEnum misconduct in Enum.GetValues(typeof(MisconductEnum)))
                                     {
-                                        <ChipItem Text="@GetEnumDisplayName(misconduct)"></ChipItem>
+                                        if (Officers[0].Misconduct.Contains((int)misconduct))
+                                        {
+                                            <ChipItem Text="@GetEnumDisplayName(misconduct)"></ChipItem>
+                                        }
                                     }
-                                }
-                            </ChipItems>
-                        </SfChip>
-                    </div>
-                }
+                                </ChipItems>
+                            </SfChip>
+                        </div>
+                        if (Officers[0].Weapon?.Length != 0)
+                        {
+                            <div>
+                                <SfChip Selection="SelectionType.None">
+                                    <ChipItems>
+                                        @foreach (WeaponEnum weapon in Enum.GetValues(typeof(WeaponEnum)))
+                                        {
+                                            if (Officers[0].Weapon.Contains((int)weapon))
+                                            {
+                                                <ChipItem CssClass="e-danger" Text="@GetEnumDisplayName(weapon)"></ChipItem>
+                                            }
+                                        }
+                                    </ChipItems>
+                                </SfChip>
+                            </div>
+                        }
+                    }
+                </div>
             </div>
-        </div>
-        <div class="card-footer">
-            @if (Information.Locked != 1 && CanEditLocked)
-            {
-                <a href="/Edit?id=@Information.IdTimelineinfo">Edit</a>
-            }
-            <a href="javascript:void" @onclick="@(() => showFlagPopover = true)">Flag</a>
-            <SfDialog ShowCloseIcon="true" ID="prompt_dialog" @bind-Visible="@showFlagPopover" Target="#target" Width="240px">
-                <DialogTemplates>
-                    <Header>
-                        Flag Content
-                    </Header>
-                    <Content>
-                        <Flag IdTimelineinfo="Information.IdTimelineinfo"></Flag>
-                    </Content>
-                </DialogTemplates>
-            </SfDialog>
+            <div class="card-footer">
+                @if (Information.Locked != 1 && CanEditLocked)
+                {
+                    <a class="pr-2" href="/Edit?id=@Information.IdTimelineinfo">Edit</a>
+                }
+                <a href="javascript:void" @onclick="@(() => showFlagPopover = true)">Flag</a>
+                <SfDialog ShowCloseIcon="true" ID="prompt_dialog" @bind-Visible="@showFlagPopover" Target="#target" Width="240px">
+                    <DialogTemplates>
+                        <Header>
+                            Flag Content
+                        </Header>
+                        <Content>
+                            <Flag IdTimelineinfo="Information.IdTimelineinfo"></Flag>
+                        </Content>
+                    </DialogTemplates>
+                </SfDialog>
+            </div>
         </div>
     </div>
-</div>
 }
 @code {
     [Parameter]

@@ -69,9 +69,11 @@ namespace DataAccessLibrary.Enums
         [Flags]
         public enum WeaponEnum : short
         {
+            [Display(Name = "Bodily Force")]
             Body = 1,
             [Display(Name = "Handheld Weapon")]
             HandWeapon = 2,
+            [Display(Name = "Nonlethal Projectile")]
             Projectile = 4,
             Taser = 8,
             [Display(Name ="Tear Gas")]
