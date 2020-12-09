@@ -1,14 +1,30 @@
 ﻿var galleryThumbs;
 var galleryTop;
+//TODO Turn on looping
 function InitializeSwiper() {
-    galleryThumbs = new Swiper(".gallery-thumbs", {
+    galleryTop = new Swiper(".gallery-top", {
         spaceBetween: 2,
         slidesPerView: 'auto',
         loop: true,
-        loopedSlides: $(".swiper-wrapper").length,
+        loopedSlides: $(".gallery-thumbs .swiper-wrapper").childElementCount,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        thumbs: {
+            swiper: galleryThumbs,
+        },
+    });
+    galleryThumbs = new Swiper(".gallery-thumbs", {
+        spaceBetween: 2,
+        slidesPerView: 'auto',
+        // loop: true,
         freeMode: true,
+        //loopedSlides: $(".gallery-thumbs .swiper-wrapper").childElementCount, //looped slides should be the same
         watchSlidesVisibility: true,
-        watchSlidesProgress: true
+        watchSlidesProgress: true,
+        //loop: true,
+        //loopedSlides: $(".gallery-thumbs .swiper-wrapper").childElementCount,
         //breakpoints: {
         //    640: {
         //        slidesPerView: 2,
@@ -23,18 +39,5 @@ function InitializeSwiper() {
         //        spaceBetween: 50,
         //    }
         //}
-    });
-    galleryTop = new Swiper(".gallery-top", {
-        spaceBetween: 2,
-        slidesPerView: 'auto',
-        loop: true,
-        loopedSlides: $(".swiper-wrapper").length,
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-        thumbs: {
-            swiper: galleryThumbs,
-        },
-    });
+    }); 
 }
