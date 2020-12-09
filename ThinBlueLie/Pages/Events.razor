@@ -92,7 +92,7 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
                 <MediaCarousel Media="Case.Medias"></MediaCarousel>
             </div>
             <div class="col-lg-3">
-                <CascadingValue Value="@(User?.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked))">
+                <CascadingValue Value="@((bool)User?.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked))">
                     <DataCard Information="Case.Data" Officers="Case.Officers" Subjects="Case.Subjects"></DataCard>
                 </CascadingValue>
             </div>
@@ -151,8 +151,6 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
         navManager.LocationChanged += LocationChanged;
         Event = new List<ViewEvent>();
         var uri = new Uri(navManager.Uri);
-        userState = await AuthState;
-        User = await userManager.GetUserAsync(userState.User);
         if (string.IsNullOrWhiteSpace(QueryHelpers.ParseQuery(uri.Query).TryGetValue("d", out var type) ? type.First() : ""))
         {
             Date = DateTime.Today;
@@ -161,6 +159,8 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
         {
             Date = TryCatchDate();
         }
+        userState = await AuthState;
+        User = await userManager.GetUserAsync(userState.User);
         await ChangeDay();
     }
 
