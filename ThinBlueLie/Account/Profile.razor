@@ -36,6 +36,9 @@
     .e-edit:before {
         content: '/e690';
     }
+    .edit-button{
+        max-width: 35px !important;
+    }
 </style>
 <div class="mx-md-5 mt-3">
     <SfSidebar Width="160px" Animate="false" EnableGestures="false" Target=".main-content" MediaQuery="(min-width:600px)">
@@ -151,8 +154,9 @@
                             <Template>
                                 @{
                                     var Event = (context as Timelineinfo);
-                                    <SfButton IsPrimary="true" CssClass="e-outline e-danger" IconCss="e-icons e-delete"></SfButton>
-                                    <SfButton IsPrimary="true" CssClass="e-outline e-info" IconCss="e-icons e-edit">
+                                    //Implement delete event
+                                    @*<SfButton IsPrimary="true" CssClass="e-outline e-danger" IconCss="e-icons e-delete"></SfButton>*@
+                                    <SfButton IsPrimary="true" CssClass="e-outline e-info edit-button" IconCss="e-icons e-edit">
                                         <a href="Edit?id=@Event?.IdTimelineinfo"></a>
                                     </SfButton>
                                 }

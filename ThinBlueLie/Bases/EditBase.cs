@@ -64,7 +64,8 @@ namespace ThinBlueLie.Bases
                 //if post is not empty and not both locked and user missing perm to edit locked
                 !(timelineinfo.Locked == 1 && (User.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) == false)))
             {
-                var mediaQuery = "SELECT m.IdMedia, m.MediaType, m.SourcePath, m.Gore, m.SourceFrom, m.Blurb, m.Credit, m.SubmittedBy, m.Rank From media m where m.IdTimelineinfo = @id Order By m.Rank;";
+                var mediaQuery = "SELECT m.IdMedia, m.MediaType, m.SourcePath, m.Gore, m.SourceFrom, m.Blurb, m.Credit, m.SubmittedBy, m.Rank " +
+                                        "From media m where m.IdTimelineinfo = @id Order By m.Rank;";
                 var officerQuery = "SELECT o.IdOfficer, o.Name, o.Race, o.Sex, o.Local, o.Image, t_o.Age, t_o.Misconduct, t_o.Weapon " +
                         "FROM timelineinfo t " +
                         "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
@@ -96,7 +97,17 @@ namespace ThinBlueLie.Bases
                 for (int i = 0; i < Media.Count; i++)
                 {
                     Media[i].ListIndex = i;
+                    Media[i].SourcePath = PrepareSendData(Media[i]);
                 }
+                for (int i = 0; i < Officers.Count; i++)
+                {
+                    Officers[i].ListIndex = i;
+                }
+                for (int i = 0; i < Subjects.Count; i++)
+                {
+                    Subjects[i].ListIndex = i;
+                }
+
 
                 oldInfo = new SubmitModel
                 {
@@ -179,12 +190,12 @@ namespace ThinBlueLie.Bases
                         await data.SaveData(sql, new
                         {
                             userId = userId,
-                            IdOfficer = pair.Item2.IdOfficer,
-                            Name = pair.Item2.Name,
-                            Race = (int)pair.Item2.Race,
-                            Sex = (int)pair.Item2.Sex,
-                            Image = pair.Item2.Image,
-                            Local = pair.Item2.Local,
+                            IdOfficer = pair.Item2?.IdOfficer,
+                            Name = pair.Item2?.Name,
+                            Race = (int?)(pair.Item2?.Race ?? 0),
+                            Sex = (int?)(pair.Item2?.Sex ?? 0),
+                            Image = pair.Item2?.Image,
+                            Local = pair.Item2?.Local,
                             Action = (int)Action
                         }, GetConnectionString());
                     }
@@ -236,12 +247,12 @@ namespace ThinBlueLie.Bases
                         await data.SaveData(sql, new
                         {
                             userId = userId,
-                            IdSubject = pair.Item2.IdSubject,
-                            Name = pair.Item2.Name,
-                            Race = (int)pair.Item2.Race,
-                            Sex = (int)pair.Item2.Sex,
-                            Image = pair.Item2.Image,
-                            Local = pair.Item2.Local,
+                            IdSubject = pair.Item2?.IdSubject,
+                            Name = pair.Item2?.Name,
+                            Race = (int?)(pair.Item2?.Race ?? 0),
+                            Sex = (int?)(pair.Item2?.Sex ?? 0),
+                            Image = pair.Item2?.Image,
+                            Local = pair.Item2?.Local,
                             Action = (int)Action
                         }, GetConnectionString());
                     }
@@ -330,7 +341,7 @@ namespace ThinBlueLie.Bases
 
             string updateEditHistory = @$"UPDATE edithistory SET 
                                                `Confirmed` = '0',`Edits` = @Edits, `EditMedia` = @EditMedia,
-                                                `Officers` = @Officers, Subjects` = @Subjects, `Timelineinfo_Officer` = @Timelineinfo_Officer, 
+                                                `Officers` = @Officers, `Subjects` = @Subjects, `Timelineinfo_Officer` = @Timelineinfo_Officer, 
                                                 `Timelineinfo_Subject` = @Timelineinfo_Subject 
                                          WHERE (`IdEditHistory` = '{EditHistoryId}');";
             await data.SaveData(updateEditHistory, editHistory, GetConnectionString());

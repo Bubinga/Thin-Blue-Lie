@@ -23,10 +23,11 @@ namespace ThinBlueLie.Bases
         public ApplicationUser User;
         public async Task GetProfile()
         {
-            string sql = $@"Select Distinct e.IdTimelineinfo, t.City, t.State, t.Updated, e.Timestamp, t.Owner, t.Title, t.Date
+            string sql = $@"Select e.IdTimelineinfo, t.City, t.State, t.Updated, e.Timestamp, t.Owner, t.Title, t.Date
                                From edithistory e
                                Join timelineinfo t on e.IdTimelineinfo = t.IdTimelineinfo
-                               Where SubmittedBy = {User.Id};
+                               Where SubmittedBy = {User.Id}
+                               Group By e.IdTimelineinfo;
                             Select Count(*) From edithistory e where e.SubmittedBy = 1 and Confirmed = {User.Id};
                             Select Count(*) From flags f where f.UserId = {User.Id};
                             Select Count(*) From edit_votes ev where ev.UserId = 1;";
