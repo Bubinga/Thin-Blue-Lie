@@ -14,6 +14,7 @@ using static ThinBlueLie.Helper.Extensions.IntExtensions;
 using static ThinBlueLie.Models.SubmitBase;
 using static ThinBlueLie.Models.View_Models.EditReviewModel;
 using static ThinBlueLie.Models.ViewSimilar;
+using static ThinBlueLie.Searches.SearchClasses;
 
 namespace ThinBlueLie.Helper
 {
@@ -44,6 +45,11 @@ namespace ThinBlueLie.Helper
             CreateMap<ViewSubject, DBSubject>();
             CreateMap<ViewOfficer, ViewSimilarPerson>();
             CreateMap<ViewSubject, ViewSimilarPerson>();
+
+            CreateMap<SimilarOfficer, SimilarPerson>();
+            CreateMap<SimilarSubject, SimilarPerson>();
+            CreateMap<SimilarOfficer, CommonPerson>();
+            CreateMap<SimilarSubject, CommonPerson>();
 
             CreateMap<DBOfficer, ViewSimilarPerson>();
             CreateMap<DBSubject, ViewSimilarPerson>();

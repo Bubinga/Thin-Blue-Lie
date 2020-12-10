@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using DataAccessLibrary.Enums;
+using KellermanSoftware.CompareNetObjects;
 using Microsoft.AspNetCore.Components;
 using ThinBlueLie.Models;
 using static ThinBlueLie.Models.ViewSimilar;
@@ -28,7 +29,8 @@ namespace ThinBlueLie.Helper.Extensions
         static string ComparePersonProperties(object oldProperty, object newProperty, bool IsOriginal)
         {
             string summary = string.Empty;
-            if (newProperty?.Equals(oldProperty) == oldProperty?.Equals(newProperty))
+            CompareLogic compareLogic = new CompareLogic();
+            if (compareLogic.Compare(oldProperty, newProperty).AreEqual)
                 if (newProperty == null)
                     summary += "Unknown";                
                 else                

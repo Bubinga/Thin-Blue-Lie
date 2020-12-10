@@ -1,4 +1,5 @@
-﻿@typeparam TPerson
+﻿@using static ThinBlueLie.Searches.SearchClasses
+@typeparam TPerson
 @inject AutoMapper.IMapper Mapper
 
 <div class="row">
@@ -6,13 +7,17 @@
         @* One side will only be null if displayed alone, on creation it will be displayed with the event it was created with *@
         @if (OldPerson != null)
         {
-        <ComparePersonCommon IsOriginal="true" Person="Mapper.Map<TPerson, CommonPerson>(OldPerson)" OtherPerson="Mapper.Map<TPerson, CommonPerson>(NewPerson)"></ComparePersonCommon>
+        <ComparePersonCommon IsOriginal="true" Person="Mapper.Map<TPerson, CommonPerson>(OldPerson)"
+                             OtherPerson="Mapper.Map<TPerson, CommonPerson>(NewPerson)" Events="(Mapper.Map<TPerson, SimilarPerson>(OldPerson ?? NewPerson)).Events">
+        </ComparePersonCommon>
         }
     </div>
     <div class="col-6">
         @if (NewPerson != null)
         {
-            <ComparePersonCommon IsOriginal="false" Person="Mapper.Map<TPerson, CommonPerson>(NewPerson)" OtherPerson="Mapper.Map<TPerson, CommonPerson>(OldPerson)"></ComparePersonCommon>
+            <ComparePersonCommon IsOriginal="false" Person="Mapper.Map<TPerson, CommonPerson>(NewPerson)"
+                                 OtherPerson="Mapper.Map<TPerson, CommonPerson>(OldPerson)" Events="(Mapper.Map<TPerson, SimilarPerson>(OldPerson ?? NewPerson)).Events">
+            </ComparePersonCommon>
         }
     </div>
 </div>
