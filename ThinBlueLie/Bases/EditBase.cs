@@ -94,6 +94,7 @@ namespace ThinBlueLie.Bases
                 var Officers = Mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers);
                 var Subjects = Mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects);
                 //Ordered by rank so it's the same as rank but it's a stupid way to do it
+                //TODO just do " m.Rank as ListIndex"
                 for (int i = 0; i < Media.Count; i++)
                 {
                     Media[i].ListIndex = i;
@@ -170,8 +171,9 @@ namespace ThinBlueLie.Bases
                 bool ChangedJunction = false;
                 foreach (var pair in officerPairs)
                 {
-                    //if officer changed
-                    if (Mapper.Map<DBOfficer, CommonPerson>(pair.Item2).JunctionChange(Mapper.Map<DBOfficer, CommonPerson>(pair.Item1)))
+                    //if officer changed and the change was not a deletion
+                    if (pair.Item2 != null &&
+                        Mapper.Map<DBOfficer, CommonPerson>(pair.Item2).PersonChange(Mapper.Map<DBOfficer, CommonPerson>(pair.Item1)))
                     {
                         //create new edithistory 
                         string sql = @"INSERT INTO edithistory (`SubmittedBy`, `Officers`)
@@ -183,8 +185,8 @@ namespace ThinBlueLie.Bases
                         EditActions Action;
                         if (pair.Item1 == null)
                             Action = EditActions.Addition;
-                        if (pair.Item2 == null)
-                            Action = EditActions.Deletion;
+                        //if (pair.Item2 == null)  Not the place to do deletion of person
+                        //    Action = EditActions.Deletion;
                         else
                             Action = EditActions.Update;
                         await data.SaveData(sql, new
@@ -194,8 +196,8 @@ namespace ThinBlueLie.Bases
                             Name = pair.Item2?.Name,
                             Race = (int?)(pair.Item2?.Race ?? 0),
                             Sex = (int?)(pair.Item2?.Sex ?? 0),
-                            Image = pair.Item2?.Image,
-                            Local = pair.Item2?.Local,
+                            Image = pair.Item1?.Image ?? pair.Item2?.Image,
+                            Local = pair.Item1?.Local ?? pair.Item2?.Local,
                             Action = (int)Action
                         }, GetConnectionString());
                     }
@@ -228,8 +230,9 @@ namespace ThinBlueLie.Bases
                 foreach (var pair in subjectPairs)
                 {
 
-                    //if subject changed
-                    if (Mapper.Map<DBSubject, CommonPerson>(pair.Item2).JunctionChange(Mapper.Map<DBSubject, CommonPerson>(pair.Item1)))
+                    //if subject changed and the change was not a deletion
+                    if (pair.Item2 != null &&
+                        Mapper.Map<DBSubject, CommonPerson>(pair.Item2).PersonChange(Mapper.Map<DBSubject, CommonPerson>(pair.Item1)))
                     {
                         string sql = @"INSERT INTO edithistory (`SubmittedBy`, `Subjects`)
                                                   VALUES (@userId, '1');
@@ -240,8 +243,8 @@ namespace ThinBlueLie.Bases
                         EditActions Action;
                         if (pair.Item1 == null)
                             Action = EditActions.Addition;
-                        if (pair.Item2 == null)
-                            Action = EditActions.Deletion;
+                        //if (pair.Item2 == null)
+                        //    Action = EditActions.Deletion; not where deletion should happen
                         else
                             Action = EditActions.Update;
                         await data.SaveData(sql, new
@@ -251,8 +254,8 @@ namespace ThinBlueLie.Bases
                             Name = pair.Item2?.Name,
                             Race = (int?)(pair.Item2?.Race ?? 0),
                             Sex = (int?)(pair.Item2?.Sex ?? 0),
-                            Image = pair.Item2?.Image,
-                            Local = pair.Item2?.Local,
+                            Image = pair.Item1?.Image ?? pair.Item2?.Image,
+                            Local = pair.Item1?.Local ?? pair.Item2?.Local,
                             Action = (int)Action
                         }, GetConnectionString());
                     }
@@ -302,8 +305,8 @@ namespace ThinBlueLie.Bases
                         else if (pair.Item2 == null && pair.Item1 != null)
                         {
                             Action = EditActions.Deletion;
-                            string deleteMedia = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `SubmittedBy`, `Action`) 
-                                                    VALUES ('{EditHistoryId}', '{Id}', '{userId}', '{(int)Action}');";
+                            string deleteMedia = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `IdMedia`, `SubmittedBy`, `Action`) 
+                                                    VALUES ('{EditHistoryId}', '{Id}', '{pair.Item1.IdMedia}', '{userId}', '{(int)Action}');";
                             await data.SaveData(deleteMedia, new { }, GetConnectionString());
                         }
                         //if updated

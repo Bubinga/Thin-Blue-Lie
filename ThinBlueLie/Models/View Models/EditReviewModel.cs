@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ThinBlueLie.ViewModels;
+using static ThinBlueLie.Searches.SearchClasses;
 
 namespace ThinBlueLie.Models.View_Models
 {
@@ -18,8 +19,8 @@ namespace ThinBlueLie.Models.View_Models
             public List<Media> Medias { get; set; }
             public List<DBOfficer> Officers { get; set; }
             public List<DBSubject> Subjects { get; set; }
-            public Officers OfficerPerson { get; set; }
-            public Subjects SubjectPerson { get; set; }
+            public SimilarOfficer OfficerPerson { get; set; }
+            public SimilarSubject SubjectPerson { get; set; }
         }
     }
 }
