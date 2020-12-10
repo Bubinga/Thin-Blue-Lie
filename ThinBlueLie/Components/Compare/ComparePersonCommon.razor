@@ -5,25 +5,25 @@
 @using static ThinBlueLie.Helper.Extensions.EnumExtensions
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
 @using static DataAccessLibrary.Enums.TimelineinfoEnums
-
+@using static ThinBlueLie.Searches.SearchClasses.SimilarPerson
 
 <div class="mb-1 d-flex @(Person.Image != OtherPerson?.Image? IsOriginal? "deleted-item" : "inserted-item" : "")">
-    <img class="mx-auto" width="200px" height="200px" src="@GetImageOfPerson(Person.Image, Person.Local == 1? true : false)" />
+    <img class="mx-auto" width="200" height="200" src="@GetImageOfPerson(Person.Image, Person.Local == 1? true : false)" />
 </div>
 <hr class="my-0" />
 <span class="d-md-block">
-    <b>Name:</b>
+    <b>Name: </b>
     @if (IsOriginal)
     {
-        <CompareLine Model="PersonDiff.OldText.Lines.FirstOrDefault()"></CompareLine>
+        <CompareLine Model="PersonDiff.OldText?.Lines.FirstOrDefault()"></CompareLine>
     }
     else
     {
-        <CompareLine Model="PersonDiff.NewText.Lines.FirstOrDefault()"></CompareLine>
+        <CompareLine Model="PersonDiff.NewText?.Lines.FirstOrDefault()"></CompareLine>
     }
 </span>
 <span class="d-md-block">
-    <b>Race:</b>
+    <b>Race: </b>
     @if (IsOriginal)
     {
         @((MarkupString)SimpleCompare(GetEnumDisplayName((RaceEnum)Person.Race), OtherPerson != null? GetEnumDisplayName((RaceEnum)OtherPerson?.Race) : null, IsOriginal))
@@ -34,7 +34,7 @@
     }
 </span>
 <span class="d-md-block">
-    <b>Race:</b>
+    <b>Sex: </b>
     @if (IsOriginal)
     {
         @((MarkupString)SimpleCompare(GetEnumDisplayName((SexEnum)Person.Sex), OtherPerson != null? GetEnumDisplayName((SexEnum)OtherPerson?.Sex) : null, IsOriginal))
@@ -44,7 +44,21 @@
         @((MarkupString)SimpleCompare(OtherPerson != null? GetEnumDisplayName((SexEnum)OtherPerson?.Sex) : null, GetEnumDisplayName((SexEnum)Person.Sex), IsOriginal))
     }
 </span>
-
+<div class="mt-2">
+    <strong>Events:</strong>
+    <ul>
+        @foreach (var item in Events)
+        {
+            <li class="event">
+                <a href="/Events?d=@item.Date.ToString("yyyy-MM-dd")" target="_blank">
+                    <span class="ml-md-1">@item.Date.ToString("yyyy, MMMM dd") ---</span>
+                    <span>@item.City,</span>
+                    <span>@GetEnumDisplayName((TimelineinfoEnums.StateEnum)item.State)</span>
+                </a>
+            </li>
+        }
+    </ul>
+</div>
 @code{
     [Parameter]
     public CommonPerson Person { get; set; }
@@ -52,7 +66,8 @@
     public CommonPerson OtherPerson { get; set; }
     [Parameter]
     public bool IsOriginal { get; set; }
-
+    [Parameter]
+    public List<SimilarPersonEvents> Events { get; set; }
     private SideBySideDiffModel PersonDiff = new SideBySideDiffModel();
 
     protected override void OnParametersSet()

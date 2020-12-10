@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccessLibrary.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace ThinBlueLie.Searches
@@ -35,14 +36,17 @@ namespace ThinBlueLie.Searches
         {
             public class SimilarPersonEvents
             {
+                public int IdTimelineinfo { get; set; }
                 public DateTime Date { get; set; }
                 public byte State { get; set; }
                 public string City { get; set; }
             }           
             public string Name { get; set; }
-            public byte Race { get; set; }
-            public byte Sex { get; set; }
+            public TimelineinfoEnums.RaceEnum Race { get; set; }
+            public TimelineinfoEnums.SexEnum Sex { get; set; }
             public byte Age { get; set; }
+            public string? Image { get; set; }
+            public byte? Local { get; set; }
             public List<SimilarPersonEvents> Events { get; set; }
 
         }

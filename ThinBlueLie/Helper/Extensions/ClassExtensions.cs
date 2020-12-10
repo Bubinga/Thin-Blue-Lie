@@ -23,7 +23,7 @@ namespace ThinBlueLie.Helper.Extensions
             return false;
         }
 
-        public static bool JunctionChange<T>(this T subject, T oldSubject) where T : CommonPerson
+        public static bool PersonChange<T>(this T subject, T oldSubject) where T : CommonPerson
         {
             if ((subject?.Name != oldSubject?.Name) || (subject?.Race != oldSubject?.Race) ||
                         (subject?.Sex != oldSubject?.Sex) || (subject?.Image != oldSubject?.Image) ||

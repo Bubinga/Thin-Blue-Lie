@@ -16,6 +16,8 @@ using static ThinBlueLie.Models.View_Models.EditReviewModel;
 using static ThinBlueLie.Searches.SearchClasses;
 using static ThinBlueLie.Helper.Extensions.IdentityExtensions;
 using DataAccessLibrary.Enums;
+using static ThinBlueLie.Helper.Extensions.IntExtensions;
+
 namespace ThinBlueLie.Searches
 {
     public class SearchesEditReview
@@ -38,7 +40,7 @@ namespace ThinBlueLie.Searches
                 if (canReviewAll)
                 {
                     //If idTimelineinfo does not exist in timelineinfo, it's a new event. 
-                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote, e.SubmittedBy, (t.IdTimelineinfo is null) as IsNewEvent
+                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote, e.SubmittedBy, (t.IdTimelineinfo is null and e.Edits != 0) as IsNewEvent
                                                 FROM edithistory e
                                                 Left Join timelineinfo t on e.IdTimelineinfo = t.IdTimelineinfo
                                                 LEFT Join edit_votes ev on e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId 
@@ -47,7 +49,7 @@ namespace ThinBlueLie.Searches
                 }
                 else
                 {
-                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote, e.SubmittedBy, (t.IdTimelineinfo is null) as IsNewEvent 
+                    getPendingEditsIdsSql = @"SELECT e.IdEditHistory, e.IdTimelineinfo, ev.Vote, e.SubmittedBy, (t.IdTimelineinfo is null and e.Edits != 0) as IsNewEvent 
                                                  FROM edithistory e 
                                                  LEFT JOIN timelineinfo t ON e.IdTimelineinfo = t.IdTimelineinfo 
                                                  LEFT JOIN edit_votes ev ON e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId 
@@ -89,24 +91,35 @@ namespace ThinBlueLie.Searches
             EditHistory editChanges = await data.LoadDataSingle<EditHistory, dynamic>(WhatChangedQuery, new { id }, GetConnectionString());
             if (editChanges.Subjects == 1)
             {
-                string SubjectChangedQuery = "Select s.IdSubject, s.Name, s.Race, s.Sex From edits_subject s Where s.IdEditHistory = @id";
-                Subjects subjectChanges = await data.LoadDataSingle<Subjects, dynamic>(SubjectChangedQuery, new { id }, GetConnectionString());
-                people.New.SubjectPerson = subjectChanges; //Get new subject
+                string SubjectChangedQuery = "Select * From edits_subject s Where s.IdEditHistory = @id";
+                people.New.SubjectPerson = await data.LoadDataSingle<SimilarSubject, dynamic>(SubjectChangedQuery, new { id }, GetConnectionString()); //Get new subject
 
-                string SubjectOldQuery = "Select * From subjects s Where s.IdSubject = @id;";                
-                var subjectsOld = await data.LoadDataSingle<Subjects, dynamic>(SubjectOldQuery, new { id = subjectChanges.IdSubject}, GetConnectionString());
-                people.Old.SubjectPerson = subjectsOld;
-                
+                string SubjectOldQuery = "Select * From subjects s Where s.IdSubject = @id;";
+                people.Old.SubjectPerson = await data.LoadDataSingle<SimilarSubject, dynamic>(SubjectOldQuery, new { id = people.New.SubjectPerson.IdSubject}, GetConnectionString());
+
+                var sql3 = "SELECT t.IdTimelineinfo, t.Date, t.City, t.State " +
+                                "FROM timelineinfo t " +
+                                "JOIN timelineinfo_subject ON t.IdTimelineinfo = timelineinfo_subject.IdTimelineinfo " +
+                                "JOIN subjects s ON timelineinfo_subject.IdSubject = s.IdSubject " +
+                                "WHERE s.IdSubject = @id;";
+                people.New.SubjectPerson.Events = people.Old.SubjectPerson.Events
+                    = await data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3, new { id = people.New.SubjectPerson.IdSubject }, GetConnectionString());
             }
             if (editChanges.Officers == 1)
-            {
-                string OfficerChangedQuery = "Select s.IdOfficer, s.Name, s.Race, s.Sex From edits_officer s Where s.IdEditHistory = @id";
-                var officerChanges = await data.LoadDataSingle<Officers, dynamic>(OfficerChangedQuery, new { id }, GetConnectionString());
-                people.New.OfficerPerson = officerChanges; //Get new officer
+            {   
+                string OfficerChangedQuery = "Select * From edits_officer s Where s.IdEditHistory = @id";
+                people.New.OfficerPerson = await data.LoadDataSingle<SimilarOfficer, dynamic>(OfficerChangedQuery, new { id }, GetConnectionString());
 
                 string OfficerOldQuery = "Select * From officers s Where s.IdOfficer = @id;";
-                var officersOld = await data.LoadDataSingle<Officers, dynamic>(OfficerOldQuery, new { id = officerChanges.IdOfficer }, GetConnectionString());
-                people.Old.OfficerPerson = officersOld;
+                people.Old.OfficerPerson = await data.LoadDataSingle<SimilarOfficer, dynamic>(OfficerOldQuery, new { id = people.New.OfficerPerson.IdOfficer }, GetConnectionString());
+
+                var sql3 = "SELECT t.IdTimelineinfo, t.Date, t.City, t.State " +
+                              "FROM timelineinfo t " +
+                              "JOIN timelineinfo_officer ON t.IdTimelineinfo = timelineinfo_officer.IdTimelineinfo " +
+                              "JOIN officers o ON timelineinfo_officer.IdOfficer = o.IdOfficer " +
+                              "WHERE o.IdOfficer = @id;";
+                people.New.OfficerPerson.Events = people.Old.OfficerPerson.Events =
+                    await data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3, new { id = people.New.OfficerPerson.IdOfficer }, GetConnectionString());
             }
 
             return new Tuple<EditReviewModel, EditHistory>( people, editChanges);
@@ -193,7 +206,7 @@ namespace ThinBlueLie.Searches
                     $@"SELECT o.IdOfficer, o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon 
                         FROM edithistory e
                         JOIN edits_timelineinfo_officer t_o ON e.IdEditHistory = t_o.IdEditHistory 
-                        JOIN edits_officer o ON t_o.IdOfficer = o.IdOfficer 
+                        JOIN {(id.IsNewEvent.ToBool()? "edits_officer" : "officers")} o ON t_o.IdOfficer = o.IdOfficer 
                         WHERE e.IdEditHistory = {id.IdEditHistory};";
                 var changesToTimelineOfficer = await data.LoadData<DBOfficer, dynamic>(changesToTimelineOfficerQuery, new { }, GetConnectionString());
                 newInfo.Officers = changesToTimelineOfficer;
@@ -201,10 +214,10 @@ namespace ThinBlueLie.Searches
             if (editChanges.Timelineinfo_Subject == 1)
             {
                 string changesToTimelineSubjectQuery =
-                   @"SELECT s.IdSubject, s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed
+                   $@"SELECT s.IdSubject, s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed
                         FROM edithistory e
                         JOIN edits_timelineinfo_subject t_s ON e.IdEditHistory = t_s.IdEditHistory 
-                        JOIN edits_subject s ON t_s.IdSubject = s.IdSubject 
+                        JOIN {(id.IsNewEvent.ToBool()? "edits_subject" : "subjects")} s ON t_s.IdSubject = s.IdSubject 
                         WHERE e.IdEditHistory = @id;";
                 var changesToTimelineSubject = await data.LoadData<DBSubject, dynamic>(changesToTimelineSubjectQuery, new { id = id.IdEditHistory }, GetConnectionString());
                 newInfo.Subjects = changesToTimelineSubject;
