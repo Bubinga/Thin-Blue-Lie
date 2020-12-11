@@ -114,9 +114,9 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
                 else
                 {
                     <article>
-                        <p class="context indent">
+                        <div class="context indent px-md-3 pt-2">
                             @((MarkupString)Case.Data.Context)
-                        </p>
+                        </div>
                     </article>
                 }
             </div>
@@ -176,6 +176,7 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
     async void LocationChanged(object sender, LocationChangedEventArgs e)
     {
         newUri = e.Location;
+        EventExists = false;
         Date = TryCatchDate();
         await ChangeDay();
     }

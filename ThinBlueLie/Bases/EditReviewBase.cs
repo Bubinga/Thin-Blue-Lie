@@ -242,8 +242,8 @@ namespace ThinBlueLie.Bases
                 {
                     string getTOChanges = "Select * from edits_timelineinfo_officer e Where e.IdEditHistory = @id";
                     var changes = await connection.QueryAsync<EditTimelineinfoOfficer>(getTOChanges, new { id = change.IdEditHistory});
-                    string deleteEverything = "Delete from timelineinfo_officer t_o where t_o.IdOfficer = @IdOfficer and t_o.IdTimelineinfo = @IdTimelineinfo;";
-                    await connection.ExecuteAsync(deleteEverything);
+                    string deleteEverything = "Delete from timelineinfo_officer t_o where t_o.IdTimelineinfo = @IdTimelineinfo;";
+                    await connection.ExecuteAsync(deleteEverything, changes);
                     string applyChanges = @"INSERT INTO timelineinfo_officer (IdTimelineinfo, IdOfficer, Age, Misconduct, Weapon) 
                                             VALUES (@IdTimelineinfo, @IdOfficer, @Age, @Misconduct, @Weapon);";
                     await connection.ExecuteAsync(applyChanges, changes);
@@ -252,8 +252,8 @@ namespace ThinBlueLie.Bases
                 {
                     string getTOChanges = "Select * from edits_timelineinfo_subject e Where e.IdEditHistory = @id";
                     var changes = await connection.QueryAsync<EditTimelineinfoSubject>(getTOChanges, new { id = change.IdEditHistory });
-                    string deleteEverything = "Delete from timelineinfo_subject ts where ts.IdSubject = @IdSubject and ts.IdTimelineinfo = @IdTimelineinfo;";
-                    await connection.ExecuteAsync(deleteEverything);
+                    string deleteEverything = "Delete from timelineinfo_subject ts where ts.IdTimelineinfo = @IdTimelineinfo;";
+                    await connection.ExecuteAsync(deleteEverything, changes);
                     string applyChanges = @"INSERT INTO timelineinfo_subject (IdTimelineinfo, IdSubject, Age, Armed) 
                                             VALUES (@IdTimelineinfo, @IdSubject, @Age, @Armed);";
                     await connection.ExecuteAsync(applyChanges, changes);

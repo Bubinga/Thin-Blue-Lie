@@ -184,7 +184,7 @@ else
     string officerList;
     bool showFlagPopover = false;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         subjectsDetails = GetSummaryList(mapper.Map<List<ViewSubject>, List<ViewSimilarPerson>>(Subjects));
         officersDetails = GetSummaryList(mapper.Map<List<ViewOfficer>, List<ViewSimilarPerson>>(Officers));

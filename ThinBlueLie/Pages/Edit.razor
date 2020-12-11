@@ -105,7 +105,7 @@
         color: inherit !important;
     }
 </style>
-@if (EventExists && !string.IsNullOrWhiteSpace(id))
+@if (EventExists == true && !string.IsNullOrWhiteSpace(id))
 {
     <div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
         @if (SavingData)
@@ -229,7 +229,7 @@ else if (model.Timelineinfos.Locked == 1 && (User.RepAuthorizer(PrivledgeEnum.Pr
         <h4>How did you get here? You need the <a href="/About/Reputation">"Edit Locked Posts"</a> privledge to edit this post</h4>
     </div>
 }
-else if (!string.IsNullOrWhiteSpace(id) || EventExists == false)
+else if (!string.IsNullOrWhiteSpace(id) && EventExists == false)
 {
     <div class="container text-center container-fluid mt-5">
         <h4>Opps, this is not a valid url</h4>
@@ -241,6 +241,14 @@ else if (EventPendingEdit)
         <h4>This Event currently has a pending edit and cannot be editted</h4>
         <h5>In the future we will allow users to edit a pending edit</h5>
     </div>
+}
+else
+{
+<div class="mt-2 container">
+    <div style="z-index: 102; margin-bottom: 100px;">
+        <SfSpinner Visible="SavingData" CssClass="e-spin-overlay" />
+    </div>
+</div>
 }
 
 
