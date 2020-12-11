@@ -45,7 +45,7 @@ namespace ThinBlueLie.Bases
 
         SubmitModel oldInfo = new SubmitModel();
 
-        public bool EventExists = false;
+        public bool? EventExists = null;
 
         public bool EventPendingEdit = false;
         internal async Task<SubmitModel> FetchDataAsync()
@@ -60,67 +60,70 @@ namespace ThinBlueLie.Bases
             var query = "SELECT * From timelineinfo t where t.IdTimelineinfo = @id;";
             Timelineinfo timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { id = Id }, GetConnectionString());
             //TODO change to multipleQueryAsync
-            if (timelineinfo != null && 
-                //if post is not empty and not both locked and user missing perm to edit locked
-                !(timelineinfo.Locked == 1 && (User.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) == false)))
+            if (timelineinfo != null)
             {
-                var mediaQuery = "SELECT m.IdMedia, m.MediaType, m.SourcePath, m.Gore, m.SourceFrom, m.Blurb, m.Credit, m.SubmittedBy, m.Rank " +
-                                        "From media m where m.IdTimelineinfo = @id Order By m.Rank;";
-                var officerQuery = "SELECT o.IdOfficer, o.Name, o.Race, o.Sex, o.Local, o.Image, t_o.Age, t_o.Misconduct, t_o.Weapon " +
-                        "FROM timelineinfo t " +
-                        "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
-                        "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
-                        "WHERE t.IdTimelineinfo = @id ;";
-                var subjectQuery = "SELECT s.IdSubject, s.Name, s.Race, s.Sex, s.Local, s.Image, t_s.Age, t_s.Armed " +
-                        "FROM timelineinfo t " +
-                        "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
-                        "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
-                        "WHERE t.IdTimelineinfo = @id;";
-
-                //get media, officers, and subjects using timelineinfo id
-                List<ViewMedia> Media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = Id }, GetConnectionString());
-                List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Id }, GetConnectionString());
-                List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Id }, GetConnectionString());
-                var Info = new ViewTimelineinfo
-                {
-                    Date = timelineinfo.Date,
-                    State = (TimelineinfoEnums.StateEnum?)timelineinfo.State,
-                    City = timelineinfo.City,
-                    Title = timelineinfo.Title,
-                    Context = timelineinfo.Context,
-                    Locked = timelineinfo.Locked,
-                    SubmittedBy = timelineinfo.Owner
-                };
-                var Officers = Mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers);
-                var Subjects = Mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects);
-                //Ordered by rank so it's the same as rank but it's a stupid way to do it
-                //TODO just do " m.Rank as ListIndex"
-                for (int i = 0; i < Media.Count; i++)
-                {
-                    Media[i].ListIndex = i;
-                    Media[i].SourcePath = PrepareSendData(Media[i]);
-                }
-                for (int i = 0; i < Officers.Count; i++)
-                {
-                    Officers[i].ListIndex = i;
-                }
-                for (int i = 0; i < Subjects.Count; i++)
-                {
-                    Subjects[i].ListIndex = i;
-                }
-
-
-                oldInfo = new SubmitModel
-                {
-                    Timelineinfos = Info,
-                    Medias = Media,
-                    Officers = Officers,
-                    Subjects = Subjects
-                };
-                SubmitModel model = new SubmitModel();
-                Mapper.Map(oldInfo, model);
                 EventExists = true;
-                return model;
+                //if post is not both locked and user missing perm to edit locked
+                if (!(timelineinfo.Locked == 1 && (User.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) == false)))
+                {
+                    var mediaQuery = "SELECT m.IdMedia, m.MediaType, m.SourcePath, m.Gore, m.SourceFrom, m.Blurb, m.Credit, m.SubmittedBy, m.Rank " +
+                                            "From media m where m.IdTimelineinfo = @id Order By m.Rank;";
+                    var officerQuery = "SELECT o.IdOfficer, o.Name, o.Race, o.Sex, o.Local, o.Image, t_o.Age, t_o.Misconduct, t_o.Weapon " +
+                            "FROM timelineinfo t " +
+                            "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
+                            "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
+                            "WHERE t.IdTimelineinfo = @id ;";
+                    var subjectQuery = "SELECT s.IdSubject, s.Name, s.Race, s.Sex, s.Local, s.Image, t_s.Age, t_s.Armed " +
+                            "FROM timelineinfo t " +
+                            "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
+                            "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
+                            "WHERE t.IdTimelineinfo = @id;";
+
+                    //get media, officers, and subjects using timelineinfo id
+                    List<ViewMedia> Media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = Id }, GetConnectionString());
+                    List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Id }, GetConnectionString());
+                    List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Id }, GetConnectionString());
+                    var Info = new ViewTimelineinfo
+                    {
+                        Date = timelineinfo.Date,
+                        State = (TimelineinfoEnums.StateEnum?)timelineinfo.State,
+                        City = timelineinfo.City,
+                        Title = timelineinfo.Title,
+                        Context = timelineinfo.Context,
+                        Locked = timelineinfo.Locked,
+                        SubmittedBy = timelineinfo.Owner
+                    };
+                    var Officers = Mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers);
+                    var Subjects = Mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects);
+                    //Ordered by rank so it's the same as rank but it's a stupid way to do it
+                    //TODO just do " m.Rank as ListIndex"
+                    for (int i = 0; i < Media.Count; i++)
+                    {
+                        Media[i].ListIndex = i;
+                        Media[i].SourcePath = PrepareSendData(Media[i]);
+                    }
+                    for (int i = 0; i < Officers.Count; i++)
+                    {
+                        Officers[i].ListIndex = i;
+                    }
+                    for (int i = 0; i < Subjects.Count; i++)
+                    {
+                        Subjects[i].ListIndex = i;
+                    }
+
+
+                    oldInfo = new SubmitModel
+                    {
+                        Timelineinfos = Info,
+                        Medias = Media,
+                        Officers = Officers,
+                        Subjects = Subjects
+                    };
+                    SubmitModel model = new SubmitModel();
+                    Mapper.Map(oldInfo, model);
+                    EventExists = true;
+                    return model;
+                }
             }
             EventExists = false;
             return new SubmitModel { Timelineinfos = new ViewTimelineinfo {Locked = timelineinfo.Locked } };
