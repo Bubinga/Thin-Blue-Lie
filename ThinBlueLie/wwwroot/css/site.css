@@ -23,8 +23,8 @@ a, .btn-link {
     padding: 0px;
 }
 
-.indent {
-    text-indent: 3rem;
+.context.indent p {
+    text-indent: 1.5rem;
 }
 
 .center {
