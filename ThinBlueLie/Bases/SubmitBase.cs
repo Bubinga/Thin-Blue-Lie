@@ -91,7 +91,9 @@ namespace ThinBlueLie.Models
                     }
                     else
                     {
-                        media.SourcePath = await PrepareStoreData(media);
+                        var result = await PrepareStoreData(media);
+                        media.SourcePath = result.SourcePath;
+                        media.SourceFrom = result.SourceFrom;
                     }
                     media.IdTimelineinfo = IdTimelineinfo;
                     string mediaSql = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`, `Action`)

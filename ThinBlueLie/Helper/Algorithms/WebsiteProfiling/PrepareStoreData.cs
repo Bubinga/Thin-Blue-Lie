@@ -5,46 +5,72 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using ThinBlueLie.Models;
+using static DataAccessLibrary.Enums.MediaEnums;
 
 namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
 {
     public static partial class WebsiteProfile
     {
-        public static async Task<string> PrepareStoreData(ViewMedia media)
+        /// <summary>
+        /// Gets url of source for reddit links
+        /// </summary>
+        static async Task<ViewMedia> GetRedditDataAsync(ViewMedia media)
         {
-            string path; 
-            if (media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
+            var url = media.SourcePath;
+            var source = media.SourceFrom;
+            url = url.Remove(url.Length - 1, 1).Insert(url.Length - 1, ".json");
+            using (var httpClient = new HttpClient())
             {
-                Uri uri = new Uri(media.SourcePath, UriKind.Absolute);
-                path = HttpUtility.ParseQueryString(uri.Query).Get("v"); //only stores youtube's video id
-                return path;
-            }
-            if (media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
-            {
-                Uri myUri = new Uri(media.SourcePath);
-                string host = myUri.Host;
-                if (host.Contains("reddit.com")) //in comments not in image
-                {
-                    //download json data and search for url_overridden_by_dest
-                    var jsonPath = media.SourcePath.Remove(media.SourcePath.Length - 1, 1).Insert(media.SourcePath.Length -1 , ".json");
-                    using (var httpClient = new HttpClient())
-                    {
-                        var json = await httpClient.GetStringAsync(jsonPath);
-                        dynamic stuff = JsonConvert.SerializeObject(json);
-                        path = stuff.url_overridden_by_dest;
-                        Uri uri = new Uri(path);
-                        path = uri.AbsolutePath.Remove(uri.AbsolutePath.Length - 4, 4).Remove(0,1);
-                        return path; //string of characters that go into format of -> https://i.redd.it/0u3pdpo3zgv51.jpg
-                    }
-                }
-                else if (media.SourcePath.Contains("preview.redd.it")) //in image
-                {
-                    Uri uri = new Uri(media.SourcePath);
+                var json = await httpClient.GetStringAsync(url);
+                dynamic stuff = JsonConvert.SerializeObject(json);
+                string path = stuff.url_overridden_by_dest;
+                Uri uri = new Uri(path);
+                if (uri.AbsolutePath.Substring(uri.AbsolutePath.IndexOf(".")) == ".jpg")
                     path = uri.AbsolutePath.Remove(uri.AbsolutePath.Length - 4, 4).Remove(0, 1);
-                    return path;
+                if (uri.Host.Contains("youtu.be") || uri.Host.Contains("youtube.com"))
+                    source = SourceFromEnum.Youtube;
+                media.SourcePath = url;
+                media.SourceFrom = source;
+                return media;
+            }
+        }
+        public static async Task<ViewMedia> PrepareStoreData(ViewMedia media)
+        {
+            Uri myUri = new Uri(media.SourcePath);
+            string host = myUri.Host;
+            if (media.SourceFrom == SourceFromEnum.Youtube)
+            {
+                if (host.Contains("youtube.com"))
+                {
+                    Uri uri = new Uri(media.SourcePath, UriKind.Absolute);
+                    media.SourcePath = HttpUtility.ParseQueryString(uri.Query).Get("v"); //only stores youtube's video id
+                    return media;
                 }
             }
-            return media.SourcePath;
+            if (media.SourceFrom == SourceFromEnum.Reddit)
+            {
+                if (media.MediaType == MediaTypeEnum.Image)  //directly in image
+                {
+                    if (host.Contains("preview.redd.it"))
+                    {
+                        media.SourceFrom = SourceFromEnum.Link;
+                        return media;
+                    }
+                    if (host.Contains("preview.redd.it"))
+                    {
+                        Uri uri = new Uri(media.SourcePath);
+                        media.SourcePath = uri.AbsolutePath.Remove(uri.AbsolutePath.Length - 4, 4).Remove(0, 1);
+                        return media;
+                    }                   
+                }
+                else if (host.Contains("reddit.com")) //for everything in the comments page
+                {
+                    media = await GetRedditDataAsync(media);
+                    return media;
+                }
+            }
+
+            return media;
         }
     }
 }
