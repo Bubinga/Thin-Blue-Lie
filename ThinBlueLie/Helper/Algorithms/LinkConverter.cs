@@ -54,6 +54,17 @@ namespace ThinBlueLie.Helper.Algorithms
 
                     }
                 }
+                if ((SourceFromEnum)media.SourceFrom == SourceFromEnum.Reddit)
+                {
+                    if (video) // -> https://v.redd.it/4ymh7g5fzfv51
+                    {
+                        return $"https://v.redd.it/{media.SourcePath}DASH_720.mp4";
+                    }
+                    else // -> https://i.redd.it/0u3pdpo3zgv51.jpg
+                    {
+                        return $"https://i.redd.it/{media.SourcePath}.jpg";
+                    }
+                }
                 //Add support for reddit
                 // image: https://i.redd.it/0u3pdpo3zgv51.jpg
                 //Add support for other sourcefroms
