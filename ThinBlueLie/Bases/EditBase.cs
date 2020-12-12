@@ -296,7 +296,9 @@ namespace ThinBlueLie.Bases
                         {
                             Action = EditActions.Addition;
                             //TODO add support for editted uploaded images
-                            pair.Item2.SourcePath = await PrepareStoreData(Mapper.Map<Media, ViewMedia>(pair.Item2));
+                            var result = await PrepareStoreData(Mapper.Map<Media, ViewMedia>(pair.Item2));
+                            pair.Item2.SourcePath = result.SourcePath;
+                            pair.Item2.SourceFrom = (byte)result.SourceFrom;
                             string saveNewMedia = @$"INSERT INTO editmedia 
                                                       (`IdEditHistory`, `IdTimelineinfo`, `Rank`, `MediaType`, `SourcePath`,
                                                         `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Action`)

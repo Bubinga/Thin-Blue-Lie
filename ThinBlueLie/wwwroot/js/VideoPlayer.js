@@ -15,7 +15,7 @@ let audioSync;
 let audioError;
 let ytID;
 let ytTimeChecked;
-const $ = document.querySelector.bind(document);
+const $$ = document.querySelector.bind(document);
 
 const settings = {
   // delay to hide contols and cursor if inactive (set to 3000 milliseconds)
@@ -302,7 +302,7 @@ function customPlayer(v) {
   const directVideo = /video/.test(document.contentType) &&
         document.body.firstElementChild === v;
   const controls = document.createElement('controls');
-  const imagus = v.classList.contains('imagus');
+  const imagus = v.classList.contains('imagus') || v.classList.contains('reddit-sync');
   if (imagus && !imagusVid) {
     imagusVid = v;
     imagusAudio = document.createElement('video');
@@ -416,6 +416,31 @@ function customPlayer(v) {
   if (v.querySelector('source')) v.classList.add('contains-source');
   if (videoWrapper) enforcePosition();
   volumeValues();
+
+v.onloadstart = () => {
+    if (/v(cf)?\.redd\.it/.test(v.src) &&
+        v.classList.contains('reddit-sync')) {
+        const prefix = v.src.split('DASH')[0].replace('vcf.', 'v.');
+        const audioSrc = `${prefix}DASH_audio.mp4`;
+        try {
+            jQuery.ajax({
+                type: "GET",
+                url: audio
+            });
+            imagusAudio.src  = audio
+        }
+        catch {
+            imagusAudio.src  = `${prefix}audio`
+        }
+        imagusAudio.src = v.dataset.audio;
+        if (!imagusAudio.muted) {
+            muteTillSync = true;
+            imagusAudio.muted = true;
+        }
+        if (imagusVid.hasAttribute('loop')) imagusAudio.setAttribute('loop', 'true');
+    }
+}
+
 
   v.onloadedmetadata = () => {
     loaded = true;
@@ -538,21 +563,21 @@ function customPlayer(v) {
   v.onemptied = () => {
     if (v === imagusVid) {
       if (v.src !== '') {
-        if (/v(cf)?\.redd\.it/.test(v.src)) {
-          const prefix = v.src.split('DASH')[0].replace('vcf.', 'v.');
-          const id = v.src.replace(/.*?redd\.it\/(.*?)\/.*/, '$1');
-          const audioSrc = `${prefix}DASH_audio.mp4`;
-          fetch(audioSrc)
-            .then(response => {
-            imagusAudio.src = response.ok ? audioSrc :
-            `${prefix}audio`;
-          }).catch(error => console.log(error));
-          if (!imagusAudio.muted) {
-            muteTillSync = true;
-            imagusAudio.muted = true;
-          }
-          if (imagusVid.hasAttribute('loop')) imagusAudio.setAttribute('loop', 'true');
-        }
+        //if (/v(cf)?\.redd\.it/.test(v.src)) {
+        //  const prefix = v.src.split('DASH')[0].replace('vcf.', 'v.');
+        //  const id = v.src.replace(/.*?redd\.it\/(.*?)\/.*/, '$1');
+        //  const audioSrc = `${prefix}DASH_audio.mp4`;
+        //  fetch(audioSrc)
+        //    .then(response => {
+        //    imagusAudio.src = response.ok ? audioSrc :
+        //    `${prefix}audio`;
+        //  }).catch(error => console.log(error));
+        //  if (!imagusAudio.muted) {
+        //    muteTillSync = true;
+        //    imagusAudio.muted = true;
+        //  }
+        //  if (imagusVid.hasAttribute('loop')) imagusAudio.setAttribute('loop', 'true');
+        //}
         v.parentElement.parentElement.classList.add('imagus-video-wrapper');
         window.addEventListener('click', imagusClick, true);
         document.addEventListener('keyup', imagusKeys, true);
@@ -746,7 +771,7 @@ function customPlayer(v) {
   // exiting fullscreen by escape key or other browser provided method
   document.onfullscreenchange = () => {
     if (!document.fullscreenElement) {
-      const nativeFS = $('.native-fullscreen');
+      const nativeFS = $$('.native-fullscreen');
       if (nativeFS) nativeFS.classList.remove('native-fullscreen');
     }
   };
@@ -956,7 +981,7 @@ function customPlayer(v) {
   }
 
   function imagusMouseDown(e) {
-    const vid = $('.imagus-video-wrapper');
+    const vid = $$('.imagus-video-wrapper');
     if (vid && e.button === 2) {
       e.stopImmediatePropagation();
       imagusMouseTimeout = setTimeout(() => {
@@ -966,7 +991,7 @@ function customPlayer(v) {
   }
 
   function imagusMouseUp(e) {
-    const vid = $('.imagus-video-wrapper');
+    const vid = $$('.imagus-video-wrapper');
     if (vid && e.button === 2) {
       if (imagusMouseTimeout === 'sticky') {
         vid.classList.add('stickied');
@@ -981,7 +1006,7 @@ function customPlayer(v) {
   }
 
   function imagusClick(e) {
-    const imagusStickied = $('.imagus-video-wrapper.stickied');
+    const imagusStickied = $$('.imagus-video-wrapper.stickied');
     if (imagusStickied) {
       if (e.target.closest('.imagus-video-wrapper.stickied')) {
         e.stopImmediatePropagation();
@@ -993,7 +1018,7 @@ function customPlayer(v) {
   }
 
   function imagusKeys(e) {
-    const vid = $('.imagus-video-wrapper');
+    const vid = $$('.imagus-video-wrapper');
     if (vid) {
       if (e.keyCode === 13 || e.keyCode === 90) {
         vid.classList.add('stickied');
@@ -1103,7 +1128,7 @@ function ytCheckSavedTime(e) {
   ytID = location.href.replace(/.*?\/(watch\?v=|embed\/)(.*?)(\?|&|$).*/, '$2');
   const savedTime = localStorage.getItem(ytID);
   const timeURL = /(\?|&)(t(ime_continue)?|start)=[1-9]/.test(location.href);
-  const ytStart = $('.ytp-clip-start:not([style*="left: 0%;"])');
+  const ytStart = $$('.ytp-clip-start:not([style*="left: 0%;"])');
   if (e.type === 'loadstart') {
     ytTimeChecked = false;
     if ((!ytStart || !savedTime) && !timeURL) ytTimeChecked = true;
@@ -1125,7 +1150,7 @@ window.addEventListener('DOMContentLoaded', () => {
       const vP = v.parentNode;
       const vPP = v.parentNode.parentNode;
       const imagus = !v.hasAttribute('controls') &&
-            $('html > div[style*="z-index: 2147483647"]') === v.parentNode;
+            $$('html > div[style*="z-index: 2147483647"]') === v.parentNode;
       const vidOrParentsIdOrClass =
             `${v.id}${v.classList}${vP.id}${vP.classList}${vPP.id}${vPP.classList}`;
       const exclude = v.classList.contains('custom-native-player') ||

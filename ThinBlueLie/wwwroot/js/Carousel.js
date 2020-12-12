@@ -6,7 +6,7 @@ function InitializeSwiper() {
         spaceBetween: 2,
         slidesPerView: 'auto',
         loop: true,
-        loopedSlides: $(".gallery-thumbs .swiper-wrapper").childElementCount,
+        loopedSlides: jQuery(".gallery-thumbs .swiper-wrapper").childElementCount,
         navigation: {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
