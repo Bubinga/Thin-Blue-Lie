@@ -165,7 +165,7 @@
                         <Subject subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></Subject>
                         if (SimilarSubjects[i] != null)
                         {
-                            <SimilarPeople PersonListIndex="i" SetSameAs="SetSameAsSubject" People="SimilarSubjects[i]"></SimilarPeople>
+                            <SimilarPeople PersonRank="i" SetSameAs="SetSameAsSubject" People="SimilarSubjects[i]"></SimilarPeople>
                         }
                     }
                 </div>
@@ -186,7 +186,7 @@
                         <Officer isSubmit="false" officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
                         if (SimilarOfficers[i] != null)
                         {
-                            <SimilarPeople PersonListIndex="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>
+                            <SimilarPeople PersonRank="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>
                         }
                     }
                 </div>

@@ -65,14 +65,15 @@ namespace ThinBlueLie.Helper
             CreateMap<DBSubject, ViewSubject>();
 
             CreateMap<ViewMedia, EditMedia>()
-                .ForMember(dest => dest.Rank, opt => opt.MapFrom(src => (short)src.ListIndex))
+                .ForMember(dest => dest.Rank, opt => opt.MapFrom(src => (short)src.Rank))
                 .ForMember(dest => dest.MediaType, opt => opt.MapFrom(src => (byte)src.MediaType))
                 .ForMember(dest => dest.SourceFrom, opt => opt.MapFrom(src => (byte)src.SourceFrom));
             CreateMap<ViewMedia, Media>()
-                .ForMember(dest => dest.Rank, opt => opt.MapFrom(src => (short)src.ListIndex))
+                .ForMember(dest => dest.Rank, opt => opt.MapFrom(src => (short)src.Rank))
                 .ForMember(dest => dest.MediaType, opt => opt.MapFrom(src => (byte)src.MediaType))
                 .ForMember(dest => dest.SourceFrom, opt => opt.MapFrom(src => (byte)src.SourceFrom));
             CreateMap<EditMedia, Media>();
+            CreateMap<EditMedia, ViewMedia>();
             CreateMap<ViewTimelineinfo, Timelineinfo>();
             CreateMap<Timelineinfo, ViewTimelineinfo>();
 

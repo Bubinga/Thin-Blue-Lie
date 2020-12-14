@@ -22,12 +22,12 @@ namespace ThinBlueLie.Bases
         {
             Timelineinfos = new ViewTimelineinfo(),
             Medias = new List<ViewMedia> { 
-                new ViewMedia { MediaType = MediaTypeEnum.Image, Blurb="Placeholder Image", ListIndex = 0 },
-               new ViewMedia { MediaType = MediaTypeEnum.Video, Blurb="Placeholder Video",ListIndex = 1 },
-                  new ViewMedia { MediaType = MediaTypeEnum.News, Blurb="Placeholder News", ListIndex = 2, SourceFrom = SourceFromEnum.Link }
+                new ViewMedia { MediaType = MediaTypeEnum.Image, Blurb="Placeholder Image", Rank = 0 },
+               new ViewMedia { MediaType = MediaTypeEnum.Video, Blurb="Placeholder Video",Rank = 1 },
+                  new ViewMedia { MediaType = MediaTypeEnum.News, Blurb="Placeholder News", Rank = 2, SourceFrom = SourceFromEnum.Link }
             },
-            Officers = new List<ViewOfficer> { new ViewOfficer { ListIndex = 0 } },
-            Subjects = new List<ViewSubject> { new ViewSubject { ListIndex = 0 } }
+            Officers = new List<ViewOfficer> { new ViewOfficer { Rank = 0 } },
+            Subjects = new List<ViewSubject> { new ViewSubject { Rank = 0 } }
         };
 
         public List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
@@ -62,21 +62,21 @@ namespace ThinBlueLie.Bases
 
         internal void SetSameAsSubject(SimilarPeopleModel person)
         {
-            model.Subjects[person.PersonListIndex].SameAsId = person.IdPerson;
-            model.Subjects[person.PersonListIndex].Age = person.Age == 0 ? null : person.Age;
-            model.Subjects[person.PersonListIndex].Name = person.Name;
-            model.Subjects[person.PersonListIndex].Sex = person.Sex;
-            model.Subjects[person.PersonListIndex].Race = person.Race;
-            SimilarSubjects[person.PersonListIndex] = new List<SimilarPersonGeneral>();
+            model.Subjects[person.PersonRank].SameAsId = person.IdPerson;
+            model.Subjects[person.PersonRank].Age = person.Age == 0 ? null : person.Age;
+            model.Subjects[person.PersonRank].Name = person.Name;
+            model.Subjects[person.PersonRank].Sex = person.Sex;
+            model.Subjects[person.PersonRank].Race = person.Race;
+            SimilarSubjects[person.PersonRank] = new List<SimilarPersonGeneral>();
         }
         internal void SetSameAsOfficer(SimilarPeopleModel person)
         {
-            model.Officers[person.PersonListIndex].SameAsId = person.IdPerson;
-            model.Officers[person.PersonListIndex].Age = person.Age == 0? null : person.Age;
-            model.Officers[person.PersonListIndex].Name = person.Name;
-            model.Officers[person.PersonListIndex].Sex = person.Sex;
-            model.Officers[person.PersonListIndex].Race = person.Race;
-            SimilarOfficers[person.PersonListIndex] = new List<SimilarPersonGeneral>();
+            model.Officers[person.PersonRank].SameAsId = person.IdPerson;
+            model.Officers[person.PersonRank].Age = person.Age == 0? null : person.Age;
+            model.Officers[person.PersonRank].Name = person.Name;
+            model.Officers[person.PersonRank].Sex = person.Sex;
+            model.Officers[person.PersonRank].Race = person.Race;
+            SimilarOfficers[person.PersonRank] = new List<SimilarPersonGeneral>();
         }
         internal void AddMedia(MediaTypeEnum mediaType)
         {
@@ -85,12 +85,12 @@ namespace ThinBlueLie.Bases
             {
                 if (mediaType != MediaTypeEnum.News)
                 {
-                    var newMediaItem = new ViewMedia { ListIndex = model.Medias.Count, MediaType = mediaType };
+                    var newMediaItem = new ViewMedia { Rank = model.Medias.Count, MediaType = mediaType };
                     model.Medias.Add(newMediaItem);
                 }
                 else
                 {
-                    var newMediaItem = new ViewMedia { ListIndex = model.Medias.Count, MediaType = mediaType, SourceFrom = SourceFromEnum.Link };
+                    var newMediaItem = new ViewMedia { Rank = model.Medias.Count, MediaType = mediaType, SourceFrom = SourceFromEnum.Link };
                     model.Medias.Add(newMediaItem);
                 }
              
@@ -101,7 +101,7 @@ namespace ThinBlueLie.Bases
         {
             if (model.Subjects.Count < SubmitModel.MaximumSubjects)
             {
-                var newSubjectItem = new ViewSubject { ListIndex = model.Subjects.Count };
+                var newSubjectItem = new ViewSubject { Rank = model.Subjects.Count };
                 model.Subjects.Add(newSubjectItem);
                 SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
             }          
@@ -110,7 +110,7 @@ namespace ThinBlueLie.Bases
         {
             if (model.Officers.Count < SubmitModel.MaximumOfficers)
             {
-                var newOfficerItem = new ViewOfficer { ListIndex = model.Officers.Count };
+                var newOfficerItem = new ViewOfficer { Rank = model.Officers.Count };
                 model.Officers.Add(newOfficerItem);
                 SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
             }           
@@ -143,8 +143,8 @@ namespace ThinBlueLie.Bases
                 var item = model.Medias[Index]; //Get Card
                 model.Medias.RemoveAt(Index); //Remove Card
                 model.Medias.Insert(Index - 1, item); //Put Card in place above where it was
-                model.Medias[Index].ListIndex = Index; //Set ListIndex to fit it's position
-                model.Medias[Index - 1].ListIndex = Index - 1; //do above to item above
+                model.Medias[Index].Rank = Index; //Set Rank to fit it's position
+                model.Medias[Index - 1].Rank = Index - 1; //do above to item above
             }
         }
 
@@ -155,8 +155,8 @@ namespace ThinBlueLie.Bases
                 var item = model.Medias[Index]; //Get Card
                 model.Medias.RemoveAt(Index); //Remove Card
                 model.Medias.Insert(Index + 1, item); //Put Card in place below where it was
-                model.Medias[Index].ListIndex = Index; //Set ListIndex to fit it's position
-                model.Medias[Index + 1].ListIndex = Index + 1; //do above to item below
+                model.Medias[Index].Rank = Index; //Set Rank to fit it's position
+                model.Medias[Index + 1].Rank = Index + 1; //do above to item below
             }
         }
 
@@ -167,10 +167,10 @@ namespace ThinBlueLie.Bases
                 var item = model.Medias[Index]; //Get Card
                 model.Medias.RemoveAt(Index); //Remove Card
                 model.Medias.Insert(0, item); //Put Card at Top
-                model.Medias[Index].ListIndex = 0; //Set ListIndex to fit it's position
+                model.Medias[Index].Rank = 0; //Set Rank to fit it's position
                 for (int i = 0; i < model.Medias.Count; i++)
                 {
-                    model.Medias[i].ListIndex = i;
+                    model.Medias[i].Rank = i;
                 }
             }
         }
@@ -180,7 +180,7 @@ namespace ThinBlueLie.Bases
             model.Medias.RemoveAt(Index);
             for (int i = 0; i < model.Medias.Count; i++)
             {
-                model.Medias[i].ListIndex = i;
+                model.Medias[i].Rank = i;
             }
         }
 
@@ -191,7 +191,7 @@ namespace ThinBlueLie.Bases
             //Resetting List Indexes
             for (int i = 0; i < model.Subjects.Count; i++)
             {
-                model.Subjects[i].ListIndex = i;
+                model.Subjects[i].Rank = i;
             }
 
         }
@@ -203,7 +203,7 @@ namespace ThinBlueLie.Bases
             //Resetting List Indexes
             for (int i = 0; i < model.Officers.Count; i++)
             {
-                model.Officers[i].ListIndex = i;
+                model.Officers[i].Rank = i;
             }
         }
 

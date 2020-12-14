@@ -97,7 +97,7 @@ namespace ThinBlueLie.Models
                     }
                     media.IdTimelineinfo = IdTimelineinfo;
                     string mediaSql = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`, `Action`)
-                                    VALUES ('{EditHistoryId}', @IdTimelineinfo, @MediaType, @SourcePath, @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', '{media.ListIndex}', '0');";
+                                    VALUES ('{EditHistoryId}', @IdTimelineinfo, @MediaType, @SourcePath, @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', '{media.Rank}', '0');";
                     await connection.ExecuteAsync(mediaSql, media);
                     editHistory.EditMedia = 1;
                 }

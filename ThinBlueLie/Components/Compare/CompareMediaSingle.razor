@@ -25,7 +25,7 @@
                             <span><b>Credit:</b> @((MarkupString)SimpleCompare(Media.Item1.Credit, Media.Item2?.Credit, true))</span>
                             <span>
                                 <b>Source:</b>
-                                @if (Media.Item1.SourceFrom != (byte)SourceFromEnum.Device)
+                                @if (Media.Item1.SourceFrom != SourceFromEnum.Device)
                                 {
                                     <a href="@SourceUrlOld"> External Link</a>
                                 }
@@ -65,13 +65,13 @@
                         <span><b>Credit:</b> @((MarkupString)SimpleCompare(Media.Item1?.Credit, Media.Item2.Credit, false))</span>
                         <span>
                             <b>Source:</b>
-                            @if (Media.Item2.SourceFrom != (byte)SourceFromEnum.Device)
+                            @if (Media.Item2.SourceFrom != SourceFromEnum.Device)
                             {
-                                <a href="@SourceUrlNew"> External Link</a>
+                                <a href="@Media.Item2.SourcePath"> External Link</a>
                             }
                             else
                             {
-                                <a href="@SourceUrlNew"> Internal Link</a>
+                                <a href="@Media.Item2.SourcePath"> Internal Link</a>
                             }
                         </span>
                         <span><b>Source Type:</b> @((MarkupString)SimpleCompare(Media.Item1 != null?GetEnumDisplayName((SourceFromEnum)Media.Item1?.SourceFrom) : null,
@@ -82,7 +82,7 @@
                 </div>
                 <div class="col-7">
                     @* If the link between the two is different, one side is null *@
-                    <img class="img-fluid rounded" style="max-height:250px;" src="@imgUrlNew">
+                    <img class="img-fluid rounded" style="max-height:250px;" src="@Media.Item2.SourcePath">
                 </div>
             </div>
         }
@@ -90,7 +90,7 @@
 </div>
 
 @code {
-    [Parameter] public Tuple<Media, Media> Media { get; set; }
+    [Parameter] public Tuple<ViewMedia, ViewMedia> Media { get; set; }
 
     [Parameter]
     public SideBySideDiffModel? Model { get; set; }
@@ -102,15 +102,6 @@
     public bool IsNewEvent { get; set; }
     protected override async Task OnParametersSetAsync()
     {
-        if (Media.Item1 != null)
-        {
-            imgUrlOld = await GetLinkFromDataEditAsync(Media.Item1);
-            SourceUrlOld = await GetLinkFromDataEditAsync(Media.Item1, true);
-        }
-        if (Media.Item2 != null)
-        {
-            imgUrlNew = await GetLinkFromDataEditAsync(Media.Item2);
-            SourceUrlNew = await GetLinkFromDataEditAsync(Media.Item2, true);
-        }
+        
     }
 }

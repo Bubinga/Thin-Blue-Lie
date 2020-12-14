@@ -96,19 +96,19 @@ namespace ThinBlueLie.Bases
                     var Officers = Mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers);
                     var Subjects = Mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects);
                     //Ordered by rank so it's the same as rank but it's a stupid way to do it
-                    //TODO just do " m.Rank as ListIndex"
+                    //TODO just do " m.Rank as Rank"
                     for (int i = 0; i < Media.Count; i++)
                     {
-                        Media[i].ListIndex = i;
+                        Media[i].Rank = i;
                         Media[i].SourcePath = PrepareSendData(Media[i]);
                     }
                     for (int i = 0; i < Officers.Count; i++)
                     {
-                        Officers[i].ListIndex = i;
+                        Officers[i].Rank = i;
                     }
                     for (int i = 0; i < Subjects.Count; i++)
                     {
-                        Subjects[i].ListIndex = i;
+                        Subjects[i].Rank = i;
                     }
 
 
@@ -283,8 +283,7 @@ namespace ThinBlueLie.Bases
                 //giving it a random id that will be used for pairing, but never inserted into database
                 foreach (var media in model.Medias.Where(subject => subject.IdMedia == 0))
                     media.IdMedia = int.MaxValue - new Random().Next(10000000);
-                var mediaPairs = Pair.PairMedia(Mapper.Map<List<ViewMedia>, List<Media>>(oldInfo.Medias),
-                                                    Mapper.Map<List<ViewMedia>, List<Media>>(model.Medias));
+                var mediaPairs = Pair.PairMedia(oldInfo.Medias, model.Medias);
                 foreach (var pair in mediaPairs)
                 {
                     //If there is a change
@@ -296,9 +295,9 @@ namespace ThinBlueLie.Bases
                         {
                             Action = EditActions.Addition;
                             //TODO add support for editted uploaded images
-                            var result = await PrepareStoreData(Mapper.Map<Media, ViewMedia>(pair.Item2));
+                            var result = await PrepareStoreData(pair.Item2);
                             pair.Item2.SourcePath = result.SourcePath;
-                            pair.Item2.SourceFrom = (byte)result.SourceFrom;
+                            pair.Item2.SourceFrom = result.SourceFrom;
                             string saveNewMedia = @$"INSERT INTO editmedia 
                                                       (`IdEditHistory`, `IdTimelineinfo`, `Rank`, `MediaType`, `SourcePath`,
                                                         `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Action`)
