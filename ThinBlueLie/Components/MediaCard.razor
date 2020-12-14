@@ -2,138 +2,141 @@
 @using Syncfusion.Blazor.Buttons
 @using ThinBlueLie.Helper.Extensions
 @using System.IO
+@using Syncfusion.Blazor.Spinner
 @using static ThinBlueLie.Helper.ConfigHelper
 @using static DataAccessLibrary.Enums.MediaEnums
 @using static ThinBlueLie.Helper.Extensions.EnumExtensions
 @using static ThinBlueLie.Helper.Algorithms.LinkConverter
-@using AutoMapper 
-@inject IMapper Mapper  
+@using AutoMapper
+@inject IMapper Mapper
 
 <style>
     .preview-image {
         height: auto;
         width: 100%;
     }
+
     .e-card > .e-card-image {
         min-height: 100px !important;
     }
 </style>
 <div class="AddMedia">
-            <div name="mediaAdd" class="container-fluid d-flex px-0 mr-0">               
-                <div class="col-8">
-                    <div class="form-row">
-                        <div class="col-12 pl-0">
-                            @if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
-                            {
-                                <div class="form-group MediaFile">
-                                    <SfUploader Enabled="!IsEdit" Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2" MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
-                                        <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>
-                                    </SfUploader>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="form-group MediaLink">
-                                    <SfTextBox Enabled="!IsEdit" CssClass="e-filled" Placeholder="Link to Media" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.SourcePath"></SfTextBox>
-                                    <ValidationMessage For="@(() => media.SourcePath)"></ValidationMessage>
-                                </div>
-                            }
+    <div name="mediaAdd" class="container-fluid d-flex px-0 mr-0">
+        <div class="col-8">
+            <div class="form-row">
+                <div class="col-12 pl-0">
+                    @if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+                    {
+                        <div class="form-group MediaFile">
+                            <SfUploader Enabled="!IsEdit" Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2"
+                                        MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
+                                <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>
+                            </SfUploader>
                         </div>
-                    </div>
-                    <div class="form-row position-relative">
-                        <div class="my-2 w-100">
-                            <SfTextBox CssClass="e-filled" Placeholder="Provide a brief description" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.Blurb"></SfTextBox>
-                            <ValidationMessage For="@(() => media.Blurb)"></ValidationMessage>
+                    }
+                    else
+                    {
+                        <div class="form-group MediaLink">
+                            <SfTextBox Enabled="!IsEdit" CssClass="e-filled" Placeholder="Link to Media" ValueChange="refresh"
+                                       FloatLabelType="@FloatLabelType.Always" @bind-Value="media.OriginalUrl">                                
+                            </SfTextBox>
+                            <ValidationMessage For="@(() => media.OriginalUrl)"></ValidationMessage>
                         </div>
-                    </div>
-                    <div class="form-row align-middle mb-2">
-                        @if (media.MediaType != MediaTypeEnum.News) { 
-                        <div class="col-8 dropdown pl-0">
-                            <label class="mb-1">
-                                Source's Location
-                            </label>
-                            <SfDropDownList Enabled="!IsEdit" TItem="SourceFromDropDown" Text="@(media.SourceFrom != null? GetEnumDisplayName((SourceFromEnum)media.SourceFrom).ToString() : "Source Location")" TValue="SourceFromEnum?" PopupHeight="230px" Placeholder="Source Location" @bind-Value="@media.SourceFrom" DataSource="@(media.MediaType == MediaTypeEnum.Image? ImageSourceLocations : VideoSourceLocations)">
-                                <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
-                            </SfDropDownList>
-                            <ValidationMessage For="@(() => media.SourceFrom)"></ValidationMessage>
-                        </div>
-                        }
-                        <div class="@(media.MediaType == MediaTypeEnum.News? "col-12 pl-0" : "col-4")">
-                            <label class="mb-1">
-                                Credit
-                            </label>
-                            <SfTextBox CssClass="e-filled" Placeholder="Credit" FloatLabelType="@FloatLabelType.Never" @bind-Value="media.Credit"></SfTextBox>
-                        </div>
-                    </div>
-                    @if (media.MediaType != MediaTypeEnum.News) { 
-                    <div>
-                        <label class="form-check-label d-inline">
-                            Any blood or gore?<span class="text-danger ml-1">*</span>
-                            <ValidationMessage For="@(() => media.Gore)"></ValidationMessage>
-                        </label>
-                        <div class="d-inline">
-                            <SfCheckBox CssClass="armed-checkbox" Name="@Guid" @bind-Checked="@media.Gore" Label="Gore"></SfCheckBox>                            
-                        </div>
-                    </div>
                     }
                 </div>
-                <div class="col-4">
-                    <div class="d-flex h-100 justify-content-center align-items-center">
-                        @if (media.MediaType == MediaEnums.MediaTypeEnum.Image)
+            </div>
+            <div class="form-row position-relative">
+                <div class="my-2 w-100">
+                    <SfTextBox CssClass="e-filled" Placeholder="Provide a brief description" FloatLabelType="@FloatLabelType.Always" @bind-Value="media.Blurb"></SfTextBox>
+                    <ValidationMessage For="@(() => media.Blurb)"></ValidationMessage>
+                </div>
+            </div>
+            <div class="form-row align-middle mb-2">
+                @if (media.MediaType != MediaTypeEnum.News)
+                {
+                    <div class="col-8 dropdown pl-0">
+                        <label class="mb-1">
+                            Source's Location
+                        </label>
+                        <SfDropDownList Enabled="!IsEdit" TItem="ListItem"
+                                        Text="@(media.SourceFrom != null? GetEnumDisplayName((SourceFromEnum)media.SourceFrom).ToString() : "Source Location")"
+                                        TValue="SourceFromEnum?" PopupHeight="230px" Placeholder="Source Location" @bind-Value="@media.SourceFrom"
+                                        DataSource="@(media.MediaType == MediaTypeEnum.Image? ImageSourceLocations : VideoSourceLocations)">
+                            <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                        <ValidationMessage For="@(() => media.SourceFrom)"></ValidationMessage>
+                    </div>
+                }
+                <div class="@(media.MediaType == MediaTypeEnum.News? "col-12 pl-0" : "col-4")">
+                    <label class="mb-1">
+                        Credit
+                    </label>
+                    <SfTextBox CssClass="e-filled" Placeholder="Credit" FloatLabelType="@FloatLabelType.Never" @bind-Value="media.Credit"></SfTextBox>
+                </div>
+            </div>
+            @if (media.MediaType != MediaTypeEnum.News)
+            {
+                <div>
+                    <label class="form-check-label d-inline">
+                        Any blood or gore?<span class="text-danger ml-1">*</span>
+                        <ValidationMessage For="@(() => media.Gore)"></ValidationMessage>
+                    </label>
+                    <div class="d-inline">
+                        <SfCheckBox CssClass="armed-checkbox" Name="@Guid" @bind-Checked="@media.Gore" Label="Gore"></SfCheckBox>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-4">
+            <div class="d-flex h-100 justify-content-center align-items-center">
+                @if (media.MediaType == MediaEnums.MediaTypeEnum.Image)
+                {
+                    if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+                    {
+                        if (!(IsEdit && !string.IsNullOrWhiteSpace(media.SourcePath)))
                         {
-                            if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
-                            {
-                                @*<img class="preview-image" src="@((media.Source?.FileInfo as Syncfusion.Blazor.Inputs.FileInfo)?.RawFile)" />*@
-                                if (IsEdit && !string.IsNullOrWhiteSpace(media.SourcePath))
-                                {
-                                    <img class="preview-image" src="@("/Uploads/" + media.SourcePath + ".jpg")" />
-                                }
-                                else
-                                {
-                                    <h5>There is currently no support for previews of uploaded images, but we are working on it</h5>
-                                }
-                            }
-                            else if (!string.IsNullOrWhiteSpace(media.SourcePath))
-                            {
-                                <img class="preview-image" src="@media.SourcePath" />
-                            }
-                            else
-                            {
-                                <img class="preview-image" src="/Assets/Placeholder-Image.png" />
-                            }
-                        }
-                        else if (media.MediaType == MediaEnums.MediaTypeEnum.News)
-                        {
-                            <NewsCard ShortVersion="true" newsUrl="@(string.IsNullOrEmpty(media.SourcePath)? "http://example.com" : media.SourcePath)"></NewsCard>
+                            <h5>There is currently no support for previews of uploaded images, but we are working on it</h5>
                         }
                         else
                         {
-                            if (!string.IsNullOrWhiteSpace(media.SourcePath))
-                            {
-                                Uri myUri = new Uri(media.SourcePath);
-                                string host = myUri.Host;
-                                if (host.Contains("youtube"))
-                                    media.SourceFrom = SourceFromEnum.Youtube;
-                                else if (host.Contains("reddit") || host.Contains("v.redd.it"))
-                                    media.SourceFrom = SourceFromEnum.Reddit;
-                                else
-                                    media.SourceFrom = null;
-                                if (media.SourceFrom != null)
-                                {
-                                    <img class="preview-image" src="@(GetLinkFromData(new Media {MediaType = (byte)media.MediaType, SourcePath = media.SourcePath, SourceFrom = (byte)media.SourceFrom}, false, false))" />
-                                }
-                                else
-                                {
-                                    <h5>There is currently no support for videos off of "@host"</h5>
-                                }
-                            }
-                            else
-                            {
-                                <img class="preview-image" src="/Assets/Placeholder-Image.png" />
-                            }
+                            <img class="preview-image" src="@media.Thumbnail" />
                         }
-                    </div>
-                </div>
+                    }
+                    else if (!string.IsNullOrWhiteSpace(media.SourcePath))
+                    {
+                        <img class="preview-image" src="@media.Thumbnail" />
+                    }
+                    else
+                    {
+                        <img class="preview-image" src="/Assets/Placeholder-Image.png" />
+                    }
+                }
+                else if (media.MediaType == MediaEnums.MediaTypeEnum.News)
+                {
+                    <NewsCard ShortVersion="true" newsUrl="@(string.IsNullOrEmpty(media.SourcePath)? "http://example.com" : media.SourcePath)"></NewsCard>
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(media.OriginalUrl))
+                    {
+                        if (media.SourceFrom != null)
+                        {
+                            <img class="preview-image" src="@media.Thumbnail" />
+                        }
+                        else
+                        {
+                            Uri myUri = new Uri(media.OriginalUrl);
+                            host = myUri.Host;
+                            <h5>There is currently no support for videos off of "@host"</h5>
+                        }
+                    }
+                    else
+                    {
+                        <img class="preview-image" src="/Assets/Placeholder-Image.png" />
+                    }
+                }
+            </div>
+        </div>
     </div>
 </div>
 @code {
@@ -157,32 +160,17 @@
         public SourceFromEnum Value { get; set; }
     }
 
-    List<SourceFromDropDown> ImageSourceLocations = new List<SourceFromDropDown>
+    public IEnumerable<ListItem> ImageSourceLocations = GetEnumDisplayNames<SourceFromEnum>()
+        .Where(x => x.Value == SourceFromEnum.Link || x.Value == SourceFromEnum.Reddit || x.Value == SourceFromEnum.Device);
+    public IEnumerable<ListItem> VideoSourceLocations = GetEnumDisplayNames<SourceFromEnum>()
+        .Where(x => x.Value == SourceFromEnum.Youtube || x.Value == SourceFromEnum.Reddit);
+
+    string host;
+
+    void refresh()
     {
-        new SourceFromDropDown
-        {
-            Text = GetEnumDisplayName(SourceFromEnum.Device),
-            Value = SourceFromEnum.Device
-        },
-        new SourceFromDropDown
-        {
-            Text = GetEnumDisplayName(SourceFromEnum.Link),
-            Value = SourceFromEnum.Link
-        }
-    };
-    List<SourceFromDropDown> VideoSourceLocations = new List<SourceFromDropDown>
-    {
-        new SourceFromDropDown
-        {
-            Text = GetEnumDisplayName(SourceFromEnum.Youtube),
-            Value = SourceFromEnum.Youtube
-        },
-        new SourceFromDropDown
-        {
-            Text = GetEnumDisplayName(SourceFromEnum.Reddit) + " (Unsupported)",
-            Value = SourceFromEnum.Reddit
-        }
-    };
+        StateHasChanged();
+    }
 
     protected override void OnInitialized()
     {

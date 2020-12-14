@@ -17,6 +17,7 @@ using static ThinBlueLie.Searches.SearchClasses;
 using static ThinBlueLie.Helper.Extensions.IdentityExtensions;
 using DataAccessLibrary.Enums;
 using static ThinBlueLie.Helper.Extensions.IntExtensions;
+using ThinBlueLie.Models;
 
 namespace ThinBlueLie.Searches
 {
@@ -148,7 +149,7 @@ namespace ThinBlueLie.Searches
                         "WHERE t.IdTimelineinfo = @id;";
 
                 //get media, officers, and subjects using timelineinfo id
-                List<Media> media = await data.LoadData<Media, dynamic>(mediaQuery, new { id }, GetConnectionString());
+                List<ViewMedia> media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id }, GetConnectionString());
                 List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id }, GetConnectionString());
                 List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id }, GetConnectionString());
 
@@ -187,12 +188,12 @@ namespace ThinBlueLie.Searches
 
                     if (action == EditActions.Addition)
                     {
-                        var media = Mapper.Map<EditMedia, Media>(change);
+                        var media = Mapper.Map<EditMedia, ViewMedia>(change);
                         newInfo.Medias.Add(media);
                     }
                     else if (action == EditActions.Update)
                     {
-                        var media = Mapper.Map<EditMedia, Media>(change);
+                        var media = Mapper.Map<EditMedia, ViewMedia>(change);
                         newInfo.Medias.Where(m => m.IdMedia == change.IdMedia).ToList().ForEach(m => m = media);
                     }
                     else if (action == EditActions.Deletion)
