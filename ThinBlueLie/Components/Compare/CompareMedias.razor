@@ -19,18 +19,18 @@ else
 }
 
 @code {
-    private List<Tuple<Media, Media>> Medias { get; set; }
+    private List<Tuple<ViewMedia, ViewMedia>> Medias { get; set; }
     [Parameter]
-    public List<Media> OldMedias { get; set; }
+    public List<ViewMedia> OldMedias { get; set; }
     [Parameter]
-    public List<Media> NewMedias { get; set; }
+    public List<ViewMedia> NewMedias { get; set; }
     bool Done = false;
     private List<SideBySideDiffModel?> Mediadiff = new List<SideBySideDiffModel?>();
 
     //TODO this same code appears in CompareOfficers and CompareSubjects too, consolidate it into a generic method
     protected override void OnParametersSet()
     {
-        Medias = new List<Tuple<Media, Media>>();
+        Medias = new List<Tuple<ViewMedia, ViewMedia>>();
         PairVersions pair = new PairVersions();
         Medias = pair.PairMedia(OldMedias, NewMedias);
 

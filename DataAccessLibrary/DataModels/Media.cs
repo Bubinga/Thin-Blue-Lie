@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static DataAccessLibrary.Enums.MediaEnums;
 
 namespace DataAccessLibrary.DataModels
 {
@@ -12,12 +13,13 @@ namespace DataAccessLibrary.DataModels
         [Key]
         public int IdMedia { get; set; }
         public int IdTimelineinfo { get; set; }
-        public byte MediaType { get; set; }
+        public MediaTypeEnum MediaType { get; set; }
         [Required]
         [Column(TypeName = "text")]
         public string SourcePath { get; set; } //Either the provided link or a pointer to the location where the uploaded file is stored
+        public string Thumbnail { get; set; }
         public byte Gore { get; set; }
-        public byte SourceFrom { get; set; }
+        public SourceFromEnum SourceFrom { get; set; }
         [Required]
         [MaxLength(250)]
         [Column(TypeName = "tinytext")]

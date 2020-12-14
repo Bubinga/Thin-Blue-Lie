@@ -5,12 +5,12 @@
 <div class="AddSubject mt-2">
     <div class="card border-dark mb-3 mx-auto">
         <div class="card-body text-dark pt-2">
-            <div @onclick="@(() => DeleteSubject.InvokeAsync(subject.ListIndex))" @onclick:stopPropagation="false" @onclick:preventDefault class="position-absolute d-inline-flex" style="right: 5px; top:0px; z-index:2;">
+            <div @onclick="@(() => DeleteSubject.InvokeAsync(subject.Rank))" @onclick:stopPropagation="false" @onclick:preventDefault class="position-absolute d-inline-flex" style="right: 5px; top:0px; z-index:2;">
                 <SfButton IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
             </div>
             <div class="form-row position-relative">
                 <div class="my-2 ml-1" style="width:71%">
-                    <SfTextBox Enabled="@(subject.SameAsId != null? false: true)" CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="subject.Name" @onchange="(()=> SuggestSubjects.InvokeAsync(new SimilarPersonCallback { Name = subject.Name, Index = subject.ListIndex }))"></SfTextBox>
+                    <SfTextBox Enabled="@(subject.SameAsId != null? false: true)" CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="subject.Name" @onchange="(()=> SuggestSubjects.InvokeAsync(new SimilarPersonCallback { Name = subject.Name, Index = subject.Rank }))"></SfTextBox>
                     <ValidationMessage For="@(() => subject.Name)"></ValidationMessage>
                 </div>
                 <div class="my-2 ml-2 w-25">

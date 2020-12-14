@@ -9,7 +9,7 @@ using ThinBlueLie.Models;
 
 namespace ThinBlueLie.Helper.Extensions
 {
-    public static class ClassExtensions
+    public static partial class ClassExtensions
     {
         public static bool ContainsChange(this EditHistory editHistory)
         {

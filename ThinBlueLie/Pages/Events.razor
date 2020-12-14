@@ -49,7 +49,7 @@
 {
     <Title>@Event.FirstOrDefault().Data.Title - Thin Blue Lie</Title>
     <Meta Property="og:title" Content="@(Event.FirstOrDefault().Data.Title + " - Thin Blue Lie")" />
-    <Meta Property="og:image" Content="@GetLinkFromData(Event.FirstOrDefault().Medias.FirstOrDefault())" />
+    <Meta Property="og:image" Content="@(Event.FirstOrDefault().Medias.FirstOrDefault().SourcePath)" />
 
     HtmlDocument htmlDoc = new HtmlDocument();
     htmlDoc.LoadHtml(Event.FirstOrDefault().Data.Context);
@@ -145,6 +145,7 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
     public AuthenticationState userState;
     public ApplicationUser User;
     public bool EventExists = false;
+    public string image = "";
     protected override async Task OnInitializedAsync()
     {
         EventExists = false;
@@ -230,7 +231,7 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
         {
             foreach ((var Case, Int32 i) in timelineinfo.Select((Case, i) => (Case, i)))
             {
-                var mediaQuery = "SELECT m.MediaType, m.SourcePath, m.Gore, m.SourceFrom, m.Blurb, m.Credit, m.SubmittedBy, m.Rank From media m where m.IdTimelineinfo = @id Order By m.Rank;";
+                var mediaQuery = "SELECT * From media m where m.IdTimelineinfo = @id Order By m.Rank;";
                 var officerQuery = "SELECT o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
                         "FROM timelineinfo t " +
                         "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
@@ -243,7 +244,7 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
                         "WHERE t.IdTimelineinfo = @id;";
 
                 //get media, officers, and subjects using timelineinfo id
-                List<Media> media = await data.LoadData<Media, dynamic>(mediaQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
+                List<ViewMedia> media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
                 List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
                 List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
 

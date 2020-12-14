@@ -78,13 +78,13 @@ else
                 if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
                 {
                     <div class="swiper-slide hytPlayerWrap">
-                        <iframe src="@LinkConverter.GetLinkFromData(media, true)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe src="@media.ContentUrl" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 }
                 else if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
                 {
                     <div class="swiper-slide">
-                        <video src="@LinkConverter.GetLinkFromData(media, true)" width="320" height="240" class="reddit-sync" controls>
+                        <video src="@media.ContentUrl" width="320" height="240" class="reddit-sync" controls>
                         </video>
                     </div>
                 }
@@ -92,7 +92,7 @@ else
             else if (((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Image))
             {
                 <div class="swiper-slide" style="
-                   background-image: url(@LinkConverter.GetLinkFromData(media)">
+                   background-image: url(@media.ContentUrl)">
                 </div>
             }
         }
@@ -110,15 +110,7 @@ else
                 if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
                 {
                     <div class="swiper-slide video"
-                         style="background-image: url(@LinkConverter.GetLinkFromData(media)) ">
-                        <img class="play-button" alt="play button overlay" src="/Assets/Play-Button.png" href="#" />
-                    </div>
-                }
-                else if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
-                {
-                    <div class="swiper-slide video">
-                        <video src="@LinkConverter.GetLinkFromData(media, true)" class="reddit-sync">
-                        </video>
+                         style="background-image: url(@media.Thumbnail) ">
                         <img class="play-button" alt="play button overlay" src="/Assets/Play-Button.png" href="#" />
                     </div>
                 }
@@ -126,7 +118,7 @@ else
             else if (((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Image))
             {
                 <div class="swiper-slide" style="
-                   background-image: url(@LinkConverter.GetLinkFromData(media)">
+                   background-image: url(@media.ContentUrl)">
                 </div>
             }
         }
@@ -136,7 +128,7 @@ else
 
 @code {
     [Parameter]
-    public List<Media>? Media { get; set; }
+    public List<ViewMedia>? Media { get; set; }
 
     string videoUrl = string.Empty;
     string imageUrl = string.Empty;

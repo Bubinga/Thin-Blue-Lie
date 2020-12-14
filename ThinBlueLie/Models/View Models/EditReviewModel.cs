@@ -16,7 +16,7 @@ namespace ThinBlueLie.Models.View_Models
         public class EditReviewSegment
         {
             public Timelineinfo Data { get; set; }
-            public List<Media> Medias { get; set; }
+            public List<ViewMedia> Medias { get; set; }
             public List<DBOfficer> Officers { get; set; }
             public List<DBSubject> Subjects { get; set; }
             public SimilarOfficer OfficerPerson { get; set; }

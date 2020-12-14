@@ -166,7 +166,7 @@
                             <Subject subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></Subject>
                             if (SimilarSubjects[i] != null)
                             {
-                                <SimilarPeople PersonListIndex="i" SetSameAs="SetSameAsSubject" People="SimilarSubjects[i]"></SimilarPeople>
+                                <SimilarPeople PersonRank="i" SetSameAs="SetSameAsSubject" People="SimilarSubjects[i]"></SimilarPeople>
                             }
                         }
                     </div>
@@ -187,7 +187,7 @@
                             <Officer isSubmit="true" officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
                             if (SimilarOfficers[i] != null)
                             {
-                                <SimilarPeople PersonListIndex="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>
+                                <SimilarPeople PersonRank="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>
                             }
                         }
                     </div>
@@ -279,19 +279,9 @@
                 Race = TimelineinfoEnums.RaceEnum.White,
                 Sex = TimelineinfoEnums.SexEnum.Male,
                 Name = "Aaron Torgalski",
-                ListIndex = 0,
+                Rank = 0,
                 Misconduct = new int[] {1, 2, 8, 32},
                 Weapon = (new int[] {1, 4}),
-            },
-            new ViewOfficer
-            {
-                Age = 27,
-                Race = TimelineinfoEnums.RaceEnum.Black,
-                Sex = TimelineinfoEnums.SexEnum.Unclear,
-                Name = "Officer Man Two",
-                ListIndex = 1,
-                Misconduct = new int[] {1, 2, 4},
-                Weapon = (new int[] {2, 8}),
             }
         };
         SimilarOfficers.Add(new List<SimilarPersonGeneral>());
@@ -304,15 +294,7 @@
                 Sex = TimelineinfoEnums.SexEnum.Female,
                 Armed = true,
                 Name = "Subject One",
-                ListIndex = 0,
-            },
-            new ViewSubject
-            {
-                Age = 24,
-                Race = TimelineinfoEnums.RaceEnum.Native,
-                Sex = TimelineinfoEnums.SexEnum.Male,
-                Armed = false,
-                ListIndex = 1,
+                Rank = 0,
             }
         };
         SimilarSubjects.Add(new List<SimilarPersonGeneral>());
@@ -320,32 +302,43 @@
         {
             new ViewMedia
             {
-                ListIndex = 0,
-                Blurb = "Image of Cat",
+                Rank = 0,
+                Blurb = "Reddit Comments Image",
                 Gore = 0,
                 MediaType = MediaEnums.MediaTypeEnum.Image,
-                Credit = "idk cat website",
-                SourcePath = @"https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                SourceFrom = MediaEnums.SourceFromEnum.Link
+                Credit = "idk bro",
+                OriginalUrl = @"https://www.reddit.com/r/EarthPorn/comments/kbdeio/ice_shards_on_mendenhall_lake_juneau_ak/",
+                SourceFrom = MediaEnums.SourceFromEnum.Reddit
             },
              new ViewMedia
             {
-                ListIndex = 1,
-                Blurb = "Really good video",
+                Rank = 1,
+                Blurb = "Reddit i.redd.it image",
+                Gore = 0,
+                MediaType = MediaEnums.MediaTypeEnum.Image,
+                Credit = "jso awan",
+                OriginalUrl = @"https://i.redd.it/0u3pdpo3zgv51.jpg",
+                SourceFrom = MediaEnums.SourceFromEnum.Reddit
+            },
+             new ViewMedia
+            {
+                Rank = 2,
+                Blurb = "Reddit Cat Video",
                 Gore = 0,
                 MediaType = MediaEnums.MediaTypeEnum.Video,
-                Credit = "Kurgesagt",
-                SourcePath = @"https://www.youtube.com/watch?v=YbgnlkJPga4",
-                SourceFrom = MediaEnums.SourceFromEnum.Youtube
+                Credit = "awefawef",
+                OriginalUrl = @"https://www.reddit.com/r/aww/comments/jien07/living_the_good_life/",
+                SourceFrom = MediaEnums.SourceFromEnum.Reddit
             },
               new ViewMedia
             {
-                ListIndex = 2,
-                Blurb = "Unrelated news article",
-                MediaType = MediaEnums.MediaTypeEnum.News,
-                Credit = "New york times",
-                SourcePath = @"https://www.nytimes.com/2019/05/27/opinion/ted-chiang-future-genetic-engineering.html",
-                SourceFrom = MediaEnums.SourceFromEnum.NewsSite
+                Rank = 3,
+                Blurb = "Reddit Youtube Video",
+                Gore = 0,
+                MediaType = MediaEnums.MediaTypeEnum.Video,
+                Credit = "aweofaw",
+                OriginalUrl = @"https://www.reddit.com/r/videos/comments/88ll08/this_is_what_happens_when_one_company_owns_dozens/",
+                SourceFrom = MediaEnums.SourceFromEnum.Reddit
             },
         };
     }

@@ -3,33 +3,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ThinBlueLie.Models;
 
 namespace ThinBlueLie.Helper.Algorithms
 {
     public partial class PairVersions
     {
-        public List<Tuple<Media, Media>> PairMedia(List<Media> OldMedias, List<Media> NewMedias)
+        public List<Tuple<ViewMedia, ViewMedia>> PairMedia(List<ViewMedia> OldMedias, List<ViewMedia> NewMedias)
         {
-            List<Tuple<Media, Media>> Medias = new List<Tuple<Media, Media>>();
+            List<Tuple<ViewMedia, ViewMedia>> Medias = new List<Tuple<ViewMedia, ViewMedia>>();
             List<int> pairedIds = new List<int>();
             foreach (var Media in NewMedias.Union(OldMedias))
             {
                 if (!pairedIds.Contains(Media.IdMedia))
                 {
-                    List<Media> pair = NewMedias.Union(OldMedias).Where(o => o.IdMedia == Media.IdMedia).ToList();
+                    List<ViewMedia> pair = NewMedias.Union(OldMedias).Where(o => o.IdMedia == Media.IdMedia).ToList();
                     bool isPaired = false;
-                    Tuple<Media, Media> pairing;
+                    Tuple<ViewMedia, ViewMedia> pairing;
                     for (int i = 0; i < pair.Count; i++)
                     {
                         if (pair[i] != Media)
                         {
                             if (NewMedias.Contains(pair[i]))
                             {
-                                pairing = new Tuple<Media, Media>(Media, pair[i]);
+                                pairing = new Tuple<ViewMedia, ViewMedia>(Media, pair[i]);
                             }
                             else //if oldMedia contains it
                             {
-                                pairing = new Tuple<Media, Media>(pair[i], Media);
+                                pairing = new Tuple<ViewMedia, ViewMedia>(pair[i], Media);
                             }
                             Medias.Add(pairing);
                             isPaired = true;
@@ -40,11 +41,11 @@ namespace ThinBlueLie.Helper.Algorithms
                     {
                         if (NewMedias.Contains(Media))
                         {
-                            pairing = new Tuple<Media?, Media?>(null, Media);
+                            pairing = new Tuple<ViewMedia?, ViewMedia?>(null, Media);
                         }
                         else //if oldMedia contains it
                         {
-                            pairing = new Tuple<Media?, Media?>(Media, null);
+                            pairing = new Tuple<ViewMedia?, ViewMedia?>(Media, null);
                         }
                         Medias.Add(pairing);
                         //pairedIds.Add(Media.IdMedia);
