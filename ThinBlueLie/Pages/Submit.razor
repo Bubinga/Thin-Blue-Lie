@@ -141,7 +141,10 @@
                             </div>
                         </div>
                         <div class="col-7">
-                            <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.City"></SfTextBox>
+                            <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always"
+                                       HtmlAttributes="@StaticHelper.AutoCompleteOff"
+                                       @bind-Value="model.Timelineinfos.City">
+                            </SfTextBox>
                             <ValidationMessage For="@(() => model.Timelineinfos.City)"></ValidationMessage>
                         </div>
                     </div>

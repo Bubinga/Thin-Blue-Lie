@@ -123,7 +123,8 @@
                 <div>
                     <div class="form-group">
                         <div id="datepicker-control">
-                            <SfDatePicker TValue="DateTime?" @bind-Value="@DateValue" Min="@MinDate" Max="@Today" Format="yyyy-MM-dd" Placeholder="Select a date" StrictMode="true">
+                            <SfDatePicker TValue="DateTime?" @bind-Value="@DateValue" Min="@MinDate" Max="@Today"
+                                          Format="yyyy-MM-dd" Placeholder="Select a date" StrictMode="true">
                             </SfDatePicker>
                             <ValidationMessage For="@(() => model.Timelineinfos.Date)"></ValidationMessage>
                         </div>
@@ -133,14 +134,18 @@
                     <div class="col-5 dropdown" style="position:relative;">
                         <div class="align">
                             <div class="position-relative mb-1 mb-md-0"> <br /> <label class="position-absolute" style="top:-6px; font-size:14px; line-height:24px;">State</label></div>
-                            <SfDropDownList TItem="EnumExtensions.ListItem" TValue="TimelineinfoEnums.StateEnum?" PopupHeight="230px" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                            <SfDropDownList TItem="EnumExtensions.ListItem" TValue="TimelineinfoEnums.StateEnum?" PopupHeight="230px"
+                                            Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
                                 <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                             </SfDropDownList>
                             <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>
                         </div>
                     </div>
                     <div class="col-7">
-                        <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.City"></SfTextBox>
+                        <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always"
+                                   @bind-Value="model.Timelineinfos.City"
+                                   HtmlAttributes="@StaticHelper.AutoCompleteOff">
+                        </SfTextBox>
                         <ValidationMessage For="@(() => model.Timelineinfos.City)"></ValidationMessage>
                     </div>
                 </div>

@@ -100,7 +100,7 @@ namespace ThinBlueLie.Bases
                     for (int i = 0; i < Media.Count; i++)
                     {
                         Media[i].Rank = i;
-                        Media[i].SourcePath = PrepareSendData(Media[i]);
+                        //Media[i].SourcePath = PrepareSendData(Media[i]);
                     }
                     for (int i = 0; i < Officers.Count; i++)
                     {
