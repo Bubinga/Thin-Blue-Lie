@@ -10,7 +10,11 @@
             </div>
             <div class="form-row position-relative">
                 <div class="my-2 ml-1" style="width:71%">
-                    <SfTextBox Enabled="@(officer.SameAsId != null? false: true)" CssClass="e-filled" Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="officer.Name" @onchange="(()=> SuggestOfficers.InvokeAsync(new SimilarPersonCallback { Name = officer.Name, Index = officer.Rank }))"></SfTextBox>
+                    <SfTextBox Enabled="@(officer.SameAsId != null? false: true)" CssClass="e-filled"
+                               HtmlAttributes="@StaticHelper.AutoCompleteOff"
+                               Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="officer.Name"
+                               @onchange="(()=> SuggestOfficers.InvokeAsync(new SimilarPersonCallback { Name = officer.Name, Index = officer.Rank }))">
+                    </SfTextBox>
                     <ValidationMessage For="@(() => officer.Name)"></ValidationMessage>
                 </div>
                 <div class="ml-2 my-2 w-25">
