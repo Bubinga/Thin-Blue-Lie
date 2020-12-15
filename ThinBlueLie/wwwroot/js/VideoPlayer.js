@@ -422,17 +422,18 @@ v.onloadstart = () => {
         v.classList.contains('reddit-sync')) {
         const prefix = v.src.split('DASH')[0].replace('vcf.', 'v.');
         const audioSrc = `${prefix}DASH_audio.mp4`;
-        try {
-            jQuery.ajax({
-                type: "GET",
-                url: audio
-            });
-            imagusAudio.src  = audio
-        }
-        catch {
-            imagusAudio.src  = `${prefix}audio`
-        }
-        imagusAudio.src = v.dataset.audio;
+        imagusAudio.src = audioSrc
+        jQuery.ajax({
+            type: "GET",
+            url: audioSrc,
+            error: function (xhr, ajaxOptions, thrownError) {
+                switch (xhr.status) {
+                    case 403:
+                        imagusAudio.src = `${prefix}audio`;
+                }
+            } 
+        });            
+            
         if (!imagusAudio.muted) {
             muteTillSync = true;
             imagusAudio.muted = true;

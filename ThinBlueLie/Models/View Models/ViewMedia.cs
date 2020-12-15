@@ -182,6 +182,20 @@ namespace ThinBlueLie.Models
                     return media;
                 }
             }
+            if (media.MediaType == MediaTypeEnum.News)
+            {
+                if (media.Processed == false)
+                {
+                    var news = await MetaScraper.GetMetaData(media.SourcePath);
+                    media.Thumbnail = news.Image;
+                    media.ContentUrl = media.sourcePath = media.originalUrl;
+                }
+                else
+                {
+                    media.originalUrl = media.SourcePath;
+                }
+                return media;
+            }
             media.Processed = false;
             return media;
         }
