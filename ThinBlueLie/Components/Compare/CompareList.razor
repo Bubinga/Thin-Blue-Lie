@@ -25,7 +25,7 @@ else
     {
         if (New != null && ((Enum)Enum.ToObject(typeof(TEnum), New)).HasFlag(flag))
         {
-            if (Old != null && ((Enum)Enum.ToObject(typeof(TEnum), Old)).HasFlag(flag))
+            if (Old != null && ((Enum)Enum.ToObject(typeof(TEnum), Old)).HasFlag(flag) || IsNewEvent)
             {
                 <li>@EnumExtensions.GetEnumDisplayName(flag)</li>
             }
@@ -39,6 +39,8 @@ else
 @code {
     [Parameter]
     public bool IsOriginal { get; set; }
+    [CascadingParameter]
+    public bool IsNewEvent { get; set; }
 
     [Parameter]
     public int? Old { get; set; }

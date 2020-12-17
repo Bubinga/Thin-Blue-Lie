@@ -12,6 +12,8 @@ namespace ThinBlueLie.Helper.Algorithms
         public List<Tuple<ViewMedia, ViewMedia>> PairMedia(List<ViewMedia> OldMedias, List<ViewMedia> NewMedias)
         {
             List<Tuple<ViewMedia, ViewMedia>> Medias = new List<Tuple<ViewMedia, ViewMedia>>();
+            foreach (var media in NewMedias.Where(media => media.IdMedia == 0))
+                media.IdMedia = int.MaxValue - new Random().Next(10000000);
             List<int> pairedIds = new List<int>();
             foreach (var Media in NewMedias.Union(OldMedias))
             {

@@ -86,7 +86,7 @@
                 </span>
             }
             <p>
-                @if (SubjectPair.Item1 != null ? SubjectPair.Item1.Armed == SubjectPair.Item2.Armed : false)
+                @if ((SubjectPair.Item1 != null ? SubjectPair.Item1.Armed == SubjectPair.Item2.Armed : false) || IsNewEvent)
                 {
                     @(SubjectPair.Item2.Armed == true? "Armed" : "Unarmed")
                 }
