@@ -52,7 +52,11 @@ namespace ThinBlueLie.Helper.Extensions
             }
             else
             {
-                if (IsOriginal)
+                if (string.IsNullOrEmpty(Old) && string.IsNullOrEmpty(New) == false) //If the event is new
+                {
+                    return New;
+                }
+                else if (IsOriginal)
                 {
                     return "<del>" + Old + "</del>";
                 }
