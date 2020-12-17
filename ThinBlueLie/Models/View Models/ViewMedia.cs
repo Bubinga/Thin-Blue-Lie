@@ -67,12 +67,12 @@ namespace ThinBlueLie.Models
 
         public static async Task<ViewMedia> GetData(ViewMedia media)
         {
-            if (string.IsNullOrWhiteSpace(media.OriginalUrl))
+            if (media.Processed == false && string.IsNullOrWhiteSpace(media.OriginalUrl))
             {
                 return media; // break
             }
 
-            if ((media.IdMedia != 0 && media.IdTimelineinfo != 0) || media.Thumbnail != null)
+            if (media.Thumbnail != null && media.Processed == false)
                 media.Processed = true;
            
             if (media.Processed == false)
@@ -116,14 +116,15 @@ namespace ThinBlueLie.Models
                     if (media.Processed)
                     {
                         // -> https://v.redd.it/4ymh7g5fzfv51
-                        media.ContentUrl = media.DisplayUrl = $"https://v.redd.it/{media.SourcePath}DASH_720.mp4";
+                        media.ContentUrl = media.DisplayUrl = $"https://v.redd.it/{media.SourcePath}/DASH_720.mp4";
                         return media;
                     }
                     else
                     {
                         var newMedia = await WebsiteProfile.GetRedditDataAsync(media);
                         newMedia.originalUrl = newMedia.ContentUrl;
-                        await GetData(newMedia);
+                        media = await GetData(newMedia);
+                        return media;
                     }
                 }
             }           
@@ -137,6 +138,7 @@ namespace ThinBlueLie.Models
                         media.ContentUrl = media.Thumbnail = "/Uploads/" + media.SourcePath + ".jpg";                       
                     }
                     media.ContentUrl = media.Thumbnail = null;
+                    media.Processed = true;
                     return media;
                 }
                 else if (media.SourceFrom == SourceFromEnum.Reddit)
@@ -167,17 +169,32 @@ namespace ThinBlueLie.Models
                                 media.ContentUrl = newMedia.ContentUrl;
                                 return media;
                             }
+                            else
+                            {
+                                media.SourceFrom = SourceFromEnum.Link;
+                                media = await GetData(media);
+                                return media;
+                            }
                         }
                         else
                         {
-                            media.ContentUrl = $"https://i.redd.it/{media.SourcePath}.jpg";
+                            try
+                            {
+                                Uri tryUri = new Uri(media.SourcePath);
+                                media.ContentUrl = media.Thumbnail = media.DisplayUrl = media.SourcePath;
+                            }
+                            catch (Exception)
+                            {
+                                media.ContentUrl = media.Thumbnail = media.DisplayUrl = $"https://i.redd.it/{media.SourcePath}.jpg";
+                            }
+                            return media;
                         }
                        
                     }
                 }
                 else
                 {
-                    media.ContentUrl = media.Thumbnail = media.SourcePath;
+                    media.ContentUrl = media.Thumbnail = media.sourcePath;
                     media.Processed = true;
                     return media;
                 }
@@ -192,7 +209,7 @@ namespace ThinBlueLie.Models
                 }
                 else
                 {
-                    media.originalUrl = media.SourcePath;
+                    media.DisplayUrl = media.ContentUrl = media.SourcePath;
                 }
                 return media;
             }
