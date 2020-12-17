@@ -25,7 +25,7 @@ else
     [Parameter]
     public List<ViewMedia> NewMedias { get; set; }
     bool Done = false;
-    private List<SideBySideDiffModel?> Mediadiff = new List<SideBySideDiffModel?>();
+    private List<SideBySideDiffModel?> Mediadiff;
 
     //TODO this same code appears in CompareOfficers and CompareSubjects too, consolidate it into a generic method
     protected override void OnParametersSet()
@@ -33,7 +33,7 @@ else
         Medias = new List<Tuple<ViewMedia, ViewMedia>>();
         PairVersions pair = new PairVersions();
         Medias = pair.PairMedia(OldMedias, NewMedias);
-
+        Mediadiff = new List<SideBySideDiffModel?>();
         foreach (var pairing in Medias)
         {
             try

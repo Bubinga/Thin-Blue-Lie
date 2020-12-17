@@ -15,6 +15,10 @@ namespace DataAccessLibrary.DataModels
         public int IdEditHistory { get; set; }
         public int IdTimelineinfo { get; set; }
         public int IdMedia { get; set; }
+        /// <summary>
+        /// For Converting to ViewMedia
+        /// </summary>
+        public bool Processed { get; set; }
         public short Rank { get; set; }
         public MediaTypeEnum MediaType { get; set; }
         [Required]

@@ -4,6 +4,8 @@
 @using static ThinBlueLie.Helper.Extensions.EnumExtensions
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
 
+<Link Rel="stylesheet" Href="/css/VideoPlayer.css" />
+
 <div class="row my-2">
     @if (IsNewEvent == false)
     {
@@ -27,11 +29,11 @@
                                 <b>Source:</b>
                                 @if (Media.Item1.SourceFrom != SourceFromEnum.Device)
                                 {
-                                    <a href="@SourceUrlOld"> External Link</a>
+                                    <a href="@Media.Item1.ContentUrl"> External Link</a>
                                 }
                                 else
                                 {
-                                    <a href="@SourceUrlOld"> Internal Link</a>
+                                    <a href="@Media.Item1.ContentUrl"> Internal Link</a>
                                 }
                             </span>
                             <span><b>Source Type:</b> @((MarkupString)SimpleCompare(GetEnumDisplayName((SourceFromEnum)Media.Item1.SourceFrom), Media.Item2 != null ? GetEnumDisplayName((SourceFromEnum)Media.Item2?.SourceFrom) : null, true))</span>
@@ -41,13 +43,34 @@
                     </div>
                     <div class="col-7">
                         @* If the link between the two is different, one side is null *@
-                        <img class="img-fluid rounded" style="max-height:250px;" src="@imgUrlOld">
+                        @if (Media.Item1.MediaType == MediaEnums.MediaTypeEnum.Video)
+                        {
+                            if (Media.Item1.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
+                            {
+                                <div style="max-height:250px;">
+                                    <iframe src="@Media.Item2.ContentUrl" frameborder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                            }
+                            else if (Media.Item1.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
+                            {
+                                <div style="max-height:250px;">
+                                    <video src="@Media.Item1.ContentUrl" width="320" height="240" class="reddit-sync" controls>
+                                    </video>
+                                </div>
+                            }
+                        }
+                        else if ((Media.Item1.MediaType == MediaEnums.MediaTypeEnum.Image))
+                        {
+                            <div style="background-image: url(@Media.Item1.ContentUrl); max-height:250px;">
+                            </div>
+                        }
                     </div>
                 </div>
             }
         </div>
     }
-    <div class="@(IsNewEvent? "col-12" : "col-6") @((Media.Item2 == null && Media.Item1 != null && !IsNewEvent)? "imaginary-item" : "") 
+    <div class="@(IsNewEvent? "col-12" : "col-6") @((Media.Item2 == null && Media.Item1 != null && !IsNewEvent)? "imaginary-item" : "")
                         @((Media.Item1 == null && Media.Item2 != null && !IsNewEvent)? "inserted-item" : "")">
         @if (Media.Item2 != null)
         {
@@ -67,22 +90,48 @@
                             <b>Source:</b>
                             @if (Media.Item2.SourceFrom != SourceFromEnum.Device)
                             {
-                                <a href="@Media.Item2.SourcePath"> External Link</a>
+                                <a href="@Media.Item2.ContentUrl"> External Link</a>
                             }
                             else
                             {
-                                <a href="@Media.Item2.SourcePath"> Internal Link</a>
+                                <a href="@Media.Item2.ContentUrl"> Internal Link</a>
                             }
                         </span>
-                        <span><b>Source Type:</b> @((MarkupString)SimpleCompare(Media.Item1 != null?GetEnumDisplayName((SourceFromEnum)Media.Item1?.SourceFrom) : null,
-                                                                                GetEnumDisplayName((SourceFromEnum)Media.Item2.SourceFrom), false))</span>
+                        <span>
+                            <b>Source Type:</b> @((MarkupString)SimpleCompare(Media.Item1 != null?GetEnumDisplayName((SourceFromEnum)Media.Item1?.SourceFrom) : null,
+                                                                                GetEnumDisplayName((SourceFromEnum)Media.Item2.SourceFrom), false))
+                        </span>
                         <span><b>Gore:</b> @((MarkupString)SimpleCompare(Media.Item1?.Gore == 1 ? "Yes" : "No", Media.Item2.Gore == 1 ? "Yes" : "No", false))</span>
                         <span><b>Rank:</b> @((MarkupString)SimpleCompare((Media.Item1?.Rank + 1).ToString(), (Media.Item2.Rank + 1).ToString(), false))</span>
                     </div>
                 </div>
                 <div class="col-7">
                     @* If the link between the two is different, one side is null *@
-                    <img class="img-fluid rounded" style="max-height:250px;" src="@Media.Item2.SourcePath">
+                    @if (Media.Item2.MediaType == MediaEnums.MediaTypeEnum.Video)
+                    {
+                        if (Media.Item2.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
+                        {
+                            <div>
+                                <iframe src="@Media.Item2.ContentUrl" frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe>
+                            </div>
+                        }
+                        else if (Media.Item2.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
+                        {
+                            <div>
+                                <video src="@Media.Item2.ContentUrl" width="320" height="240" class="reddit-sync" controls>
+                                </video>
+                            </div>
+                        }
+                    }
+                    else if ((Media.Item2.MediaType == MediaEnums.MediaTypeEnum.Image))
+                    {
+                        <img src="@Media.Item2.ContentUrl" style="max-height:250px; width: auto;" />
+                    }
+                    else if ((Media.Item2.MediaType == MediaEnums.MediaTypeEnum.News))
+                    {
+                        <img src="@Media.Item2.Thumbnail" style="max-height:250px; width: auto;" />
+                    }
                 </div>
             </div>
         }
@@ -94,14 +143,11 @@
 
     [Parameter]
     public SideBySideDiffModel? Model { get; set; }
-    string? imgUrlOld = string.Empty;
-    string? imgUrlNew = string.Empty;
-    string? SourceUrlOld = string.Empty;
-    string? SourceUrlNew = string.Empty;
     [CascadingParameter]
     public bool IsNewEvent { get; set; }
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
-        
+        //await Task.Delay(5000);
+        this.StateHasChanged();
     }
 }

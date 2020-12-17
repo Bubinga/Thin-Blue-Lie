@@ -136,7 +136,7 @@ namespace ThinBlueLie.Searches
             //get old information from DB
             string query = "SELECT * From timelineinfo t where t.IdTimelineinfo = @id";
             Timelineinfo timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { id }, GetConnectionString());
-            string mediaQuery = "SELECT m.IdMedia, m.MediaType, m.SourcePath, m.Gore, m.SourceFrom, m.Blurb, m.Credit, m.SubmittedBy, m.Rank From media m where m.IdTimelineinfo = @id Order By m.Rank;";
+            string mediaQuery = "SELECT *, (true) as Processed From media m where m.IdTimelineinfo = @id Order By m.Rank;";
             string officerQuery = "SELECT o.IdOfficer, o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
                         "FROM timelineinfo t " +
                         "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
@@ -179,7 +179,7 @@ namespace ThinBlueLie.Searches
             }
             if (editChanges.EditMedia == 1)
             {
-                string MediaChangedQuery = @"Select *
+                string MediaChangedQuery = @"Select *, (true) as Processed
                                           From editmedia m Where m.IdEditHistory = @id;";
                 var changesToMedia = await data.LoadData<EditMedia, dynamic>(MediaChangedQuery, new { id = id.IdEditHistory }, GetConnectionString());
                 foreach (var change in changesToMedia)

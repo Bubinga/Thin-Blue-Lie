@@ -100,7 +100,7 @@ else
 
             if (pane.Id != null)
             {
-                paneHeight = await JSRuntime.InvokeAsync<int>("blazorTextDiff.getHeight", pane);
+                paneHeight = await JSRuntime.InvokeAsync<int>("BlazorTextDiff.getHeight", pane);
             }
         }
     }
@@ -113,7 +113,7 @@ else
     {
         if (pane.Id != null)
         {
-            paneHeight = await JSRuntime.InvokeAsync<int>("blazorTextDiff.getHeight", pane);
+            paneHeight = await JSRuntime.InvokeAsync<int>("BlazorTextDiff.getHeight", pane);
             Console.WriteLine(paneHeight);
         }
     }
