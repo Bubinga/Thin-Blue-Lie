@@ -5,7 +5,11 @@
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
 
 <Link Rel="stylesheet" Href="/css/VideoPlayer.css" />
-
+<style>
+    .reddit-video-wrapper videowrapper{
+        height: 275px !important;
+    }
+</style>
 <div class="row my-2">
     @if (IsNewEvent == false)
     {
@@ -48,13 +52,13 @@
                             if (Media.Item1.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
                             {
                                 <div style="max-height:250px;">
-                                    <iframe src="@Media.Item2.ContentUrl" frameborder="0"
+                                    <iframe src="@youtube1Url" frameborder="0"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                 </div>
                             }
                             else if (Media.Item1.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
                             {
-                                <div style="max-height:250px;">
+                                <div class="reddit-video-wrapper">
                                     <video src="@Media.Item1.ContentUrl" width="320" height="240" class="reddit-sync" controls>
                                     </video>
                                 </div>
@@ -111,14 +115,16 @@
                     {
                         if (Media.Item2.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
                         {
-                            <div>
-                                <iframe src="@Media.Item2.ContentUrl" frameborder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe>
+                            <div style="height: 275px !important;">
+                                <iframe src="@youtube2Url" frameborder="0" class="h-100"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen="allowfullscreen">
+                                </iframe>
                             </div>
                         }
                         else if (Media.Item2.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
                         {
-                            <div>
+                            <div class="reddit-video-wrapper">
                                 <video src="@Media.Item2.ContentUrl" width="320" height="240" class="reddit-sync" controls>
                                 </video>
                             </div>
@@ -126,7 +132,14 @@
                     }
                     else if ((Media.Item2.MediaType == MediaEnums.MediaTypeEnum.Image))
                     {
-                        <img src="@Media.Item2.ContentUrl" style="max-height:250px; width: auto;" />
+                        <img src="@Media.Item2.ContentUrl" style="max-height:275px; width: auto;" zya="@(Media.Item2.ContentUrl ?? "it's null chief")"/>
+                        @*<ul>
+                            <li>@(Media.Item2.ContentUrl ?? "null link")</li>
+                            <li>@(Media.Item2.Thumbnail ?? "null link")</li>
+                            <li>@(Media.Item2.DisplayUrl ?? "null link")</li>
+                            <li>@(Media.Item2.SourcePath ?? "null link")</li>
+                            <li>@("Processsed: " + Media.Item2.Processed)</li>
+                        </ul>*@
                     }
                     else if ((Media.Item2.MediaType == MediaEnums.MediaTypeEnum.News))
                     {
@@ -145,9 +158,20 @@
     public SideBySideDiffModel? Model { get; set; }
     [CascadingParameter]
     public bool IsNewEvent { get; set; }
-    protected override void OnParametersSet()
+    string youtube2Url;
+    string youtube1Url;
+    protected override async Task OnParametersSetAsync()
     {
-        //await Task.Delay(5000);
+        //TODO this is a crappy fix to youtube videos not having fullscreen. 
+        await Task.Delay(50);
+        if (Media.Item2?.MediaType == MediaTypeEnum.Video && Media.Item2?.SourceFrom == SourceFromEnum.Youtube)
+        {
+            youtube2Url = Media.Item2.ContentUrl;
+        }
+        if (Media.Item1?.MediaType == MediaTypeEnum.Video && Media.Item1?.SourceFrom == SourceFromEnum.Youtube)
+        {
+            youtube1Url = Media.Item1.ContentUrl;
+        }
         this.StateHasChanged();
     }
 }

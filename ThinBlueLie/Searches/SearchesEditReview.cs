@@ -180,8 +180,9 @@ namespace ThinBlueLie.Searches
             if (editChanges.EditMedia == 1)
             {
                 string MediaChangedQuery = @"Select *, (true) as Processed
-                                          From editmedia m Where m.IdEditHistory = @id;";
+                                          From editmedia m Where m.IdEditHistory = @id Order By m.Rank;";
                 var changesToMedia = await data.LoadData<EditMedia, dynamic>(MediaChangedQuery, new { id = id.IdEditHistory }, GetConnectionString());
+                //the frist media isn't getting it's set called for some reason, and thus its urls are empty
                 foreach (var change in changesToMedia)
                 {
                     var action = (EditActions)change.Action;
@@ -200,6 +201,11 @@ namespace ThinBlueLie.Searches
                     {
                         newInfo.Medias.RemoveAll(m => m.IdMedia == change.IdMedia);
                     }
+                }
+                //TODO this is a crappy solution to the first image not loading sometimes, it'd load on refresh everytime, but not on inital display
+                foreach (var media in newInfo.Medias.Where(m => m.MediaType == MediaEnums.MediaTypeEnum.Image))
+                {
+                    await ViewMedia.GetData(media);
                 }
             }
             if (editChanges.Timelineinfo_Officer == 1)
