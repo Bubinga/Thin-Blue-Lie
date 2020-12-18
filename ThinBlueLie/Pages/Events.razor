@@ -231,7 +231,7 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
         {
             foreach ((var Case, Int32 i) in timelineinfo.Select((Case, i) => (Case, i)))
             {
-                var mediaQuery = "SELECT * From media m where m.IdTimelineinfo = @id Order By m.Rank;";
+                var mediaQuery = "SELECT *,(true) as Processed From media m where m.IdTimelineinfo = @id Order By m.Rank;";
                 var officerQuery = "SELECT o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
                         "FROM timelineinfo t " +
                         "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
