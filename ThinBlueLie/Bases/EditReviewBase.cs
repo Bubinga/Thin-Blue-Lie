@@ -84,6 +84,7 @@ namespace ThinBlueLie.Bases
                 ActiveIdIndex = 0;
             else
                 ActiveIdIndex++;
+            
             Loading = false;
             StateHasChanged();
         }
