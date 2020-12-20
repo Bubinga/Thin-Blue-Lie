@@ -1,4 +1,5 @@
-﻿@page "/Events"
+﻿@page "/Events/{Date:datetime}/{Title}"
+@page "/Events/{Date:datetime}"
 @using ThinBlueLie.ViewModels
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.Popups
@@ -9,13 +10,13 @@
 @using static ThinBlueLie.Helper.ConfigHelper
 @using Microsoft.AspNetCore.WebUtilities
 @using HtmlAgilityPack
+@using ThinBlueLie.Models.ViewModels
 @using DataAccessLibrary.UserModels;
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
 @using static ThinBlueLie.Helper.Algorithms.LinkConverter
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> userManager
 @inject IJSRuntime JsRuntime
-@implements IDisposable
 @inject NavigationManager navManager
 @inject AutoMapper.IMapper mapper
 
@@ -47,17 +48,22 @@
 <Meta Property="og:type" Content="article" />
 @if (EventExists)
 {
-    <Title>@Event.FirstOrDefault().Data.Title - Thin Blue Lie</Title>
-    <Meta Property="og:title" Content="@(Event.FirstOrDefault().Data.Title + " - Thin Blue Lie")" />
-    <Meta Property="og:image" Content="@(Event.FirstOrDefault().Medias.FirstOrDefault().SourcePath)" />
+    <Title>@Event.Data.Title - Thin Blue Lie</Title>
+    <Meta Property="og:title" Content="@(Event.Data.Title + " - Thin Blue Lie")" />
+    <Meta Property="og:image" Content="@(Event.Medias.FirstOrDefault()?.Thumbnail ?? "https://via.placeholder.com/150")" />
 
     HtmlDocument htmlDoc = new HtmlDocument();
-    htmlDoc.LoadHtml(Event.FirstOrDefault().Data.Context);
+    htmlDoc.LoadHtml(Event.Data.Context);
     string result = htmlDoc.DocumentNode.InnerText;
     <Meta Name="description" Content="@(TruncateString(result, 165))" />
 
-    <Meta Property="article:published_time" Content="@Event.FirstOrDefault().Data.Timestamp.ToUniversalTime().ToString()" />
-    <Meta Property="article:modified_time" Content="@Event.FirstOrDefault().Data.EventUpdated.ToUniversalTime().ToString()" />
+    <Meta Property="article:published_time" Content="@Event.Data.Timestamp.ToUniversalTime().ToString()" />
+    <Meta Property="article:modified_time" Content="@Event.Data.EventUpdated.ToUniversalTime().ToString()" />
+}
+else if (MultipleEvents)
+{
+    <Title>@Date?.ToShortDateString() - Thin Blue Lie</Title>
+    <Meta Property="og:title" Content="@(Date?.ToShortDateString() + " - Thin Blue Lie")" />
 }
 else
 {
@@ -65,35 +71,34 @@ else
 }
 
 
-<div class="d-flex my-2">
-    <div class="col-10">
-        <Timeline Date="(DateTime)Date" @ref="Timeline"></Timeline>
-    </div>
-    <div class="ml-4 mt-auto">
-        <SfTooltip CssClass="e-tooltip-css" OpensOn="Click">
-            <TooltipTemplates>
-                <Content>
-                    <SfCalendar TValue="DateTime?" Max="DateTime.Today" @bind-Value="Date">
-                        <CalendarEvents TValue="DateTime?" ValueChange="@SetDay"></CalendarEvents>
-                    </SfCalendar>
-                </Content>
-            </TooltipTemplates>
-            <SfButton CssClass="e-outline text" IsPrimary="true" Content="Calendar"></SfButton>
-        </SfTooltip>
-    </div>
-</div>
-@if (EventExists)
+<TimeNavigation Date="Date"></TimeNavigation>
+
+
+@if (MultipleEvents)
 {
-foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
+    <div class="border mx-auto">
+        @foreach (var evnt in DatesEvents)
+        {
+            <div class="col-8">
+                <h5>@evnt.Title</h5>
+                <p>@evnt.Context</p>
+            </div>
+            <div class="col-4">
+                <img src="@evnt.Media.Thumbnail" />
+            </div>
+        }
+    </div>
+}
+else if (EventExists)
 {
     <div class="mx-3">
         <div class="row">
             <div class="col-lg-9 event-main-row">
-                <MediaCarousel Media="Case.Medias"></MediaCarousel>
+                <MediaCarousel Media="Event.Medias"></MediaCarousel>
             </div>
             <div class="col-lg-3">
                 <CascadingValue Value="@((bool)User?.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked))">
-                    <DataCard Information="Case.Data" Officers="Case.Officers" Subjects="Case.Subjects"></DataCard>
+                    <DataCard Information="Event.Data" Officers="Event.Officers" Subjects="Event.Subjects"></DataCard>
                 </CascadingValue>
             </div>
         </div>
@@ -103,7 +108,7 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
                 <div class="border-bottom">
                     <h5 style="margin-left: 6%; font-size:30px;" class="mt-2 mb-0"> <strong>Context</strong></h5>
                 </div>
-                @if (Case.Data.Context == null)
+                @if (Event.Data.Context == null)
                 {
                     <div class="col-lg-9">
                         <div class="mx-auto">
@@ -115,7 +120,7 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
                 {
                     <article>
                         <div class="context indent px-md-3 pt-2">
-                            @((MarkupString)Case.Data.Context)
+                            @((MarkupString)Event.Data.Context)
                         </div>
                     </article>
                 }
@@ -126,7 +131,7 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
                         <strong>News Articles</strong>
                     </h4>
                 </div>
-                @foreach (var newsItem in Case.Medias.Where(m => (MediaEnums.MediaTypeEnum)m.MediaType == MediaEnums.MediaTypeEnum.News))
+                @foreach (var newsItem in Event.Medias.Where(m => (MediaEnums.MediaTypeEnum)m.MediaType == MediaEnums.MediaTypeEnum.News))
                 {
                     <NewsCard newsUrl="@newsItem.SourcePath"></NewsCard>
                 }
@@ -134,35 +139,70 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
         </div>
     </div>
 }
+else if (NoEvents)
+{
+    <h4 class="text-center mt-4">There are no recorded events on this day</h4>
 }
+else
+{
+    <SfSpinner Type="SpinnerType.Material"></SfSpinner>
+}
+
 @code {
-    public List<ViewEvent> Event { get; set; }
+    public ViewEvent Event { get; set; }
+    public List<FirstLoadEvents> DatesEvents { get; set; }
+    [Parameter]
     public DateTime? Date { get; set; }
-    string newUri;
+    [Parameter]
+    public string Title { get; set; }
     Timeline Timeline;
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
     public AuthenticationState userState;
     public ApplicationUser User;
     public bool EventExists = false;
-    public string image = "";
+    bool MultipleEvents;
+    string DbTitle;
+    bool NoEvents;
+
+
     protected override async Task OnInitializedAsync()
     {
-        EventExists = false;
-        navManager.LocationChanged += LocationChanged;
-        Event = new List<ViewEvent>();
-        var uri = new Uri(navManager.Uri);
-        if (string.IsNullOrWhiteSpace(QueryHelpers.ParseQuery(uri.Query).TryGetValue("d", out var type) ? type.First() : ""))
+        userState = await AuthState;
+        User = await userManager.GetUserAsync(userState.User);
+    }
+    DateTime previousDay { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        EventExists = MultipleEvents = NoEvents = false;
+        if (Date == null) { return; }
+        else if (Date != previousDay)
         {
-            Date = DateTime.Today;
+            DatesEvents = new List<FirstLoadEvents>();  //clearing previous information
+            previousDay = (DateTime)Date;
+            await GetDaysEvents();
+        }
+        previousDay = (DateTime)Date;
+        if (DatesEvents.Count() == 1)
+        {
+            DbTitle = string.Join(" ", DatesEvents.FirstOrDefault().Title.Split(' ').Take(5));
+            if (Title == null)
+            {
+                var title = new string(DatesEvents.FirstOrDefault().Title.Where(c => !char.IsPunctuation(c)).ToArray()).Split(' ').Take(5);
+                var title2 = string.Join("-", title);
+                navManager.NavigateTo(navManager.BaseUri + "Events/" + Date?.ToString("yyyy-MM-dd") + "/" + title2); //recall onparameters set async
+                return;
+            }
+            await ChangeDay();
+        }
+        else if (DatesEvents.Count() > 1)
+        {
+            MultipleEvents = true;
         }
         else
         {
-            Date = TryCatchDate();
+            NoEvents = true;
         }
-        userState = await AuthState;
-        User = await userManager.GetUserAsync(userState.User);
-        await ChangeDay();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -172,93 +212,67 @@ foreach (var Case in Event?.Where(e => !string.IsNullOrEmpty(e?.Data.Title)))
             await JsRuntime.InvokeVoidAsync("InitializeSwiper");
         }
     }
-
-    //When the url changes, rerun the changeday on the new date
-    async void LocationChanged(object sender, LocationChangedEventArgs e)
+    DataAccess data = new DataAccess();
+    async Task GetDaysEvents()
     {
-        newUri = e.Location;
-        EventExists = false;
-        Date = TryCatchDate();
-        await ChangeDay();
-    }
-
-    private DateTime TryCatchDate()
-    {
-        var uri = new Uri(navManager.Uri);
-        try
+        List<FirstLoadEvents> events = new List<FirstLoadEvents>();
+        string getEventsFromDate = "SELECT t.Title, t.Context, t.IdTimelineinfo FROM timelineinfo t WHERE t.Date = @date";
+        (await data.LoadData<FirstLoadEvents?, dynamic>(getEventsFromDate, new { date = Date?.ToString("yyyy-MM-dd") }, GetConnectionString())).ForEach(e => events.Add(e));
+        if (events.Any())
         {
-            return Convert.ToDateTime(QueryHelpers.ParseQuery(uri.Query).TryGetValue("d", out var type) ? type.First() : "");
-        }
-        catch (FormatException)
-        {
-            return DateTime.Today;
-        }
-    }
+            foreach (var evnt in events)
+            {
+                string getFirstMedia = "Select * from media m where m.IdTimelineinfo = @id order by m.rank Limit 1";
+                evnt.Media = await data.LoadDataSingle<ViewMedia, dynamic>(getFirstMedia, new { id = evnt.IdTimelineinfo }, GetConnectionString());
 
-    public void Dispose()
-    {
-        // Unsubscribe from the event when component is disposed
-        navManager.LocationChanged -= LocationChanged;
-    }
-
-    //Change url
-    private async Task SetDay()
-    {
-        var queryParam = QueryHelpers.ParseQuery(new Uri(navManager.Uri).Query).TryGetValue("d", out var type) ? type.First() : "";
-        if (queryParam != Date?.ToString("yyyy-MM-dd"))//if url does not match date
-        {
-            string url = UriExtensions.RemoveQueryStringByKey(navManager.Uri, "d");
-            var query = new Dictionary<string, string> { { "d", Date?.ToString("yyyy-MM-dd") } };
-
-            navManager.NavigateTo(QueryHelpers.AddQueryString(url, query));
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(evnt.Context);
+                var htmlBody = htmlDoc.DocumentNode;
+                HtmlNode text = htmlBody.FirstChild;
+                evnt.Context = string.Join(". ", text.InnerText.Split(". ").Take(2)); //Get just the first two sentences
+            }
         }
-        await Timeline.LoadFromNewDate((DateTime)Date);
+        DatesEvents.AddRange(events);
     }
 
     //Get new information
     private async Task ChangeDay()
     {
-        Event = new List<ViewEvent>(); //clearing previous information
-        DataAccess data = new DataAccess();
-
         //get new information from DB
+        var title = $"%{DbTitle}%";
         var query = @"SELECT t.*, Max(e.Timestamp) As EventUpdated, Min(e.Timestamp) as Timestamp
-            From timelineinfo t
-            Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
-            where t.date = @date and Confirmed = 1;";
-        List<Timelineinfo?> timelineinfo = await data.LoadData<Timelineinfo?, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd") }, GetConnectionString());
-        if (timelineinfo.FirstOrDefault()?.City != null)
+                        From timelineinfo t
+                        Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
+                        where t.date = @date and t.Title like @title and Confirmed = 1;";
+        var timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd"), title }, GetConnectionString());
+
+        var mediaQuery = "SELECT *,(true) as Processed From media m where m.IdTimelineinfo = @id Order By m.Rank;";
+        var officerQuery = "SELECT o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
+                "FROM timelineinfo t " +
+                "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
+                "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
+                "WHERE t.IdTimelineinfo = @id ;";
+        var subjectQuery = "SELECT s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed " +
+                "FROM timelineinfo t " +
+                "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
+                "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
+                "WHERE t.IdTimelineinfo = @id;";
+
+        //get media, officers, and subjects using timelineinfo id
+        List<ViewMedia> media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = timelineinfo.IdTimelineinfo }, GetConnectionString());
+        List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = timelineinfo.IdTimelineinfo }, GetConnectionString());
+        List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = timelineinfo.IdTimelineinfo }, GetConnectionString());
+
+
+        Event = new ViewEvent
         {
-            foreach ((var Case, Int32 i) in timelineinfo.Select((Case, i) => (Case, i)))
-            {
-                var mediaQuery = "SELECT *,(true) as Processed From media m where m.IdTimelineinfo = @id Order By m.Rank;";
-                var officerQuery = "SELECT o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
-                        "FROM timelineinfo t " +
-                        "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
-                        "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
-                        "WHERE t.IdTimelineinfo = @id ;";
-                var subjectQuery = "SELECT s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed " +
-                        "FROM timelineinfo t " +
-                        "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
-                        "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
-                        "WHERE t.IdTimelineinfo = @id;";
+            Data = timelineinfo,
+            Medias = media,
+            Officers = mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers),
+            Subjects = mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects)
+        };
+        EventExists = true;
 
-                //get media, officers, and subjects using timelineinfo id
-                List<ViewMedia> media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
-                List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
-                List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Case.IdTimelineinfo }, GetConnectionString());
-
-
-                Event.Add(new ViewEvent
-                {
-                    Data = Case,
-                    Medias = media,
-                    Officers = mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers),
-                    Subjects = mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects)
-                });
-                EventExists = true;
-            }
-        }
         this.StateHasChanged();
     }
 }

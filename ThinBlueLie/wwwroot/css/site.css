@@ -588,7 +588,7 @@ app {
             }
 
 .content {
-  /*  padding-top: 1.1rem;*/
+    padding-top: 67px !important
 }
 
 .navbar-toggler {
