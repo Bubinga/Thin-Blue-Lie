@@ -1,6 +1,6 @@
 ﻿
 
-<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-dark">
+<nav class="navbar fixed-top navbar-expand-lg bg-dark">
     <div class="d-flex flex-grow-1 container-fluid pl-2">
         <a class="navbar-brand text-white" href="/Index">
             <img id="logo" alt="" src="/favicon.ico" width="35" height="35" class="d-inline-block">
@@ -58,7 +58,7 @@
 </nav>
 
 @code {
-    private string currentDate = "/Events?d=" + DateTime.Today.ToString("yyyy-MM-dd");
+    private string currentDate = "/Events/" + DateTime.Today.ToString("yyyy-MM-dd");
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
