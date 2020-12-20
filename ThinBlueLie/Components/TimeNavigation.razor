@@ -1,0 +1,37 @@
+﻿@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@inject NavigationManager navManager
+
+<div class="d-flex my-2">
+    <div class="col-10">
+        <Timeline Date="(DateTime)Date" @ref="Timeline"></Timeline>
+    </div>
+    <div class="ml-4 mt-auto">
+        <SfTooltip CssClass="e-tooltip-css" OpensOn="Click">
+            <TooltipTemplates>
+                <Content>
+                    <SfCalendar TValue="DateTime?" Max="DateTime.Today" @bind-Value="Date">
+                        <CalendarEvents TValue="DateTime?" ValueChange="@SetDay"></CalendarEvents>
+                    </SfCalendar>
+                </Content>
+            </TooltipTemplates>
+            <SfButton CssClass="e-outline text" IsPrimary="true" Content="Calendar"></SfButton>
+        </SfTooltip>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public DateTime? Date { get; set; }
+    Timeline Timeline;
+    private async Task SetDay()
+    {
+        var currentUri = new Uri(navManager.Uri);
+        if (currentUri.Segments[2].TrimEnd('/') != Date?.ToString("yyyy-MM-dd"))//if url does not match current date
+        {
+            string newUrl = new Uri(currentUri, "/Events").AbsoluteUri + "/" + ((DateTime)Date).ToShortDateString();
+            navManager.NavigateTo(newUrl);
+        }
+        await Timeline.LoadFromNewDate((DateTime)Date);
+    }
+}

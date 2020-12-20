@@ -21,7 +21,7 @@ else
     <div @onclick="PrevWeek" id="triangle-left"> <div class="empty"></div></div>
     @foreach ((var day, Int32 i) in Day.Select((day, i) => (day, i)))
     {
-        <div class="week btn @(DateTime.Compare(Dates[i], DateTime.Today.Date) <= 0 ? "" : "disabled") " onclick='location.href = "/Events?d=@Dates[i].Year-@Dates[i].Month.ToString().PadLeft(2, '0')-@Dates[i].Day.ToString().PadLeft(2, '0')"'>
+        <div class="week btn @(DateTime.Compare(Dates[i], DateTime.Today.Date) <= 0 ? "" : "disabled") " onclick='location.href = "/Events/@Dates[i].ToString("yyyy-MM-dd")"'>
             <div class="timeline-label">
                 <span class="d-none d-lg-inline">@Dates[i].DayOfWeek</span>
                 <span> @Dates[i].Month/@Dates[i].Day</span>

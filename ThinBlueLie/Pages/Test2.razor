@@ -1,19 +1,14 @@
-﻿@page "/test2"
+﻿@page "/test2/{Date:datetime}"
 
 <Link Rel="stylesheet" Href="/css/VideoPlayer.css" />
 
-<div class="d-block">
-    <video src="https://v.redd.it/4ymh7g5fzfv51/DASH_720.mp4" id="test" width="320" height="240" class="reddit-sync" controls>
-        @*<source src="https://v.redd.it/4ymh7g5fzfv51/DASH_720.mp4?source=fallback">*@
-        @*<source src="https://v.redd.it/4ymh7g5fzfv51/DASH_audio.mp4" type="audio/mp4"/>*@
-    </video>
+<div class="d-block mt-4">
+    <p>
+        @Date.ToLongDateString()
+    </p>
 </div>
-<div class="d-block">
-    <iframe src="https://www.youtube-nocookie.com/embed/YbgnlkJPga4?rel=0&enablejsapi=1&iv_load_policy=3&version=3&modestbranding=1" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>
-</div>
-
 @code {
 
+    [Parameter]
+    public DateTime Date { get; set; }
 }
