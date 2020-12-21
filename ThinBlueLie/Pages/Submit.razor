@@ -1,9 +1,8 @@
-﻿
-@page "/Submit"
+﻿@page "/Submit"
 @inherits SubmitBase
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject AutoMapper.IMapper mapper
-
+@using Syncfusion.Blazor.Spinner
 @using Syncfusion.Blazor.DropDowns
 @using ThinBlueLie.Helper
 @using ThinBlueLie.Helper.Extensions
@@ -106,7 +105,7 @@
 <AuthorizeView>
     <NotAuthorized>
         <h5 class="text-center mt-5">
-            Either 
+            Either
             <a href="/Account/Login">Login</a> or
             <a href="/Account/Register">Register</a>
             to create a new Event
@@ -114,6 +113,12 @@
     </NotAuthorized>
     <Authorized Context="Auth">
         <div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
+            @if (SavingData)
+            {
+                <div style="z-index: 102; margin-bottom: 100px;">
+                    <SfSpinner Visible="SavingData" CssClass="e-spin-overlay" />
+                </div>
+            }
             <EditForm Model="model" OnValidSubmit="HandleValidSubmitAsync">
                 <ObjectGraphDataAnnotationsValidator />
                 <div class="col-lg-5 col-md-6 border-left border-right border-bottom">
@@ -182,7 +187,7 @@
                             <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
                                 Officer
                             </SfButton>
-                        </div>                        
+                        </div>
                     </div>
                     <div id="OfficerList">
                         @foreach ((var officer, Int32 i) in model.Officers.Select((officer, i) => (officer, i)))
@@ -206,11 +211,6 @@
                     <div class="form-group">
                         <ValidationSummary />
                         <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-                        <div class="d-inline ml-auto" @onclick="FillWithData" @onclick:stopPropagation="false" @onclick:preventDefault>
-                            <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
-                                Fill me with Data
-                            </SfButton>
-                        </div>
                         <a asp-page="/Index" style="float:right">Back to Home</a>
                     </div>
                 </div>
@@ -261,90 +261,6 @@
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> _authState { get; set; }
-
-    void FillWithData()
-    {
-        model.Timelineinfos = new ViewTimelineinfo
-        {
-            City = "PlaceHolder Entered City",
-            State = TimelineinfoEnums.StateEnum.Arizona,
-            Title = "PlaceHolder Title",
-            Date = DateTime.Today,
-            Locked = 0,
-            Context = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
-        };
-        model.Officers = new List<ViewOfficer>
-        {
-            new ViewOfficer
-            {
-                SameAsId = 1,
-                Age = 55,
-                Race = TimelineinfoEnums.RaceEnum.White,
-                Sex = TimelineinfoEnums.SexEnum.Male,
-                Name = "Aaron Torgalski",
-                Rank = 0,
-                Misconduct = new int[] {1, 2, 8, 32},
-                Weapon = (new int[] {1, 4}),
-            }
-        };
-        SimilarOfficers.Add(new List<SimilarPersonGeneral>());
-        model.Subjects = new List<ViewSubject>
-        {
-            new ViewSubject
-            {
-                Age = 38,
-                Race = TimelineinfoEnums.RaceEnum.Asian,
-                Sex = TimelineinfoEnums.SexEnum.Female,
-                Armed = true,
-                Name = "Subject One",
-                Rank = 0,
-            }
-        };
-        SimilarSubjects.Add(new List<SimilarPersonGeneral>());
-        model.Medias = new List<ViewMedia>()
-        {
-            new ViewMedia
-            {
-                Rank = 0,
-                Blurb = "Reddit Comments Image",
-                Gore = 0,
-                MediaType = MediaEnums.MediaTypeEnum.Image,
-                Credit = "idk bro",
-                OriginalUrl = @"https://www.reddit.com/r/EarthPorn/comments/kbdeio/ice_shards_on_mendenhall_lake_juneau_ak/",
-                SourceFrom = MediaEnums.SourceFromEnum.Reddit
-            },
-             new ViewMedia
-            {
-                Rank = 1,
-                Blurb = "Reddit i.redd.it image",
-                Gore = 0,
-                MediaType = MediaEnums.MediaTypeEnum.Image,
-                Credit = "jso awan",
-                OriginalUrl = @"https://i.redd.it/0u3pdpo3zgv51.jpg",
-                SourceFrom = MediaEnums.SourceFromEnum.Reddit
-            },
-             new ViewMedia
-            {
-                Rank = 2,
-                Blurb = "Reddit Cat Video",
-                Gore = 0,
-                MediaType = MediaEnums.MediaTypeEnum.Video,
-                Credit = "awefawef",
-                OriginalUrl = @"https://www.reddit.com/r/aww/comments/jien07/living_the_good_life/",
-                SourceFrom = MediaEnums.SourceFromEnum.Reddit
-            },
-              new ViewMedia
-            {
-                Rank = 3,
-                Blurb = "Reddit Youtube Video",
-                Gore = 0,
-                MediaType = MediaEnums.MediaTypeEnum.Video,
-                Credit = "aweofaw",
-                OriginalUrl = @"https://www.reddit.com/r/videos/comments/88ll08/this_is_what_happens_when_one_company_owns_dozens/",
-                SourceFrom = MediaEnums.SourceFromEnum.Reddit
-            },
-        };
-    }
 
     public List<ViewSimilar>? SimilarEvents { get; set; } = new List<ViewSimilar>();
     protected async void FindEvents(ChangedEventArgs<DateTime?> args)

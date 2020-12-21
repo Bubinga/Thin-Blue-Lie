@@ -79,7 +79,7 @@ namespace ThinBlueLie.Helper.Extensions
         {
             var personSummary = person.Name;
 
-            if (person.Age != null)
+            if (person.Age != null && person.Age != 0)
             {
                 personSummary += ", " + person.Age.ToString();
             }

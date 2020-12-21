@@ -175,7 +175,7 @@ namespace ThinBlueLie.Helper
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
             List<ViewSimilar> SimilarEvents = new List<ViewSimilar>();
             DataAccess data = new DataAccess();
-            var query1 = "SELECT t.Date, t.IdTimelineinfo, t.Context, t.State, t.City From timelineinfo t where t.date = @Date;";
+            var query1 = "SELECT * From timelineinfo t where t.date = @Date;";
             var SimilarTimelineinfos = await data.LoadData<Timelineinfo, dynamic>(query1, new {Date = TempDate }, GetConnectionString());
             foreach ((var Event, Int32 i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))
             {
@@ -184,8 +184,8 @@ namespace ThinBlueLie.Helper
                 var Officers = await data.LoadData<ViewSimilarPerson, dynamic>(officerQuery, new { id = Id }, GetConnectionString());
                 var subjectQuery = "SELECT s.Name, s.Race, s.Sex, ts.Age FROM timelineinfo t JOIN timelineinfo_subject ts ON t.IdTimelineinfo = ts.IdTimelineinfo JOIN subjects s ON ts.IdSubject = s.IdSubject WHERE t.IdTimelineinfo = @id;";
                 var Subjects = await data.LoadData<ViewSimilarPerson, dynamic>(subjectQuery, new { id = Id }, GetConnectionString());
-                var MediaQuery = "Select * From media m Where(m.IdTimelineinfo = @id);";
-                var Media = await data.LoadData<Media, dynamic>(MediaQuery, new {id = Id }, GetConnectionString());
+                var MediaQuery = "Select *,(true) as Processed From media m Where(m.IdTimelineinfo = @id);";
+                var Media = await data.LoadData<ViewMedia, dynamic>(MediaQuery, new {id = Id }, GetConnectionString());
 
                 //add timelineinfos, officers, subject, and media to list at end
                 ViewSimilar items = new ViewSimilar()

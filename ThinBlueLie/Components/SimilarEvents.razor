@@ -1,6 +1,7 @@
 ﻿@using ThinBlueLie.Models;
 @using DataAccessLibrary.Enums;
 @using ThinBlueLie.Helper;
+@using HtmlAgilityPack
 @using ThinBlueLie.Helper.Extensions;
 
 <style>
@@ -16,31 +17,45 @@
         padding-left: 1.5rem;
         margin-bottom: 0px;
     }
-    .people{
+
+    .people {
         margin-bottom: .3rem;
     }
+
     .similar-bold {
         position: relative;
         vertical-align: top;
     }
-    .single-person{
 
+    .single-person {
     }
 
+    .similar-header {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
 </style>
 
 <div id="likeVideos" class="mt-2">
     <div class="card border-dark mb-3 ml-1">
-        <div class="card-header">
-            @(Event.Timelineinfo.Date.ToString("MMMM d") + StringExtensions.GetDaySuffix(Event.Timelineinfo.Date.Day) + ", " + Event.Timelineinfo.Date.Year.ToString())
-            </div> 
+        <div class="card-header similar-header">
+            <span>@(Event.Timelineinfo.Date.ToString("MMMM d") + StringExtensions.GetDaySuffix(Event.Timelineinfo.Date.Day) + ", " + Event.Timelineinfo.Date.Year.ToString())</span>
+            <span>@(Event.Timelineinfo.Title)</span>
+        </div>
         <div class="card-body text-dark pt-2">
             <div class="d-block">
                 <div class="d-inline-block">
-                    <p class="location">@Event.Timelineinfo.City, @EnumExtensions.GetEnumDisplayName((TimelineinfoEnums.StateEnum)Event.Timelineinfo.State)</p>
+                    @{ 
+                        var title = new string(Event.Timelineinfo.Title.Where(c => !char.IsPunctuation(c)).ToArray()).Split(' ').Take(5);
+                        var title2 = string.Join("-", title);
+                    }
+                    <a class="location" href="@("/Events/" + Event.Timelineinfo.Date.ToString("yyyy-MM-dd") + "/" + title2)">
+                    @Event.Timelineinfo.City, @EnumExtensions.GetEnumDisplayName((TimelineinfoEnums.StateEnum)Event.Timelineinfo.State)
+                    </a>
                     <div class="people">
                         <span class="similar-bold">
-                            <strong>Subject@(subjectsDetails.Count != 1? "s:" : ":")</strong>
+                            <strong>Subject@(subjectsDetails.Count != 1 ? "s: " : ": ")</strong>
                         </span>
                         @if (subjectsDetails.Count > 1)
                         {
@@ -60,7 +75,7 @@
                     </div>
                     <div class="people">
                         <span class="similar-bold">
-                            <strong>Officer@(officersDetails.Count != 1? "s:" : ":")</strong>
+                            <strong>Officer@(officersDetails.Count != 1 ? "s: " : ": ")</strong>
                         </span>
                         @if (officersDetails.Count > 1)
                         {
@@ -75,20 +90,21 @@
                         }
                         else
                         {
-                             <span class="single-person">@officersDetails[0]</span>
+                            <span class="single-person">@officersDetails[0]</span>
                         }
                     </div>
                 </div>
                 <div class="d-inline-block float-right">
-                    <div style="border-radius:3px; width:100%;" class="embed-responsive embed-responsive-2by1">
-                        <iframe class="embed-responsive-item border" src="https://www.youtube.com/embed/vtWH0uzx4R8"
-                                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                        </iframe>
-                    </div>
+                   <img src="@Event.Media.Thumbnail" style="max-height:175px;"/>
                 </div>
             </div>
             <div>
-                <p class="mb-0 d-block"><strong>Context:</strong> @StringExtensions.TruncateString(Event.Timelineinfo.Context)</p>
+                @{
+                    HtmlDocument htmlDoc = new HtmlDocument();
+                    htmlDoc.LoadHtml(Event.Timelineinfo.Context);
+                    string result = htmlDoc.DocumentNode.InnerText;
+                }
+                <p class="mb-0 d-block" style="overflow-wrap:normal;"><strong>Context:</strong> @StringExtensions.TruncateString(result)</p>
             </div>
         </div>
     </div>
@@ -108,6 +124,6 @@
         officersDetails = StringExtensions.GetSummaryList(Event.Officers);
         subjectList = StringExtensions.CommaQuibbling(subjectsDetails);
         officerList = StringExtensions.CommaQuibbling(officersDetails);
-    }   
+    }
 
 }
