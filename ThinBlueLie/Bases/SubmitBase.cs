@@ -160,7 +160,7 @@ namespace ThinBlueLie.Models
                         idofficer = officer.SameAsId == null? IdOfficer : officer.SameAsId,
                         age = officer.Age,
                         misconduct = officer.Misconduct.Sum(),
-                        weapon = officer.Weapon?.Sum(),
+                        weapon = officer.Weapon?.Sum() == 0? null : officer.Weapon?.Sum(),
                     });
                     editHistory.Timelineinfo_Officer = 1;
                 }

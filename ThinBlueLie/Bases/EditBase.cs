@@ -211,13 +211,14 @@ namespace ThinBlueLie.Bases
                 if (ChangedJunction)
                 {
                     editHistory.Timelineinfo_Officer = 1; 
-                    await CreateEmptyEditHistory();                   
-                    //MySql.Data.MySqlClient.MySqlException: 'Operand should contain 1 column(s)' on line below
+                    await CreateEmptyEditHistory();               
+                    
                     foreach (var officer in model.Officers)
                     {
+                        var weapon = officer.Weapon?.Sum() == 0 ? null : officer.Weapon?.Sum();
                         string newTimelineinfoOfficer = $@"INSERT INTO edits_timelineinfo_officer
                                                         (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `Misconduct`, `Weapon`, `Age`) 
-                                                        VALUES ('{EditHistoryId}', '{Id}', @IdOfficer, '{officer.Misconduct.Sum()}', '{officer.Weapon.Sum()}', @Age);";
+                                                        VALUES ('{EditHistoryId}', '{Id}', @IdOfficer, '{officer.Misconduct.Sum()}', {weapon}, @Age);";
                         await data.SaveData(newTimelineinfoOfficer, officer, GetConnectionString());
                     }                    
                 }
