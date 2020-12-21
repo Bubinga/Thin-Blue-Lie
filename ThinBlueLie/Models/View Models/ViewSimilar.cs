@@ -21,6 +21,6 @@ namespace ThinBlueLie.Models
         internal Timelineinfo Timelineinfo { get; set; }
         internal List<ViewSimilarPerson> Officers { get; set; }
         internal List<ViewSimilarPerson> Subjects { get; set; }
-        internal Media Media { get; set; }
+        internal ViewMedia Media { get; set; }
     }
 }

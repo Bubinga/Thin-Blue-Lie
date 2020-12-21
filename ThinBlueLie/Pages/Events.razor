@@ -74,7 +74,7 @@ else
 <TimeNavigation Date="Date"></TimeNavigation>
 
 
-@if (MultipleEvents)
+@if (MultipleEvents && Title == null)
 {
     <h5 class="text-center col-10 mt-3">@Date?.ToLongDateString()</h5>
     <div class="container mt-1">
@@ -83,7 +83,11 @@ else
             {
             <div class="py-2 row">
                 <div class="col-8">
-                    <h5>@evnt.Title</h5>
+                    @{ 
+                        var title = new string(DatesEvents.FirstOrDefault().Title.Where(c => !char.IsPunctuation(c)).ToArray()).Split(' ').Take(5);
+                        var title2 = string.Join("-", title);
+                    }
+                    <h5><a href="@("/Events/" + Date?.ToString("yyyy-MM-dd") + "/" + title2)">@evnt.Title</a></h5>
                     <p>@evnt.Context</p>
                 </div>
                 <div class="col-4">
@@ -203,6 +207,7 @@ else
         else if (DatesEvents.Count() > 1)
         {
             MultipleEvents = true;
+            await ChangeDay();
         }
         else
         {
