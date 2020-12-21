@@ -21,8 +21,8 @@
                 {
                     <span>
                         @((MarkupString)(GetComparePersonSummary(
-                        new CommonPerson { Age = (int?)OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
-                        new CommonPerson { Age = (int?)OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
+                        new CommonPerson { Age = OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
+                        new CommonPerson { Age = OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
                         true
                         )))
                     </span>
@@ -31,8 +31,8 @@
                 {
                     <span>
                         @((MarkupString)(GetComparePersonSummary(
-                        new CommonPerson { Age = (int?)OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
-                        new CommonPerson { Age = (int?)OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
+                        new CommonPerson { Age = OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
+                        new CommonPerson { Age = OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
                         true
                         )))
                     </span>
@@ -76,8 +76,8 @@
             {
                 <span>
                     @((MarkupString)(GetComparePersonSummary(
-                    new CommonPerson { Age = (int?)OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
-                    new CommonPerson { Age = (int?)OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
+                    new CommonPerson { Age = OfficerPair.Item1.Age, Sex = OfficerPair.Item1.Sex, Race = OfficerPair.Item1.Race },
+                    new CommonPerson { Age = OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
                     false
                     )))
                 </span>
@@ -86,8 +86,8 @@
             {
                 <span>
                     @((MarkupString)(GetComparePersonSummary(
-                    new CommonPerson { Age = (int)OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
-                    new CommonPerson { Age = (int)OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
+                    new CommonPerson { Age = OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
+                    new CommonPerson { Age = OfficerPair.Item2.Age, Sex = OfficerPair.Item2.Sex, Race = OfficerPair.Item2.Race },
                     false
                     )))
                 </span>
