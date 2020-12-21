@@ -26,11 +26,13 @@ namespace ThinBlueLie.Models
         [Inject] UserManager<ApplicationUser> userManager { get; set; }
 
         public AuthenticationState userState;
+        public bool SavingData { get; set; }
         protected async Task HandleValidSubmitAsync()
         {
             //display loading gif in modal while doing the processing
             //TODO add locked option in form for authed users with perms
-
+            SavingData = true;
+            this.StateHasChanged();
             model.Timelineinfos.Locked = 0;
             string? userId;
             if (signInManager.IsSignedIn(userState.User))
@@ -171,13 +173,17 @@ namespace ThinBlueLie.Models
                                                 `Timelineinfo_Subject` = @Timelineinfo_Subject 
                                             WHERE (`IdEditHistory` = '{EditHistoryId}');";
                 await connection.ExecuteAsync(updateEditHistory, editHistory);
-            }    
-
+            }           
             //TODO move all into querymultiple
-            if (true) //TODO check if successful submit
+            if (userState.User.Identity.IsAuthenticated) //TODO check if successful submit
+            {
+                NavManager.NavigateTo("/Account/Profile");
+            }
+            else
             {
                 NavManager.NavigateTo("/Index");
             }
+            SavingData = false;
         }
 
     }
