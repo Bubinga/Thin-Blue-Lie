@@ -192,9 +192,17 @@ namespace ThinBlueLie.Models
                        
                     }
                 }
-                else
+                else //direct link
                 {
-                    media.ContentUrl = media.Thumbnail = media.sourcePath;
+                    if (media.Processed == false)
+                    {
+                        media.sourcePath = media.originalUrl;
+                    }
+                    else
+                    {
+                        media.originalUrl = media.sourcePath;
+                    }
+                    media.ContentUrl = media.Thumbnail = media.sourcePath ?? media.originalUrl;
                     media.Processed = true;
                     return media;
                 }
