@@ -186,8 +186,8 @@ else
 
     protected override void OnParametersSet()
     {
-        subjectsDetails = GetSummaryList(mapper.Map<List<ViewSubject>, List<ViewSimilarPerson>>(Subjects));
-        officersDetails = GetSummaryList(mapper.Map<List<ViewOfficer>, List<ViewSimilarPerson>>(Officers));
+        subjectsDetails = GetSummaryList(mapper.Map<List<ViewSubject>, List<CommonPerson>>(Subjects));
+        officersDetails = GetSummaryList(mapper.Map<List<ViewOfficer>, List<CommonPerson>>(Officers));
         subjectList = CommaQuibbling(subjectsDetails);
         officerList = CommaQuibbling(officersDetails);
     }

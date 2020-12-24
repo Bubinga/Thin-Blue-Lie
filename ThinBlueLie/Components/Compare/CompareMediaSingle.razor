@@ -106,7 +106,7 @@
                                                                                 GetEnumDisplayName((SourceFromEnum)Media.Item2.SourceFrom), false))
                         </span>
                         <span><b>Gore:</b> @((MarkupString)SimpleCompare(Media.Item1?.Gore == 1 ? "Yes" : "No", Media.Item2.Gore == 1 ? "Yes" : "No", false))</span>
-                        <span><b>Rank:</b> @((MarkupString)SimpleCompare((Media.Item1?.Rank + 1).ToString(), (Media.Item2.Rank + 1).ToString(), false))</span>
+                        <span><b>Rank:</b> @((MarkupString)SimpleCompare(IsNewEvent ? null : (Media.Item1?.Rank + 1).ToString(), (Media.Item2.Rank + 1).ToString(), false))</span>
                     </div>
                 </div>
                 <div class="col-7">

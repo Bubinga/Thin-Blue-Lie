@@ -34,7 +34,7 @@
                                                             Info.Item2.Date.ToLongDateString(), false))
             </span>
             <span class="d-md-block">
-                <b>State:</b> @((MarkupString)SimpleCompare(IsNewEvent? "" : (GetEnumDisplayName((StateEnum)Info.Item1?.State)),
+                <b>State:</b> @((MarkupString)SimpleCompare(IsNewEvent? null : (GetEnumDisplayName((StateEnum)Info.Item1?.State)),
                                                             GetEnumDisplayName((StateEnum)Info.Item2.State), false))
             </span>
             <span class="d-md-block">
@@ -52,9 +52,4 @@
     public Tuple<Timelineinfo, Timelineinfo> Info { get; set; }
     [CascadingParameter]
     public bool IsNewEvent { get; set; }
-    //Title
-    //Date
-    //State
-    //City
-
 }

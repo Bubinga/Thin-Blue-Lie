@@ -12,6 +12,6 @@ namespace DataAccessLibrary.DataModels
         public int IdOfficer { get; set; }
         public int Misconduct { get; set; }
         public int Weapon { get; set; }
-        public int Age { get; set; }
+        public int? Age { get; set; }
     }
 }
