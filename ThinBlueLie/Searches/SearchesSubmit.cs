@@ -177,13 +177,13 @@ namespace ThinBlueLie.Helper
             DataAccess data = new DataAccess();
             var query1 = "SELECT * From timelineinfo t where t.date = @Date;";
             var SimilarTimelineinfos = await data.LoadData<Timelineinfo, dynamic>(query1, new {Date = TempDate }, GetConnectionString());
-            foreach ((var Event, Int32 i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))
+            foreach ((var Event, int i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))
             {
                 var Id = Event.IdTimelineinfo;
-                var officerQuery = "SELECT o.Name, o.Race, o.Sex, tio.Age FROM timelineinfo t JOIN timelineinfo_officer tio ON t.IdTimelineinfo = tio.IdTimelineinfo JOIN officers o ON tio.IdOfficer = o.IdOfficer WHERE t.IdTimelineinfo = @id;";
-                var Officers = await data.LoadData<ViewSimilarPerson, dynamic>(officerQuery, new { id = Id }, GetConnectionString());
+                var officerQuery = "SELECT o.*, tio.Age FROM timelineinfo t JOIN timelineinfo_officer tio ON t.IdTimelineinfo = tio.IdTimelineinfo JOIN officers o ON tio.IdOfficer = o.IdOfficer WHERE t.IdTimelineinfo = @id;";
+                var Officers = await data.LoadData<CommonPerson, dynamic>(officerQuery, new { id = Id }, GetConnectionString());
                 var subjectQuery = "SELECT s.Name, s.Race, s.Sex, ts.Age FROM timelineinfo t JOIN timelineinfo_subject ts ON t.IdTimelineinfo = ts.IdTimelineinfo JOIN subjects s ON ts.IdSubject = s.IdSubject WHERE t.IdTimelineinfo = @id;";
-                var Subjects = await data.LoadData<ViewSimilarPerson, dynamic>(subjectQuery, new { id = Id }, GetConnectionString());
+                var Subjects = await data.LoadData<CommonPerson, dynamic>(subjectQuery, new { id = Id }, GetConnectionString());
                 var MediaQuery = "Select *,(true) as Processed From media m Where(m.IdTimelineinfo = @id);";
                 var Media = await data.LoadData<ViewMedia, dynamic>(MediaQuery, new {id = Id }, GetConnectionString());
 

@@ -44,7 +44,7 @@ namespace ThinBlueLie.Searches
             public string Name { get; set; }
             public TimelineinfoEnums.RaceEnum Race { get; set; }
             public TimelineinfoEnums.SexEnum Sex { get; set; }
-            public byte Age { get; set; }
+            public byte? Age { get; set; }
             public string? Image { get; set; }
             public byte? Local { get; set; }
             public List<SimilarPersonEvents> Events { get; set; }
