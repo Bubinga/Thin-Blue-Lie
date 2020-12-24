@@ -26,73 +26,46 @@ namespace ThinBlueLie.Helper.Extensions
             return name;
         }
 
-        static string ComparePersonProperties(object oldProperty, object newProperty, bool IsOriginal)
+        public static string SimpleCompare(object Old, object New, bool IsOriginal)
         {
             string summary = string.Empty;
             CompareLogic compareLogic = new CompareLogic();
-            if (compareLogic.Compare(oldProperty, newProperty).AreEqual)
-                if (newProperty == null)
+            if (compareLogic.Compare(Old, New).AreEqual)
+                if (New == null)
                     summary += "Unknown";                
                 else                
-                    summary += newProperty.ToString();                
+                    summary += New.ToString();                
             else
             {
-                if (IsOriginal)
-                    summary += "<del>" + oldProperty + "</del> ";
-                else
-                    summary += "<ins>" + newProperty + "</ins> ";
-            }
-            return summary;
-        }
-        public static string SimpleCompare(string? Old, string? New, bool IsOriginal)
-        {
-            if (Old == New)
-            {
-                return Old;
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(Old) && string.IsNullOrEmpty(New) == false) //If the event is new
+                if (New != null && Old == null) //If the event is new
                 {
-                    return New;
+                    summary += New;
                 }
                 else if (IsOriginal)
-                {
-                    return "<del>" + Old + "</del>";
-                }
+                    summary += "<del>" + Old + "</del> ";
                 else
-                {
-                    return "<ins>" + New + "</ins>";
-                }
+                    summary += "<ins>" + New + "</ins> ";
             }
-        }
-        public static string GetComparePersonSummary(CommonPerson oldPerson, CommonPerson newPerson, bool IsOriginal)
-        {
-            string summary = string.Empty;
-            summary += ComparePersonProperties(oldPerson?.Race, newPerson?.Race, IsOriginal) + " ";
-            summary += ComparePersonProperties(oldPerson?.Sex, newPerson?.Sex, IsOriginal) + ", ";
-            summary += ComparePersonProperties(oldPerson?.Age, newPerson?.Age, IsOriginal) + " years old";
             return summary;
         }
-        
-        internal static string GetPersonSummary(ViewSimilarPerson person)
+       
+        public static string GetComparePersonSummary(CommonPerson oldPerson, CommonPerson newPerson, bool IsOriginal, bool getName = false)
         {
-            var personSummary = person.Name;
-
-            if (person.Age != null && person.Age != 0)
-            {
-                personSummary += ", " + person.Age.ToString();
-            }
-            personSummary += ", " + Enum.GetName(typeof(TimelineinfoEnums.RaceEnum), person.Race)
-                               + " " + Enum.GetName(typeof(TimelineinfoEnums.SexEnum), person.Sex);
-            return personSummary;
+            string summary = string.Empty;
+            if (getName)
+                summary += newPerson.Name + ", ";
+            summary += SimpleCompare(oldPerson?.Race, newPerson?.Race, IsOriginal) + " ";
+            summary += SimpleCompare(oldPerson?.Sex, newPerson?.Sex, IsOriginal) + ", ";
+            summary += SimpleCompare(oldPerson?.Age, newPerson?.Age, IsOriginal) + (getName? "" : " years old");
+            return summary;
         }
-        internal static List<string> GetSummaryList(List<ViewSimilarPerson> People)
+
+        internal static List<string> GetSummaryList(List<CommonPerson> People)
         {
             List<string> list = new List<string>();
             foreach (var person in People)
             {
-                list.Add(StringExtensions.GetPersonSummary(person));
+                list.Add(GetComparePersonSummary(person, person, true, true));
             }
             return list;
         }

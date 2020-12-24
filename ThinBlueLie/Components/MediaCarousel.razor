@@ -17,6 +17,9 @@
     .swiper-slide {
         background-size: cover;
         background-position: center;
+      /*  background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;*/
     }
 
     .gallery-top {
@@ -73,15 +76,15 @@ else
     <div class="swiper-wrapper hytPlayerWrapOuter">
         @foreach (var media in Media)
         {
-            if ((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Video)
+            if (media.MediaType == MediaEnums.MediaTypeEnum.Video)
             {
-                if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
+                if (media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
                 {
                     <div class="swiper-slide hytPlayerWrap">
                         <iframe src="@media.ContentUrl" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 }
-                else if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
+                else if (media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
                 {
                     <div class="swiper-slide">
                         <video src="@media.ContentUrl" width="320" height="240" class="reddit-sync" controls>
@@ -89,7 +92,7 @@ else
                     </div>
                 }
             }
-            else if (((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Image))
+            else if (media.MediaType == MediaEnums.MediaTypeEnum.Image)
             {
                 <div class="swiper-slide" style="
                    background-image: url(@media.ContentUrl)">
@@ -105,17 +108,14 @@ else
     <div class="swiper-wrapper">
         @foreach (var media in Media)
         {
-            if ((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Video)
+            if (media.MediaType == MediaEnums.MediaTypeEnum.Video)
             {
-                if ((MediaEnums.SourceFromEnum)media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
-                {
-                    <div class="swiper-slide video"
-                         style="background-image: url(@media.Thumbnail) ">
-                        <img class="play-button" alt="play button overlay" src="/Assets/Play-Button.png" href="#" />
-                    </div>
-                }
+                <div class="swiper-slide video"
+                        style="background-image: url(@media.Thumbnail) ">
+                    <img class="play-button" alt="play button overlay" src="/Assets/Play-Button.png" href="#" />
+                </div>
             }
-            else if (((MediaEnums.MediaTypeEnum)media.MediaType == MediaEnums.MediaTypeEnum.Image))
+            else if (media.MediaType == MediaEnums.MediaTypeEnum.Image)
             {
                 <div class="swiper-slide" style="
                    background-image: url(@media.ContentUrl)">

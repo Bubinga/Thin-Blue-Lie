@@ -43,16 +43,14 @@ namespace ThinBlueLie.Helper
                 .ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => src.Misconduct.Sum()))
                 .ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => src.Weapon.Sum()));
             CreateMap<ViewSubject, DBSubject>();
-            CreateMap<ViewOfficer, ViewSimilarPerson>();
-            CreateMap<ViewSubject, ViewSimilarPerson>();
+            CreateMap<ViewOfficer, CommonPerson>();
+            CreateMap<ViewSubject, CommonPerson>();
 
             CreateMap<SimilarOfficer, SimilarPerson>();
             CreateMap<SimilarSubject, SimilarPerson>();
             CreateMap<SimilarOfficer, CommonPerson>();
             CreateMap<SimilarSubject, CommonPerson>();
 
-            CreateMap<DBOfficer, ViewSimilarPerson>();
-            CreateMap<DBSubject, ViewSimilarPerson>();
             CreateMap<DBOfficer, CommonPerson>()
                .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (RaceEnum?)src.Race))
                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (SexEnum?)src.Sex));
