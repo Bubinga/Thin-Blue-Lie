@@ -67,10 +67,10 @@ namespace ThinBlueLie.Models
                 //Insert data into edits table
                 await connection.QueryAsync<int>(timelineSave, new
                 {                    
-                    model.Timelineinfos.Title,
+                    Title = model.Timelineinfos.Title.Trim(),
                     Date = DateValue,
                     model.Timelineinfos.State,
-                    model.Timelineinfos.City,
+                    City = model.Timelineinfos.City.Trim(),
                     context = sanitizer.Sanitize(model.Timelineinfos.Context),
                     model.Timelineinfos.Locked,
                     submittedby = userId, //nullable
@@ -99,6 +99,7 @@ namespace ThinBlueLie.Models
                     {
                         media.Thumbnail = null;
                     }
+                    media.Blurb = media.Blurb.Trim();
                     media.IdTimelineinfo = IdTimelineinfo;
                     string mediaSql = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Thumbnail`,
                                             `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`, `Action`)
@@ -112,6 +113,7 @@ namespace ThinBlueLie.Models
                 foreach (var subject in model.Subjects)
                 {
                     int IdSubject = 0;
+                    subject.Name = subject.Name.Trim();
                     if (subject.SameAsId == null)
                     {
                         //Create new subject
@@ -141,6 +143,7 @@ namespace ThinBlueLie.Models
                 foreach (var officer in model.Officers)
                 {
                     int IdOfficer = 0;
+                    officer.Name = officer.Name.Trim();
                     if (officer.SameAsId == null)
                     {
                         //Create new officer

@@ -84,11 +84,7 @@ else
             {
             <div class="py-2 row">
                 <div class="col-8">
-                    @{ 
-                        var title = new string(DatesEvents.FirstOrDefault().Title.Where(c => !char.IsPunctuation(c)).ToArray()).Split(' ').Take(5);
-                        var title2 = string.Join("-", title);
-                    }
-                    <h5><a href="@("/Events/" + Date?.ToString("yyyy-MM-dd") + "/" + title2)">@evnt.Title</a></h5>
+                    <h5><a href="@("/Events/" + Date?.ToString("yyyy-MM-dd") + "/" + UriExtensions.CreateTitleUrl(evnt.Title))">@evnt.Title</a></h5>
                     <p>@evnt.Context</p>
                 </div>
                 <div class="col-4">
@@ -198,9 +194,9 @@ else
             DbTitle = string.Join(" ", DatesEvents.FirstOrDefault().Title.Split(' ').Take(5));
             if (Title == null)
             {
-                var title = new string(DatesEvents.FirstOrDefault().Title.Where(c => !char.IsPunctuation(c)).ToArray()).Split(' ').Take(5);
-                var title2 = string.Join("-", title);
-                navManager.NavigateTo(navManager.BaseUri + "Events/" + Date?.ToString("yyyy-MM-dd") + "/" + title2); //recall onparameters set async
+                navManager.NavigateTo(navManager.BaseUri + "Events/" +
+                    Date?.ToString("yyyy-MM-dd") + "/" +
+                    UriExtensions.CreateTitleUrl(DatesEvents.FirstOrDefault().Title)); //recall onparameters set async
                 return;
             }
             await ChangeDay();

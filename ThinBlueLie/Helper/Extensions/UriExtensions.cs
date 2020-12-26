@@ -25,5 +25,11 @@ namespace ThinBlueLie.Helper.Extensions
                 ? String.Format("{0}?{1}", pagePathWithoutQueryString, newQueryString)
                 : pagePathWithoutQueryString;
         }
+        public static string CreateTitleUrl(string url)
+        {
+            var title = new string(url.Where(c => !char.IsPunctuation(c)).ToArray()).Split(' ').Take(5);
+            var shorttitle = string.Join("-", title);
+            return shorttitle;
+        }
     }
 }
