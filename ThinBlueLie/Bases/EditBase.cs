@@ -196,7 +196,7 @@ namespace ThinBlueLie.Bases
                         {
                             userId = userId,
                             IdOfficer = pair.Item2?.IdOfficer,
-                            Name = pair.Item2?.Name,
+                            Name = pair.Item2?.Name.Trim(),
                             Race = (int?)(pair.Item2?.Race ?? 0),
                             Sex = (int?)(pair.Item2?.Sex ?? 0),
                             Image = pair.Item1?.Image ?? pair.Item2?.Image,
@@ -248,15 +248,15 @@ namespace ThinBlueLie.Bases
                         if (pair.Item1 == null)
                             Action = EditActions.Addition;
                         //if (pair.Item2 == null)
-                        //    Action = EditActions.Deletion; not where deletion should happen
+                        //    Action = EditActions.Deletion; not where person deletion should happen
                         else
                             Action = EditActions.Update;
                         await data.SaveData(sql, new
                         {
                             userId = userId,
                             IdSubject = pair.Item2?.IdSubject,
-                            Name = pair.Item2?.Name,
-                            Race = (int?)(pair.Item2?.Race ?? 0),
+                            Name = pair.Item2?.Name.Trim(),
+                            Race = (int?)(pair.Item2?.Race ?? 0), // should never be null anyways
                             Sex = (int?)(pair.Item2?.Sex ?? 0),
                             Image = pair.Item1?.Image ?? pair.Item2?.Image,
                             Local = pair.Item1?.Local ?? pair.Item2?.Local,
@@ -299,6 +299,7 @@ namespace ThinBlueLie.Bases
                             var result = await PrepareStoreData(pair.Item2);
                             pair.Item2.SourcePath = result.SourcePath;
                             pair.Item2.SourceFrom = result.SourceFrom;
+                            pair.Item2.Blurb = pair.Item2.Blurb.Trim();
                             string saveNewMedia = @$"INSERT INTO editmedia 
                                                       (`IdEditHistory`, `IdTimelineinfo`, `Rank`, `MediaType`, `SourcePath`,
                                                         `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Action`)
@@ -318,6 +319,7 @@ namespace ThinBlueLie.Bases
                         else
                         {
                             Action = EditActions.Update;
+                            pair.Item2.Blurb = pair.Item2.Blurb.Trim();
                             string updateMedia = $@"INSERT INTO editmedia 
                                                       (`IdEditHistory`, `IdTimelineinfo`, `IdMedia`, `Rank`, `MediaType`, `SourcePath`,
                                                         `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Action`)
@@ -333,12 +335,15 @@ namespace ThinBlueLie.Bases
                 editHistory.Edits = 1;
                 await CreateEmptyEditHistory();
                 var sanitizer = new HtmlSanitizer();
+                //TODO this currently doesnt do anything, have to initialize the sanitizer object with this info
                 sanitizer.AllowedCssProperties.Remove("color");
                 sanitizer.AllowedCssProperties.Remove("display");
                 sanitizer.AllowedCssProperties.Remove("font-style");
                 sanitizer.AllowedCssProperties.Remove("font-family");
                 sanitizer.AllowedCssProperties.Remove("background-color");
                 sanitizer.AllowedCssProperties.Remove("whitespace");
+                model.Timelineinfos.Title = model.Timelineinfos.Title.Trim();
+                model.Timelineinfos.City = model.Timelineinfos.City.Trim();
                 model.Timelineinfos.Context = sanitizer.Sanitize(model.Timelineinfos.Context);
                 string InsertEdits = $@"INSERT INTO edits (`IdEditHistory`, `IdTimelineinfo`, `Title`, `Date`, `State`, 
                                            `City`, `Context`, `Locked`) 

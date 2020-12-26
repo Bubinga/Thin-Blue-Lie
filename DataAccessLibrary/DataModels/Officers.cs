@@ -21,7 +21,7 @@ namespace DataAccessLibrary.DataModels
         public byte Race { get; set; }
         [Required(ErrorMessage = "The Officer's Sex field is required")]
         public byte Sex { get; set; }
-        public string Image { get; set; }
+        public string? Image { get; set; }
         public byte Local { get; set; }
         //public byte Employed { get; set; }
 

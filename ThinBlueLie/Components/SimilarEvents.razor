@@ -46,11 +46,7 @@
         <div class="card-body text-dark pt-2">
             <div class="d-block">
                 <div class="d-inline-block">
-                    @{ 
-                        var title = new string(Event.Timelineinfo.Title.Where(c => !char.IsPunctuation(c)).ToArray()).Split(' ').Take(5);
-                        var title2 = string.Join("-", title);
-                    }
-                    <a class="location" href="@("/Events/" + Event.Timelineinfo.Date.ToString("yyyy-MM-dd") + "/" + title2)">
+                    <a class="location" href="@("/Events/" + Event.Timelineinfo.Date.ToString("yyyy-MM-dd") + "/" + UriExtensions.CreateTitleUrl(Event.Timelineinfo.Title))">
                     @Event.Timelineinfo.City, @EnumExtensions.GetEnumDisplayName((TimelineinfoEnums.StateEnum)Event.Timelineinfo.State)
                     </a>
                     <div class="people">

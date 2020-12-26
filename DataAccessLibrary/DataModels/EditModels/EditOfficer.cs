@@ -13,7 +13,7 @@ namespace DataAccessLibrary.DataModels
         public string Name { get; set; }
         public byte Race { get; set; }
         public byte Sex { get; set; }
-        public string Image { get; set; }
+        public string? Image { get; set; }
         public byte Local { get; set; }
         public byte Action { get; set; }
     }
