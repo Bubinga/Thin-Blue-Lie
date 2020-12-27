@@ -1,8 +1,8 @@
 ﻿@using ThinBlueLie.Helper.Algorithms 
 @using Syncfusion.Blazor.Spinner 
-<style>
-   
 
+
+<style>
     .ytp-pause-overlay {
         display: none;
     }
@@ -23,12 +23,12 @@
     }
 
     .gallery-top {
-        height: 80%;
+        height: 75%;
         width: 100%;
     }
 
     .gallery-thumbs {
-        height: 20%;
+        height: 25%;
         box-sizing: border-box;
         padding: 10px 0;
     }
@@ -61,26 +61,34 @@
         left: 40%;
         margin: -10% 0 0 -8%;
     }
+    .gallery-top .swiper-slide {
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .gallery-thumbs .swiper-slide{
+        min-height: 100px;
+    }
 </style>
 @if (Media.Any() == false)
 {
-        <div class="col-lg-9">
-            <div class="mx-auto">
-                <SfSpinner Type="@SpinnerType.Material"></SfSpinner>
-            </div>
+    <div class="col-lg-9">
+        <div class="mx-auto">
+            <SfSpinner Type="@SpinnerType.Material"></SfSpinner>
         </div>
+    </div>
 }
 else
 {
 <div class="swiper-container gallery-top">
-    <div class="swiper-wrapper hytPlayerWrapOuter">
+    <div class="swiper-wrapper">
         @foreach (var media in Media)
         {
             if (media.MediaType == MediaEnums.MediaTypeEnum.Video)
             {
                 if (media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
                 {
-                    <div class="swiper-slide hytPlayerWrap">
+                    <div class="swiper-slide">
                         <iframe src="@media.ContentUrl" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 }
@@ -129,7 +137,4 @@ else
 @code {
     [Parameter]
     public List<ViewMedia>? Media { get; set; }
-
-    string videoUrl = string.Empty;
-    string imageUrl = string.Empty;
 }

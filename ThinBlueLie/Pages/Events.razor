@@ -1,9 +1,6 @@
 ﻿@page "/Events/{Date:datetime}/{Title}"
 @page "/Events/{Date:datetime}"
 @using ThinBlueLie.ViewModels
-@using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.Popups
-@using Syncfusion.Blazor.Buttons
 @using ThinBlueLie.Helper.Extensions
 @using DataAccessLibrary.DataAccess
 @using Syncfusion.Blazor.Spinner
@@ -27,7 +24,8 @@
     }
 
     .event-main-row {
-        min-height: 550px;
+        max-height: 650px;
+        min-height: 575px;
     }
 
     .brokencard {
@@ -204,7 +202,11 @@ else
         else if (DatesEvents.Count() > 1)
         {
             MultipleEvents = true;
-            await ChangeDay();
+            if (Title != null)
+            {
+                DbTitle = string.Join(" ", Title.Split('-'));
+                await ChangeDay();
+            }
         }
         else
         {

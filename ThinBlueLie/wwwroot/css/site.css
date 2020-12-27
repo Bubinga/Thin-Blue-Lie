@@ -642,7 +642,7 @@ app {
 
 @media (min-width: 768px) {
     app {
-        flex-direction: row;
+        flex-direction: row; /* causing issues with carousel*/
     }
 
     .sidebar {
@@ -670,4 +670,8 @@ app {
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
+}
+
+.gallery-top{
+    background-color: lightgrey
 }
