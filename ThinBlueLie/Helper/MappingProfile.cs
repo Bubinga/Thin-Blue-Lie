@@ -72,8 +72,10 @@ namespace ThinBlueLie.Helper
                 .ForMember(dest => dest.SourceFrom, opt => opt.MapFrom(src => (byte)src.SourceFrom));
             CreateMap<EditMedia, Media>();
             CreateMap<EditMedia, ViewMedia>();
-            CreateMap<ViewTimelineinfo, Timelineinfo>();
-            CreateMap<Timelineinfo, ViewTimelineinfo>();
+            CreateMap<ViewTimelineinfo, Timelineinfo>()
+                .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.SubmittedBy));
+            CreateMap<Timelineinfo, ViewTimelineinfo>()
+                .ForMember(dest => dest.SubmittedBy, opt => opt.MapFrom(src => src.Owner));
 
             //For Deep Cloning
             CreateMap<EditReviewSegment, EditReviewSegment>();

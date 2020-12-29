@@ -180,9 +180,15 @@ namespace ThinBlueLie.Helper
             foreach ((var Event, int i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))
             {
                 var Id = Event.IdTimelineinfo;
-                var officerQuery = "SELECT o.*, tio.Age FROM timelineinfo t JOIN timelineinfo_officer tio ON t.IdTimelineinfo = tio.IdTimelineinfo JOIN officers o ON tio.IdOfficer = o.IdOfficer WHERE t.IdTimelineinfo = @id;";
+                var officerQuery = "SELECT o.*, tio.Age FROM timelineinfo t " +
+                    "JOIN timelineinfo_officer tio ON t.IdTimelineinfo = tio.IdTimelineinfo " +
+                    "JOIN officers o ON tio.IdOfficer = o.IdOfficer " +
+                    "WHERE t.IdTimelineinfo = @id;";
                 var Officers = await data.LoadData<CommonPerson, dynamic>(officerQuery, new { id = Id }, GetConnectionString());
-                var subjectQuery = "SELECT s.Name, s.Race, s.Sex, ts.Age FROM timelineinfo t JOIN timelineinfo_subject ts ON t.IdTimelineinfo = ts.IdTimelineinfo JOIN subjects s ON ts.IdSubject = s.IdSubject WHERE t.IdTimelineinfo = @id;";
+                var subjectQuery = "SELECT s.Name, s.Race, s.Sex, ts.Age FROM timelineinfo t " +
+                    "JOIN timelineinfo_subject ts ON t.IdTimelineinfo = ts.IdTimelineinfo " +
+                    "JOIN subjects s ON ts.IdSubject = s.IdSubject " +
+                    "WHERE t.IdTimelineinfo = @id;";
                 var Subjects = await data.LoadData<CommonPerson, dynamic>(subjectQuery, new { id = Id }, GetConnectionString());
                 var MediaQuery = "Select *,(true) as Processed From media m Where(m.IdTimelineinfo = @id);";
                 var Media = await data.LoadData<ViewMedia, dynamic>(MediaQuery, new {id = Id }, GetConnectionString());
@@ -197,6 +203,8 @@ namespace ThinBlueLie.Helper
                 };
                 SimilarEvents.Add(items);
             }
+            await ViewMedia.GetDataMany(SimilarEvents.Select(e => e.Media).ToList());
+
             return SimilarEvents;
         }
     }   
