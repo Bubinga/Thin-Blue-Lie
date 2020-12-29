@@ -66,14 +66,14 @@ namespace ThinBlueLie.Bases
                 //if post is not both locked and user missing perm to edit locked
                 if (!(timelineinfo.Locked == 1 && (User.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) == false)))
                 {
-                    var mediaQuery = "SELECT m.IdMedia, m.MediaType, m.SourcePath, m.Gore, m.SourceFrom, m.Blurb, m.Credit, m.SubmittedBy, m.Rank " +
+                    var mediaQuery = "SELECT *, (true) as Processed " +
                                             "From media m where m.IdTimelineinfo = @id Order By m.Rank;";
-                    var officerQuery = "SELECT o.IdOfficer, o.Name, o.Race, o.Sex, o.Local, o.Image, t_o.Age, t_o.Misconduct, t_o.Weapon " +
+                    var officerQuery = "SELECT o.*, t_o.Age, t_o.Misconduct, t_o.Weapon " +
                             "FROM timelineinfo t " +
                             "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
                             "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
                             "WHERE t.IdTimelineinfo = @id ;";
-                    var subjectQuery = "SELECT s.IdSubject, s.Name, s.Race, s.Sex, s.Local, s.Image, t_s.Age, t_s.Armed " +
+                    var subjectQuery = "SELECT s.*, t_s.Age, t_s.Armed " +
                             "FROM timelineinfo t " +
                             "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
                             "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
@@ -83,25 +83,12 @@ namespace ThinBlueLie.Bases
                     List<ViewMedia> Media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = Id }, GetConnectionString());
                     List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Id }, GetConnectionString());
                     List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Id }, GetConnectionString());
-                    var Info = new ViewTimelineinfo
-                    {
-                        Date = timelineinfo.Date,
-                        State = (TimelineinfoEnums.StateEnum?)timelineinfo.State,
-                        City = timelineinfo.City,
-                        Title = timelineinfo.Title,
-                        Context = timelineinfo.Context,
-                        Locked = timelineinfo.Locked,
-                        SubmittedBy = timelineinfo.Owner
-                    };
+
+                    Media = await ViewMedia.GetDataMany(Media);
+
+                    var Info = Mapper.Map<Timelineinfo, ViewTimelineinfo>(timelineinfo);
                     var Officers = Mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers);
                     var Subjects = Mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects);
-                    //Ordered by rank so it's the same as rank but it's a stupid way to do it
-                    //TODO just do " m.Rank as Rank"
-                    for (int i = 0; i < Media.Count; i++)
-                    {
-                        Media[i].Rank = i;
-                        //Media[i].SourcePath = PrepareSendData(Media[i]);
-                    }
                     for (int i = 0; i < Officers.Count; i++)
                     {
                         Officers[i].Rank = i;
