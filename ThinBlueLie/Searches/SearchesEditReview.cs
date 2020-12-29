@@ -137,29 +137,31 @@ namespace ThinBlueLie.Searches
             string query = "SELECT * From timelineinfo t where t.IdTimelineinfo = @id";
             Timelineinfo timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { id }, GetConnectionString());
             string mediaQuery = "SELECT *, (true) as Processed From media m where m.IdTimelineinfo = @id Order By m.Rank;";
-            string officerQuery = "SELECT o.IdOfficer, o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
+            string officerQuery = "SELECT o.*, t_o.Age, t_o.Misconduct, t_o.Weapon " +
                         "FROM timelineinfo t " +
                         "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
                         "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
                         "WHERE t.IdTimelineinfo = @id ;";
-            string subjectQuery = "SELECT s.IdSubject, s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed " +
+            string subjectQuery = "SELECT s.*, t_s.Age, t_s.Armed " +
                         "FROM timelineinfo t " +
                         "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
                         "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
                         "WHERE t.IdTimelineinfo = @id;";
 
-                //get media, officers, and subjects using timelineinfo id
-                List<ViewMedia> media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id }, GetConnectionString());
-                List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id }, GetConnectionString());
-                List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id }, GetConnectionString());
+            //get media, officers, and subjects using timelineinfo id
+            List<ViewMedia> media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id }, GetConnectionString());
+            List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id }, GetConnectionString());
+            List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id }, GetConnectionString());
 
-                return new EditReviewSegment
-                {
-                    Data = timelineinfo,
-                    Medias = media,
-                    Officers = officers,
-                    Subjects = subjects
-                };            
+            media = await ViewMedia.GetDataMany(media);
+
+            return new EditReviewSegment
+            {
+                Data = timelineinfo,
+                Medias = media,
+                Officers = officers,
+                Subjects = subjects
+            };            
         }
 
         public async Task<Tuple<EditReviewSegment, EditHistory>> GetNewInfoFromId(FirstLoadEditHistory id, EditReviewSegment oldInfo)
@@ -202,16 +204,13 @@ namespace ThinBlueLie.Searches
                         newInfo.Medias.RemoveAll(m => m.IdMedia == change.IdMedia);
                     }
                 }
-                //TODO this is a crappy solution to the first image not loading sometimes, it'd load on refresh everytime, but not on inital display
-                foreach (var media in newInfo.Medias.Where(m => m.MediaType == MediaEnums.MediaTypeEnum.Image))
-                {
-                    await ViewMedia.GetData(media);
-                }
+                
+                await ViewMedia.GetDataMany(newInfo.Medias);
             }
             if (editChanges.Timelineinfo_Officer == 1)
             {
                 string changesToTimelineOfficerQuery = 
-                    $@"SELECT o.IdOfficer, o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon 
+                    $@"SELECT o.*, t_o.Age, t_o.Misconduct, t_o.Weapon 
                         FROM edithistory e
                         JOIN edits_timelineinfo_officer t_o ON e.IdEditHistory = t_o.IdEditHistory 
                         JOIN {(id.IsNewEvent.ToBool()? "edits_officer" : "officers")} o ON t_o.IdOfficer = o.IdOfficer 
@@ -222,7 +221,7 @@ namespace ThinBlueLie.Searches
             if (editChanges.Timelineinfo_Subject == 1)
             {
                 string changesToTimelineSubjectQuery =
-                   $@"SELECT s.IdSubject, s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed
+                   $@"SELECT s.*, t_s.Age, t_s.Armed
                         FROM edithistory e
                         JOIN edits_timelineinfo_subject t_s ON e.IdEditHistory = t_s.IdEditHistory 
                         JOIN {(id.IsNewEvent.ToBool()? "edits_subject" : "subjects")} s ON t_s.IdSubject = s.IdSubject 

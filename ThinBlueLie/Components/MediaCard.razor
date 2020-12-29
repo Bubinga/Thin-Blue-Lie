@@ -115,7 +115,7 @@
                 {
                     <NewsCard ShortVersion="true" newsUrl="@(string.IsNullOrEmpty(media.SourcePath)? "http://example.com" : media.SourcePath)"></NewsCard>
                 }
-                else
+                else //if it's a video
                 {
                     if (!string.IsNullOrWhiteSpace(media.OriginalUrl))
                     {

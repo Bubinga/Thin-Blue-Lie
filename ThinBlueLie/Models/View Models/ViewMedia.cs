@@ -8,6 +8,7 @@ using static DataAccessLibrary.Enums.MediaEnums;
 using System;
 using System.Web;
 using ThinBlueLie.Helper.Algorithms.WebsiteProfiling;
+using System.Collections.Generic;
 
 namespace ThinBlueLie.Models
 {
@@ -19,7 +20,16 @@ namespace ThinBlueLie.Models
         public int Rank { get; set; } //becomes Rank
         [Required]
         public MediaTypeEnum? MediaType { get; set; }
-
+        public UploadFiles Source { get; set; } //For uploaded image file         
+        [Required]
+        public byte Gore { get; set; }
+        [Required(ErrorMessage = "Select where the Media is from")]
+        public SourceFromEnum? SourceFrom { get; set; }
+        [Required]
+        [StringLength(250, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
+        public string Blurb { get; set; }
+        [MaxLength(100, ErrorMessage = "Please enter less than 100 characters")]
+        public string Credit { get; set; }
 
         public string sourcePath;
 
@@ -27,10 +37,11 @@ namespace ThinBlueLie.Models
         {
             get { return sourcePath; }
             set { sourcePath = value;
-                new Task(async () =>
-                {
-                    await GetData(this);
-                }).Start();
+                //new Task(async () =>
+                //{
+                //    await GetData(this);
+                //}).Start();
+                //  GetData(this).RunSynchronously(); //fine because it only has to modify existing data
             }
         }
 
@@ -40,7 +51,11 @@ namespace ThinBlueLie.Models
         [MaxLength(500, ErrorMessage = "Please enter a url than 500 characters")]
         public string OriginalUrl
         {
-            get { return originalUrl; }
+            get {
+                if (originalUrl != null)
+                    return originalUrl;
+                return DisplayUrl;            
+            }
             set { originalUrl = value;
                 new Task(async () =>
                 {
@@ -54,16 +69,17 @@ namespace ThinBlueLie.Models
         public string ContentUrl { get; set; } //link to video
         public string DisplayUrl { get; set; } //link to display       
         public bool Processed { get; set; }
-        public UploadFiles Source { get; set; } //For uploaded image file         
-        [Required]
-        public byte Gore { get; set; }
-        [Required(ErrorMessage = "Select where the Media is from")]
-        public SourceFromEnum? SourceFrom { get; set; }
-        [Required]
-        [StringLength(250, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
-        public string Blurb { get; set; }
-        [MaxLength(100, ErrorMessage = "Please enter less than 100 characters")]
-        public string Credit { get; set; }
+      
+        public static async Task<List<ViewMedia>> GetDataMany(List<ViewMedia> medias)
+        {
+            var tasks = new List<Task<ViewMedia>>();
+            foreach (var media in medias)
+            {
+                tasks.Add(GetData(media));
+            }
+            medias = new List<ViewMedia>(await Task.WhenAll(tasks));
+            return medias;
+        }
 
         public static async Task<ViewMedia> GetData(ViewMedia media)
         {
