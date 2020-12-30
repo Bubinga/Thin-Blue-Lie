@@ -139,7 +139,7 @@ namespace ThinBlueLie.Models
                     {
                         var newMedia = await WebsiteProfile.GetRedditDataAsync(media);
                         newMedia.originalUrl = newMedia.ContentUrl;
-                        media = await GetData(newMedia);
+                        media = await GetData(newMedia); //to check if it's a youtube video
                         return media;
                     }
                 }

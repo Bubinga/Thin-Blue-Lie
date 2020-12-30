@@ -3,6 +3,7 @@ var galleryTop;
 var slideCount;
 var slides;
 var loadedEvent;
+var players = [];
 //TODO Turn on looping
 function InitializeSwiper() {
     slideCount = jQuery(".gallery-thumbs .swiper-wrapper .swiper-slide").length;
@@ -44,7 +45,21 @@ function InitializeSwiper() {
             thumbs: {
                 swiper: galleryThumbs,
             },
+            on: {
+                slideChange: function () {
+                    $("videowrapper:not(.paused) btn.toggle-play").mouseup(); //pauses reddit videos
+                    players.forEach(function (element) {
+                        element.pauseVideo();
+                    });
+                },
+            }
         });
         loadedEvent = window.location.href;
     }    
+}
+function onYouTubePlayerAPIReady() {
+    $("iframe").toArray().forEach(function (element) { //pauses youtube videos
+        var player = new YT.Player(element.id, {});
+        players.push(player);
+    });
 }
