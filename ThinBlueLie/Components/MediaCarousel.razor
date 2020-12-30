@@ -89,7 +89,7 @@ else
                 if (media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
                 {
                     <div class="swiper-slide">
-                        <iframe src="@media.ContentUrl" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe id="@(new Guid()) " src="@media.ContentUrl" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 }
                 else if (media.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
