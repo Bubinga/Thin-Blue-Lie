@@ -16,7 +16,7 @@ appsettings.json
 appsettings.Development.json
 appsettings.Production.json
 Test.razor
-Test2.razor
+Test?.razor
 
 Uploads/
 
