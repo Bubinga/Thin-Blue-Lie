@@ -8,6 +8,9 @@ var players = [];
 function InitializeSwiper() {
     slideCount = jQuery(".gallery-thumbs .swiper-wrapper .swiper-slide").length;
     slides = (slideCount > 3 ? 'auto' : `${slideCount}`);
+
+    //getYoutubeAPIscript();
+
     if (loadedEvent != window.location.href) {
         galleryThumbs = new Swiper(".gallery-thumbs", {
             spaceBetween: 2,
@@ -55,10 +58,32 @@ function InitializeSwiper() {
             }
         });
         loadedEvent = window.location.href;
+        $("videowrapper:not(.paused) btn.toggle-play").mouseup();
     }    
 }
-function onYouTubePlayerAPIReady() {
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+// 2. This code loads the IFrame Player API code asynchronously.
+function getYoutubeAPIscript() {
+    var tag = document.createElement('script');
+    tag.src = "http://www.youtube.com/player_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+}
+
+async function onYouTubePlayerAPIReady() {
+    while (galleryTop == null) {
+          await sleep(2000);
+    }
     $("iframe").toArray().forEach(function (element) { //pauses youtube videos
+        element.id = uuidv4();
         var player = new YT.Player(element.id, {});
         players.push(player);
     });
