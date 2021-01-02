@@ -28,7 +28,7 @@ namespace ThinBlueLie.Searches
             {
                 //get data
                 DataAccess data = new DataAccess();
-                var query = "SELECT t.IdTimelineinfo From timelineinfo t where t.date = @date;";
+                var query = "SELECT * From timelineinfo t where t.date = @date;";
                 dateData[i] = await data.LoadData<Timelineinfo, dynamic>(query, new {date = dates[i].ToString("yyyy-MM-dd") }, GetConnectionString());
             }
             return Tuple.Create(dateData, dates);
