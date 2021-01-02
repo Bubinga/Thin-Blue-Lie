@@ -1,11 +1,22 @@
 ﻿@page "/Timeline"
 @using DataAccessLibrary.DataModels;
+@using Syncfusion.Blazor.Popups
 @using ThinBlueLie.Helper.Extensions
 @using ThinBlueLie.Helper
 @using ThinBlueLie.Searches
 @inject NavigationManager MyNavigationManager
 
-
+<style>
+    .event {
+        color: black;
+        padding: 5px 0px;
+    }
+    .e-control, .e-css {
+        font-family: inherit !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+    }
+</style>
 @if (Day == null)
 {
     <p>
@@ -17,26 +28,39 @@ else
     <div class="d-flex justify-content-center h6 mb-0 py-2">
         @Dates[0].Year
     </div>
-<div class="btn-group btn-group-toggle my-auto w-100 mt-5" data-toggle="buttons">
-    <div @onclick="PrevWeek" id="triangle-left"> <div class="empty"></div></div>
-    @foreach ((var day, Int32 i) in Day.Select((day, i) => (day, i)))
-    {
-        <div class="week btn @(DateTime.Compare(Dates[i], DateTime.Today.Date) <= 0 ? "" : "disabled") " onclick='location.href = "/Events/@Dates[i].ToString("yyyy-MM-dd")"'>
-            <div class="timeline-label">
+    <div class="btn-group btn-group-toggle my-auto w-100 mt-5" data-toggle="buttons">
+        <div @onclick="PrevWeek" id="triangle-left"> <div class="empty"></div></div>
+        @foreach ((var day, Int32 i) in Day.Select((day, i) => (day, i)))
+        {
+    <NavLink class="@("week btn " + ((DateTime.Compare(Dates[i], DateTime.Today.Date) <= 0)? "" : "disabled"))" href="@("/Events/" + Dates[i].ToString("yyyy-MM-dd"))">
+        @if (day.Any())
+        {
+            string Content = string.Empty;
+            foreach (var Event in day)
+            {
+                Content += "<div class=\"event\" style=\"border-right: 2px solid blue\">" +
+                                Event.Title +
+                            "</div>";
+            }
+            <SfTooltip ID="tooltiphover" Target="@("#day" + i)" OpensOn="Hover" Content="@Content">
+                <div class="timeline-label" id="@("day"+i)">
+                    <span class="d-none d-lg-inline">@Dates[i].DayOfWeek</span>
+                    <span> @Dates[i].Month/@Dates[i].Day</span>
+                </div>
+            </SfTooltip>
+        }
+        else
+        {
+            <div class="timeline-label" id="@("day"+i)">
                 <span class="d-none d-lg-inline">@Dates[i].DayOfWeek</span>
                 <span> @Dates[i].Month/@Dates[i].Day</span>
             </div>
-            @*<div class="badge-bar">
-                    <svg class="badge">
-                        <circle cx="13" cy="13" r="12" stroke="DarkBlue" stroke-width="2" fill="#dedede" />
-                        <text x="8" y="18" fill="black">@day.Count</text>
-                    </svg>
-                </div>*@
-            <input type="radio">
-        </div>
-    }
-    <div @onclick="NextWeek" id="triangle-right"><div class="empty"></div></div>
-</div>
+        }
+        <input type="radio">
+    </NavLink>
+        }
+        <div @onclick="NextWeek" id="triangle-right"><div class="empty"></div></div>
+    </div>
 
 }
 @code {
@@ -77,6 +101,7 @@ else
         Dates = Result.Item2;
         this.StateHasChanged();
     }
+
 
 }
 
