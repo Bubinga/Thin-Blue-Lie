@@ -1,19 +1,11 @@
 ﻿using AutoMapper;
 using DataAccessLibrary.DataModels;
-using DataAccessLibrary.Enums;
-using Syncfusion.Blazor.Lists;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ThinBlueLie.Models;
-using ThinBlueLie.Models.View_Models;
-using ThinBlueLie.ViewModels;
 using static DataAccessLibrary.Enums.TimelineinfoEnums;
 using static ThinBlueLie.Helper.Extensions.IntExtensions;
 using static ThinBlueLie.Models.SubmitBase;
-using static ThinBlueLie.Models.View_Models.EditReviewModel;
-using static ThinBlueLie.Models.ViewSimilar;
+using static ThinBlueLie.Models.ViewModels.EditReviewModel;
 using static ThinBlueLie.Searches.SearchClasses;
 
 namespace ThinBlueLie.Helper

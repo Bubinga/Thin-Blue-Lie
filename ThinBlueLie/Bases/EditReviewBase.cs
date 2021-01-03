@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLie.Models.View_Models;
+using ThinBlueLie.Models.ViewModels;
 using ThinBlueLie.Searches;
 using static DataAccessLibrary.Enums.EditEnums;
 using static ThinBlueLie.Helper.ConfigHelper;
