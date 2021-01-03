@@ -18,11 +18,5 @@ namespace DataAccessLibrary.DataModels
         [Column(TypeName = "varchar(255)")]
         public int? UserId { get; set; }
 
-        [ForeignKey(nameof(IdTimelineinfo))]
-        [InverseProperty(nameof(TimelineinfoFull.Flagged))]
-        public virtual TimelineinfoFull IdTimelineinfoNavigation { get; set; }
-        [ForeignKey(nameof(UserId))]
-        [InverseProperty(nameof(Aspnetusers.Flagged))]
-        public virtual Aspnetusers UserIdNavigation { get; set; }
     }
 }

@@ -21,11 +21,6 @@ namespace DataAccessLibrary.DataModels
         public int? UserId { get; set; }
         public int? IdTimelineinfo { get; set; }
 
-        [ForeignKey(nameof(IdTimelineinfo))]
-        [InverseProperty(nameof(TimelineinfoFull.Log))]
-        public virtual TimelineinfoFull IdTimelineinfoNavigation { get; set; }
-        [ForeignKey(nameof(UserId))]
-        [InverseProperty(nameof(Aspnetusers.Log))]
-        public virtual Aspnetusers UserIdNavigation { get; set; }
+        
     }
 }
