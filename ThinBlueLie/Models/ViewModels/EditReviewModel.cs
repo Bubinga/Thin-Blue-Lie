@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ThinBlueLie.ViewModels;
 using static ThinBlueLie.Searches.SearchClasses;
 
-namespace ThinBlueLie.Models.View_Models
+namespace ThinBlueLie.Models.ViewModels
 {
     public class EditReviewModel
     {

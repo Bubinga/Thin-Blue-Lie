@@ -15,12 +15,5 @@ namespace DataAccessLibrary.DataModels
         public int IdSubject { get; set; }
         public byte Armed { get; set; }
         public byte? Age { get; set; }
-
-        [ForeignKey(nameof(IdSubject))]
-        [InverseProperty(nameof(Subjects.TimelineinfoSubject))]
-        public virtual Subjects IdSubjectNavigation { get; set; }
-        [ForeignKey(nameof(IdTimelineinfo))]
-        [InverseProperty(nameof(TimelineinfoFull.TimelineinfoSubject))]
-        public virtual TimelineinfoFull IdTimelineinfoNavigation { get; set; }
     }
 }
