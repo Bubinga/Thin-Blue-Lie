@@ -1,4 +1,12 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+:root {
+    --low: #002AFF;
+    --low-medium: #00F6FF;
+    --medium: #FFED2D;
+    --high-medium: #FF7B00;
+    --high: #FF0400;
+    --extreme: #FF00AE;
+}
 
 html, body {
    /* font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
@@ -215,6 +223,8 @@ a.navbar-brand {
     padding-right: 4px;
 }
 
+--low: black;
+
 #imposedline {
     border-top: 1px solid black;
     color: #dee2e6;
@@ -224,7 +234,7 @@ a.navbar-brand {
     left: 10%;
 }
 
-.btn.active {
+.btn.week.active {
     background-color: #919191;
 }
 
@@ -239,7 +249,7 @@ card.header {
 
 .timeline-label {
     position: absolute !important;
-    //top: -25px !important;
+    /*top: -25px !important;*/
     text-align: center;
     padding: 0px;
     margin: 0px;
@@ -248,10 +258,11 @@ card.header {
     white-space: nowrap;
 }
 
-.btn.week.focus, .btn.week.active {
+.btn.week.active{
     box-shadow: none;
     outline: #919191 solid 3px;
 }
+
 
 
 .btn {
