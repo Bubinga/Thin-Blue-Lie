@@ -1,11 +1,11 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 :root {
-    --low: #002AFF;
+    --low: #007bff;
     --low-medium: #00F6FF;
-    --medium: #FFED2D;
-    --high-medium: #FF7B00;
-    --high: #FF0400;
-    --extreme: #FF00AE;
+    --medium: #ffc107;
+    --high-medium: #fd7e14;
+    --high: #dc3545;
+    --extreme: #DB3691;
 }
 
 html, body {
@@ -223,8 +223,6 @@ a.navbar-brand {
     padding-right: 4px;
 }
 
---low: black;
-
 #imposedline {
     border-top: 1px solid black;
     color: #dee2e6;
@@ -234,18 +232,63 @@ a.navbar-brand {
     left: 10%;
 }
 
-.btn.week.active {
+.week.active.severity-no-event {
     background-color: #919191;
 }
 
-.brokencard {
-    border: none;
+.event {
+    color: black;
+    padding: 3px 5px 0px 0px;
+    margin: 3px 0px;
 }
 
-card.header {
-    font-size: 1rem;
+.severity-low {
+    background-color: var(--low);
+    outline-color: var(--low) !important;
+    color: white !important;
 }
 
+.severity-low-medium {
+    background-color: var(--low-medium);
+    outline-color: var(--low-medium) !important;
+    color: black !important;
+}
+
+.severity-medium {
+    background-color: var(--medium);
+    outline-color: var(--medium) !important;
+    color: black !important;
+}
+
+.severity-high-medium {
+    background-color: var(--high-medium);
+    outline-color: var(--high-medium) !important;
+    color: black !important;
+}
+
+.severity-high {
+    background-color: var(--high);
+    outline-color: var(--high) !important;
+    color: white !important;
+}
+
+.severity-extreme {
+    background-color: var(--extreme);
+    outline-color: var(--extreme) !important;
+    color: white !important;
+}
+
+.severity-no-event {
+    background-color: #DEDEDE;
+    outline-color: #919191 !important;
+}
+
+.btn.week.active{
+    box-shadow: none;
+    outline-width: 3px;
+    outline-style: solid;
+    outline-offset: unset;
+}
 
 .timeline-label {
     position: absolute !important;
@@ -257,13 +300,6 @@ card.header {
     width: 100%;
     white-space: nowrap;
 }
-
-.btn.week.active{
-    box-shadow: none;
-    outline: #919191 solid 3px;
-}
-
-
 
 .btn {
     cursor: pointer;
@@ -331,6 +367,13 @@ card.header {
     font-size: 1.2rem;
 }
 
+.brokencard {
+    border: none;
+}
+
+card.header {
+    font-size: 1rem;
+}
 
 /*Side nav bars */
 
