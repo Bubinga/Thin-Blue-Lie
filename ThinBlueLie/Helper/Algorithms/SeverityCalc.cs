@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DataAccessLibrary.Helper;
 using System.Reflection;
 using static ThinBlueLie.Models.ViewModels.TimelineinfoFull;
+using ThinBlueLie.Models.ViewModels;
 
 namespace ThinBlueLie.Helper.Algorithms
 {
@@ -21,6 +22,29 @@ namespace ThinBlueLie.Helper.Algorithms
                 .GetField(fieldName)
                 .GetCustomAttribute<ValueAttribute>();
             return displayAttr.Value;
+        }
+        public static string SeverityCalculatorManyHighest(List<TimelineinfoFull> timelineinfos)
+        {
+            int highestScore = 0;
+            foreach (var timelineinfo in timelineinfos)
+            {
+                var result = SeverityCalculatorList(timelineinfo.OfficerInfo);
+                if (result > highestScore)
+                    highestScore = result;
+            }
+            if (highestScore > 0)
+                return GetSeverityColor(highestScore);
+            return "no-event";         
+        }
+
+        public static int SeverityCalculatorList(List<TimelineinfoOfficerShort> officers)
+        {
+            int score = 0;
+            foreach (var officer in officers)
+            {
+                score += SeverityCalculator(officer.Misconduct, officer.Weapon);
+            }
+            return score;
         }
 
         public static string SeverityCalculatorMany(List<TimelineinfoOfficerShort> officers)
@@ -57,18 +81,18 @@ namespace ThinBlueLie.Helper.Algorithms
             switch (score)
             {
                 case int n when n >= 150:
-                    return "--extreme";
+                    return "extreme";
                 case int n when n >= 100:
-                    return "--high";
+                    return "high";
                 case int n when n >= 50:
-                    return "--high-medium";
+                    return "high-medium";
                 case int n when n >= 30:
-                    return "--medium";
+                    return "medium";
                 case int n when n >= 15:
-                    return "--low-medium";
+                    return "low-medium";
 
                 default:
-                    return "--low";
+                    return "low";
             }
         }
     }

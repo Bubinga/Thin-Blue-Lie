@@ -29,7 +29,7 @@
         var currentUri = new Uri(navManager.Uri);
         if (currentUri.Segments[2].TrimEnd('/') != Date?.ToString("yyyy-MM-dd"))//if url does not match current date
         {
-            string newUrl = new Uri(currentUri, "/Events").AbsoluteUri + "/" + ((DateTime)Date).ToShortDateString();
+            string newUrl = new Uri(currentUri, "/Events").AbsoluteUri + "/" + Date?.ToString("yyyy-MM-dd");
             navManager.NavigateTo(newUrl);
         }
         await Timeline.LoadFromNewDate((DateTime)Date);
