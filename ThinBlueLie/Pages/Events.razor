@@ -44,7 +44,6 @@
 
 
 <Meta Property="og:type" Content="article" />
-<Link Rel="stylesheet" Href="/css/VideoPlayer.css" />
 @if (EventExists)
 {
     <Title>@Event.Data.Title - Thin Blue Lie</Title>
@@ -101,7 +100,7 @@ else if (EventExists)
                 <MediaCarousel Media="Event.Medias"></MediaCarousel>
             </div>
             <div class="col-lg-3">
-                <CascadingValue Value="@((bool)User?.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked))">
+                <CascadingValue Value="@((bool?)User?.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked))">
                     <DataCard Information="Event.Data" Officers="Event.Officers" Subjects="Event.Subjects"></DataCard>
                 </CascadingValue>
             </div>
@@ -172,6 +171,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        EventExists = MultipleEvents = NoEvents = false;
         userState = await AuthState;
         User = await userManager.GetUserAsync(userState.User);
     }

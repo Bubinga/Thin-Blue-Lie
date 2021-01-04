@@ -9,16 +9,13 @@
 @inject NavigationManager MyNavigationManager
 
 <style>
-    .event {
-        color: black;
-        padding: 3px 5px 0px 0px;
-    }
 
     .e-control, .e-css {
         font-family: inherit !important;
         font-size: inherit !important;
         font-weight: inherit !important;
     }
+    
 </style>
 @if (Day == null)
 {
@@ -35,18 +32,19 @@ else
         <div @onclick="PrevWeek" id="triangle-left"> <div class="empty"></div></div>
         @foreach (var i in Enumerable.Range(0, Day.Count))
         {
-            <NavLink class="@("week btn " + ((DateTime.Compare(Dates[i], DateTime.Today.Date) <= 0)? "" : "disabled"))"
+            <NavLink class="@("week btn " + ((DateTime.Compare(Dates[i], DateTime.Today.Date) <= 0)? "" : "disabled")
+                              + $"severity-{(SeverityCalc.SeverityCalculatorManyHighest(Day[i]))}")"
                      href="@("/Events/" + Dates[i].ToString("yyyy-MM-dd"))">
                 @if (Day[i].Any())
                 {
                     string Content = string.Empty;
                     foreach (var Event in Day[i])
                     {
-                        Content += $"<div class=\"event\" style=\"border-right: 2px solid var({SeverityCalc.SeverityCalculatorMany(Event.OfficerInfo)})\">" +
+                        Content += $"<div class=\"event\" style=\"border-right: 3px solid var(--{SeverityCalc.SeverityCalculatorMany(Event.OfficerInfo)})\">" +
                                         Event.Timelineinfo.Title +
                                     "</div>";
                     }
-                    <SfTooltip ID="tooltiphover" Target="@("#day" + i)" OpensOn="Hover" Content="@Content">
+                    <SfTooltip ID="tooltiphover" Target="@("#day" + i)" OpensOn="Hover" Content="@Content" CloseDelay="100">
                         <div class="timeline-label" id="@("day"+i)">
                             <span class="d-none d-lg-inline">@Dates[i].DayOfWeek</span>
                             <span> @Dates[i].Month/@Dates[i].Day</span>
