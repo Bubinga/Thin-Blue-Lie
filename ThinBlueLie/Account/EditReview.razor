@@ -59,7 +59,7 @@
                         <SfButton CssClass="e-outline e-accept-button" IconCss="e-icons e-check">Accept</SfButton>
                         <SfButton CssClass="e-outline e-decline-button" IconCss="e-icons e-cross">Reject</SfButton>
                     }
-                    else if (Ids.ToArray()[ActiveIdIndex] != null)
+                    else if (Ids.Any() && Ids.ToArray()[ActiveIdIndex] != null)
                     {
                         <SfButton CssClass="@("e-outline e-accept-button " + (Ids.ToArray()[ActiveIdIndex].Vote == 1? "active" : ""))"
                                   OnClick="async () => await AcceptEdit()" IconCss="e-icons e-check">
@@ -84,7 +84,7 @@
                         <h3 class="mt-5">There are no current Pending Edits</h3>
                     </div>
                 }
-                else
+                else if (Ids.Any())
                 {
                     @if (Ids.ToArray()[ActiveIdIndex].IdTimelineinfo != null)
                     {
@@ -112,7 +112,7 @@
                             <CompareSubjects OldSubjects="@Edits[ActiveIdIndex].Old.Subjects" NewSubjects="@Edits[ActiveIdIndex].New.Subjects"></CompareSubjects>
                         </CascadingValue>
                     }
-                    else if (Ids.ToArray()[ActiveIdIndex].IsNewEvent.ToBool() == false)
+                    else if (Ids.Any() && Ids.ToArray()[ActiveIdIndex].IsNewEvent.ToBool() == false)
                     {
                         if ((Edits[ActiveIdIndex].New.OfficerPerson != null || Edits[ActiveIdIndex].Old.OfficerPerson != null))
                         {

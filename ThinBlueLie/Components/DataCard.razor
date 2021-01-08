@@ -2,6 +2,7 @@
 @using static ThinBlueLie.Helper.Extensions.EnumExtensions
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
 @using static ThinBlueLie.Models.ViewSimilar;
+@using static ThinBlueLie.Helper.Extensions.IntExtensions 
 @using static DataAccessLibrary.Enums.TimelineinfoEnums
 @using Syncfusion.Blazor.Spinner
 @using Syncfusion.Blazor.Popups
@@ -149,7 +150,7 @@ else
                 </div>
             </div>
             <div class="card-footer">
-                @if (Information.Locked != 1 && CanEditLocked)
+                @if ((Information.Locked.ToBool() == false) || CanEditLocked)
                 {
                     <a class="pr-2" href="/Edit?id=@Information.IdTimelineinfo">Edit</a>
                 }
