@@ -6,7 +6,7 @@
 <Meta Property="og:title" Content="Donate" />
 <Meta Name="description" Content="Seeking to help solve the epidemic? All these charities could use donations to do vital work in 
       each of their respective areas."/>
-<Link Rel="stylesheet" Href="~/css/content.css" />
+<Link Rel="stylesheet" Href="/css/content.css" />
 
 <div class="header-image" style="background-image: url(Assets/Protests-Wallpaper.jpg) !important;">
     <div class="my-auto text-center">
@@ -34,19 +34,13 @@
         </SfSidebar>
         <SfSidebar Width="200px" Animate="false" EnableGestures="false" Position="SidebarPosition.Right" Target=".main-content" MediaQuery="(min-width:600px)">
             <ChildContent>
-                <div class="p-3 mt-2">
-                    <div>
-                        <h6>To learn more about the issue visit:</h6>
-                        <div class="d-flex justify-content-center">
-                            <a class="btn btn-sm btn-outline-info" href="/Resources" role="button">Resources</a>
-                        </div>
-                    </div>
-                    <div>
-                        <h6>To see the severity of the problem look at:</h6>
-                        <div class="d-flex justify-content-center">
-                            <a class="btn btn-sm btn-outline-info" href="/Timeline" role="button">Timeline</a>
-                        </div>
-                    </div>
+                <div class="p-3 mt-2 text-center">
+                    <h6>Thin Blue Lie</h6>
+                    <form action="https://www.paypal.com/donate" method="post" target="_top">
+                        <input type="hidden" name="hosted_button_id" value="TG95ZRQRCXPMU" />
+                        <input type="image" src="/Assets/PayPalDonate.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+                        <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+                    </form>
                 </div>
             </ChildContent>
         </SfSidebar>
@@ -60,7 +54,28 @@
                         <p>Here you can read about reputable charities to donate to help support the cause</p>
                     </div>
                     <hr class="blueline nogap" />
-                    <br />
+                    <div>
+                        <div class="charity">
+                            <img src="/Assets/ThinBlueLie-Logo.png" class="charity-thumbnail"/>
+                            <div class="charity-content">
+                                <h4>Thin Blue Lie</h4>
+                                <p>
+                                    Thin Blue Lie relies entirely on donations for operation. Each and every penny goes straight into
+                                    either maintainace and improvements on the website.
+                                </p>
+                                <div class="charity-button">
+                                    <form action="https://www.paypal.com/donate" method="post" target="_top">
+                                        <input type="hidden" name="hosted_button_id" value="TG95ZRQRCXPMU" />
+                                        <button class="e-btn e-outline e-primary" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button">Donate</button>
+                                        <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
