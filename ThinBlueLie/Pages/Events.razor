@@ -44,7 +44,7 @@
 
 
 <Meta Property="og:type" Content="article" />
-@if (EventExists)
+@if (EventExists && (Event.Data?.Context != null))
 {
     <Title>@Event.Data.Title - Thin Blue Lie</Title>
     <Meta Property="og:title" Content="@(Event.Data.Title + " - Thin Blue Lie")" />
@@ -100,7 +100,7 @@ else if (EventExists)
                 <MediaCarousel Media="Event.Medias"></MediaCarousel>
             </div>
             <div class="col-lg-3">
-                <CascadingValue Value="@((bool?)User?.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked))">
+                <CascadingValue Value="@(User?.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) ?? false)">
                     <DataCard Information="Event.Data" Officers="Event.Officers" Subjects="Event.Subjects"></DataCard>
                 </CascadingValue>
             </div>

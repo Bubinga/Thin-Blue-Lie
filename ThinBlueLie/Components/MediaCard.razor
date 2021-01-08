@@ -28,7 +28,7 @@
                     @if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
                     {
                         <div class="form-group MediaFile">
-                            <SfUploader Enabled="!IsEdit" Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2"
+                            <SfUploader Enabled="!(IsEdit && media.IdMedia != 0)" Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2"
                                         MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
                                 <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>
                             </SfUploader>
@@ -37,7 +37,7 @@
                     else
                     {
                         <div class="form-group MediaLink">
-                            <SfTextBox Enabled="!IsEdit" CssClass="e-filled" Placeholder="Link to Media" ValueChange="refresh"
+                            <SfTextBox Enabled="!(IsEdit && media.IdMedia != 0)" CssClass="e-filled" Placeholder="Link to Media" ValueChange="refresh"
                                        FloatLabelType="@FloatLabelType.Always" @bind-Value="media.OriginalUrl">                                
                             </SfTextBox>
                             <ValidationMessage For="@(() => media.OriginalUrl)"></ValidationMessage>
@@ -58,7 +58,7 @@
                         <label class="mb-1">
                             Source's Location
                         </label>
-                        <SfDropDownList Enabled="!IsEdit" TItem="ListItem"
+                        <SfDropDownList Enabled="!(IsEdit && media.IdMedia != 0)" TItem="ListItem"
                                         Text="@(media.SourceFrom != null? GetEnumDisplayName((SourceFromEnum)media.SourceFrom).ToString() : "Source Location")"
                                         TValue="SourceFromEnum?" PopupHeight="230px" Placeholder="Source Location" @bind-Value="@media.SourceFrom"
                                         DataSource="@(media.MediaType == MediaTypeEnum.Image? ImageSourceLocations : VideoSourceLocations)">

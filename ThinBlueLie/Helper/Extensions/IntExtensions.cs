@@ -43,5 +43,13 @@ namespace ThinBlueLie.Helper.Extensions
             else
                 return true;
         }
+        public static bool IsNullOrZero(this int? value)
+        {
+            if (value == null || value == 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

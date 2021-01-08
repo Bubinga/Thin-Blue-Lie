@@ -59,8 +59,8 @@ namespace ThinBlueLie.Bases
             Ids = await Review.GetPendingEdits(User);               
 
             //get number of all the unconfirmed edits that user can access
-            var firstId = Ids.FirstOrDefault().IdTimelineinfo;
-            if (firstId != 0) //firstId will never be zero other than if ids is empty
+            var firstId = Ids?.FirstOrDefault()?.IdTimelineinfo;
+            if (firstId != 0 && firstId != null) //firstId will never be zero other than if ids is empty
             {
                 var change = await Review.GetEditFromId(Ids.FirstOrDefault());
                 Edits.Add(change.Item1);
