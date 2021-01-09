@@ -79,15 +79,15 @@ else
         <div class="border px-3 py-2">
             @foreach (var evnt in DatesEvents)
             {
-            <div class="py-2 row">
-                <div class="col-8">
-                    <h5><a href="@("/Events/" + Date?.ToString("yyyy-MM-dd") + "/" + UriExtensions.CreateTitleUrl(evnt.Title))">@evnt.Title</a></h5>
-                    <p>@evnt.Context</p>
+                <div class="py-2 row">
+                    <div class="col-8">
+                        <h5><a href="@("/Events/" + Date?.ToString("yyyy-MM-dd") + "/" + UriExtensions.CreateTitleUrl(evnt.Title))">@evnt.Title</a></h5>
+                        <p>@evnt.Context</p>
+                    </div>
+                    <div class="col-4">
+                        <img style="max-height:175px;" src="@evnt.Media.Thumbnail" />
+                    </div>
                 </div>
-                <div class="col-4">
-                    <img style="max-height:175px;" src="@evnt.Media.Thumbnail" />
-                </div>
-            </div>
             }
         </div>
     </div>
@@ -142,13 +142,17 @@ else if (EventExists)
         </div>
     </div>
 }
+else if (FakeEvent)
+{
+    <h4 class="text-center mt-4">Opps, something went wrong! Please double-check your link</h4>
+}
 else if (NoEvents)
 {
-    <h4 class="text-center mt-4">There are no recorded events on this day</h4>
+<h4 class="text-center mt-4">There are no recorded events on this day</h4>
 }
 else
 {
-    <SfSpinner Type="SpinnerType.Material"></SfSpinner>
+<SfSpinner Type="SpinnerType.Material"></SfSpinner>
 }
 
 @code {
@@ -167,17 +171,17 @@ else
     bool MultipleEvents;
     string DbTitle;
     bool NoEvents;
-
+    bool FakeEvent;
 
     protected override async Task OnInitializedAsync()
     {
-        EventExists = MultipleEvents = NoEvents = false;
+        EventExists = MultipleEvents = NoEvents = FakeEvent = false;
         userState = await AuthState;
         User = await userManager.GetUserAsync(userState.User);
     }
     protected override async Task OnParametersSetAsync()
     {
-        EventExists = MultipleEvents = NoEvents = false;
+        EventExists = MultipleEvents = NoEvents = FakeEvent = false;
         if (Date == null) { return; }
 
         if (Title != null)
@@ -239,6 +243,10 @@ else
                 evnt.Context = string.Join(". ", text.InnerText.Split(". ").Take(2)); //Get just the first two sentences
             }
         }
+        else
+        {
+            NoEvents = true;
+        }
         DatesEvents.AddRange(events);
         await ViewMedia.GetDataMany(events.Select(m => m.Media).ToList());
         //await Task.Delay(50);
@@ -251,39 +259,44 @@ else
         DbTitle = string.Join("[^a-zA-Z]*", Title.Split('-'));
         var title = $"[^a-zA-Z]*{DbTitle}"; //use Title to get information
         var query = @"SELECT t.*, Max(e.Timestamp) As EventUpdated, Min(e.Timestamp) as Timestamp
-                    From timelineinfo t
-                    Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
-                    where t.date = @date and t.Title Regexp @title and Confirmed = 1;";
+                From timelineinfo t
+                Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
+                where t.date = @date and t.Title Regexp @title and Confirmed = 1;";
         var timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd"), title }, GetConnectionString());
-
-        var mediaQuery = "SELECT *,(true) as Processed From media m where m.IdTimelineinfo = @id Order By m.Rank;";
-        var officerQuery = "SELECT o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
-                "FROM timelineinfo t " +
-                "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
-                "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
-                "WHERE t.IdTimelineinfo = @id ;";
-        var subjectQuery = "SELECT s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed " +
-                "FROM timelineinfo t " +
-                "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
-                "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
-                "WHERE t.IdTimelineinfo = @id;";
-
-        //get media, officers, and subjects using timelineinfo id
-        List<ViewMedia> media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = timelineinfo.IdTimelineinfo }, GetConnectionString());
-        List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = timelineinfo.IdTimelineinfo }, GetConnectionString());
-        List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = timelineinfo.IdTimelineinfo }, GetConnectionString());
-
-        await ViewMedia.GetDataMany(media);
-
-        Event = new ViewEvent
+        if (timelineinfo.IdTimelineinfo != 0) //If title matches title on that day
         {
-            Data = timelineinfo,
-            Medias = media,
-            Officers = mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers),
-            Subjects = mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects)
-        };
-        EventExists = true;
+            var mediaQuery = "SELECT *,(true) as Processed From media m where m.IdTimelineinfo = @id Order By m.Rank;";
+            var officerQuery = "SELECT o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " +
+                    "FROM timelineinfo t " +
+                    "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
+                    "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
+                    "WHERE t.IdTimelineinfo = @id ;";
+            var subjectQuery = "SELECT s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed " +
+                    "FROM timelineinfo t " +
+                    "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
+                    "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
+                    "WHERE t.IdTimelineinfo = @id;";
 
+            //get media, officers, and subjects using timelineinfo id
+            List<ViewMedia> media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = timelineinfo.IdTimelineinfo }, GetConnectionString());
+            List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = timelineinfo.IdTimelineinfo }, GetConnectionString());
+            List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = timelineinfo.IdTimelineinfo }, GetConnectionString());
+
+            await ViewMedia.GetDataMany(media);
+
+            Event = new ViewEvent
+            {
+                Data = timelineinfo,
+                Medias = media,
+                Officers = mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers),
+                Subjects = mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects)
+            };
+            EventExists = true;
+        }
+        else
+        {
+            FakeEvent = true;
+        }
         this.StateHasChanged();
     }
 }
