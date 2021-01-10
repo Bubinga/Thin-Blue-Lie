@@ -99,16 +99,16 @@
                         }
                         else
                         {
-                            <img class="preview-image" src="@media.Thumbnail" />
+                            <img alt="image-preview" class="preview-image" src="@media.Thumbnail" />
                         }
                     }
                     else if (!string.IsNullOrWhiteSpace(media.SourcePath))
                     {
-                        <img class="preview-image" src="@media.Thumbnail" />
+                        <img alt="image preview"  class="preview-image" src="@media.Thumbnail" />
                     }
                     else
                     {
-                        <img class="preview-image" src="/Assets/Placeholder-Image.png" />
+                        <img alt="placeholder image" class="preview-image" src="/Assets/Placeholder-Image.png" />
                     }
                 }
                 else if (media.MediaType == MediaEnums.MediaTypeEnum.News)
@@ -119,7 +119,7 @@
                     }
                     else
                     {
-                        <img class="preview-image" src="/Assets/Placeholder-Image.png" />
+                        <img alt="placeholder image" class="preview-image" src="/Assets/Placeholder-Image.png" />
                     }
                 }
                 else //if it's a video
@@ -128,7 +128,7 @@
                     {
                         if (media.SourceFrom != null)
                         {
-                            <img class="preview-image" src="@media.Thumbnail" />
+                            <img alt="image preview" class="preview-image" src="@media.Thumbnail" />
                         }
                         else
                         {
@@ -139,7 +139,7 @@
                     }
                     else
                     {
-                        <img class="preview-image" src="/Assets/Placeholder-Image.png" />
+                        <img alt="placeholder image" class="preview-image" src="/Assets/Placeholder-Image.png" />
                     }
                 }
             </div>           
