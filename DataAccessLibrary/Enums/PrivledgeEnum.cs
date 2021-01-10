@@ -27,8 +27,8 @@ namespace DataAccessLibrary.Enums
             SelfVerifyEdits = 1000,
             [Display(Name = "Delete Events")]
             DeleteEvents = 2000,
-            [Display(Name = "Full Permissions")]
-            Moderator = 5000
+            [Display(Name = "Access to Moderator Tools")]
+            Moderator = 4000
         }
     }
 }
