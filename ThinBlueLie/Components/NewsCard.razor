@@ -53,6 +53,16 @@ else
     protected override async Task OnParametersSetAsync()
     {
         news = new MetaTags(newsUrl); //initialized with HasData = false
-        news = await MetaScraper.GetMetaData(newsUrl); //Filling out with data later.
+        Uri uriResult;
+        bool isUrl = Uri.TryCreate(newsUrl, UriKind.Absolute, out uriResult)
+            && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+        if (isUrl)
+        {
+            news = await MetaScraper.GetMetaData(newsUrl); //Filling out with data later.
+        }
+        else
+        {
+            news.Error = true;
+        }
     }
 }
