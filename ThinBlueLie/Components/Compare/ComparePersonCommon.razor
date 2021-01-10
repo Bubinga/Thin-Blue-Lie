@@ -8,7 +8,8 @@
 @using static ThinBlueLie.Searches.SearchClasses.SimilarPerson
 
 <div class="mb-1 d-flex @(Person.Image != OtherPerson?.Image? IsOriginal? "deleted-item" : "inserted-item" : "")">
-    <img class="mx-auto" width="200" height="200" src="@GetImageOfPerson(Person.Image, Person.Local == 1? true : false)" />
+    <img alt="image of @((Person.Name ?? OtherPerson.Name) ?? "placeholder")" class="mx-auto" width="200" height="200"
+         src="@GetImageOfPerson(Person.Image, Person.Local == 1? true : false)" />
 </div>
 <hr class="my-0" />
 <span class="d-md-block">
