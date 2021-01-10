@@ -23,11 +23,12 @@ namespace ThinBlueLie.Bases
         public ApplicationUser User;
         public async Task GetProfile()
         {
-            string sql = $@"Select e.IdTimelineinfo, t.City, t.State, t.Updated, e.Timestamp, t.Owner, t.Title, t.Date
+            //need to fix Event column processing
+            string sql = $@"Select e.IdTimelineinfo, t.City, t.State, t.Updated, e.Timestamp, t.Owner, t.Title, t.Date, e.Confirmed as Status, 
+                               ((Select Min(x.Timestamp) from edithistory x where x.IdTimelineinfo = e.IdTimelineinfo) = e.TimeStamp) as Event
                                From edithistory e
                                Join timelineinfo t on e.IdTimelineinfo = t.IdTimelineinfo
-                               Where SubmittedBy = {User.Id}
-                               Group By e.IdTimelineinfo;
+                               Where SubmittedBy = {User.Id};
                             Select Count(*) From edithistory e where e.SubmittedBy = 1 and Confirmed = {User.Id};
                             Select Count(*) From flags f where f.UserId = {User.Id};
                             Select Count(*) From edit_votes ev where ev.UserId = 1;";
@@ -37,7 +38,7 @@ namespace ThinBlueLie.Bases
 
                 using (var multi = await connection.QueryMultipleAsync(sql))
                 {
-                    profile.Submissions = multi.Read<Timelineinfo>().ToList();
+                    profile.Submissions = multi.Read<ProfileInfo>().ToList();
                     profile.AcceptedEdits = multi.Read<int>().FirstOrDefault();
                     profile.Flags = multi.Read<int>().FirstOrDefault();
                     profile.VotesCast = multi.Read<int>().FirstOrDefault();
