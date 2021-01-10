@@ -57,6 +57,7 @@ namespace ThinBlueLie.Models
                 return DisplayUrl;            
             }
             set { originalUrl = value;
+                this.Processed = false;
                 new Task(async () =>
                 {
                     await GetData(this);
@@ -88,8 +89,8 @@ namespace ThinBlueLie.Models
                 return media; // break
             }
 
-            if (media.Thumbnail != null && media.Processed == false)
-                media.Processed = true;
+            //if (media.Thumbnail != null && media.Processed == false)
+            //    media.Processed = true;
            
             if (media.Processed == false)
             {
@@ -212,13 +213,12 @@ namespace ThinBlueLie.Models
                 {
                     if (media.Processed == false)
                     {
-                        media.sourcePath = media.originalUrl;
+                        media.ContentUrl = media.Thumbnail = media.sourcePath = media.originalUrl;
                     }
                     else
                     {
-                        media.originalUrl = media.sourcePath;
+                        media.ContentUrl = media.Thumbnail = media.originalUrl = media.sourcePath;
                     }
-                    media.ContentUrl = media.Thumbnail = media.sourcePath ?? media.originalUrl;
                     media.Processed = true;
                     return media;
                 }
