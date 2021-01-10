@@ -98,6 +98,8 @@ namespace ThinBlueLie.Bases
         }
 
         DataAccess data = new DataAccess();
+        const int minimumAcceptVotes = 6;
+        const int minimumDenyVotes = -4;
         //TODO make only able to vote once.
         public async Task AcceptEdit()
         {
@@ -107,20 +109,18 @@ namespace ThinBlueLie.Bases
             //if the vote was already accepted
             if (Vote < 1 || Vote == null)
             {
-                string AcceptSql = @"INSERT INTO edit_votes (IdEditHistory,UserId,Vote) 
-                                            VALUES (@IdEditHistory, @UserId, 1) AS new
-                                               ON DUPLICATE KEY UPDATE
-                                                   Vote = new.Vote;
-                                    SELECT e.Vote FROM edit_votes e where e.IdEditHistory = @IdEditHistory;";
+                string AcceptSql = "INSERT INTO edit_votes (IdEditHistory,UserId,Vote) " +
+                            "VALUES (@IdEditHistory, @UserId, 1) AS new " +
+                            "ON DUPLICATE KEY UPDATE " +
+                            "Vote = new.Vote; " +
+                    "SELECT e.Vote FROM edit_votes e where e.IdEditHistory = @IdEditHistory;";
                 IEnumerable<int> rows;
                 using (IDbConnection connection = new MySqlConnection(GetConnectionString()))
                 {
                     rows = await connection.QueryAsync<int>(AcceptSql, new { IdEditHistory = Ids.ToArray()[ActiveIdIndex].IdEditHistory, UserId = User.Id });
                 }
                 Ids.ToArray()[ActiveIdIndex].Vote = 1;
-                if (rows.Sum() <= 2)
-                    await MergeEdit();
-                //StateHasChanged();
+                await GetEditTask(rows);
             }
            
         }
@@ -129,13 +129,50 @@ namespace ThinBlueLie.Bases
             var Vote = Ids.ToArray()[ActiveIdIndex].Vote;
             if (Vote > -1 || Vote == null)
             {
-                string AcceptSql = @"INSERT INTO edit_votes (`IdEditHistory`, `UserId`, `Vote`) 
-                                            VALUES(@IdEditHistory, @UserId, -1) AS new
-                                              ON DUPLICATE KEY UPDATE
-                                                  Vote = new.Vote; ";
-                await data.SaveData(AcceptSql, new { Ids.ToArray()[ActiveIdIndex].IdEditHistory, UserId = User.Id }, GetConnectionString());
+                string RejectSql = "INSERT INTO edit_votes (`IdEditHistory`, `UserId`, `Vote`) " +
+                        "VALUES(@IdEditHistory, @UserId, -1) AS new " +
+                        "ON DUPLICATE KEY UPDATE " +
+                        "Vote = new.Vote; " +
+                    "SELECT e.Vote FROM edit_votes e where e.IdEditHistory = @IdEditHistory;";
+                IEnumerable<int> rows;
+                using (IDbConnection connection = new MySqlConnection(GetConnectionString()))
+                {
+                    rows = await connection.QueryAsync<int>(RejectSql, new { IdEditHistory = Ids.ToArray()[ActiveIdIndex].IdEditHistory, UserId = User.Id });
+                }
                 Ids.ToArray()[ActiveIdIndex].Vote = -1;
+                await GetEditTask(rows);
             }
+        }
+
+        public async Task GetEditTask(IEnumerable<int> rows)
+        {
+            bool DidSomething = false;
+            if (rows.Sum() <= minimumDenyVotes)
+            {
+                await DenyEdit();
+                DidSomething = true;
+            }
+            else if (rows.Sum() >= minimumAcceptVotes)
+            {
+                await MergeEdit();
+                DidSomething = true;
+            }
+
+            if (DidSomething)
+            {
+                //var id = Ids.ToArray()[ActiveIdIndex].IdEditHistory;
+                Edits.RemoveAt(ActiveIdIndex);
+                EditChanges.RemoveAt(ActiveIdIndex);
+                var x = Ids.ToList();
+                x.RemoveAt(ActiveIdIndex);
+                Ids = x;
+                PendingEditsCount--;
+            }
+        }
+        public async Task DenyEdit()
+        {
+            string DenyEditSql = "UPDATE edithistory SET `Confirmed` = '2' WHERE (`IdEditHistory` = @id);";
+            await data.SaveData(DenyEditSql, new { id = Ids.ToArray()[ActiveIdIndex].IdEditHistory }, GetConnectionString());
         }
 
         public async Task MergeEdit()

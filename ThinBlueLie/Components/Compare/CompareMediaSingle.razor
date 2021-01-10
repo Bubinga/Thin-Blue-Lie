@@ -51,9 +51,11 @@
                         {
                             if (Media.Item1.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
                             {
-                                <div style="max-height:250px;">
-                                    <iframe src="@youtube1Url" frameborder="0"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <div style="height: 275px !important;">
+                                    <iframe src="@youtube1Url" frameborder="0" class="h-100"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen="allowfullscreen">
+                                    </iframe>
                                 </div>
                             }
                             else if (Media.Item1.SourceFrom == MediaEnums.SourceFromEnum.Reddit)
@@ -66,8 +68,11 @@
                         }
                         else if ((Media.Item1.MediaType == MediaEnums.MediaTypeEnum.Image))
                         {
-                            <div style="background-image: url(@Media.Item1.ContentUrl); max-height:250px;">
-                            </div>
+                            <img class="img-fluid" src="@Media.Item1.ContentUrl" style="max-height:275px; width: auto;" />
+                        }
+                        else if ((Media.Item1.MediaType == MediaEnums.MediaTypeEnum.News))
+                        {
+                            <img class="img-fluid" src="@Media.Item1.Thumbnail" style="max-height:250px; width: auto;" />
                         }
                     </div>
                 </div>
@@ -132,18 +137,11 @@
                     }
                     else if ((Media.Item2.MediaType == MediaEnums.MediaTypeEnum.Image))
                     {
-                        <img src="@Media.Item2.ContentUrl" style="max-height:275px; width: auto;" zya="@(Media.Item2.ContentUrl ?? "it's null chief")"/>
-                        @*<ul>
-                            <li>@(Media.Item2.ContentUrl ?? "null link")</li>
-                            <li>@(Media.Item2.Thumbnail ?? "null link")</li>
-                            <li>@(Media.Item2.DisplayUrl ?? "null link")</li>
-                            <li>@(Media.Item2.SourcePath ?? "null link")</li>
-                            <li>@("Processsed: " + Media.Item2.Processed)</li>
-                        </ul>*@
+                        <img class="img-fluid" src="@Media.Item2.ContentUrl" style="max-height:275px; width: auto;"/>
                     }
                     else if ((Media.Item2.MediaType == MediaEnums.MediaTypeEnum.News))
                     {
-                        <img src="@Media.Item2.Thumbnail" style="max-height:250px; width: auto;" />
+                        <img class="img-fluid" src="@Media.Item2.Thumbnail" style="max-height:250px; width: auto;" />
                     }
                 </div>
             </div>
