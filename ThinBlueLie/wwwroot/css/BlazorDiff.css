@@ -31,7 +31,7 @@
     .diff-container .diff-panes .diff-pane {
       flex: 1; }
       .diff-container .diff-panes .diff-pane .line-text {
-        word-break: break-all;
+        /*word-break: break-all;*/
         word-wrap: break-word; }
 
 .diff-pane-left {

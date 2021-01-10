@@ -46,11 +46,10 @@ namespace ThinBlueLie.Searches
                         "FROM edithistory e " +
                         "Left Join timelineinfo t on e.IdTimelineinfo = t.IdTimelineinfo " +
                         "LEFT Join edit_votes ev on e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId " +
-                        "WHERE Confirmed = 0;";
-                    //"And e.SubmittedBy != @UserId;";
-                    PendingIds =
-                        await connection.QueryAsync<FirstLoadEditHistory>(getPendingEditsIdsSql,
-                            new {UserId = user.Id});
+                        "WHERE Confirmed = 0 " +
+                        "And ev.Vote is null " +
+                        "And e.SubmittedBy != @UserId;";
+                    PendingIds = await connection.QueryAsync<FirstLoadEditHistory>(getPendingEditsIdsSql, new {UserId = user.Id});
                 }
                 else
                 {
@@ -60,7 +59,8 @@ namespace ThinBlueLie.Searches
                         "LEFT JOIN timelineinfo t ON e.IdTimelineinfo = t.IdTimelineinfo " +
                         "LEFT JOIN edit_votes ev ON e.IdEditHistory = ev.IdEditHistory And ev.UserId = @UserId " +
                         "WHERE e.Confirmed = 0 " +
-                        "And e.SubmittedBy != @UserId" +
+                        "And e.SubmittedBy != @UserId " +
+                        "And ev.Vote is null " +
                         "AND (t.Owner = @UserId OR e.IdTimelineinfo is null);";
                     PendingIds =
                         await connection.QueryAsync<FirstLoadEditHistory>(getPendingEditsIdsSql,
