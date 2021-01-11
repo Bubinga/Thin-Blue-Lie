@@ -4,13 +4,11 @@ var slideCount;
 var slides;
 var loadedEvent;
 var players = [];
-//TODO Turn on looping
 function InitializeSwiper() {
     slideCount = jQuery(".gallery-thumbs .swiper-wrapper .swiper-slide").length;
     slides = (slideCount > 3 ? 'auto' : `${slideCount}`);
 
-    //getYoutubeAPIscript();
-
+    //TODO only loop if item count > slides per view
     if (loadedEvent != window.location.href) {
         galleryThumbs = new Swiper(".gallery-thumbs", {
             spaceBetween: 2,
@@ -57,9 +55,9 @@ function InitializeSwiper() {
                 },
             }
         });
-        loadedEvent = window.location.href;
         $("videowrapper:not(.paused) btn.toggle-play").mouseup();
-    }    
+        loadedEvent = window.location.href;        
+    }       
 }
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
