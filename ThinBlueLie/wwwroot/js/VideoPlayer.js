@@ -870,7 +870,8 @@ v.onloadstart = () => {
       } else if (muteTillSync && imagusAudio.readyState > 2) {
         imagusAudio.muted = false;
         muteTillSync = false;
-        console.log('unmuted');
+          console.log('unmuted');
+          imagusAudio.pause();
       }
     }
     if (eInput || eMouseUp) xPosition = +tooltip.getAttribute('data-x-position');

@@ -151,7 +151,7 @@
                             <Template>
                                 @{
                                     var Event = (context as ProfileInfo);
-                                    <span>@(Event.Event ? "New Event" : "Edit")</span>
+                                    <span>@(Event.IsNewEvent ? "New Event" : "Edit")</span>
                                 }
                             </Template>
                         </GridColumn>

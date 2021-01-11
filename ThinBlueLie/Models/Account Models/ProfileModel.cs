@@ -19,6 +19,6 @@ namespace ThinBlueLie.Models
         /// 0 = Unconfirmed 1 = Confirmed 2 = Rejected
         /// </summary>
         public int Status { get; set; }
-        public bool Event { get; set; }
+        public bool IsNewEvent { get; set; }
     }
 }
