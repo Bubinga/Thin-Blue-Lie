@@ -23,15 +23,22 @@ namespace ThinBlueLie.Bases
         public ApplicationUser User;
         public async Task GetProfile()
         {
-            //need to fix Event column processing
-            string sql = $@"Select e.IdTimelineinfo, t.City, t.State, t.Updated, e.Timestamp, t.Owner, t.Title, t.Date, e.Confirmed as Status, 
-                               ((Select Min(x.Timestamp) from edithistory x where x.IdTimelineinfo = e.IdTimelineinfo) = e.TimeStamp) as Event
-                               From edithistory e
-                               Join timelineinfo t on e.IdTimelineinfo = t.IdTimelineinfo
-                               Where SubmittedBy = {User.Id};
-                            Select Count(*) From edithistory e where e.SubmittedBy = 1 and Confirmed = {User.Id};
-                            Select Count(*) From flags f where f.UserId = {User.Id};
-                            Select Count(*) From edit_votes ev where ev.UserId = 1;";
+            string sql = "SELECT " +
+                              "e.IdTimelineinfo, t.City, t.State, t.Updated, e.Timestamp, t.Owner, t.Title, t.Date, e.Confirmed as Status, " +
+                                "CASE " +
+                                  "WHEN  " +
+                                    "ROW_NUMBER() OVER (PARTITION BY e.IdTimelineinfo ORDER BY e.Timestamp) = 1 " +
+                                    "THEN 1 " +
+                                  "ELSE 0 " +
+                                "END AS IsNewEvent, " +
+                              "ROW_NUMBER() OVER (PARTITION BY IdTimelineinfo ORDER BY e.Timestamp) AS rn " +
+                            "From edithistory e " +
+                            "Join timelineinfo t on e.IdTimelineinfo = t.IdTimelineinfo " +
+                            $"Where SubmittedBy = {User.Id} " +
+                            "ORDER BY e.IdTimelineinfo; " +
+                        $"Select Count(*) From edithistory e where e.SubmittedBy = 1 and Confirmed = {User.Id}; " +
+                        $"Select Count(*) From flags f where f.UserId = {User.Id}; " +
+                        $"Select Count(*) From edit_votes ev where ev.UserId = {User.Id};";
             using (var connection = new MySqlConnection(GetConnectionString()))
             {
                 connection.Open();
@@ -45,20 +52,5 @@ namespace ThinBlueLie.Bases
                 }
             }
         }
-
-        
-        //Accepted Edits: Count(edithistory where userId = userId and Confirmed = 1)
-        //Flags: Count(flags where UserId = userid)
-        //Submissions: select Count(distinct IdTimelineinfo from edithistory Where userId = userId)
-        //    Gets submissions that have even been turned public
-        // Votes Cast: select Count(editvotes where userId = userId);
-
-        //Get all Events they Own/Owned select distinct IdTimelineinfo e.IdTimelineinfo from edithistory e Where userId = userId
-        //    Date Uploaded
-        //    Date of Event
-        //    Title
-        //    Thoroughness Index (later)
-        //    Community
-        //
     }
 }
