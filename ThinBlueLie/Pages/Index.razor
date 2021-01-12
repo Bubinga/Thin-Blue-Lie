@@ -17,13 +17,16 @@
         color: #007bff; /* old IE */
         background-color: #007bff; /* Modern Browsers */
     }
-    .header-image{
+
+    .header-image {
         display: flex;
     }
+
     .line {
         position: relative;
         width: 100%;
     }
+
     ul {
         list-style-type: none;
     }
@@ -38,32 +41,41 @@
 <div class="container">
     <div class="py-3 px-5 border-bottom">
         <h6>
-            Every year, police kill roughly <strong>1,000</strong> people and harass countless people, but much of it gets buried
-            in documents and hidden from public view
+            Every year, police kill roughly <strong>1,200</strong> people and harass countless others. However, much of it gets buried
+            in documents and hidden from public view. Thin Blue Lie aims to document and expose the widespread nature of police brutality
+            in America by circumnavigating legal avenues to infromation, crowd sourcing all data.
         </h6>
     </div>
-    <div class="text-center">
-        <h5>
-            Since we were focusing on getting functionality working, the home page is a bit bare bones, explore the below links. 
-        </h5>
-    </div>
-    <div>
-        <ul>
-            <li>
-                <a href="/Events">Events</a>
-            </li>
-             <li>
-                <a href="/Submit">Submit an Event</a>
-            </li>
-             <li>
-                <a href="/About">About Us</a>
-
-            </li>
-        </ul>
+    <div class="d-flex justify-content-between mt-3">
+        <div class="card mx-2">
+            <div class="card-body">
+                <h5 class="card-title"><a href="/Events" class="text-black">Events</a></h5>
+                <h6 class="card-subtitle mb-2 text-muted">Access to our data</h6>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="/Events" class="card-link">Events</a>
+                <a href="/Events" class="card-link">Submit Event</a>
+            </div>
+        </div>
+        <div class="card mx-2">
+            <div class="card-body">
+                <h5 class="card-title"><a href="/Solutions" class="text-black">Solutions</a></h5>
+                <h6 class="card-subtitle mb-2 text-muted">Articles on Solutions</h6>
+                <p class="card-text">We have written a series of essays on proposed and discussed topics.</p>
+                <a href="/Solutions" class="card-link">Solutions</a>
+            </div>
+        </div>
+        <div class="card mx-2">
+            <div class="card-body">
+                <h5 class="card-title"><a href="/Donate" class="text-black">Donate</a></h5>
+                <h6 class="card-subtitle mb-2 text-muted">Donate to Charities</h6>
+                <p class="card-text">We have compiled a set of charites to donate to help the cause.</p>
+                <a href="/Donate" class="card-link">Donate</a>
+            </div>
+        </div>
     </div>
 </div>
 
 
 @code {
-   
+
 }
