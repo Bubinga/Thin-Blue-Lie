@@ -33,7 +33,7 @@ namespace ThinBlueLie.Searches
         //count total pending edits that the user can access and get their edithistory ids
         public async Task<List<FirstLoadEditHistory>> GetPendingEdits(ApplicationUser user)
         {
-            var canReviewAll = user.RepAuthorizer(PrivledgeEnum.Privledges.ReviewAll);
+            var canReviewAll = user.RepAuthorizer(PrivilegeEnum.Privileges.ReviewAll);
             using (var connection = new MySqlConnection(GetConnectionString()))
             {
                 IEnumerable<FirstLoadEditHistory> PendingIds;

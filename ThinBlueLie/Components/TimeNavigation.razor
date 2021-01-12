@@ -7,17 +7,18 @@
     <div class="col-10">
         <Timeline Date="(DateTime)Date" @ref="Timeline"></Timeline>
     </div>
-    <div class="ml-4 mt-auto">
+    <div class="ml-3 mt-auto d-flex">
         <SfTooltip CssClass="e-tooltip-css" OpensOn="Click">
             <TooltipTemplates>
                 <Content>
-                    <SfCalendar TValue="DateTime?" Max="DateTime.Today" @bind-Value="Date">
+                    <SfCalendar TValue="DateTime?" Min="InformationBase.MinDate" Max="DateTime.Today" @bind-Value="Date">
                         <CalendarEvents TValue="DateTime?" ValueChange="@SetDay"></CalendarEvents>
                     </SfCalendar>
                 </Content>
             </TooltipTemplates>
-            <SfButton CssClass="e-outline text" IsPrimary="true" Content="Calendar"></SfButton>
+            <SfButton CssClass="e-outline text mx-1" IsPrimary="true" Content="Calendar"></SfButton>
         </SfTooltip>
+        <SfButton CssClass="e-outline text mx-1" IsPrimary="true"><a href="@("/Events/" + DateTime.Today.ToString("yyyy-MM-dd"))">Today</a></SfButton>
     </div>
 </div>
 @code {

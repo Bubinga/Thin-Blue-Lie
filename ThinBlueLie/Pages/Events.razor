@@ -1,5 +1,6 @@
 ﻿@page "/Events/{Date:datetime}/{Title}"
 @page "/Events/{Date:datetime}"
+@page "/Events"
 @using ThinBlueLie.ViewModels
 @using ThinBlueLie.Helper.Extensions
 @using DataAccessLibrary.DataAccess
@@ -100,7 +101,7 @@ else if (EventExists)
                 <MediaCarousel Media="Event.Medias"></MediaCarousel>
             </div>
             <div class="col-lg-3">
-                <CascadingValue Value="@(User?.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) ?? false)">
+                <CascadingValue Value="@(User?.RepAuthorizer(PrivilegeEnum.Privileges.EditLocked) ?? false)">
                     <DataCard Information="Event.Data" Officers="Event.Officers" Subjects="Event.Subjects"></DataCard>
                 </CascadingValue>
             </div>
@@ -148,11 +149,11 @@ else if (FakeEvent)
 }
 else if (NoEvents)
 {
-<h4 class="text-center mt-4">There are no recorded events on this day</h4>
+    <h4 class="text-center mt-4">There are no recorded events on this day</h4>
 }
 else
 {
-<SfSpinner Type="SpinnerType.Material"></SfSpinner>
+    <SfSpinner Type="SpinnerType.Material"></SfSpinner>
 }
 
 @code {
@@ -176,6 +177,10 @@ else
     protected override async Task OnInitializedAsync()
     {
         EventExists = MultipleEvents = NoEvents = FakeEvent = false;
+        if (Date == null)
+        {
+            Date = DateTime.Today;
+        }
         userState = await AuthState;
         User = await userManager.GetUserAsync(userState.User);
     }
@@ -183,6 +188,10 @@ else
     {
         EventExists = MultipleEvents = NoEvents = FakeEvent = false;
         if (Date == null) { return; }
+        if (Date > DateTime.Today.Date || Date <= InformationBase.MinDate)
+        {
+            Date = DateTime.Today;
+        }
 
         if (Title != null)
         {
@@ -259,9 +268,9 @@ else
         DbTitle = string.Join("[^a-zA-Z]*", Title.Split('-'));
         var title = $"[^a-zA-Z]*{DbTitle}"; //use Title to get information
         var query = @"SELECT t.*, Max(e.Timestamp) As EventUpdated, Min(e.Timestamp) as Timestamp
-                From timelineinfo t
-                Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
-                where t.date = @date and t.Title Regexp @title and Confirmed = 1;";
+            From timelineinfo t
+            Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
+            where t.date = @date and t.Title Regexp @title and Confirmed = 1;";
         var timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd"), title }, GetConnectionString());
         if (timelineinfo.IdTimelineinfo != 0) //If title matches title on that day
         {

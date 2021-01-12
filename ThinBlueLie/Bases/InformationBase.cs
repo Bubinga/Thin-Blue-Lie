@@ -57,7 +57,7 @@ namespace ThinBlueLie.Bases
         public IEnumerable<ListItem> States = GetEnumDisplayNames<TimelineinfoEnums.StateEnum>();
 
         public DateTime Today { get; set; } =  DateTime.Today;
-        public DateTime MinDate { get; set; } = new DateTime(1776, 6, 4);
+        public static DateTime MinDate = new DateTime(1776, 7, 4);
         public DateTime? DateValue { get; set; } = DateTime.Today;
 
         internal void SetSameAsSubject(SimilarPeopleModel person)

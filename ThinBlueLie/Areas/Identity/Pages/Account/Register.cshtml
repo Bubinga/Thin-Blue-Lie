@@ -27,7 +27,7 @@
 <link rel="stylesheet" href="~/Identity/css/site.css" />
 <div class="container">
     <div class="mx-auto col-md-6 mt-5">
-        <form id="account" method="post">
+        <form id="account" method="post" autocomplete="off">
             <div class="mx-auto text-center">
                 <a href="/">
                     <img class="mb-4" src="/Assets/ThinBlueLie-Logo.png" alt="Thin Blue Lie Logo" width="125" height="125">
@@ -61,7 +61,7 @@
             <div class="text-center">
                 <div class="form-group text-center">
                     <p>
-                        <a asp-page="Account/Login" asp-route-returnUrl="@Model.ReturnUrl">Log in with existing account</a>
+                        <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Log in with existing account</a>
                     </p>
                 </div>
                 <p class="mt-5 mb-3 text-muted">Thin Blue Lie ©2020</p>

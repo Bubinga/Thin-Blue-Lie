@@ -34,3 +34,14 @@ jobs:
         host: ${{ secrets.REMOTE_HOST }}
         username: ${{ secrets.REMOTE_USER }}
         privateKey: ${{ secrets.REMOTE_SSH_KEY }}
+    - name: Test Custom
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+        severity: info
+        username: Deployments
+        color: '#ff00aa'
+        avatarUrl: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+        description: 'Deployment: ${{ job.status }}'
+        details: '${{ github.actor }}: ${{ github.event_name }}'
+        footer: ${{ github.workflow }}
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
