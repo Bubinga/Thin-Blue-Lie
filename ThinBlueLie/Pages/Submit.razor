@@ -104,12 +104,13 @@
 </style>
 <AuthorizeView>
     <NotAuthorized>
-        <h5 class="text-center mt-5">
-            Either
-            <a href="/Account/Login">Login</a> or
-            <a href="/Account/Register">Register</a>
-            to create a new Event
-        </h5>
+        <div class="text-center mt-5">
+            <h4 >
+                You must be logged in to create a new event
+            </h4>
+            <a style="font-size: 20px;" href="/Account/Login">Login</a> or
+            <a style="font-size: 20px;"href="/Account/Register">Register</a>
+        </div>       
     </NotAuthorized>
     <Authorized Context="Auth">
         <div class="offset-lg-2 row container-fluid mr-0 pr-0" style="margin-bottom:100px;">
@@ -279,7 +280,7 @@
             SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
             SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
             Today = DateTime.Today;
-            MinDate = new DateTime(1776, 6, 4);
+            MinDate = new DateTime(1776, 7, 4);
             DateValue = DateTime.Today;
             SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
         }

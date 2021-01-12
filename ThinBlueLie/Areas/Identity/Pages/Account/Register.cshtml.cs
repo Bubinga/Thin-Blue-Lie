@@ -97,7 +97,7 @@ namespace ThinBlueLie.Areas.Identity.Pages.Account
 
                     string email = $@"
                                         <div style=""text-align: center; margin-top: 50px;"">
-                                                 <img alt=""Thin Blue Lie Logo"" src=""{Request.Scheme + "ThinBlueLie.us/Assets/ThinBlueLie-Logo.png"}"" 
+                                                 <img alt=""Thin Blue Lie Logo"" src=""{Request.Scheme + @"https://thinbluelie.us/Assets/ThinBlueLie-Logo.png"}"" 
                                                     width=""150px"" height=""150px"">
                                        </div>
                                         <div style = ""padding: 0 15px;"">

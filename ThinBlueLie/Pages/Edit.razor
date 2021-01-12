@@ -228,10 +228,10 @@
         </EditForm>
     </div>
 }
-else if (model.Timelineinfos.Locked == 1 && (User.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) == false))
+else if (model.Timelineinfos.Locked == 1 && (User.RepAuthorizer(PrivilegeEnum.Privileges.EditLocked) == false))
 {
     <div class="container text-center container-fluid mt-5">
-        <h4>How did you get here? You need the <a href="/About/Reputation">"Edit Locked Posts"</a> privledge to edit this post</h4>
+        <h4>How did you get here? You need the <a href="/About/Reputation">"Edit Locked Posts"</a> privilege to edit this post</h4>
     </div>
 }
 else if (!string.IsNullOrWhiteSpace(id) && EventExists == false)

@@ -64,7 +64,7 @@ namespace ThinBlueLie.Bases
             {
                 EventExists = true;
                 //if post is not both locked and user missing perm to edit locked
-                if (!(timelineinfo.Locked == 1 && (User.RepAuthorizer(PrivledgeEnum.Privledges.EditLocked) == false)))
+                if (!(timelineinfo.Locked == 1 && (User.RepAuthorizer(PrivilegeEnum.Privileges.EditLocked) == false)))
                 {
                     var mediaQuery = "SELECT *, (true) as Processed " +
                                             "From media m where m.IdTimelineinfo = @id Order By m.Rank;";
