@@ -8,7 +8,7 @@
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Buttons
 @using static ThinBlueLie.Helper.Extensions.EnumExtensions
-@using static DataAccessLibrary.Enums.PrivledgeEnum
+@using static DataAccessLibrary.Enums.PrivilegeEnum
 @inherits ProfileBase
 @inject UserManager<ApplicationUser> userManager
 @attribute [Authorize]
@@ -76,12 +76,12 @@
                     <h5><a href="/About/Reputation">Reputation</a></h5>
                     <h6>Granted Perms</h6>
                     <ul>
-                        @foreach (Privledges privledge in Enum.GetValues(typeof(Privledges)))
+                        @foreach (Privileges privilege in Enum.GetValues(typeof(Privileges)))
                         {
-                            @if (User.Reputation > (int)privledge)
+                            @if (User.Reputation > (int)privilege)
                             {
                                 <li>
-                                    @GetEnumDisplayName(privledge)
+                                    @GetEnumDisplayName(privilege)
                                 </li>
                             }
                         }
@@ -90,13 +90,13 @@
                     <div class="col-6">
                         <div>
                             @{
-                                bool FullUser = User.Reputation > (int)Enum.GetValues(typeof(Privledges)).Cast<Privledges>().Max();
+                                bool FullUser = User.Reputation > (int)Enum.GetValues(typeof(Privileges)).Cast<Privileges>().Max();
                             }
                             <div>
                                 Total Reputation: @User.Reputation
                             </div>
                             <div>
-                                Next Privledge: @(FullUser? "You have all Privledges" : GetEnumDisplayName(User.NextPrivledge()))
+                                Next Privilege: @(FullUser? "You have all Privileges" : GetEnumDisplayName(User.NextPrivilege()))
                             </div>
                             @if (!FullUser)
                             {
@@ -105,12 +105,12 @@
                                                 TrackThickness="24"
                                                 ProgressThickness="24" Role="ModeType.Success"
                                                 ShowProgressValue="true"
-                                                Value="User.Reputation - (int)User.CurrentPrivledge()"
+                                                Value="User.Reputation - (int)User.CurrentPrivilege()"
                                                 Minimum="0"
-                                                Maximum="((int)User.NextPrivledge() - (int)User.CurrentPrivledge())"
+                                                Maximum="((int)User.NextPrivilege() - (int)User.CurrentPrivilege())"
                                                 Theme="@ProgressTheme.Bootstrap4">
-                                    <ProgressBarLabelStyle Text="@((User.Reputation - (int)User.CurrentPrivledge()) + "/"
-                                                                    + ((int)User.NextPrivledge() - (int)User.CurrentPrivledge()))" 
+                                    <ProgressBarLabelStyle Text="@((User.Reputation - (int)User.CurrentPrivilege()) + "/"
+                                                                    + ((int)User.NextPrivilege() - (int)User.CurrentPrivilege()))" 
                                                             TextAlignment="TextAlignmentType.Center" Color="#FFFFFF" />
                                     <ProgressBarAnimation Enable="true" Duration="2000" Delay="0" />
                                 </SfProgressBar>

@@ -3,42 +3,42 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static DataAccessLibrary.Enums.PrivledgeEnum;
+using static DataAccessLibrary.Enums.PrivilegeEnum;
 
 namespace ThinBlueLie.Helper.Extensions
 {
     public static class IdentityExtensions
     {
-        public static bool RepAuthorizer(this ApplicationUser User, Privledges Privledge)
+        public static bool RepAuthorizer(this ApplicationUser User, Privileges Privilege)
         {
-            if (User.Reputation >= (int)Privledge)
+            if (User.Reputation >= (int)Privilege)
                 return true;
             else
                 return false;
         }
-        public static Privledges NextPrivledge(this ApplicationUser User)
+        public static Privileges NextPrivilege(this ApplicationUser User)
         {
             int Rep = User.Reputation;
-            foreach (int privledge in Enum.GetValues(typeof(Privledges)))
+            foreach (int privilege in Enum.GetValues(typeof(Privileges)))
             {
-                if (Rep < privledge)
+                if (Rep < privilege)
                 {
-                    return (Privledges)privledge;
+                    return (Privileges)privilege;
                 }
             }
-            return Privledges.CreateEditFlag;
+            return Privileges.CreateEditFlag;
         }
-        public static Privledges CurrentPrivledge(this ApplicationUser User)
+        public static Privileges CurrentPrivilege(this ApplicationUser User)
         {
             int Rep = User.Reputation;
-            foreach (int privledge in ((Privledges[])Enum.GetValues(typeof(Privledges))).OrderByDescending(x => x))
+            foreach (int privilege in ((Privileges[])Enum.GetValues(typeof(Privileges))).OrderByDescending(x => x))
             {
-                if (Rep > privledge)
+                if (Rep > privilege)
                 {
-                    return (Privledges)privledge;
+                    return (Privileges)privilege;
                 }
             }
-            return Privledges.CreateEditFlag;            
+            return Privileges.CreateEditFlag;            
         }
     }
 }

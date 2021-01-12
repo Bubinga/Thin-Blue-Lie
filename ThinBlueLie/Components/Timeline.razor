@@ -32,7 +32,7 @@ else
         <div @onclick="PrevWeek" id="triangle-left"> <div class="empty"></div></div>
         @foreach (var i in Enumerable.Range(0, Day.Count))
         {
-            <NavLink class="@("week btn " + ((DateTime.Compare(Dates[i], DateTime.Today.Date) <= 0)? "" : "disabled")
+            <NavLink class="@("week btn " + ((DateTime.Compare(Dates[i], DateTime.Today.Date) <= 0)? "" : "disabled ")
                               + $"severity-{(SeverityCalc.SeverityCalculatorManyHighest(Day[i]))}")"
                      href="@("/Events/" + Dates[i].ToString("yyyy-MM-dd"))">
                 @if (Day[i].Any())
@@ -89,19 +89,26 @@ else
 
     public async Task NextWeek()
     {
-        Date = Date.AddDays(7);
-        var Result = await searches.GetTimeline(Date);
-        Day = Result.Item1;
-        Dates = Result.Item2;
-        this.StateHasChanged();
+        if (Date.Date < DateTime.Today.Date)
+        {
+            Date = Date.AddDays(7);
+            var Result = await searches.GetTimeline(Date);
+            Day = Result.Item1;
+            Dates = Result.Item2;
+            this.StateHasChanged();
+        }
     }
     public async Task PrevWeek()
     {
-        Date = Date.AddDays(-7);
-        var Result = await searches.GetTimeline(Date);
-        Day = Result.Item1;
-        Dates = Result.Item2;
-        this.StateHasChanged();
+        if (Date.Date >= InformationBase.MinDate)
+        {
+
+            Date = Date.AddDays(-7);
+            var Result = await searches.GetTimeline(Date);
+            Day = Result.Item1;
+            Dates = Result.Item2;
+            this.StateHasChanged();
+        }
     }
 
 

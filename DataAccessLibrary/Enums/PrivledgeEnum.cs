@@ -5,9 +5,9 @@ using System.Text;
 
 namespace DataAccessLibrary.Enums
 {
-    public class PrivledgeEnum
+    public class PrivilegeEnum
     {
-        public enum Privledges
+        public enum Privileges
         {
             [Display(Name = "Create, Edit, and Flag Events")]
             CreateEditFlag = 1,

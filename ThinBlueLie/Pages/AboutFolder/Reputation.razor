@@ -1,5 +1,5 @@
 ﻿@page "/About/Reputation"
-@using static DataAccessLibrary.Enums.PrivledgeEnum
+@using static DataAccessLibrary.Enums.PrivilegeEnum
 @using static ThinBlueLie.Helper.Extensions.EnumExtensions 
 
 <Title>Reputation System - Thin Blue Lie</Title>
@@ -35,7 +35,7 @@
                     <hr class="mt-0" />
                     <p>
                         Thin Blue Lie uses a Reputation system to moderate the website. The more reputation you have, which you can get from
-                        contributing to the database, the more you can do. Each time you hit a milestone you get a new privledge. You can also
+                        contributing to the database, the more you can do. Each time you hit a milestone you get a new privilege. You can also
                         lose reputation if you deliberately misuse or abuse the website. As long as you aren't doing anything malicious, don't
                         worry about it! 
                     </p>                   
@@ -73,12 +73,12 @@
                     </div>
                 </div>
                 <div class="flex-column pt-2 justify-content-between border-bottom">
-                    @foreach (var privledge in Enum.GetValues(typeof(Privledges)))
+                    @foreach (var privilege in Enum.GetValues(typeof(Privileges)))
                     {
                         <div class="d-block">
-                            <span class="e-icons e-@(Convert.ToString(privledge))"></span>
-                            <span class="reputation">@(Convert.ToInt32(privledge))</span>
-                            <span>@GetEnumDisplayName((Privledges)privledge)</span>
+                            <span class="e-icons e-@(Convert.ToString(privilege))"></span>
+                            <span class="reputation">@(Convert.ToInt32(privilege))</span>
+                            <span>@GetEnumDisplayName((Privileges)privilege)</span>
                         </div>
                     }
                 </div>
