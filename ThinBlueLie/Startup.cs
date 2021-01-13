@@ -39,7 +39,7 @@ namespace ThinBlueLie
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("UserDB"), MySqlOptions => MySqlOptions
-                .ServerVersion(new Version(8, 0, 18), ServerType.MySql)));
+                .ServerVersion(new Version(8, 0, 22), ServerType.MySql)));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -50,7 +50,7 @@ namespace ThinBlueLie
                 options.SignIn.RequireConfirmedAccount = true;
                 options.User.RequireUniqueEmail = true;
                 options.User.AllowedUserNameCharacters =
-                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._ ";
+                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;

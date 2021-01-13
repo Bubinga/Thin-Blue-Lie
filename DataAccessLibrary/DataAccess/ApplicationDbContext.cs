@@ -21,40 +21,40 @@ namespace DataAccessLibrary.DataAccess
 
             modelBuilder.Entity<ApplicationUser>(b =>
             {
-                b.ToTable("Users");
+                b.ToTable("users");
                 b.Property(e => e.Id).HasColumnName("UserId");
             });
 
             modelBuilder.Entity<IdentityUserClaim<int>>(b =>
             {
-                b.ToTable("UserClaims");
+                b.ToTable("userclaims");
                 b.Property(e => e.Id).HasColumnName("UserClaimId");
             });
 
             modelBuilder.Entity<IdentityUserLogin<int>>(b =>
             {
-                b.ToTable("UserLogins");
+                b.ToTable("userlogins");
             });
 
             modelBuilder.Entity<IdentityUserToken<int>>(b =>
             {
-                b.ToTable("UserTokens");
+                b.ToTable("usertokens");
             });
 
             modelBuilder.Entity<ApplicationRole>(b =>
             {
-                b.ToTable("Roles");
-                b.Property(e => e.Id).HasColumnName("RoleId");
+                b.ToTable("roles");
+                b.Property(e => e.Id).HasColumnName("roleId");
             });
 
             modelBuilder.Entity<IdentityRoleClaim<int>>(b =>
             {
-                b.ToTable("RoleClaims");
+                b.ToTable("roleclaims");
             });
 
             modelBuilder.Entity<IdentityUserRole<int>>(b =>
             {
-                b.ToTable("UserRoles");
+                b.ToTable("userroles");
             });
         }
     }

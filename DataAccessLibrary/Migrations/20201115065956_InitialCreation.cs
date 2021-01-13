@@ -9,7 +9,7 @@ namespace DataAccessLibrary.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Roles",
+                name: "roles",
                 columns: table => new
                 {
                     RoleId = table.Column<int>(nullable: false)
@@ -24,7 +24,7 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "users",
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false)
@@ -52,7 +52,7 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleClaims",
+                name: "roleclaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -67,13 +67,13 @@ namespace DataAccessLibrary.Migrations
                     table.ForeignKey(
                         name: "FK_RoleClaims_Roles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "Roles",
+                        principalTable: "roles",
                         principalColumn: "RoleId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserClaims",
+                name: "userclaims",
                 columns: table => new
                 {
                     UserClaimId = table.Column<int>(nullable: false)
@@ -88,13 +88,13 @@ namespace DataAccessLibrary.Migrations
                     table.ForeignKey(
                         name: "FK_UserClaims_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserLogins",
+                name: "userlogins",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(nullable: false),
@@ -108,13 +108,13 @@ namespace DataAccessLibrary.Migrations
                     table.ForeignKey(
                         name: "FK_UserLogins_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRoles",
+                name: "userroles",
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
@@ -126,19 +126,19 @@ namespace DataAccessLibrary.Migrations
                     table.ForeignKey(
                         name: "FK_UserRoles_Roles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "Roles",
+                        principalTable: "roles",
                         principalColumn: "RoleId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserRoles_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserTokens",
+                name: "usertokens",
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
@@ -152,45 +152,45 @@ namespace DataAccessLibrary.Migrations
                     table.ForeignKey(
                         name: "FK_UserTokens_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
-                table: "RoleClaims",
+                table: "roleclaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
-                table: "Roles",
+                table: "roles",
                 column: "NormalizedName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",
-                table: "UserClaims",
+                table: "userclaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserLogins_UserId",
-                table: "UserLogins",
+                table: "userlogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
-                table: "UserRoles",
+                table: "userroles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                table: "Users",
+                table: "users",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                table: "Users",
+                table: "users",
                 column: "NormalizedUserName",
                 unique: true);
         }
@@ -198,25 +198,25 @@ namespace DataAccessLibrary.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "RoleClaims");
+                name: "roleclaims");
 
             migrationBuilder.DropTable(
-                name: "UserClaims");
+                name: "userclaims");
 
             migrationBuilder.DropTable(
-                name: "UserLogins");
+                name: "userlogins");
 
             migrationBuilder.DropTable(
-                name: "UserRoles");
+                name: "userroles");
 
             migrationBuilder.DropTable(
-                name: "UserTokens");
+                name: "usertokens");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "roles");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "users");
         }
     }
 }
