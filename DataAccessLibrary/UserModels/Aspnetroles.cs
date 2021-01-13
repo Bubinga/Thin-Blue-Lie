@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLibrary.UserModels
 {
-    [Table("aspnetroles")]
+    [Table("roles")]
     public partial class Aspnetroles
     {
         public Aspnetroles()
