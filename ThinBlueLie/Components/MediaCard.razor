@@ -95,7 +95,7 @@
                     {
                         if (!(IsEdit && !string.IsNullOrWhiteSpace(media.SourcePath)))
                         {
-                            <h5>There is currently no support for previews of uploaded images, but we are working on it</h5>
+                            <h5>There is currently no support for previews of uploaded images</h5>
                         }
                         else
                         {
@@ -124,7 +124,7 @@
                 }
                 else //if it's a video
                 {
-                    if (!string.IsNullOrWhiteSpace(media.OriginalUrl))
+                    if (!string.IsNullOrWhiteSpace(media.OriginalUrl) && media.Processed)
                     {
                         if (media.SourceFrom != null)
                         {
