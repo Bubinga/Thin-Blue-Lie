@@ -11,30 +11,35 @@ using static ThinBlueLie.Models.ViewSimilar;
 using static ThinBlueLie.Searches.SearchClasses;
 using static ThinBlueLie.Helper.ConfigHelper;
 using ThinBlueLie.Helper.Algorithms;
+using ThinBlueLie.Helper.Extensions;
 
 namespace ThinBlueLie.Helper
 {
     public class SearchesSubmit
     {      
 
-        private Tuple<int, string> GetNameInfo(string Input)
+        private static Tuple<int, string> GetNameInfo(string Input)
         {
+            if (string.IsNullOrWhiteSpace(Input))
+            {
+                return Tuple.Create(0, "null");
+            }
+            Input = StringExtensions.NormalizeWhiteSpace(Input);
             var FirstName = Input.Split(' ').FirstOrDefault();
             var LastName = Input.Split(' ').Last();
             var NormalizedName = FirstName + " " + LastName;
             //TODO for names like: J. Alexander Kueng or make it into J. Kueng and Alexander Kueng and test both
-            var MiddleCount1 = Input.Replace(" " + LastName, "").Replace(FirstName, "");
+            var x = Input.Remove(0, FirstName.Length).Trim();
+            var MiddleCount1 = x.Remove((x.Length - 1) - (LastName.Length));
             string[] MiddleCount2;
             int MiddleCount;
-            if (MiddleCount1 != string.Empty)
+            if (!string.IsNullOrWhiteSpace(MiddleCount1))
             {
                 MiddleCount2 = MiddleCount1.Split(' ');
                 MiddleCount = MiddleCount2.Count();
             }
             else
-            {
                 MiddleCount = 0;
-            }
             return new Tuple<int, string>(MiddleCount, NormalizedName);
         }
         public async Task<List<SimilarPersonGeneral>> SearchOfficer(string Input)
