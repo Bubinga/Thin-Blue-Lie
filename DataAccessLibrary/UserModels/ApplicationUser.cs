@@ -9,6 +9,6 @@ namespace DataAccessLibrary.UserModels
     public class ApplicationUser : IdentityUser<int>
     {
         public DateTime DateJoined { get; set; }
-        public int Reputation { get; set; }
+        public int Reputation { get; set; } = 1;
     }
 }
