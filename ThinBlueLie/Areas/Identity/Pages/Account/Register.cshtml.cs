@@ -89,26 +89,9 @@ namespace ThinBlueLie.Areas.Identity.Pages.Account
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = $@"https://thinbluelie.us/Identity/Account/ConfirmEmail?userId={user.Id}&code={code}&returnUrl={returnUrl}";
+                    var callbackUrl = $@"https://{HttpContext.Request.Host}/Identity/Account/ConfirmEmail?userId={user.Id}&code={code}&returnUrl={returnUrl}";
 
-                    string email = @"<div style=""text-align: center; margin-top: 50px;"">" +
-                                                 @"<img alt=""Thin Blue Lie Logo"" src=""https://thinbluelie.us/Assets/ThinBlueLie-Logo.png"" " +
-                                                    @"width=""100px"" height=""100px""> " +
-                                       @"</div>" +
-                                        @"< div style=""padding: 0 15px;""> " +
-                                            @"<h3 style=""text-align:center;""> " +
-                                            @"Thanks for registering for a Thin Blue Lie acccount!" +
-                                            @"</h3>" +
-                                                @"<div style=""text-align:center; max-width: 950px; margin-right: auto; margin-left: auto""> " +
-                                                    @"<p> " +
-                                                    @"To confirm your account, please click the link below. " +
-                                                    @"</p>" +
-                                                    @"<a href=""{HtmlEncoder.Default.Encode(callbackUrl)}"">Verify</a> " +
-                                                @"</div> " +
-                                        @"</div>";
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email", email);
-
+                    await _emailSender.SendConfirmationEmailAsync(Input.Email, "Confirm your Email", callbackUrl);
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });

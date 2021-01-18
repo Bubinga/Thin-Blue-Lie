@@ -20,6 +20,7 @@ using DiffPlex;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using ThinBlueLie.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authentication.Google;
 using ThinBlueLie.Helper.Services;
 
 namespace ThinBlueLie
@@ -57,6 +58,18 @@ namespace ThinBlueLie
                 options.Password.RequireUppercase = true;
                 options.Password.RequiredLength = 8;
             });
+
+
+            services.AddAuthentication()
+                .AddGoogle(options =>
+            {
+                IConfigurationSection googleAuthNSection =
+                    Configuration.GetSection("Authentication:Google");
+
+                options.ClientId = googleAuthNSection["ClientId"];
+                options.ClientSecret = googleAuthNSection["ClientSecret"];
+            });
+
             services.AddOptions();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddSignalR();
