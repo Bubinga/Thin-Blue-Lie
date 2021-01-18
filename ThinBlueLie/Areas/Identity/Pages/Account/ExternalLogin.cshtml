@@ -1,7 +1,7 @@
 ﻿@page
 @model ExternalLoginModel
 @{
-    Layout = null;
+    Layout = "/Pages/Shared/_EmptyLayout.cshtml";
     ViewData["Title"] = "Register";
 }
 
@@ -22,11 +22,6 @@
             cursor: auto;
         }
 </style>
-<head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <title>External Login - Thin Blue Lie</title>
-</head>
 <div class="container">
     <div class="mx-auto col-md-6 mt-5">
         <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">

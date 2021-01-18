@@ -1,8 +1,9 @@
 ﻿@page "/Account/Register"
 @model RegisterModel
 @{
-    Layout = null;
+    Layout = "/Pages/Shared/_EmptyLayout.cshtml";
     ViewData["Title"] = "Register";
+    ViewData["IsLogin"] = true;
 }
 
 <style>
@@ -22,14 +23,6 @@
             cursor: auto;
         }
 </style>
-<head>
-    <title>Register</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/google.css" />
-    @*<script src="https://apis.google.com/js/platform.js" async defer></script>*@
-    <meta name="google-signin-client_id" content="334307951622-1k97f14pd4lhojeu1sfbvmtmtgp5lpl6.apps.googleusercontent.com">
-</head>
 <div class="container">
     <div class="mx-auto col-md-6 mt-5">
         <form id="account" method="post" autocomplete="off">

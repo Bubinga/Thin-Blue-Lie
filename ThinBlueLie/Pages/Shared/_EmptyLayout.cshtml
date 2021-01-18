@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ThinBlueLie</title>
+    <!-- Data Tracking -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-187465356-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-187465356-1');
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    @if ((bool?)ViewData["IsLogin"] == true)
+    {
+        <link rel="stylesheet" href="~/css/google.css" />
+        <meta name="google-signin-client_id" content="334307951622-1k97f14pd4lhojeu1sfbvmtmtgp5lpl6.apps.googleusercontent.com">
+    }
+</head>
+<body>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/Identity/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/Identity/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Identity/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
