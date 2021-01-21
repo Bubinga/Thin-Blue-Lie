@@ -1,0 +1,66 @@
+﻿.email-description p {
+    margin-bottom: 0px;
+}
+
+.email-description {
+    margin-bottom: .75rem;
+}
+
+.about {
+    margin-top: 50px;
+}
+
+h4 {
+    padding-left: .3rem;
+}
+
+.about-header-image {
+    background-size: cover !important;
+    background-color: #919191;
+    width: 100%;
+    border-radius: 0px !important;
+    padding-top: 3rem !important;
+    padding-bottom: 2rem !important;
+    margin-bottom: 0px;
+    margin-top: 0px !important;
+}
+
+.nav-with-bar ul {
+    list-style-type: none;
+    padding-left: 10px;
+}
+
+.nav-with-bar.aboutnav {
+    position: sticky;
+    margin-top: 25px;
+    padding: 0px;
+    bottom: 100%;
+    z-index: 100;
+    width: 150px;
+    top: 81px;
+    display: flex !important;
+    flex-direction: column;
+    height: 100%;
+}
+
+.nav-with-bar h5 {
+    text-decoration: underline;
+}
+
+.nav-with-bar .nav-link:hover {
+    text-decoration: underline;
+}
+
+.nav-with-bar .nav-link.active {
+    border-right: 3px solid blue;
+}
+
+.nav-with-bar a {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 0px;
+}
+
+    .nav-with-bar a:hover {
+        color: #064579;
+    }

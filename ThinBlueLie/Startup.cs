@@ -22,6 +22,7 @@ using ThinBlueLie.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Authentication.Google;
 using ThinBlueLie.Helper.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace ThinBlueLie
 {
@@ -39,8 +40,7 @@ namespace ThinBlueLie
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("UserDB"), MySqlOptions => MySqlOptions
-                .ServerVersion(new Version(8, 0, 22), ServerType.MySql)));
+                options.UseMySql(Configuration.GetConnectionString("UserDB"), new MySqlServerVersion(new Version(5, 7, 17))));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -65,7 +65,6 @@ namespace ThinBlueLie
             {
                 IConfigurationSection googleAuthNSection =
                     Configuration.GetSection("Authentication:Google");
-
                 options.ClientId = googleAuthNSection["ClientId"];
                 options.ClientSecret = googleAuthNSection["ClientSecret"];
             });
@@ -104,7 +103,7 @@ namespace ThinBlueLie
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzU3NDc4QDMxMzgyZTMzMmUzMGQ0LzlKL3J3MjcvL3FVSHF6L1JudWxyblFrU2VOTDF2L2xUMEZaSHpwcXM9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mzg2NjkxQDMxMzgyZTM0MmUzMFczRmRWeHlYS1p2enAyWlZaQ2pqaG1RcVhpUEhuRjNJY3NiSDMzRExaTFU9");
             ConnectionString = Configuration["ConnectionStrings:DataDB"];
 
             if (env.IsDevelopment())
@@ -122,6 +121,12 @@ namespace ThinBlueLie
             app.UseHeadElementServerPrerendering();
 
             app.UseHttpsRedirection();
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedProto
+            });
+
             app.UseStaticFiles();
 
             app.UseRouting();

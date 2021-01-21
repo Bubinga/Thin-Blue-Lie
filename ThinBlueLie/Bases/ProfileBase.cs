@@ -3,7 +3,7 @@ using DataAccessLibrary.DataModels;
 using DataAccessLibrary.UserModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Linq;

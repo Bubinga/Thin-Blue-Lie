@@ -6,7 +6,7 @@ using Ganss.XSS;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System;
 using System.IO;
 using System.Linq;
