@@ -5,23 +5,7 @@
     ViewData["Title"] = "Register";
 }
 
-<style>
-    body {
-        background-color: #F5F5F5 !important;
-    }
-
-    input {
-        background-color: #ffffff
-    }
-
-        input.form-control {
-            background-repeat: no-repeat;
-            background-attachment: scroll;
-            background-size: 16px 18px;
-            background-position: 98% 50%;
-            cursor: auto;
-        }
-</style>
+<link href="~/css/account.css" rel="stylesheet" />
 <div class="container">
     <div class="mx-auto col-md-6 mt-5">
         <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">

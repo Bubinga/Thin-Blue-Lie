@@ -6,7 +6,7 @@ using DataAccessLibrary.UserModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
