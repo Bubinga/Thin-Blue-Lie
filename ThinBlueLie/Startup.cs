@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Authentication.Google;
 using ThinBlueLie.Helper.Services;
 using Microsoft.AspNetCore.HttpOverrides;
+using Serilog;
 
 namespace ThinBlueLie
 {
@@ -144,6 +145,8 @@ namespace ThinBlueLie
             //});
 
             app.UseStaticFiles();
+
+            app.UseSerilogRequestLogging();
 
             app.UseRouting();
 
