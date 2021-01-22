@@ -16,21 +16,9 @@
 
 <Title>Profile - Thin Blue Lie</Title>
 <Meta Name="robots" Content="noindex" />
+<Link Href="~/css/Profile.css" Rel="stylesheet"/>
 
 <style>
-    ul {
-        list-style-type: none;
-    }
-
-    li a {
-        color: dimgray;
-        font-size: 1rem;
-    }
-
-        li a:hover {
-            color: black;
-        }
-
     .e-delete:before {
         content: '/e773';
     }
@@ -47,15 +35,12 @@
         <ChildContent>
             <div class="main-menu nav-with-bar mt-1">
                 <ul class="mt-3">
-                    <li>
+                    <li class="sidebar-link">
                         <NavLink class="nav-link" href="/Account/Profile">Profile</NavLink>
                     </li>
-                    <li>
+                    <li class="sidebar-link">
                         <NavLink class="nav-link" href="/Account/ReviewEdits">Review Edits</NavLink>
                     </li>
-                    @*<li>
-                        <NavLink class="nav-link" href="/Account/Reputation">Reputation</NavLink>
-                    </li>*@
                 </ul>
             </div>
         </ChildContent>
@@ -108,7 +93,7 @@
                                                 Value="User.Reputation - (int)User.CurrentPrivilege()"
                                                 Minimum="0"
                                                 Maximum="((int)User.NextPrivilege() - (int)User.CurrentPrivilege())"
-                                                Theme="@ProgressTheme.Bootstrap4">
+                                                Theme="@Syncfusion.Blazor.Theme.Bootstrap4">
                                     <ProgressBarLabelStyle Text="@((User.Reputation - (int)User.CurrentPrivilege()) + "/"
                                                                     + ((int)User.NextPrivilege() - (int)User.CurrentPrivilege()))" 
                                                             TextAlignment="TextAlignmentType.Center" Color="#FFFFFF" />

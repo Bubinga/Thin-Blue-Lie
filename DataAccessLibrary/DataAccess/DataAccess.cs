@@ -8,7 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MySqlConnectorAlias::MySql.Data.MySqlClient;
+//using MySqlConnectorAlias::MySql.Data.MySqlClient;
 
 namespace DataAccessLibrary.DataAccess
 {

@@ -1,0 +1,15 @@
+﻿body {
+    background-color: #F5F5F5 !important;
+}
+
+input {
+    background-color: #ffffff
+}
+
+    input.form-control {
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-size: 16px 18px;
+        background-position: 98% 50%;
+        cursor: auto;
+    }

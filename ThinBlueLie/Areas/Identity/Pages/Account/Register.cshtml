@@ -6,23 +6,7 @@
     ViewData["IsLogin"] = true;
 }
 
-<style>
-    body {
-        background-color: #F5F5F5 !important;
-    }
-
-    input {
-        background-color: #ffffff
-    }
-
-        input.form-control {
-            background-repeat: no-repeat;
-            background-attachment: scroll;
-            background-size: 16px 18px;
-            background-position: 98% 50%;
-            cursor: auto;
-        }
-</style>
+<link href="~/css/account.css" rel="stylesheet" />
 <div class="container">
     <div class="mx-auto col-md-6 mt-5">
         <form id="account" method="post" autocomplete="off">
@@ -76,10 +60,15 @@
                                 @*<button class="g-signin2" style="border:inherit;" type="submit" name="provider"
                                         value="@provider.Name" title="Log in using your @provider.DisplayName account">
                                 </button>*@
-                                    <div class="g-signin2" style="border:inherit;" data-onsuccess="onSuccess" data-gapiscan="true" data-onload="true">
+                                @*<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" 
+                                        title="Log in using your @provider.DisplayName account">@provider.DisplayName
+                                </button>*@                                   
+                                <div class="g-signin2" style="border:inherit;" data-onsuccess="onSuccess" data-gapiscan="true" data-onload="true">
                                     <div style="height:36px;width:120px;" class="abcRioButton abcRioButtonLightBlue">
-                                        <button class="abcRioButtonContentWrapper" style="border:inherit; background-color:white !important" type="submit" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
-                                            <img class="position-absolute" src="https://assets.stickpng.com/images/5847f9cbcef1014c0b5e48c8.png" style="left: 12px;height: 18px;bottom: 10px;">
+                                        <button class="abcRioButtonContentWrapper" style="border:inherit; background-color:white !important"
+                                                type="submit" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                            <img class="position-absolute" src="https://assets.stickpng.com/images/5847f9cbcef1014c0b5e48c8.png"
+                                                 style="left: 12px;height: 18px;bottom: 10px;">
                                             <span style="font-size:13px;line-height:34px;" class="abcRioButtonContents">
                                                 <span class="ml-3">Sign in</span>
                                             </span>

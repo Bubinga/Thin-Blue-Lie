@@ -19,31 +19,6 @@
 @inject AutoMapper.IMapper mapper
 
 
-<style>
-    .context {
-        font-size: 1.1rem;
-    }
-
-    .event-main-row {
-        max-height: 650px;
-        min-height: 575px;
-    }
-
-    .brokencard {
-        border: none;
-    }
-
-    .e-tip-content .e-calendar {
-        border: none !important;
-        background-color: white !important;
-    }
-
-    .e-popup {
-        background-color: white !important;
-    }
-</style>
-
-
 <Meta Property="og:type" Content="article" />
 @if (EventExists && (Event.Data?.Context != null))
 {
