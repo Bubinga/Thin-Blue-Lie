@@ -4,7 +4,6 @@ using DataAccessLibrary.DataAccess;
 using DataAccessLibrary.DataModels;
 using DataAccessLibrary.DataModels.EditModels;
 using DataAccessLibrary.UserModels;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +17,7 @@ using static ThinBlueLie.Helper.Extensions.IntExtensions;
 using ThinBlueLie.Models;
 using ThinBlueLie.Models.ViewModels;
 using static ThinBlueLie.Models.ViewModels.EditReviewModel;
+using MySqlConnector;
 
 namespace ThinBlueLie.Searches
 {
