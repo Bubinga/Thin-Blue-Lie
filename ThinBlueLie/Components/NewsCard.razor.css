@@ -1,0 +1,14 @@
+﻿.e-card > .e-card-image {
+    background-repeat: no-repeat;
+    min-height: 205px;
+}
+
+.e-card-header-title {
+    white-space: normal !important;
+    font-size: 1.1rem;
+    padding-bottom: 0 !important;
+}
+
+#SideCard {
+    margin-top: .8rem;
+}
