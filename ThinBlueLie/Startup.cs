@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using ThinBlueLie.Helper.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
+using Microsoft.AspNetCore.Http;
 
 namespace ThinBlueLie
 {
@@ -60,6 +61,26 @@ namespace ThinBlueLie
                 options.Password.RequiredLength = 8;
             });
 
+            if (string.Equals(
+            Environment.GetEnvironmentVariable("ASPNETCORE_FORWARDEDHEADERS_ENABLED"),
+            "true", StringComparison.OrdinalIgnoreCase))
+            {
+                services.Configure<ForwardedHeadersOptions>(options =>
+                {
+                    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                        ForwardedHeaders.XForwardedProto;
+                    // Only loopback proxies are allowed by default.
+                    // Clear that restriction because forwarders are enabled by explicit 
+                    // configuration.
+                    options.KnownNetworks.Clear();
+                    options.KnownProxies.Clear();
+                });
+            }
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
 
             services.AddAuthentication()
                 .AddGoogle(options =>
@@ -98,23 +119,6 @@ namespace ThinBlueLie
 
             services.AddSingleton<Helper.Services.IEmailSender, EmailSender>();
 
-
-            if (string.Equals(
-            Environment.GetEnvironmentVariable("ASPNETCORE_FORWARDEDHEADERS_ENABLED"),
-            "true", StringComparison.OrdinalIgnoreCase))
-            {
-                services.Configure<ForwardedHeadersOptions>(options =>
-                {
-                    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
-                        ForwardedHeaders.XForwardedProto;
-                    // Only loopback proxies are allowed by default.
-                    // Clear that restriction because forwarders are enabled by explicit 
-                    // configuration.
-                    options.KnownNetworks.Clear();
-                    options.KnownProxies.Clear();
-                });
-            }
-
             services.AddSyncfusionBlazor();
         }
 
@@ -123,7 +127,11 @@ namespace ThinBlueLie
         {
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mzg2NjkxQDMxMzgyZTM0MmUzMFczRmRWeHlYS1p2enAyWlZaQ2pqaG1RcVhpUEhuRjNJY3NiSDMzRExaTFU9");
             ConnectionString = Configuration["ConnectionStrings:DataDB"];
-
+            app.UseForwardedHeaders();
+            app.UseCookiePolicy(new CookiePolicyOptions()
+            {
+                MinimumSameSitePolicy = SameSiteMode.Lax
+            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -137,12 +145,10 @@ namespace ThinBlueLie
             }
             app.UseHeadElementServerPrerendering();
 
+            app.UseCertificateForwarding();
+
             app.UseHttpsRedirection();
 
-            //app.UseForwardedHeaders(new ForwardedHeadersOptions
-            //{
-            //    ForwardedHeaders = ForwardedHeaders.XForwardedProto
-            //});
 
             app.UseStaticFiles();
 
