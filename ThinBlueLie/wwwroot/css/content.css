@@ -122,11 +122,7 @@
 /* end of content area styles */
 /* custom code start */
 /* body and html styles */
-body {
-    margin: 0;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    -webkit-tap-highlight-color: transparent;
-}
+
 /* end of body and html styles */
 /* newTab support styles */
 .sf-new .sb-header,

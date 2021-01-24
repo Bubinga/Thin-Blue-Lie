@@ -33,6 +33,8 @@ namespace ThinBlueLie
             {
                 Log.CloseAndFlush();
             }
+
+            Serilog.Debugging.SelfLog.Enable(Console.Error);
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)
