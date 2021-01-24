@@ -19,14 +19,16 @@ jobs:
         dotnet-version: '5.0.x'
     - name: Dotnet Publish
       run: dotnet publish . -c Release -o deploy
-    - name: Copy via ssh
-      uses: garygrossgarten/github-action-scp@release
+    - name: Copy files via ssh rsync
+      uses: trendyminds/github-actions-rsync@master
       with:
-        local: /home/runner/work/Thin-Blue-Lie/Thin-Blue-Lie/deploy/
-        remote: ${{ secrets.REMOTE_TARGET }}
-        host: ${{ secrets.REMOTE_HOST }}
-        username: ${{ secrets.REMOTE_USER }}
-        privateKey: ${{ secrets.REMOTE_SSH_KEY }}
+        RSYNC_OPTIONS: -avzr --delete --exclude node_modules --exclude '.git*'
+        RSYNC_TARGET: ${{ secrets.REMOTE_TARGET }}
+        RSYNC_SOURCE: /home/runner/work/Thin-Blue-Lie/Thin-Blue-Lie/deploy/
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY }}
+        SSH_USERNAME: ${{ secrets.REMOTE_USER }}
+        SSH_HOSTNAME: ${{ secrets.REMOTE_HOST }}   
     - name: Run SSH command
       uses: garygrossgarten/github-action-ssh@release
       with:
@@ -34,7 +36,7 @@ jobs:
         host: ${{ secrets.REMOTE_HOST }}
         username: ${{ secrets.REMOTE_USER }}
         privateKey: ${{ secrets.REMOTE_SSH_KEY }}
-    - name: Test Custom
+    - name: Discord Notification
       uses: rjstone/discord-webhook-notify@v1
       with:
         severity: info
