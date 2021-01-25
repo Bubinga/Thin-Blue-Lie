@@ -24,7 +24,7 @@ jobs:
       with:
         RSYNC_OPTIONS: -avzr --delete --exclude node_modules --exclude '.git*'
         RSYNC_TARGET: ${{ secrets.REMOTE_TARGET }}
-        RSYNC_SOURCE: /home/runner/work/Thin-Blue-Lie/Thin-Blue-Lie/deploy/
+        RSYNC_SOURCE: /deploy/
       env:
         SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY }}
         SSH_USERNAME: ${{ secrets.REMOTE_USER }}
