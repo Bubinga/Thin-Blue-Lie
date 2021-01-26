@@ -383,6 +383,20 @@ card.header {
     vertical-align: text-bottom;
 }
 
+/* Profile Settings*/
+ul.sidebar-profile {
+    list-style-type: none !important;
+}
+
+li.profile-sidebar-link a {
+    color: dimgray;
+    font-size: 1rem;
+}
+
+    li.profile-sidebar-link a:hover {
+        color: black;
+    }
+
 /*
  * Sidebar
 */
@@ -483,6 +497,76 @@ li p {
     -ms-overflow-style: none !important;
 }
 
+
+/*Submit Settings*/
+.e-btn-sb-icons {
+    font-family: 'button-icons';
+    line-height: 1;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.e-add-icon::before {
+    content: '\e70a';
+}
+
+.e-richtexteditor .e-rte-content .e-content {
+    min-height: 150px;
+}
+
+.e-file-select-wrap {
+    padding: 0.2rem;
+}
+
+.e-close-icon:before {
+    content: '\e745';
+}
+
+.e-double-arrow-up-icon:before {
+    content: '\e7c5';
+}
+
+.e-chevron-up-icon:before {
+    content: '\e734';
+}
+
+.e-chevron-down-icon:before {
+    content: '\e705';
+}
+
+.e-primary.e-custom {
+    color: #221e1e !important;
+    background-color: #F8F9FA !important;
+    border-color: #F8F9FA !important;
+    padding-right: 5px;
+    padding-left: 0px;
+}
+
+    .e-primary.e-custom:hover {
+        color: #314DB2 !important;
+    }
+
+    .e-primary.e-custom:focus, .e-primary.e-cuton:active {
+        box-shadow: none !important;
+    }
+
+.e-acrdn-header-content {
+    width: 100% !important;
+    position: relative;
+}
+
+.e-acrdn-content .e-acrdn-content {
+    padding-left: 0.6rem !important;
+}
+
+.e-acrdn-header:hover .e-icons, .e-acrdn-header, .e-acrdn-header-content {
+    text-decoration: none !important;
+    color: inherit !important;
+}
 
 
 

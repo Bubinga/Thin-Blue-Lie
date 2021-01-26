@@ -1,0 +1,11 @@
+﻿.e-delete:before {
+    content: '/e773';
+}
+
+.e-edit:before {
+    content: '/e690';
+}
+
+.edit-button {
+    max-width: 35px !important;
+}
