@@ -20,6 +20,7 @@ namespace ThinBlueLie
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
 
+            Serilog.Debugging.SelfLog.Enable(Console.Error);
             try
             {
                 Log.Information("Application Starting Up");
@@ -34,7 +35,6 @@ namespace ThinBlueLie
                 Log.CloseAndFlush();
             }
 
-            Serilog.Debugging.SelfLog.Enable(Console.Error);
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)

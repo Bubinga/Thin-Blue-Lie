@@ -3,6 +3,12 @@
 @using Syncfusion.Blazor.Buttons
 @inject NavigationManager navManager
 
+<style>
+    .e-tip-content .e-calendar {
+        border: none !important;
+        background-color: white !important;
+    }
+</style>
 <div class="d-flex mb-2">
     <div class="col-10">
         <Timeline Date="(DateTime)Date" @ref="Timeline"></Timeline>

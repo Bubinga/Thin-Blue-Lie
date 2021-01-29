@@ -61,25 +61,16 @@ namespace ThinBlueLie
                 options.Password.RequiredLength = 8;
             });
 
-            if (string.Equals(
-            Environment.GetEnvironmentVariable("ASPNETCORE_FORWARDEDHEADERS_ENABLED"),
-            "true", StringComparison.OrdinalIgnoreCase))
-            {
-                services.Configure<ForwardedHeadersOptions>(options =>
-                {
-                    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
-                        ForwardedHeaders.XForwardedProto;
-                    // Only loopback proxies are allowed by default.
-                    // Clear that restriction because forwarders are enabled by explicit 
-                    // configuration.
-                    options.KnownNetworks.Clear();
-                    options.KnownProxies.Clear();
-                });
-            }
+           
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                    ForwardedHeaders.XForwardedProto;
+                // Only loopback proxies are allowed by default.
+                // Clear that restriction because forwarders are enabled by explicit 
+                // configuration.
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
             });
 
             services.AddAuthentication()
@@ -107,16 +98,15 @@ namespace ThinBlueLie
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
-            services.AddScoped<ISideBySideDiffBuilder, SideBySideDiffBuilder>();
-            services.AddScoped<IDiffer, Differ>();
-
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
+            services.AddScoped<ISideBySideDiffBuilder, SideBySideDiffBuilder>();
+            services.AddScoped<IDiffer, Differ>();
            
             services.AddSingleton<IDataAccess, DataAccess>();
             services.AddSingleton<SearchesEditReview>();
-
             services.AddSingleton<Helper.Services.IEmailSender, EmailSender>();
 
             services.AddSyncfusionBlazor();
@@ -128,10 +118,7 @@ namespace ThinBlueLie
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mzg2NjkxQDMxMzgyZTM0MmUzMFczRmRWeHlYS1p2enAyWlZaQ2pqaG1RcVhpUEhuRjNJY3NiSDMzRExaTFU9");
             ConnectionString = Configuration["ConnectionStrings:DataDB"];
             app.UseForwardedHeaders();
-            app.UseCookiePolicy(new CookiePolicyOptions()
-            {
-                MinimumSameSitePolicy = SameSiteMode.Lax
-            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -144,16 +131,10 @@ namespace ThinBlueLie
                 app.UseHsts();
             }
             app.UseHeadElementServerPrerendering();
-
             app.UseCertificateForwarding();
-
-            app.UseHttpsRedirection();
-
-
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseSerilogRequestLogging();
-
             app.UseRouting();
 
             app.UseAuthentication();

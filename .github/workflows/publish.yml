@@ -1,4 +1,4 @@
-name: CI
+name: Continuous Deployment
 
 on:
   workflow_dispatch:
@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -22,9 +21,9 @@ jobs:
     - name: Copy files via ssh rsync
       uses: trendyminds/github-actions-rsync@master
       with:
-        RSYNC_OPTIONS: -avzr --delete --exclude node_modules --exclude '.git*'
+        RSYNC_OPTIONS: -avzr --delete --exclude node_modules --exclude '.git*' --exclude 'appsettings.*'
         RSYNC_TARGET: ${{ secrets.REMOTE_TARGET }}
-        RSYNC_SOURCE: /home/runner/work/Thin-Blue-Lie/Thin-Blue-Lie/deploy/
+        RSYNC_SOURCE: /deploy/
       env:
         SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY }}
         SSH_USERNAME: ${{ secrets.REMOTE_USER }}
@@ -36,13 +35,29 @@ jobs:
         host: ${{ secrets.REMOTE_HOST }}
         username: ${{ secrets.REMOTE_USER }}
         privateKey: ${{ secrets.REMOTE_SSH_KEY }}
-    - name: Discord Notification
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Deployment Success
       uses: rjstone/discord-webhook-notify@v1
+      if: ${{ success() }}
       with:
         severity: info
-        username: Deployments
-        avatarUrl: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-        description: 'Deployment: ${{ job.status }}'
-        details: '${{ github.actor }}: ${{ github.event_name }}'
-        footer: ${{ github.workflow }}
+        details: Deployment Succeeded!
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+    - name: Deployment Failure
+      uses: rjstone/discord-webhook-notify@v1
+      if: ${{ failure() }}
+      with:
+        severity: error
+        details: Deployment Failed!
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+    - name: Deployment Cancelled
+      uses: rjstone/discord-webhook-notify@v1
+      if: ${{ cancelled() }}
+      with:
+        severity: warn
+        details: Deployment Cancelled!
         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
