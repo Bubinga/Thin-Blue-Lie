@@ -29,6 +29,7 @@ namespace ThinBlueLie
             catch (Exception ex)
             {
                 Log.Fatal("Application failed to start correctly");
+                Log.Fatal("{Exception}", ex);
             }
             finally
             {

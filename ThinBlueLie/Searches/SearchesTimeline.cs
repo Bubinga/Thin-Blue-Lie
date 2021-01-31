@@ -13,7 +13,14 @@ using static ThinBlueLie.Models.ViewModels.TimelineinfoFull;
 namespace ThinBlueLie.Searches
 {
     public class SearchesTimeline
-    {      
+    {
+        public IDataAccess Data { get; }
+
+        public SearchesTimeline(IDataAccess data)
+        {
+            Data = data;
+        }
+
         public async Task<Tuple<List<List<TimelineinfoFull>>, DateTime[]>> GetTimeline(DateTime date)
         {
             //get dates[] 
@@ -26,21 +33,23 @@ namespace ThinBlueLie.Searches
                 dates[i] = dates[0].AddDays(i);
             }
             var dateData = new List<List<TimelineinfoFull>>(new List<TimelineinfoFull>[7]);
+            int eventCount = 0;
             for (int i = 0; i < 7; i++)
             {
                 //get data
-                DataAccess data = new DataAccess();
                 var query = "SELECT IdTimelineinfo, Date, Title From timelineinfo where Date = @date;";                
-                var result = await data.LoadData<Timelineinfo, dynamic>(query, new {date = dates[i].ToString("yyyy-MM-dd") }, GetConnectionString());
+                var result = await Data.LoadDataNoLog<Timelineinfo, dynamic>(query, new {date = dates[i].ToString("yyyy-MM-dd") }, GetConnectionString());
                 List<TimelineinfoFull> results = new List<TimelineinfoFull>();
                 foreach (var Event in result)
                 {
                     var officerquery = "SELECT Misconduct,Weapon FROM timelineinfo_officer Where IdTimelineinfo = @id;";
-                    var officerresult = await data.LoadData<TimelineinfoOfficerShort, dynamic>(officerquery, new {id = Event.IdTimelineinfo}, GetConnectionString());
+                    var officerresult = await Data.LoadDataNoLog<TimelineinfoOfficerShort, dynamic>(officerquery, new {id = Event.IdTimelineinfo}, GetConnectionString());
                     results.Add(new TimelineinfoFull {Timelineinfo = Event, OfficerInfo = officerresult });
                 }
+                eventCount += result.Count;
                 dateData[i] = results;
             }
+            Serilog.Log.Information("Fetched {eventCount} events in week {date}", eventCount, date.ToShortDateString());
             return Tuple.Create(dateData, dates);
         }
     }

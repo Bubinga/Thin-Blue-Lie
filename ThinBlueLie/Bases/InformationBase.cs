@@ -18,6 +18,10 @@ namespace ThinBlueLie.Bases
 {
     public class InformationBase : ComponentBase
     {
+
+        [Inject]
+        public SearchesSubmit searchesSubmit { get; set; }
+
         public SubmitModel model = new SubmitModel()
         {
             Timelineinfos = new ViewTimelineinfo(),
@@ -57,7 +61,7 @@ namespace ThinBlueLie.Bases
         public IEnumerable<ListItem> States = GetEnumDisplayNames<TimelineinfoEnums.StateEnum>();
 
         public DateTime Today { get; set; } =  DateTime.Today;
-        public static DateTime MinDate = new DateTime(1776, 7, 4);
+        public static readonly DateTime MinDate = new DateTime(1776, 7, 4);
         public DateTime? DateValue { get; set; } = DateTime.Today;
 
         internal void SetSameAsSubject(SimilarPeopleModel person)
@@ -119,7 +123,6 @@ namespace ThinBlueLie.Bases
         public List<List<SimilarPersonGeneral>> SimilarSubjects { get; set; } = new List<List<SimilarPersonGeneral>>();
         internal async void SuggestSubjects(SimilarPersonCallback personCallback)
         {
-            SearchesSubmit searchesSubmit = new SearchesSubmit();
             //TODO don't do suggest if name is too short or something
             var similarSubject = await searchesSubmit.SearchSubject(personCallback.Name);
             SimilarSubjects[personCallback.Index] = similarSubject;
@@ -129,7 +132,6 @@ namespace ThinBlueLie.Bases
         public List<List<SimilarPersonGeneral>> SimilarOfficers { get; set; } = new List<List<SimilarPersonGeneral>>();
         internal async void SuggestOfficers(SimilarPersonCallback personCallback)
         {
-            SearchesSubmit searchesSubmit = new SearchesSubmit();
             //TODO don't do suggest if name is too short or something
             var similarOfficer = await searchesSubmit.SearchOfficer(personCallback.Name);
             SimilarOfficers[personCallback.Index] = similarOfficer;

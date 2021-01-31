@@ -13,6 +13,7 @@
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor httpContextAccessor
 @inject UserManager<ApplicationUser> userManager
+@inject IDataAccess data
 @using DataAccessLibrary.UserModels
 
 <div class="flagPopover">
@@ -83,14 +84,13 @@
         }
         flagged.IdTimelineinfo = IdTimelineinfo;
         string flaggedSql = "INSERT INTO flags (`IdTimelineinfo`, `FlagType`, `Message`, `UserId`) VALUES (@idTimelineinfo, @flagType, @message, @userId);";
-        DataAccess data = new DataAccess();
         await data.SaveData(flaggedSql, new {
             idTimelineinfo = flagged.IdTimelineinfo,
             flagType = flagged.FlagType,
             message = flagged.Message,
             userId = flagged.UserId
-        }, GetConnectionString());
-
+        });
+        Serilog.Log.Information("Submitted new Flag: \"{Message}\"", flagged.Message);
         submitted = true;
     }
 

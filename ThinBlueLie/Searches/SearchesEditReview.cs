@@ -23,11 +23,12 @@ namespace ThinBlueLie.Searches
 {
     public class SearchesEditReview
     {
-        public SearchesEditReview(IMapper mapper)
+        public SearchesEditReview(IMapper mapper, IDataAccess data)
         {
             Mapper = mapper;
+            Data = data;
         }
-
+        public IDataAccess Data { get; }
         private IMapper Mapper { get; }
 
         //count total pending edits that the user can access and get their edithistory ids
@@ -96,20 +97,18 @@ namespace ThinBlueLie.Searches
         private async Task<Tuple<EditReviewModel, EditHistory>> GetPeopleChangesFromId(int id)
         {
             var people = new EditReviewModel {New = new EditReviewSegment(), Old = new EditReviewSegment()};
-            var data = new DataAccess();
             var WhatChangedQuery = "Select * from edithistory e Where e.IdEditHistory = @id";
             var editChanges =
-                await data.LoadDataSingle<EditHistory, dynamic>(WhatChangedQuery, new {id}, GetConnectionString());
+                await Data.LoadDataSingle<EditHistory, dynamic>(WhatChangedQuery, new {id});
             if (editChanges.Subjects == 1)
             {
                 var SubjectChangedQuery = "Select * From edits_subject s Where s.IdEditHistory = @id";
                 people.New.SubjectPerson =
-                    await data.LoadDataSingle<SimilarSubject, dynamic>(SubjectChangedQuery, new {id},
-                        GetConnectionString()); //Get new subject
+                    await Data.LoadDataSingle<SimilarSubject, dynamic>(SubjectChangedQuery, new {id}); //Get new subject
 
                 var SubjectOldQuery = "Select * From subjects s Where s.IdSubject = @id;";
-                people.Old.SubjectPerson = await data.LoadDataSingle<SimilarSubject, dynamic>(SubjectOldQuery,
-                    new {id = people.New.SubjectPerson.IdSubject}, GetConnectionString());
+                people.Old.SubjectPerson = await Data.LoadDataSingle<SimilarSubject, dynamic>(SubjectOldQuery,
+                    new {id = people.New.SubjectPerson.IdSubject});
 
                 var sql3 = "SELECT t.IdTimelineinfo, t.Date, t.City, t.State " +
                            "FROM timelineinfo t " +
@@ -117,20 +116,19 @@ namespace ThinBlueLie.Searches
                            "JOIN subjects s ON timelineinfo_subject.IdSubject = s.IdSubject " +
                            "WHERE s.IdSubject = @id;";
                 people.New.SubjectPerson.Events = people.Old.SubjectPerson.Events
-                    = await data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3,
-                        new {id = people.New.SubjectPerson.IdSubject}, GetConnectionString());
+                    = await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3,
+                        new {id = people.New.SubjectPerson.IdSubject});
             }
 
             if (editChanges.Officers == 1)
             {
                 var OfficerChangedQuery = "Select * From edits_officer s Where s.IdEditHistory = @id";
                 people.New.OfficerPerson =
-                    await data.LoadDataSingle<SimilarOfficer, dynamic>(OfficerChangedQuery, new {id},
-                        GetConnectionString());
+                    await Data.LoadDataSingle<SimilarOfficer, dynamic>(OfficerChangedQuery, new {id});
 
                 var OfficerOldQuery = "Select * From officers s Where s.IdOfficer = @id;";
-                people.Old.OfficerPerson = await data.LoadDataSingle<SimilarOfficer, dynamic>(OfficerOldQuery,
-                    new {id = people.New.OfficerPerson.IdOfficer}, GetConnectionString());
+                people.Old.OfficerPerson = await Data.LoadDataSingle<SimilarOfficer, dynamic>(OfficerOldQuery,
+                    new {id = people.New.OfficerPerson.IdOfficer});
 
                 var sql3 = "SELECT t.IdTimelineinfo, t.Date, t.City, t.State " +
                            "FROM timelineinfo t " +
@@ -138,8 +136,8 @@ namespace ThinBlueLie.Searches
                            "JOIN officers o ON timelineinfo_officer.IdOfficer = o.IdOfficer " +
                            "WHERE o.IdOfficer = @id;";
                 people.New.OfficerPerson.Events = people.Old.OfficerPerson.Events =
-                    await data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3,
-                        new {id = people.New.OfficerPerson.IdOfficer}, GetConnectionString());
+                    await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3,
+                        new {id = people.New.OfficerPerson.IdOfficer});
             }
 
             return new Tuple<EditReviewModel, EditHistory>(people, editChanges);
@@ -150,11 +148,9 @@ namespace ThinBlueLie.Searches
             //for edits reference edit w/ id that matches id against active timelineinfo with matching idtimelineinfo
             //for editmedia reference reference against active and use action to determine what to do
             //clearing previous information
-            var data = new DataAccess();
-
             //get old information from DB
             var query = "SELECT * From timelineinfo t where t.IdTimelineinfo = @id";
-            var timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new {id}, GetConnectionString());
+            var timelineinfo = await Data.LoadDataSingle<Timelineinfo, dynamic>(query, new {id});
             var mediaQuery = "SELECT *, (true) as Processed From media m where m.IdTimelineinfo = @id Order By m.Rank;";
             var officerQuery = "SELECT o.*, t_o.Age, t_o.Misconduct, t_o.Weapon " +
                                "FROM timelineinfo t " +
@@ -168,9 +164,9 @@ namespace ThinBlueLie.Searches
                                "WHERE t.IdTimelineinfo = @id;";
 
             //get media, officers, and subjects using timelineinfo id
-            var media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new {id}, GetConnectionString());
-            var officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new {id}, GetConnectionString());
-            var subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new {id}, GetConnectionString());
+            var media = await Data.LoadData<ViewMedia, dynamic>(mediaQuery, new {id});
+            var officers = await Data.LoadData<DBOfficer, dynamic>(officerQuery, new {id});
+            var subjects = await Data.LoadData<DBSubject, dynamic>(subjectQuery, new {id});
 
             media = await ViewMedia.GetDataMany(media);
 
@@ -188,26 +184,25 @@ namespace ThinBlueLie.Searches
         {
             var newInfo = new EditReviewSegment();
             Mapper.Map(oldInfo, newInfo);
-            var data = new DataAccess();
             var WhatChangedQuery = "Select * from edithistory e Where e.IdEditHistory = @id";
-            var editChanges = await data.LoadDataSingle<EditHistory, dynamic>(WhatChangedQuery,
-                new {id = id.IdEditHistory}, GetConnectionString());
+            var editChanges = await Data.LoadDataSingle<EditHistory, dynamic>(WhatChangedQuery,
+                new {id = id.IdEditHistory});
             //If Timelineinfo changed
             //TODO move to querymultipleasync
             if (editChanges.Edits == 1)
             {
                 var EditChangedQuery = @"Select e.IdTimelineinfo, e.Title, e.Date, e.State, e.City, e.Context, e.Locked 
                                         From edits e Where e.IdEditHistory = @id;";
-                newInfo.Data = await data.LoadDataSingle<Timelineinfo, dynamic>(EditChangedQuery,
-                    new {id = id.IdEditHistory}, GetConnectionString());
+                newInfo.Data = await Data.LoadDataSingle<Timelineinfo, dynamic>(EditChangedQuery,
+                    new {id = id.IdEditHistory});
             }
 
             if (editChanges.EditMedia == 1)
             {
                 var MediaChangedQuery = @"Select *, (true) as Processed
                                           From editmedia m Where m.IdEditHistory = @id Order By m.Rank;";
-                var changesToMedia = await data.LoadData<EditMedia, dynamic>(MediaChangedQuery,
-                    new {id = id.IdEditHistory}, GetConnectionString());
+                var changesToMedia = await Data.LoadData<EditMedia, dynamic>(MediaChangedQuery,
+                    new {id = id.IdEditHistory});
                 //the frist media isn't getting it's set called for some reason, and thus its urls are empty
                 foreach (var change in changesToMedia)
                 {
@@ -241,8 +236,7 @@ namespace ThinBlueLie.Searches
                         JOIN {(id.IsNewEvent.ToBool() ? "edits_officer" : "officers")} o ON t_o.IdOfficer = o.IdOfficer 
                         WHERE e.IdEditHistory = {id.IdEditHistory};";
                 var changesToTimelineOfficer =
-                    await data.LoadData<DBOfficer, dynamic>(changesToTimelineOfficerQuery, new { },
-                        GetConnectionString());
+                    await Data.LoadData<DBOfficer, dynamic>(changesToTimelineOfficerQuery, new { });
                 newInfo.Officers = changesToTimelineOfficer;
             }
 
@@ -254,8 +248,8 @@ namespace ThinBlueLie.Searches
                         JOIN edits_timelineinfo_subject t_s ON e.IdEditHistory = t_s.IdEditHistory 
                         JOIN {(id.IsNewEvent.ToBool() ? "edits_subject" : "subjects")} s ON t_s.IdSubject = s.IdSubject 
                         WHERE e.IdEditHistory = @id;";
-                var changesToTimelineSubject = await data.LoadData<DBSubject, dynamic>(changesToTimelineSubjectQuery,
-                    new {id = id.IdEditHistory}, GetConnectionString());
+                var changesToTimelineSubject = await Data.LoadData<DBSubject, dynamic>(changesToTimelineSubjectQuery,
+                    new {id = id.IdEditHistory});
                 newInfo.Subjects = changesToTimelineSubject;
             }
 

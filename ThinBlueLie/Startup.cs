@@ -25,6 +25,8 @@ using ThinBlueLie.Helper.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 using Microsoft.AspNetCore.Http;
+using Dapper.Logging;
+using MySqlConnector;
 
 namespace ThinBlueLie
 {
@@ -73,6 +75,8 @@ namespace ThinBlueLie
                 options.KnownProxies.Clear();
             });
 
+            services.AddDbConnectionFactory(prv => new MySqlConnection(Configuration.GetConnectionString("DataDB")), null, ServiceLifetime.Singleton);
+
             services.AddAuthentication()
                 .AddGoogle(options =>
             {
@@ -104,8 +108,11 @@ namespace ThinBlueLie
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddScoped<ISideBySideDiffBuilder, SideBySideDiffBuilder>();
             services.AddScoped<IDiffer, Differ>();
-           
+
             services.AddSingleton<IDataAccess, DataAccess>();
+            services.AddSingleton<SearchesTimeline>();
+            services.AddSingleton<SearchesSubmit>();
+            services.AddSingleton<SearchesEditReview>();
             services.AddSingleton<SearchesEditReview>();
             services.AddSingleton<Helper.Services.IEmailSender, EmailSender>();
 

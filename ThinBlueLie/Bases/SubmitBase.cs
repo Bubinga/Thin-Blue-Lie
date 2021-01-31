@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MySqlConnector;
+using Syncfusion.Blazor.Calendars;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -176,18 +178,22 @@ namespace ThinBlueLie.Models
                                                 `Timelineinfo_Subject` = @Timelineinfo_Subject 
                                             WHERE (`IdEditHistory` = '{EditHistoryId}');";
                 await connection.ExecuteAsync(updateEditHistory, editHistory);
-            }           
+            }
+            Serilog.Log.Information("Created new Event {id}", IdTimelineinfo);
             //TODO move all into querymultiple
-            if (userState.User.Identity.IsAuthenticated) //TODO check if successful submit
+            if (true) //TODO check if successful submit
             {
                 NavManager.NavigateTo("/Account/Profile");
             }
-            else
-            {
-                NavManager.NavigateTo("/Index");
-            }
+
             SavingData = false;
         }
-
+        public List<ViewSimilar>? SimilarEvents { get; set; } = new List<ViewSimilar>();
+        protected async void FindEvents(ChangedEventArgs<DateTime?> args)
+        {
+            model.Timelineinfos.Date = Convert.ToDateTime(DateValue);
+            SimilarEvents = await searchesSubmit.GetSimilar(args.Value?.ToString("yyyy-MM-dd"));
+            this.StateHasChanged();
+        }
     }
 }

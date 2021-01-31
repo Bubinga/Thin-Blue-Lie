@@ -46,6 +46,8 @@ namespace ThinBlueLie.Bases
         public List<EditReviewModel> Edits = new List<EditReviewModel>();
         [Inject]
         SearchesEditReview Review { get; set; }
+        [Inject]
+        IDataAccess Data { get; }
         protected override async Task OnInitializedAsync()
         {
             //TODO only trigger this if use is logged in
@@ -97,7 +99,6 @@ namespace ThinBlueLie.Bases
             StateHasChanged();
         }
 
-        DataAccess data = new DataAccess();
         const int minimumAcceptVotes = 6;
         const int minimumDenyVotes = -4;
         //TODO make only able to vote once.
@@ -172,7 +173,7 @@ namespace ThinBlueLie.Bases
         public async Task DenyEdit()
         {
             string DenyEditSql = "UPDATE edithistory SET `Confirmed` = '2' WHERE (`IdEditHistory` = @id);";
-            await data.SaveData(DenyEditSql, new { id = Ids.ToArray()[ActiveIdIndex].IdEditHistory }, GetConnectionString());
+            await Data.SaveData(DenyEditSql, new { id = Ids.ToArray()[ActiveIdIndex].IdEditHistory });
         }
 
         public async Task MergeEdit()
@@ -196,7 +197,7 @@ namespace ThinBlueLie.Bases
                 if (change.EditMedia == 1)
                 {
                     string MediaChangedQuery = @"Select * From editmedia m Where m.IdEditHistory = @id;";
-                    var changesToMedia = await data.LoadData<EditMedia, dynamic>(MediaChangedQuery, new { id = change.IdEditHistory }, GetConnectionString());                   
+                    var changesToMedia = await Data.LoadData<EditMedia, dynamic>(MediaChangedQuery, new { id = change.IdEditHistory });                   
                     //TODO find way to do all at once. 
                     foreach (var media in changesToMedia)
                     {
@@ -299,7 +300,7 @@ namespace ThinBlueLie.Bases
 
                 string changeToConfirmed = "UPDATE edithistory SET `Confirmed` = '1' WHERE (`IdEditHistory` = @IdEditHistory);";
                 await connection.ExecuteAsync(changeToConfirmed, new {Ids.ToArray()[ActiveIdIndex].IdEditHistory});
-
+                Serilog.Log.Information("Merged Edit for Event {id}", newInfo.Data.IdTimelineinfo);
                 //var confirmedEditId = Ids.ToArray()[ActiveIdIndex].IdEditHistory;
                 //Ids = Ids.Where(i => i.IdEditHistory != confirmedEditId).ToList();
 

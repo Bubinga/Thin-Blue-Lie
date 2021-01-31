@@ -16,7 +16,13 @@ using ThinBlueLie.Helper.Extensions;
 namespace ThinBlueLie.Helper
 {
     public class SearchesSubmit
-    {      
+    {
+        public IDataAccess Data { get; }
+
+        public SearchesSubmit(IDataAccess data)
+        {
+            Data = data;
+        }
 
         private static Tuple<int, string> GetNameInfo(string Input)
         {
@@ -49,9 +55,8 @@ namespace ThinBlueLie.Helper
             int MiddleCount = NameInfo.Item1;     
 
             //Load all OfficerNames
-            DataAccess data = new DataAccess();
             string sql = "SELECT IdOfficer, Name FROM officers";
-            List<FirstLoadOfficer> Names = await data.LoadData<FirstLoadOfficer, dynamic>(sql, new { }, GetConnectionString());
+            List<FirstLoadOfficer> Names = await Data.LoadData<FirstLoadOfficer, dynamic>(sql, new { });
 
             List<NameScore> nameScores = new List<NameScore>();
             foreach (var name in Names)
@@ -76,7 +81,7 @@ namespace ThinBlueLie.Helper
             if (!string.IsNullOrWhiteSpace(Ids))
             {
                 var sql2 = "SELECT o.Name, o.Race, o.Sex, IdOfficer FROM officers o Where IdOfficer in (@IdList) ORDER BY field(IdOfficer, @IdList)";
-                similarPeople = await data.LoadData<SimilarOfficer, dynamic>(sql2, new {IdList = Ids }, GetConnectionString());
+                similarPeople = await Data.LoadData<SimilarOfficer, dynamic>(sql2, new {IdList = Ids });
                 for (int i = 0; i < Ids.Length; i++)
                 {
                     var sql3 = "SELECT t.Date, t.City, t.State " +
@@ -84,7 +89,7 @@ namespace ThinBlueLie.Helper
                                 "JOIN timelineinfo_officer ON t.IdTimelineinfo = timelineinfo_officer.IdTimelineinfo " +
                                 "JOIN officers o ON timelineinfo_officer.IdOfficer = o.IdOfficer " +
                                 "WHERE o.IdOfficer = @Id;";
-                    similarPeople[i].Events = await data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3, new {Id = Ids[i] }, GetConnectionString());
+                    similarPeople[i].Events = await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3, new {Id = Ids[i] });
                 }                          
             }
             else
@@ -115,9 +120,8 @@ namespace ThinBlueLie.Helper
             int MiddleCount = NameInfo.Item1;
 
             //Load all SubjectNames
-            DataAccess data = new DataAccess();
             string sql = "SELECT IdSubject, Name FROM subjects";
-            List<FirstLoadSubject> Names = await data.LoadData<FirstLoadSubject, dynamic>(sql, new { }, GetConnectionString());
+            List<FirstLoadSubject> Names = await Data.LoadData<FirstLoadSubject, dynamic>(sql, new { });
 
             List<NameScore> nameScores = new List<NameScore>();
             foreach (var name in Names)
@@ -143,7 +147,7 @@ namespace ThinBlueLie.Helper
             if (!string.IsNullOrWhiteSpace(Ids))
             {
                 var sql2 = "SELECT * FROM subjects Where IdSubject in (@IdList) ORDER BY field(IdSubject, @IdList)";
-                similarPeople = await data.LoadData<SimilarSubject, dynamic>(sql2, new {IdList = Ids }, GetConnectionString());
+                similarPeople = await Data.LoadData<SimilarSubject, dynamic>(sql2, new {IdList = Ids });
                 for (int i = 0; i < Ids.Length; i++)
                 {
                     var sql3 = "SELECT t.Date, t.City, t.State " +
@@ -151,7 +155,7 @@ namespace ThinBlueLie.Helper
                                 "JOIN timelineinfo_subject ON t.IdTimelineinfo = timelineinfo_subject.IdTimelineinfo " +
                                 "JOIN subjects s ON timelineinfo_subject.IdSubject = s.IdSubject " +
                                 "WHERE s.IdSubject = @Id;";
-                    similarPeople[i].Events = await data.LoadData<SimilarSubject.SimilarPersonEvents, dynamic>(sql3, new {Id = Ids[i] }, GetConnectionString());
+                    similarPeople[i].Events = await Data.LoadData<SimilarSubject.SimilarPersonEvents, dynamic>(sql3, new {Id = Ids[i] });
                 }
             }
             else
@@ -179,9 +183,8 @@ namespace ThinBlueLie.Helper
         {
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
             List<ViewSimilar> SimilarEvents = new List<ViewSimilar>();
-            DataAccess data = new DataAccess();
             var query1 = "SELECT * From timelineinfo t where t.date = @Date;";
-            var SimilarTimelineinfos = await data.LoadData<Timelineinfo, dynamic>(query1, new {Date = TempDate }, GetConnectionString());
+            var SimilarTimelineinfos = await Data.LoadData<Timelineinfo, dynamic>(query1, new {Date = TempDate });
             foreach ((var Event, int i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))
             {
                 var Id = Event.IdTimelineinfo;
@@ -189,14 +192,14 @@ namespace ThinBlueLie.Helper
                     "JOIN timelineinfo_officer tio ON t.IdTimelineinfo = tio.IdTimelineinfo " +
                     "JOIN officers o ON tio.IdOfficer = o.IdOfficer " +
                     "WHERE t.IdTimelineinfo = @id;";
-                var Officers = await data.LoadData<CommonPerson, dynamic>(officerQuery, new { id = Id }, GetConnectionString());
+                var Officers = await Data.LoadData<CommonPerson, dynamic>(officerQuery, new { id = Id });
                 var subjectQuery = "SELECT s.Name, s.Race, s.Sex, ts.Age FROM timelineinfo t " +
                     "JOIN timelineinfo_subject ts ON t.IdTimelineinfo = ts.IdTimelineinfo " +
                     "JOIN subjects s ON ts.IdSubject = s.IdSubject " +
                     "WHERE t.IdTimelineinfo = @id;";
-                var Subjects = await data.LoadData<CommonPerson, dynamic>(subjectQuery, new { id = Id }, GetConnectionString());
+                var Subjects = await Data.LoadData<CommonPerson, dynamic>(subjectQuery, new { id = Id });
                 var MediaQuery = "Select *,(true) as Processed From media m Where(m.IdTimelineinfo = @id);";
-                var Media = await data.LoadData<ViewMedia, dynamic>(MediaQuery, new {id = Id }, GetConnectionString());
+                var Media = await Data.LoadData<ViewMedia, dynamic>(MediaQuery, new {id = Id });
 
                 //add timelineinfos, officers, subject, and media to list at end
                 ViewSimilar items = new ViewSimilar()
