@@ -27,6 +27,8 @@ using Serilog;
 using Microsoft.AspNetCore.Http;
 using Dapper.Logging;
 using MySqlConnector;
+using Dapper.Logging.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ThinBlueLie
 {
@@ -74,7 +76,11 @@ namespace ThinBlueLie
                 options.KnownProxies.Clear();
             });
 
-            services.AddDbConnectionFactory(prv => new MySqlConnection(Configuration.GetConnectionString("DataDB")), null, ServiceLifetime.Singleton);
+            services.AddDbConnectionFactory(prv => new MySqlConnection(Configuration.GetConnectionString("DataDB")),
+                options => options
+                    .WithLogLevel(LogLevel.Information)
+                    .WithSensitiveDataLogging(),
+                ServiceLifetime.Singleton);
 
             services.AddAuthentication()
                 .AddGoogle(options =>
