@@ -19,6 +19,7 @@ Test.razor
 Test?.razor
 
 Uploads/
+Logs/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using ThinBlueLie.Helper.Validators;
 
 namespace ThinBlueLie.Areas.Identity.Pages.Account
 {
@@ -52,9 +53,11 @@ namespace ThinBlueLie.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+            [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
             [Required]
-            [RegularExpression("^[a-zA-Z ]*$")]
-            [MaxLength(25)]
+            [RegularExpression("^[a-zA-Z0-9-._]+$", ErrorMessage = "Username can only contain letters, numbers, and '_.-'")]
+            [UsernamePunctuation(ErrorMessage = "Username must contain no punctuation at the end or beginning")]
+            [RepeatedPuncutation(ErrorMessage = "Username must not contain repeated punctuation")]
             public string Username { get; set; }
         }
 

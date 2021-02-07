@@ -25,6 +25,10 @@ using ThinBlueLie.Helper.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 using Microsoft.AspNetCore.Http;
+using Dapper.Logging;
+using MySqlConnector;
+using Dapper.Logging.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ThinBlueLie
 {
@@ -52,8 +56,7 @@ namespace ThinBlueLie
             {
                 options.SignIn.RequireConfirmedAccount = true;
                 options.User.RequireUniqueEmail = true;
-                options.User.AllowedUserNameCharacters =
-                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
@@ -72,6 +75,12 @@ namespace ThinBlueLie
                 options.KnownNetworks.Clear();
                 options.KnownProxies.Clear();
             });
+
+            services.AddDbConnectionFactory(prv => new MySqlConnection(Configuration.GetConnectionString("DataDB")),
+                options => options
+                    .WithLogLevel(LogLevel.Information)
+                    .WithSensitiveDataLogging(),
+                ServiceLifetime.Singleton);
 
             services.AddAuthentication()
                 .AddGoogle(options =>
@@ -104,8 +113,11 @@ namespace ThinBlueLie
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddScoped<ISideBySideDiffBuilder, SideBySideDiffBuilder>();
             services.AddScoped<IDiffer, Differ>();
-           
+
             services.AddSingleton<IDataAccess, DataAccess>();
+            services.AddSingleton<SearchesTimeline>();
+            services.AddSingleton<SearchesSubmit>();
+            services.AddSingleton<SearchesEditReview>();
             services.AddSingleton<SearchesEditReview>();
             services.AddSingleton<Helper.Services.IEmailSender, EmailSender>();
 

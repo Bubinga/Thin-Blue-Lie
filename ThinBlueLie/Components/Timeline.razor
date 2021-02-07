@@ -1,5 +1,4 @@
-﻿@page "/Timeline"
-@using DataAccessLibrary.DataModels;
+﻿@using DataAccessLibrary.DataModels;
 @using Syncfusion.Blazor.Popups
 @using ThinBlueLie.Helper.Extensions
 @using ThinBlueLie.Helper
@@ -7,6 +6,7 @@
 @using ThinBlueLie.Helper.Algorithms 
 @using ThinBlueLie.Searches
 @inject NavigationManager MyNavigationManager
+@inject SearchesTimeline searches 
 
 <style>
     .e-control, .e-css {
@@ -69,14 +69,12 @@ else
 @code {
     DateTime[] Dates;
     List<List<TimelineinfoFull>> Day { get; set; }
-    SearchesTimeline searches;
     [Parameter]
     public DateTime Date { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         //TODO make synchronous
-        searches = new Searches.SearchesTimeline();
         await LoadFromNewDate(Date);
     }
 

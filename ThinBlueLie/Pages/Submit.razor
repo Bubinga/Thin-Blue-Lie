@@ -190,28 +190,15 @@
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> _authState { get; set; }
-
-    public List<ViewSimilar>? SimilarEvents { get; set; } = new List<ViewSimilar>();
-    protected async void FindEvents(ChangedEventArgs<DateTime?> args)
-    {
-        model.Timelineinfos.Date = Convert.ToDateTime(DateValue);
-        SearchesSubmit searchesSubmit = new SearchesSubmit();
-        SimilarEvents = await searchesSubmit.GetSimilar(args.Value?.ToString("yyyy-MM-dd"));
-        this.StateHasChanged();
-    }
+    
     protected override async Task OnInitializedAsync()
     {
         userState = await _authState;
         if (userState.User.Identity.IsAuthenticated)
         {
-            SearchesSubmit searchesSubmit = new SearchesSubmit();
             SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
             SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
-            Today = DateTime.Today;
-            MinDate = new DateTime(1776, 7, 4);
-            DateValue = DateTime.Today;
             SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
         }
     }
-
 }

@@ -41,6 +41,8 @@ namespace ThinBlueLie.Bases
         public IMapper Mapper { get; set; }
         [Inject]
         NavigationManager navManager { get; set; }
+        [Inject]
+        IDataAccess Data { get; set; }
 
 
         SubmitModel oldInfo = new SubmitModel();
@@ -50,15 +52,14 @@ namespace ThinBlueLie.Bases
         public bool EventPendingEdit = false;
         internal async Task<SubmitModel> FetchDataAsync()
         {
-            DataAccess data = new DataAccess();
             string checkPending = "SELECT e.Confirmed FROM edithistory e where e.IdTimelineinfo = @id Order by e.Timestamp desc Limit 1;";
-            int Confirmed = await data.LoadDataSingle<int, dynamic>(checkPending, new { id = Id }, GetConnectionString());
+            int Confirmed = await Data.LoadDataSingle<int, dynamic>(checkPending, new { id = Id });
             if (Confirmed == 0) { 
                 EventPendingEdit = true;
                 return new SubmitModel { Timelineinfos = new ViewTimelineinfo { } }; 
             }
             var query = "SELECT * From timelineinfo t where t.IdTimelineinfo = @id;";
-            Timelineinfo timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { id = Id }, GetConnectionString());
+            Timelineinfo timelineinfo = await Data.LoadDataSingle<Timelineinfo, dynamic>(query, new { id = Id });
             //TODO change to multipleQueryAsync
             if (timelineinfo != null)
             {
@@ -80,9 +81,9 @@ namespace ThinBlueLie.Bases
                             "WHERE t.IdTimelineinfo = @id;";
 
                     //get media, officers, and subjects using timelineinfo id
-                    List<ViewMedia> Media = await data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = Id }, GetConnectionString());
-                    List<DBOfficer> officers = await data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Id }, GetConnectionString());
-                    List<DBSubject> subjects = await data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Id }, GetConnectionString());
+                    List<ViewMedia> Media = await Data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = Id });
+                    List<DBOfficer> officers = await Data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Id });
+                    List<DBSubject> subjects = await Data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Id });
 
                     Media = await ViewMedia.GetDataMany(Media);
 
@@ -126,7 +127,7 @@ namespace ThinBlueLie.Bases
                 string createNewEditHistory = @"INSERT INTO edithistory (`Confirmed`, `SubmittedBy`, `IdTimelineinfo`) 
                                                         VALUES ('2', @userId, @IdTimelineinfo);
                                             SELECT LAST_INSERT_ID();";
-                EditHistoryId = await data.LoadDataSingle<int, dynamic>(createNewEditHistory, new { userId, IdTimelineinfo = Id }, GetConnectionString());
+                EditHistoryId = await Data.LoadDataSingle<int, dynamic>(createNewEditHistory, new { userId, IdTimelineinfo = Id });
                 CreatedNewEditHistory = true;
             }
         }
@@ -135,7 +136,6 @@ namespace ThinBlueLie.Bases
         public bool SavingData = false;
 
         internal AuthenticationState userState;
-        DataAccess data = new DataAccess();
         int userId;
         int EditHistoryId;
         public ApplicationUser User;
@@ -179,7 +179,7 @@ namespace ThinBlueLie.Bases
                         //    Action = EditActions.Deletion;
                         else
                             Action = EditActions.Update;
-                        await data.SaveData(sql, new
+                        await Data.SaveData(sql, new
                         {
                             userId = userId,
                             IdOfficer = pair.Item2?.IdOfficer,
@@ -189,7 +189,7 @@ namespace ThinBlueLie.Bases
                             Image = pair.Item1?.Image ?? pair.Item2?.Image,
                             Local = pair.Item1?.Local ?? pair.Item2?.Local,
                             Action = (int)Action
-                        }, GetConnectionString());
+                        });
                     }
                     if ((pair.Item1?.Age != pair.Item2?.Age) || (pair.Item1?.Misconduct != pair.Item2?.Misconduct)
                         || (pair.Item1?.Weapon != pair.Item2?.Weapon))
@@ -206,7 +206,7 @@ namespace ThinBlueLie.Bases
                         string newTimelineinfoOfficer = $@"INSERT INTO edits_timelineinfo_officer
                                                         (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `Misconduct`, `Weapon`, `Age`) 
                                                         VALUES ('{EditHistoryId}', '{Id}', @IdOfficer, '{officer.Misconduct.Sum()}', {weapon}, @Age);";
-                        await data.SaveData(newTimelineinfoOfficer, officer, GetConnectionString());
+                        await Data.SaveData(newTimelineinfoOfficer, officer);
                     }                    
                 }
             }
@@ -238,7 +238,7 @@ namespace ThinBlueLie.Bases
                         //    Action = EditActions.Deletion; not where person deletion should happen
                         else
                             Action = EditActions.Update;
-                        await data.SaveData(sql, new
+                        await Data.SaveData(sql, new
                         {
                             userId = userId,
                             IdSubject = pair.Item2?.IdSubject,
@@ -248,7 +248,7 @@ namespace ThinBlueLie.Bases
                             Image = pair.Item1?.Image ?? pair.Item2?.Image,
                             Local = pair.Item1?.Local ?? pair.Item2?.Local,
                             Action = (int)Action
-                        }, GetConnectionString());
+                        });
                     }
                     //junction table has to change
                     if ((pair.Item1?.Age != pair.Item2?.Age) || (pair.Item1?.Armed != pair.Item2?.Armed))
@@ -261,7 +261,7 @@ namespace ThinBlueLie.Bases
                     string newTimelineinfoSubject = $@"INSERT INTO edits_timelineinfo_subject
                                                         (`IdEditHistory`, `IdTimelineinfo`, `IdSubject`, `Armed`, `Age`) 
                                                         VALUES ('{EditHistoryId}', '{Id}', @IdSubject, @Armed, @Age);";
-                    await data.SaveData(newTimelineinfoSubject, model.Subjects, GetConnectionString());
+                    await Data.SaveData(newTimelineinfoSubject, model.Subjects);
                 }
             }
             if (!compareLogic.Compare(model.Medias, oldInfo.Medias).AreEqual)
@@ -292,7 +292,7 @@ namespace ThinBlueLie.Bases
                                                         `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Action`)
                                                        VALUES ('{EditHistoryId}', '{Id}', @Rank, @MediaType, @SourcePath,
                                                           @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', '{(int)Action}');";
-                            await data.SaveData(saveNewMedia, pair.Item2, GetConnectionString());
+                            await Data.SaveData(saveNewMedia, pair.Item2);
                         }
                         //if deleted media
                         else if (pair.Item2 == null && pair.Item1 != null)
@@ -300,7 +300,7 @@ namespace ThinBlueLie.Bases
                             Action = EditActions.Deletion;
                             string deleteMedia = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `IdMedia`, `SubmittedBy`, `Action`) 
                                                     VALUES ('{EditHistoryId}', '{Id}', '{pair.Item1.IdMedia}', '{userId}', '{(int)Action}');";
-                            await data.SaveData(deleteMedia, new { }, GetConnectionString());
+                            await Data.SaveData(deleteMedia, new { });
                         }
                         //if updated
                         else
@@ -312,7 +312,7 @@ namespace ThinBlueLie.Bases
                                                         `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Action`)
                                                        VALUES ('{EditHistoryId}', '{Id}', @IdMedia, @Rank, @MediaType, @SourcePath,
                                                           @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', '{(int)Action}');";
-                            await data.SaveData(updateMedia, pair.Item2, GetConnectionString());
+                            await Data.SaveData(updateMedia, pair.Item2);
                         }
                     }
                 }
@@ -336,7 +336,7 @@ namespace ThinBlueLie.Bases
                                            `City`, `Context`, `Locked`) 
                                         VALUES ('{EditHistoryId}', '{Id}', @Title, @Date, @State,
                                             @City, @Context, @Locked);";
-                await data.SaveData(InsertEdits, model.Timelineinfos, GetConnectionString());
+                await Data.SaveData(InsertEdits, model.Timelineinfos);
             }
 
             string updateEditHistory = @$"UPDATE edithistory SET 
@@ -344,7 +344,8 @@ namespace ThinBlueLie.Bases
                                                 `Officers` = @Officers, `Subjects` = @Subjects, `Timelineinfo_Officer` = @Timelineinfo_Officer, 
                                                 `Timelineinfo_Subject` = @Timelineinfo_Subject 
                                          WHERE (`IdEditHistory` = '{EditHistoryId}');";
-            await data.SaveData(updateEditHistory, editHistory, GetConnectionString());
+            await Data.SaveData(updateEditHistory, editHistory);
+            Serilog.Log.Information("Created new Edit for Event {id}", Id);
             navManager.NavigateTo("/Account/Profile");
             SavingData = false;
         }
