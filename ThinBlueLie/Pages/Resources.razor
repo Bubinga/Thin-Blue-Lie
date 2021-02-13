@@ -1,4 +1,7 @@
 ﻿@page "/Resources"
+@inject NavigationManager navManager
+@implements IDisposable
+@using static ThinBlueLie.Helper.Extensions.StringExtensions
 @using Syncfusion.Blazor.Navigations
 
 <Title>Resources - Thin Blue Lie</Title>
@@ -17,44 +20,41 @@
 </div>
 <div id="wrapper">
     <div class="col-lg-12 col-sm-12 col-md-12">
-        <SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" EnableGestures="false" Animate="false" Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)">
+        <SfSidebar Width="290px" EnableGestures="false" Animate="false" Target=".main-content" MediaQuery="(min-width:600px)">
             <ChildContent>
-                <div class="main-menu">
-                    <div class="table-content">
-                        <p class="main-menu-header sidebar-heading">Navigation</p>
+                <div class="nav-with-bar">
+                    <div class="text-center">
+                        <h5>Navigation</h5>
                     </div>
-                    <div>
-                        <SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
-                            <TreeViewFieldsSettings Id="nodeId" Text="nodeText" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
-                            </TreeViewFieldsSettings>
-                        </SfTreeView>
-                    </div>
+                    <ul>
+                        <li>
+                            <NavLink class="nav-link" href="/Resources#featured">Featured</NavLink>
+                        </li>
+                        <li>
+                            <NavLink class="nav-link" href="/Resources#datasets">Data Sets</NavLink>
+                        </li>
+                        <li>
+                            <NavLink class="nav-link" href="/Resources#books">Books</NavLink>
+                        </li>
+                        <li>
+                            <NavLink class="nav-link" href="/Resources#podcasts">Podcasts</NavLink>
+                        </li>
+                        <li>
+                            <NavLink class="nav-link" href="/Resources#public-figures">Public Figures</NavLink>
+                        </li>
+                        <li>
+                            <NavLink class="nav-link" href="/Resources#musicians">Musicians</NavLink>
+                        </li>
+                        <li>
+                            <NavLink class="nav-link" href="/Resources#artists">Artists</NavLink>
+                        </li>
+                    </ul>
                 </div>
             </ChildContent>
         </SfSidebar>
-        <SfSidebar Animate="false" Width="200px" EnableGestures="false" Position="SidebarPosition.Right" Target=".main-content" MediaQuery="(min-width:600px)">
-            <ChildContent>
-                <div class="p-3 mt-2">
-                    <div>
-                        <h6>To learn more about the issue visit:</h6>
-                        <div class="d-flex justify-content-center">
-                            <a class="btn btn-sm btn-outline-info" href="/Resources" role="button">Resources</a>
-                        </div>
-                    </div>
-                    <div>
-                        <h6>To see the severity of the problem look at:</h6>
-                        <div class="d-flex justify-content-center">
-                            <a class="btn btn-sm btn-outline-info" href="/Events" role="button">Events</a>
-                        </div>
-                    </div>
-                </div>
-            </ChildContent>
-        </SfSidebar>
-        <!-- end of sidebar element -->
-        <!-- main-content declaration -->
         <div class="main-content" id="main-text">
-            <div class="sidebar-content">
-                <div class="pr-0" style="min-height:1500px;">
+            <div class="sidebar-content" style="min-height:1000px;">
+                <div class="pr-md-5">
                     <div class="pt-3 pb-2 mb-0 pl-2">
                         <p>
                             <em>Policing is an incredibly complex topic</em>. Thin Blue Lie can only go so far, and so we would like to recommend
@@ -65,44 +65,71 @@
                     <hr class="blueline nogap" />
                     <br />
                 </div>
+                <div>
+                    @if (anchor == null) { }
+                    else if (anchor.Contains("featured", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                        </div>
+                    }
+                    else if (anchor.Contains("books", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                        </div>
+                    }
+                    else if (anchor.Contains("podcasts", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                        </div>
+                    }
+                    else if (anchor.Contains("public-figures", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                        </div>
+                    }
+                    else if (anchor.Contains("musicians", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                        </div>
+                    }
+                    else if (anchor.Contains("artists", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
 </div>
 @code {
-    SfTreeView<TreeData> TreeView;
-    SfSidebar Sidebar;
-    public ExpandAction Expand = ExpandAction.Click;
-    Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-{
-        {"class", "sidebar-treeview" }
-    };
-    //public void Toggle()
-    //{
-    //    this.Sidebar.Toggle();
-    //}
-    public class TreeData
-    {
-        public string nodeId { get; set; }
-        public string nodeText { get; set; }
-        public string iconCss { get; set; }
-        public bool hasChild { get; set; }
-        public string pid { get; set; }
-    }
-    private List<TreeData> treedata = new List<TreeData>();
+    string anchor;
+    string[] Sections = { "Featured", "Books", "DataSets", "Podcasts", "Public-Figures", "Musicians", "Artists" };
     protected override void OnInitialized()
     {
+        CheckUrl();
+        navManager.LocationChanged += LocationChanged;
         base.OnInitialized();
-        treedata.Add(new TreeData { nodeId = "01", nodeText = "Books", hasChild = true });
-
-        treedata.Add(new TreeData { nodeId = "02", nodeText = "Podcasts", hasChild = true });
-
-        treedata.Add(new TreeData { nodeId = "03", nodeText = "Public Figures", hasChild = true });
-
-        treedata.Add(new TreeData { nodeId = "04", nodeText = "Musicians", hasChild = true });
-        treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Kendrick Lamar", pid = "04" });
-
-        treedata.Add(new TreeData { nodeId = "05", nodeText = "Artists", hasChild = true });
-
+    }
+    void LocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        CheckUrl();
+        this.StateHasChanged();
+    }
+    void CheckUrl()
+    {
+        var relUri = navManager.ToBaseRelativePath(navManager.Uri);
+        anchor = relUri.Split('#').Skip(1).FirstOrDefault();
+        //if #string is not valid go to #featured
+        if (Sections.Contains(anchor, StringComparer.OrdinalIgnoreCase) == false)
+        {
+            anchor = null;
+            navManager.NavigateTo(navManager.BaseUri + "Resources#featured");
+        }
+    }
+    void IDisposable.Dispose()
+    {
+        // Unsubscribe from the event when our component is disposed
+        navManager.LocationChanged -= LocationChanged;
     }
 }
