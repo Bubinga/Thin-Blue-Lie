@@ -205,7 +205,7 @@ namespace ThinBlueLie.Bases
                         var weapon = officer.Weapon?.Sum() == 0 ? null : officer.Weapon?.Sum();
                         string newTimelineinfoOfficer = $@"INSERT INTO edits_timelineinfo_officer
                                                         (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `Misconduct`, `Weapon`, `Age`) 
-                                                        VALUES ('{EditHistoryId}', '{Id}', @IdOfficer, '{officer.Misconduct.Sum()}', {weapon}, @Age);";
+                                                        VALUES ('{EditHistoryId}', '{Id}', @IdOfficer, '{officer.Misconduct.Sum()}', '{weapon}', @Age);";
                         await Data.SaveData(newTimelineinfoOfficer, officer);
                     }                    
                 }
@@ -345,7 +345,7 @@ namespace ThinBlueLie.Bases
                                                 `Timelineinfo_Subject` = @Timelineinfo_Subject 
                                          WHERE (`IdEditHistory` = '{EditHistoryId}');";
             await Data.SaveData(updateEditHistory, editHistory);
-            Serilog.Log.Information("Created new Edit for Event {id}", Id);
+            Serilog.Log.Information("Created new Edit {Edit-Changes} for Event {id}", compareLogic.Compare(model, oldInfo).Differences, Id);
             navManager.NavigateTo("/Account/Profile");
             SavingData = false;
         }

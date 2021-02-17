@@ -31,18 +31,24 @@ namespace ThinBlueLie.Helper
                 return Tuple.Create(0, "null");
             }
             Input = StringExtensions.NormalizeWhiteSpace(Input);
-            var FirstName = Input.Split(' ').FirstOrDefault();
-            var LastName = Input.Split(' ').Last();
-            var NormalizedName = FirstName + " " + LastName;
+
+            string[] subNames = Input.Split(' ');            
+            var FirstName = subNames.FirstOrDefault();
+            var LastName = subNames.Last();
+            string NormalizedName;
+            // If more than 1 name
+            if (subNames.Length > 1)
+                NormalizedName = FirstName + " " + LastName;
+            else
+                NormalizedName = FirstName;
+
             //TODO for names like: J. Alexander Kueng or make it into J. Kueng and Alexander Kueng and test both
-            var x = Input.Remove(0, FirstName.Length).Trim();
-            var MiddleCount1 = x.Remove((x.Length - 1) - (LastName.Length));
-            string[] MiddleCount2;
+            //Remove first name, remove last element, reverse back to normal
+            var MiddleNames = subNames.Skip(1).Reverse().Skip(1).Reverse().ToArray();
             int MiddleCount;
-            if (!string.IsNullOrWhiteSpace(MiddleCount1))
+            if (MiddleNames.Length > 1)
             {
-                MiddleCount2 = MiddleCount1.Split(' ');
-                MiddleCount = MiddleCount2.Count();
+                MiddleCount = MiddleNames.Length;
             }
             else
                 MiddleCount = 0;

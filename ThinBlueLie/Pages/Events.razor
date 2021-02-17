@@ -211,7 +211,9 @@ else
     {
         List<FirstLoadEvents> events = new List<FirstLoadEvents>();
         string getEventsFromDate = "SELECT t.Title, t.Context, t.IdTimelineinfo FROM timelineinfo t WHERE t.Date = @date";
-        (await data.LoadData<FirstLoadEvents?, dynamic>(getEventsFromDate, new { date = Date?.ToString("yyyy-MM-dd") })).ForEach(e => events.Add(e));
+        (await data.LoadDataNoLog<FirstLoadEvents?, dynamic>(getEventsFromDate, new { date = Date?.ToString("yyyy-MM-dd") }, GetConnectionString()))
+            .ForEach(e => events.Add(e));
+        int eventCount = 0;
         if (events.Any())
         {
             foreach (var evnt in events)
@@ -225,15 +227,17 @@ else
                 var htmlBody = htmlDoc.DocumentNode;
                 HtmlNode text = htmlBody.FirstChild;
                 evnt.Context = string.Join(". ", text.InnerText.Split(". ").Take(2)); //Get just the first two sentences
+
+                eventCount++;
             }
         }
         else
         {
             NoEvents = true;
         }
+        Serilog.Log.Information("Fetched {eventCount} events on day {date}", eventCount, Date?.ToShortDateString());
         DatesEvents.AddRange(events);
         await ViewMedia.GetDataMany(events.Select(m => m.Media).ToList());
-        //await Task.Delay(50);
     }
 
     //Get new information
@@ -276,10 +280,12 @@ else
                 Subjects = mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects)
             };
             EventExists = true;
+            Serilog.Log.Information("Sucessfully fetched '{Event-Title}' event", timelineinfo.Title);
         }
         else
         {
             FakeEvent = true;
+            Serilog.Log.Information("Could not fetch '{Event-Title}' event", Title);
         }
         this.StateHasChanged();
     }
