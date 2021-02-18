@@ -116,6 +116,7 @@ hr.blueline {
 }
 
 .header-image {
+    display: flex;
     background-size: cover !important;
     background-color: #919191;
     width: 100%;

@@ -18,10 +18,6 @@
         background-color: #007bff; /* Modern Browsers */
     }
 
-    .header-image {
-        display: flex;
-    }
-
     .line {
         position: relative;
         width: 100%;
@@ -32,11 +28,15 @@
     }
 </style>
 <div class="header-image" style="background-image: url(Assets/Landing-Image.png) !important;">
-    <div class="line"> <hr class="position-absolute bluestrikethrough"></div>
-    <div style="flex-grow: 0; flex-shrink: 0; ">
-        <h1 style="font-family: MillerItalic, Georgia, serif; font-size: 4em;" class="text-primary font-italic px-3">Thin Blue Lie </h1>
+    <div class="line d-none d-md-flex"> <hr class="position-absolute bluestrikethrough"></div>
+    <img class="d-flex d-md-none mx-md-0 mx-auto" src="/Assets/ThinBlueLie-Logo.png" height="110" width="110"/>
+    <div class="d-none d-md-flex" style="flex-grow: 0; flex-shrink: 0; ">
+        <h1 style="font-family: MillerItalic, Georgia, serif;font-size: 4em;" 
+            class="text-primary font-italic px-3">
+            Thin Blue Lie
+        </h1>
     </div>
-    <div class="line"><hr class="position-absolute bluestrikethrough"></div>
+    <div class="line d-none d-md-flex"><hr class="position-absolute bluestrikethrough"></div>
 </div>
 <div class="container">
     <div class="py-3 px-5 border-bottom">

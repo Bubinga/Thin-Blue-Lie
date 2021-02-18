@@ -34,7 +34,7 @@
     private async Task SetDay()
     {
         var currentUri = new Uri(navManager.Uri);
-        if (currentUri.Segments[2].TrimEnd('/') != Date?.ToString("yyyy-MM-dd"))//if url does not match current date
+        if (currentUri.Segments.Length == 2 || currentUri.Segments[2].TrimEnd('/') != Date?.ToString("yyyy-MM-dd")) //if url does not match current date or doesnt have a current date
         {
             string newUrl = new Uri(currentUri, "/Events").AbsoluteUri + "/" + Date?.ToString("yyyy-MM-dd");
             navManager.NavigateTo(newUrl);
