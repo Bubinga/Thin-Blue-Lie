@@ -179,8 +179,8 @@ namespace ThinBlueLie.Models
                                             WHERE (`IdEditHistory` = '{EditHistoryId}');";
                 await connection.ExecuteAsync(updateEditHistory, editHistory);
             }
-            Serilog.Log.Information("Created new Event {@Event-Info} with EditHistory Id {EditHistoryId}", model, EditHistoryId);
-            Serilog.Log.Information("Created new Edit {@Edit-History}", editHistory);
+            Serilog.Log.Information("Created new Event {@EventInfo} with EditHistory Id {EditHistoryId}", model, EditHistoryId);
+            Serilog.Log.Information("Created new Edit {@EditHistory}", editHistory);
             //TODO move all into querymultiple
             if (true) //TODO check if successful submit
             {

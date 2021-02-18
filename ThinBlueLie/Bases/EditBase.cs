@@ -345,7 +345,7 @@ namespace ThinBlueLie.Bases
                                                 `Timelineinfo_Subject` = @Timelineinfo_Subject 
                                          WHERE (`IdEditHistory` = '{EditHistoryId}');";
             await Data.SaveData(updateEditHistory, editHistory);
-            Serilog.Log.Information("Created new Edit {Edit-Changes} for Event {id}", compareLogic.Compare(model, oldInfo).Differences, Id);
+            Serilog.Log.Information("Created new Edit {EditChanges} for Event {id}", compareLogic.Compare(model, oldInfo).Differences, Id);
             navManager.NavigateTo("/Account/Profile");
             SavingData = false;
         }

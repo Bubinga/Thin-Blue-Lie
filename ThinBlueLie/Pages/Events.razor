@@ -280,12 +280,12 @@ else
                 Subjects = mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects)
             };
             EventExists = true;
-            Serilog.Log.Information("Sucessfully fetched '{Event-Title}' event", timelineinfo.Title);
+            Serilog.Log.Information("Sucessfully fetched '{EventTitle}' event", timelineinfo.Title);
         }
         else
         {
             FakeEvent = true;
-            Serilog.Log.Information("Could not fetch '{Event-Title}' event", Title);
+            Serilog.Log.Information("Could not fetch '{EventTitle}' event", Title);
         }
         this.StateHasChanged();
     }
