@@ -115,8 +115,7 @@ hr.blueline {
     margin: 0px;
 }
 
-.header-image {
-    display: flex;
+.header-image {    
     background-size: cover !important;
     background-color: #919191;
     width: 100%;
@@ -127,6 +126,9 @@ hr.blueline {
     margin-bottom: 0px;
     margin-top: 0px !important;
 }
+    .header-image.landing-image {
+        display: flex;
+    }
 
 @media (max-width: 480px) {
     .header-image {
@@ -134,8 +136,21 @@ hr.blueline {
     }
 }
 
+.line .bluestrikethrough {
+    z-index: 5;
+    top: 1.5em;
+    width: 100%;
+    border: none;
+    height: 3px;
+    /* Set the hr color */
+    color: #007bff; /* old IE */
+    background-color: #007bff; /* Modern Browsers */
+}
 
-
+.header-image .line {
+    position: relative;
+    width: 100%;
+}
 
 /*Navbar */
 a.navbar-brand {
