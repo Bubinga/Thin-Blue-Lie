@@ -1,0 +1,9 @@
+﻿.nav-with-bar{
+    margin-top: 2rem;
+}
+.nav-with-bar li{
+    font-size: 16px !important;
+}
+.nav-with-bar ul{
+    padding-left: 30px;
+}

@@ -12,7 +12,7 @@ using static ThinBlueLie.Models.ViewSimilar;
 
 namespace ThinBlueLie.Helper.Extensions
 {
-    public class StringExtensions
+    public static class StringExtensions
     {
         internal static string NormalizeWhiteSpace(string input, char normalizeTo = ' ')
         {
@@ -149,6 +149,11 @@ namespace ThinBlueLie.Helper.Extensions
             const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        
+        public static bool Contains(this string source, string toCheck, StringComparison comp)
+        {
+            return source?.IndexOf(toCheck, comp) >= 0;
         }
     }
 }

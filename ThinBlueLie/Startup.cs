@@ -29,6 +29,7 @@ using Dapper.Logging;
 using MySqlConnector;
 using Dapper.Logging.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 
 namespace ThinBlueLie
 {
@@ -114,6 +115,7 @@ namespace ThinBlueLie
             services.AddScoped<ISideBySideDiffBuilder, SideBySideDiffBuilder>();
             services.AddScoped<IDiffer, Differ>();
 
+            services.AddSingleton<CircuitHandler, TrackingCircuitHandler>();
             services.AddSingleton<IDataAccess, DataAccess>();
             services.AddSingleton<SearchesTimeline>();
             services.AddSingleton<SearchesSubmit>();

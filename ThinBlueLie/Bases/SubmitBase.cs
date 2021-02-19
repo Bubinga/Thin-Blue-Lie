@@ -45,12 +45,12 @@ namespace ThinBlueLie.Models
             EditHistory editHistory = new EditHistory();
             //TODO if user is has perms auto verify
             int IdTimelineinfo;
+            int EditHistoryId;
             var sanitizer = new HtmlSanitizer();
             using (var connection = new MySqlConnection(ConfigHelper.GetConnectionString()))
             {
                 connection.Open();
 
-                int EditHistoryId;
                 string createNewEditHistory = @"INSERT INTO edithistory (`Confirmed`, `SubmittedBy`) 
                                                         VALUES ('2', @userId);
                                             SELECT LAST_INSERT_ID();
@@ -179,7 +179,8 @@ namespace ThinBlueLie.Models
                                             WHERE (`IdEditHistory` = '{EditHistoryId}');";
                 await connection.ExecuteAsync(updateEditHistory, editHistory);
             }
-            Serilog.Log.Information("Created new Event {id}", IdTimelineinfo);
+            Serilog.Log.Information("Created new Event {@EventInfo} with EditHistory Id {EditHistoryId}", model, EditHistoryId);
+            Serilog.Log.Information("Created new Edit {@EditHistory}", editHistory);
             //TODO move all into querymultiple
             if (true) //TODO check if successful submit
             {

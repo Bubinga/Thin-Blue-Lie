@@ -101,7 +101,10 @@ hr.blueline {
     padding-bottom: 5px;
     padding-left: 0px;
 }
-
+.nav-with-bar ul {
+    list-style-type: none;
+    padding-left: 10px;
+}
     .nav-with-bar a:hover {
         color: #064579;
     }
@@ -113,6 +116,7 @@ hr.blueline {
 }
 
 .header-image {
+    display: flex;
     background-size: cover !important;
     background-color: #919191;
     width: 100%;
@@ -437,6 +441,10 @@ li.profile-sidebar-link a {
 
 [role="main"] {
     padding-top: 48px; /* Space for fixed navbar */
+}
+
+.resource{
+
 }
 
 /* Navbar */

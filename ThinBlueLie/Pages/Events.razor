@@ -17,7 +17,7 @@
 @inject IJSRuntime JsRuntime
 @inject NavigationManager navManager
 @inject AutoMapper.IMapper mapper
-@inject IDataAccess data 
+@inject IDataAccess data
 
 
 <Meta Property="og:type" Content="article" />
@@ -42,6 +42,7 @@ else if (MultipleEvents)
 }
 else
 {
+    <Meta Name="robots" Content="noindex" />
     <Title>Events - Thin Blue Lie</Title>
 }
 
@@ -211,7 +212,9 @@ else
     {
         List<FirstLoadEvents> events = new List<FirstLoadEvents>();
         string getEventsFromDate = "SELECT t.Title, t.Context, t.IdTimelineinfo FROM timelineinfo t WHERE t.Date = @date";
-        (await data.LoadData<FirstLoadEvents?, dynamic>(getEventsFromDate, new { date = Date?.ToString("yyyy-MM-dd") })).ForEach(e => events.Add(e));
+        (await data.LoadDataNoLog<FirstLoadEvents?, dynamic>(getEventsFromDate, new { date = Date?.ToString("yyyy-MM-dd") }, GetConnectionString()))
+            .ForEach(e => events.Add(e));
+        int eventCount = 0;
         if (events.Any())
         {
             foreach (var evnt in events)
@@ -225,15 +228,17 @@ else
                 var htmlBody = htmlDoc.DocumentNode;
                 HtmlNode text = htmlBody.FirstChild;
                 evnt.Context = string.Join(". ", text.InnerText.Split(". ").Take(2)); //Get just the first two sentences
+
+                eventCount++;
             }
         }
         else
         {
             NoEvents = true;
         }
+        Serilog.Log.Information("Fetched {eventCount} events on day {date}", eventCount, Date?.ToShortDateString());
         DatesEvents.AddRange(events);
         await ViewMedia.GetDataMany(events.Select(m => m.Media).ToList());
-        //await Task.Delay(50);
     }
 
     //Get new information
@@ -243,9 +248,9 @@ else
         DbTitle = string.Join("[^a-zA-Z]*", Title.Split('-'));
         var title = $"[^a-zA-Z]*{DbTitle}"; //use Title to get information
         var query = @"SELECT t.*, Max(e.Timestamp) As EventUpdated, Min(e.Timestamp) as Timestamp
-            From timelineinfo t
-            Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
-            where t.date = @date and t.Title Regexp @title and Confirmed = 1;";
+        From timelineinfo t
+        Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
+        where t.date = @date and t.Title Regexp @title and Confirmed = 1;";
         var timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd"), title });
         if (timelineinfo.IdTimelineinfo != 0) //If title matches title on that day
         {
@@ -276,10 +281,12 @@ else
                 Subjects = mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects)
             };
             EventExists = true;
+            Serilog.Log.Information("Sucessfully fetched '{EventTitle}' event", timelineinfo.Title);
         }
         else
         {
             FakeEvent = true;
+            Serilog.Log.Information("Could not fetch '{EventTitle}' event", Title);
         }
         this.StateHasChanged();
     }
