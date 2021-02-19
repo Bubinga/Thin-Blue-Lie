@@ -119,6 +119,10 @@
     void CheckUrl()
     {
         var relUri = navManager.ToBaseRelativePath(navManager.Uri);
+        if (relUri.Contains("Resources") == false)
+        {
+            return;
+        }
         anchor = relUri.Split('#').Skip(1).FirstOrDefault();
         //if #string is not valid go to #featured
         if (Sections.Contains(anchor, StringComparer.OrdinalIgnoreCase) == false)
