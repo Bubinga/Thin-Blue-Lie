@@ -17,7 +17,7 @@
 @inject IJSRuntime JsRuntime
 @inject NavigationManager navManager
 @inject AutoMapper.IMapper mapper
-@inject IDataAccess data 
+@inject IDataAccess data
 
 
 <Meta Property="og:type" Content="article" />
@@ -42,6 +42,7 @@ else if (MultipleEvents)
 }
 else
 {
+    <Meta Name="robots" Content="noindex" />
     <Title>Events - Thin Blue Lie</Title>
 }
 
@@ -247,9 +248,9 @@ else
         DbTitle = string.Join("[^a-zA-Z]*", Title.Split('-'));
         var title = $"[^a-zA-Z]*{DbTitle}"; //use Title to get information
         var query = @"SELECT t.*, Max(e.Timestamp) As EventUpdated, Min(e.Timestamp) as Timestamp
-            From timelineinfo t
-            Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
-            where t.date = @date and t.Title Regexp @title and Confirmed = 1;";
+        From timelineinfo t
+        Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
+        where t.date = @date and t.Title Regexp @title and Confirmed = 1;";
         var timelineinfo = await data.LoadDataSingle<Timelineinfo, dynamic>(query, new { date = Date?.ToString("yyyy-MM-dd"), title });
         if (timelineinfo.IdTimelineinfo != 0) //If title matches title on that day
         {
