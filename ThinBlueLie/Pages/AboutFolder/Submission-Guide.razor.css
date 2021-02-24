@@ -1,0 +1,16 @@
+﻿.guide-section > div {
+    margin-left: 10px;
+}
+
+.guide-subsection {
+    margin-left: 10px;
+}
+
+    .guide-subsection span {
+        color: black;
+        text-decoration: underline;
+    }
+
+p {
+    text-indent: 10px;
+}
