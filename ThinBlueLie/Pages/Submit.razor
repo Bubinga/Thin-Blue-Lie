@@ -2,6 +2,7 @@
 @inherits SubmitBase
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject AutoMapper.IMapper mapper
+@inject IJSRuntime JS
 @using Syncfusion.Blazor.Spinner
 @using Syncfusion.Blazor.DropDowns
 @using ThinBlueLie.Helper
@@ -184,7 +185,7 @@
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> _authState { get; set; }
-    
+
     protected override async Task OnInitializedAsync()
     {
         userState = await _authState;
@@ -193,6 +194,13 @@
             SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
             SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
             SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
+        }
+    }
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            await JS.InvokeVoidAsync("MakeMobileFriendly");
         }
     }
 }

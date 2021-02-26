@@ -1,5 +1,6 @@
 ﻿@page "/Resources"
 @inject NavigationManager navManager
+@inject IJSRuntime JSRuntime
 @implements IDisposable
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
 @using Syncfusion.Blazor.Navigations
@@ -7,11 +8,10 @@
 <Title>Resources - Thin Blue Lie</Title>
 <Meta Property="og:type" Content="article" />
 <Meta Property="og:title" Content="Resources on Police Brutality" />
-<Meta Name="description" Content="Policing is an incredibly complex topic; we would like to recommend some other resources for those who want to learn more.
-                            So, we have complied a list of books, podcasts, musicans, and more that we believe provide a valuable insight." />
+<Meta Name="description" Content="Policing is an incredibly complex topic; we would like to recommend some other resources for those who want to learn more. So, we have complied a list of books, podcasts, musicans, and more that we believe provide a valuable insight." />
 <Link Rel="stylesheet" Href="/css/content.css" />
 
-<div class="header-image" style="background-image: url(Assets/Protests-Wallpaper.jpg) !important;">
+<div class="header-image" style="background-image: url(https://images.unsplash.com/photo-1550399105-c4db5fb85c18?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1051&q=80) !important;">
     <div class="my-auto text-center">
         <h1 style="font-family: 'Crimson Text', serif; font-size: 4em;" class="text-white d-inline-block">
             Resources
@@ -20,33 +20,51 @@
 </div>
 <div id="wrapper">
     <div class="col-lg-12 col-sm-12 col-md-12">
-        <SfSidebar Width="290px" EnableGestures="false" Animate="false" Target=".main-content" MediaQuery="(min-width:600px)">
+        <SfSidebar EnableGestures="false" @ref="sidebarObj" EnableDock=true  Animate="false" Target=".main-content" MediaQuery="(min-width:768px)" @bind-IsOpen="SidebarToggle">
             <ChildContent>
                 <div class="nav-with-bar">
-                    <div class="text-center">
-                        <h5>Navigation</h5>
-                    </div>
-                    <ul>
+                    <ul class="pl-3 pl-sm-5">
                         <li>
-                            <NavLink class="nav-link" href="/Resources#featured">Featured</NavLink>
+                            <h5 class="d-flex align-items-center" @onclick="Toggle">
+                                <i class="" data-feather="menu"></i>
+                                <span class="category text-black">Navigation</span>
+                            </h5>
                         </li>
                         <li>
-                            <NavLink class="nav-link" href="/Resources#datasets">Data Sets</NavLink>
+                            <NavLink class="nav-link d-flex align-items-center pr-" href="/Resources#featured">
+                                <i data-feather="star"></i>
+                                <span class="category">Featured</span>
+                            </NavLink>
                         </li>
                         <li>
-                            <NavLink class="nav-link" href="/Resources#books">Books</NavLink>
+                            <NavLink class="nav-link d-flex align-items-center" href="/Resources#datasets">
+                                <i data-feather="database"></i>
+                                <span class="category">Data Sets</span>
+                            </NavLink>
                         </li>
                         <li>
-                            <NavLink class="nav-link" href="/Resources#podcasts">Podcasts</NavLink>
+                            <NavLink class="nav-link d-flex align-items-center" href="/Resources#books">
+                                <i data-feather="book"></i>
+                                <span class="category">Books</span>
+                            </NavLink>
                         </li>
                         <li>
-                            <NavLink class="nav-link" href="/Resources#public-figures">Public Figures</NavLink>
+                            <NavLink class="nav-link d-flex align-items-center" href="/Resources#podcasts">
+                                <i data-feather="radio"></i>
+                                <span class="category">Podcasts</span>
+                            </NavLink>
                         </li>
                         <li>
-                            <NavLink class="nav-link" href="/Resources#musicians">Musicians</NavLink>
+                            <NavLink class="nav-link d-flex align-items-center" href="/Resources#public-figures">
+                                <i data-feather="user"></i>
+                                <span class="category">Public Figures</span>
+                            </NavLink>
                         </li>
                         <li>
-                            <NavLink class="nav-link" href="/Resources#artists">Artists</NavLink>
+                            <NavLink class="nav-link d-flex align-items-center" href="/Resources#art">
+                                <i data-feather="zap"></i>
+                                <span class="category">Art</span>
+                            </NavLink>
                         </li>
                     </ul>
                 </div>
@@ -87,12 +105,7 @@
                         <div class="resource">
                         </div>
                     }
-                    else if (anchor.Contains("musicians", StringComparison.OrdinalIgnoreCase))
-                    {
-                        <div class="resource">
-                        </div>
-                    }
-                    else if (anchor.Contains("artists", StringComparison.OrdinalIgnoreCase))
+                    else if (anchor.Contains("art", StringComparison.OrdinalIgnoreCase))
                     {
                         <div class="resource">
                         </div>
@@ -104,12 +117,16 @@
 </div>
 @code {
     string anchor;
-    string[] Sections = { "Featured", "Books", "DataSets", "Podcasts", "Public-Figures", "Musicians", "Artists" };
+    string[] Sections = { "Featured", "Books", "DataSets", "Podcasts", "Public-Figures", "Art" };
     protected override void OnInitialized()
     {
-        CheckUrl();
         navManager.LocationChanged += LocationChanged;
-        base.OnInitialized();
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        CheckUrl();
+        await JSRuntime.InvokeVoidAsync("feather.replace");
     }
     void LocationChanged(object sender, LocationChangedEventArgs e)
     {
@@ -135,5 +152,12 @@
     {
         // Unsubscribe from the event when our component is disposed
         navManager.LocationChanged -= LocationChanged;
+    }
+
+    SfSidebar sidebarObj;
+    public bool SidebarToggle = false;
+    public void Toggle()
+    {
+        SidebarToggle = !SidebarToggle;
     }
 }

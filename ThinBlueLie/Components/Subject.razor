@@ -9,7 +9,7 @@
                 <SfButton IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
             </div>
             <div class="form-row position-relative">
-                <div class="my-2 ml-1" style="width:71%">
+                <div class="my-2 col-sm-8">
                     <SfTextBox Enabled="@(subject.SameAsId != null? false: true)" CssClass="e-filled" 
                                Placeholder="Name" FloatLabelType="@FloatLabelType.Always" @bind-Value="subject.Name"
                                @onchange="(()=> SuggestSubjects.InvokeAsync(new SimilarPersonCallback { Name = subject.Name, Index = subject.Rank }))"
@@ -17,7 +17,7 @@
                     </SfTextBox>
                     <ValidationMessage For="@(() => subject.Name)"></ValidationMessage>
                 </div>
-                <div class="my-2 ml-2 w-25">
+                <div class="my-2 col-sm-4">
                     <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1
                                       @bind-Value="subject.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
                     <ValidationMessage For="@(() => subject.Age)"></ValidationMessage>

@@ -15,6 +15,7 @@
 @using DataAccessLibrary.UserModels
 @inject UserManager<ApplicationUser> userManager
 @inject NavigationManager navManager
+@inject IJSRuntime JS
 @attribute [Authorize]
 
 <Title>Edit Event - Thin Blue Lie</Title>
@@ -25,9 +26,10 @@
     body {
         overflow-x: hidden;
     }
+
     form {
         display: inherit;
-    }    
+    }
 </style>
 @if (EventExists == true && !string.IsNullOrWhiteSpace(id))
 {
@@ -173,11 +175,11 @@ else if (EventPendingEdit)
 }
 else
 {
-<div class="mt-2 container">
-    <div style="z-index: 102; margin-bottom: 100px;">
-        <SfSpinner Visible="SavingData" CssClass="e-spin-overlay" />
+    <div class="mt-2 container">
+        <div style="z-index: 102; margin-bottom: 100px;">
+            <SfSpinner Visible="SavingData" CssClass="e-spin-overlay" />
+        </div>
     </div>
-</div>
 }
 
 
@@ -211,6 +213,13 @@ else
                 DateValue = Convert.ToDateTime(model.Timelineinfos.Date);
                 this.StateHasChanged();
             }
+        }
+    }
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            await JS.InvokeVoidAsync("MakeMobileFriendly");
         }
     }
 }

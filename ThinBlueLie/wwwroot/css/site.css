@@ -84,9 +84,6 @@ hr.blueline {
     background-color: #314DB2; /* Modern Browsers */
 }
 /* nav menu with blue bar */
-.nav-with-bar h5 {
-    text-decoration: underline;
-}
 
 .nav-with-bar .nav-link:hover {
     text-decoration: underline;
@@ -450,6 +447,10 @@ li.profile-sidebar-link a {
     text-transform: uppercase;
     margin-top: .6rem;
     margin-bottom: .3rem;
+}
+
+a.nav-link svg {
+    margin: 0px 5px 0px 0px;
 }
 
 /* Content */

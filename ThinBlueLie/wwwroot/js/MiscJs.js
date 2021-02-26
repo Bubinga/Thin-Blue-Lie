@@ -1,6 +1,10 @@
 ﻿var isMobile = false;
+var isInfoPage = false;
 function MakeMobileFriendly() {
-    if ($(window).width() < 976) {
+    if (isInfoPage == false) {
+        return;
+    }
+    if ($(window).width() < 976) {  
         var element = document.getElementById('context');
         var newElement = document.getElementById('addMedia');
         element.parentNode.insertBefore(newElement, element);
@@ -20,11 +24,13 @@ function MakeMobileFriendly() {
     }
 }
 
-window.onload = function () {
+$(document).ready(function () {
     var path = window.location.pathname;
     if (path.includes("/Submit") || path.includes("/Edit")) {
         document.getElementsByTagName("BODY")[0].onresize = function () { MakeMobileFriendly() };
-        MakeMobileFriendly();
+        isInfoPage = true;
     }
-}
-
+    else {
+        isInfoPage = false;
+    }
+});
