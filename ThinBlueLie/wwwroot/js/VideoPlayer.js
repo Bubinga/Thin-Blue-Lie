@@ -434,10 +434,12 @@ v.onloadstart = () => {
             } 
         });            
             
-        if (!imagusAudio.muted) {
-            muteTillSync = true;
-            imagusAudio.muted = true;
-        }
+        //if (!imagusAudio.muted) {
+        //    muteTillSync = true;
+        //    imagusAudio.muted = true;
+        //}
+        muteTillSync = true;
+        imagusAudio.muted = true;
         if (imagusVid.hasAttribute('loop')) imagusAudio.setAttribute('loop', 'true');
     }
 }
@@ -871,7 +873,7 @@ v.onloadstart = () => {
         imagusAudio.muted = false;
         muteTillSync = false;
           console.log('unmuted');
-          imagusAudio.pause();
+          //imagusAudio.pause();
       }
     }
     if (eInput || eMouseUp) xPosition = +tooltip.getAttribute('data-x-position');

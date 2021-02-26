@@ -189,6 +189,10 @@ namespace ThinBlueLie.Helper
         {
             //load events where date or officer/subject name is shared and load it into SimilarEvents.            
             List<ViewSimilar> SimilarEvents = new List<ViewSimilar>();
+            if (TempDate == null)
+            {
+                return SimilarEvents;
+            }
             var query1 = "SELECT * From timelineinfo t where t.date = @Date;";
             var SimilarTimelineinfos = await Data.LoadData<Timelineinfo, dynamic>(query1, new {Date = TempDate });
             foreach ((var Event, int i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))

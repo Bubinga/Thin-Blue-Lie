@@ -12,16 +12,16 @@ namespace ThinBlueLie.Helper.Services
         public override Task OnConnectionUpAsync(Circuit circuit,
             CancellationToken cancellationToken)
         {
+            //Serilog.Log.Information("New connection {CircuitId}", circuit.Id);
             circuits.Add(circuit);
-            Serilog.Log.Information("New connection {CircuitId}", circuit.Id);
             return Task.CompletedTask;
         }
 
         public override Task OnConnectionDownAsync(Circuit circuit,
             CancellationToken cancellationToken)
         {
+            //Serilog.Log.Information("Closed connection {CircuitId}", circuit.Id);
             circuits.Remove(circuit);
-            Serilog.Log.Information("Closed connection {CircuitId}", circuit.Id);
             return Task.CompletedTask;
         }
 

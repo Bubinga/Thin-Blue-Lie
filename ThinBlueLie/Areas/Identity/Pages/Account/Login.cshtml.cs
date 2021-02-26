@@ -94,7 +94,7 @@ namespace ThinBlueLie.Areas.Identity.Pages.Account
                 }
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    Serilog.Log.Information("User {Email} logged in.", user.Email);
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -103,7 +103,7 @@ namespace ThinBlueLie.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    Serilog.Log.Warning("User account {Email} locked out.", user.Email);
                     return RedirectToPage("./Lockout");
                 }
                 else
