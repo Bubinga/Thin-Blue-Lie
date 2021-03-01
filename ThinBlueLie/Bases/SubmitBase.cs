@@ -97,15 +97,17 @@ namespace ThinBlueLie.Models
                     {
                         path = media.SourcePath;
                     }
+
                     if (media.SourcePath == media.Thumbnail)
-                    {
                         media.Thumbnail = null;
-                    }
+                    if (media.SourcePath == media.OriginalUrl)
+                        media.OriginalUrl = null;
+
                     media.Blurb = media.Blurb.Trim();
                     media.IdTimelineinfo = IdTimelineinfo;
-                    string mediaSql = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Thumbnail`,
+                    string mediaSql = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Thumbnail`, `OriginalUrl`,
                                             `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`, `Action`)
-                                    VALUES ('{EditHistoryId}', @IdTimelineinfo, @MediaType, @SourcePath, @Thumbnail,
+                                    VALUES ('{EditHistoryId}', @IdTimelineinfo, @MediaType, @SourcePath, @Thumbnail, @OriginalUrl,
                                             @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', '{media.Rank}', '0');";
                     await connection.ExecuteAsync(mediaSql, media);
                     editHistory.EditMedia = 1;

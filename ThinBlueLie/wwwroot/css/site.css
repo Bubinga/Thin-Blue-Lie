@@ -568,6 +568,13 @@ li p {
     color: inherit !important;
 }
 
+.e-accordion .e-acrdn-item .e-acrdn-panel .e-acrdn-content{
+    padding: 0px !important;
+}
+
+form{
+    width: inherit;
+}
 
 
 /* Provide sufficient contrast against white background */
@@ -622,7 +629,7 @@ html {
 
 body {
     /* Margin bottom by footer height */
-    margin-bottom: 60px;
+   /* margin-bottom: 60px;*/
 }
 
 .footer {
@@ -672,7 +679,7 @@ body {
 
 app {
     position: relative;
-    display: flex;
+    /*display: flex;*/
     flex-direction: column;
 }
 

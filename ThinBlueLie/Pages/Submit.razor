@@ -123,9 +123,10 @@
                             }
                         }
                     </div>
-                    <hr />
-                    <div class="form-group" id="context">
-                        <label asp-for="Timelineinfos.Context" class="control-label">Use this section to fill in information about context around the event in the video. This could be things such as it being part of protests, the victim was previously detained, and anything related to the event that happened off-screen.</label>
+                    <div class="form-group border-top mt-3 pt-2" id="context">
+                        <h6>
+                            Context: Detailed information about the event.
+                        </h6>
                         <SfRichTextEditor CssClass="w-100" @bind-Value="@model.Timelineinfos.Context" EnableResize="true" EnableHtmlSanitizer="true" ShowCharCount="true">
                             <RichTextEditorPasteCleanupSettings></RichTextEditorPasteCleanupSettings>
                             <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
@@ -135,7 +136,7 @@
                     <div class="form-group">
                         <ValidationSummary />
                         <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-                        <a asp-page="/Index" style="float:right">Back to Home</a>
+                        <a href="/Index" style="float:right">Back to Home</a>
                     </div>
                 </div>
                 <div class="col-xl-5 col-lg-6 d-none d-lg-block" id="otherColumn">
@@ -167,7 +168,7 @@
                         <div class="d-block border-top container-fluid border-bottom" @onclick:stopPropagation="false" @onclick:preventDefault>
                             <h4 class="pt-2">Add Media</h4>
                             <p class="mb-0" style="font-size:1em">
-                                Add Media relevant to the event, such as videos, images, news articles, etc.
+                                Add Media relevant to the event:
                             </p>
                         </div>
                         <div id="MediaList" class="container-fluid px-0">

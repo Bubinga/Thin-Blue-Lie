@@ -24,6 +24,8 @@ namespace DataAccessLibrary.DataModels
         [Required]
         [Column(TypeName = "text")]
         public string SourcePath { get; set; }
+        [Url]
+        public string OriginalUrl { get; set; }
         public string Thumbnail { get; set; }
         public byte Gore { get; set; }
         public SourceFromEnum SourceFrom { get; set; }
