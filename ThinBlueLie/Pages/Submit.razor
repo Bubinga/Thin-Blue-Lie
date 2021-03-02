@@ -3,6 +3,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject AutoMapper.IMapper mapper
 @inject IJSRuntime JS
+@attribute [Authorize]
 @using Syncfusion.Blazor.Spinner
 @using Syncfusion.Blazor.DropDowns
 @using ThinBlueLie.Helper
@@ -21,168 +22,156 @@
     body {
         overflow-x: hidden;
     }
+
     form {
         display: inherit;
-    }    
+    }
 </style>
-<AuthorizeView>
-    <NotAuthorized>
-        <div class="text-center mt-5">
-            <h4 >
-                You must be logged in to create a new event
-            </h4>
-            <a style="font-size: 20px;" href="/Account/Login">Login</a> or
-            <a style="font-size: 20px;"href="/Account/Register">Register</a>
+
+<div class="offset-xl-2 d-lg-flex d-block container-fluid px-1 px-md-5 px-sm-3 pl-lg-2 mr-lg-0 pr-lg-0" style="margin-bottom:100px;">
+    @if (SavingData)
+    {
+        <div style="z-index: 102; margin-bottom: 100px;">
+            <SfSpinner Visible="SavingData" CssClass="e-spin-overlay" />
         </div>
-    </NotAuthorized>
-    <Authorized Context="Auth">
-        <div class="offset-xl-2 d-lg-flex d-block container-fluid px-1 px-md-5 px-sm-3 pl-lg-2 mr-lg-0 pr-lg-0" style="margin-bottom:100px;">
-            @if (SavingData)
-            {
-                <div style="z-index: 102; margin-bottom: 100px;">
-                    <SfSpinner Visible="SavingData" CssClass="e-spin-overlay" />
+    }
+    <EditForm Model="model" OnValidSubmit="HandleValidSubmitAsync">
+        <ObjectGraphDataAnnotationsValidator />
+        <div class="col-xl-5 col-lg-6 col-12 border">
+            <div class="d-block mb-0 pt-3 border-bottom mb-2">
+                <h4 class="mb-0 align-te">Information Submission Form</h4>
+            </div>
+            <div id="basicInfo">
+                <div class="form-group">
+                    <div id="datepicker-control">
+                        <SfDatePicker TValue="DateTime?" @bind-Value="@DateValue" Min="@MinDate" Max="@Today" Format="yyyy-MM-dd" Placeholder="Select a date" StrictMode="true">
+                            <DatePickerEvents TValue="DateTime?" ValueChange="@FindEvents"></DatePickerEvents>
+                        </SfDatePicker>
+                        <ValidationMessage For="@(() => model.Timelineinfos.Date)"></ValidationMessage>
+                    </div>
                 </div>
-            }
-            <EditForm Model="model" OnValidSubmit="HandleValidSubmitAsync">
-                <ObjectGraphDataAnnotationsValidator />
-                <div class="col-xl-5 col-lg-6 col-12 border">
-                    <div class="d-block mb-0 pt-3 border-bottom mb-2">
-                        <h4 class="mb-0 align-te">Information Submission Form</h4>
-                    </div>
-                    <div id="basicInfo">
-                        <div class="form-group">
-                            <div id="datepicker-control">
-                                <SfDatePicker TValue="DateTime?" @bind-Value="@DateValue" Min="@MinDate" Max="@Today" Format="yyyy-MM-dd" Placeholder="Select a date" StrictMode="true">
-                                    <DatePickerEvents TValue="DateTime?" ValueChange="@FindEvents"></DatePickerEvents>
-                                </SfDatePicker>
-                                <ValidationMessage For="@(() => model.Timelineinfos.Date)"></ValidationMessage>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-5 dropdown" style="position:relative;">
-                                <div class="align">
-                                    <div class="position-relative mb-md-0"> <br /> <label class="position-absolute" style="top:-6px; font-size:14px; line-height:24px;">State</label></div>
-                                    <SfDropDownList TItem="EnumExtensions.ListItem" TValue="TimelineinfoEnums.StateEnum?" PopupHeight="230px" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
-                                        <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
-                                    </SfDropDownList>
-                                    <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>
-                                </div>
-                            </div>
-                            <div class="col-7">
-                                <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always"
-                                           HtmlAttributes="@StaticHelper.AutoCompleteOff"
-                                           @bind-Value="model.Timelineinfos.City">
-                                </SfTextBox>
-                                <ValidationMessage For="@(() => model.Timelineinfos.City)"></ValidationMessage>
-                            </div>
-                        </div>
-                        <div class="w-100 pt-3">
-                            <SfTextBox CssClass="e-filled" Placeholder="Title" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.Title"></SfTextBox>
-                            <ValidationMessage For="@(() => model.Timelineinfos.Title)"></ValidationMessage>
+                <div class="form-row">
+                    <div class="col-5 dropdown" style="position:relative;">
+                        <div class="align">
+                            <div class="position-relative mb-md-0"> <br /> <label class="position-absolute" style="top:-6px; font-size:14px; line-height:24px;">State</label></div>
+                            <SfDropDownList TItem="EnumExtensions.ListItem" TValue="TimelineinfoEnums.StateEnum?" PopupHeight="230px" Placeholder="State" @bind-Value="@model.Timelineinfos.State" DataSource="@States">
+                                <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                            <ValidationMessage For="@(() => model.Timelineinfos.State)"></ValidationMessage>
                         </div>
                     </div>
-                    <hr />
-                    <div class="d-flex">
-                        <h6 class="d-inline">
-                            Fill out the following information for the Subject
-                        </h6>
-                        <div class="d-inline ml-auto" @onclick="AddSubject" @onclick:stopPropagation="false" @onclick:preventDefault>
-                            <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
-                                Subject
-                            </SfButton>
-                        </div>
+                    <div class="col-7">
+                        <SfTextBox CssClass="e-filled" Placeholder="City" FloatLabelType="@FloatLabelType.Always"
+                                   HtmlAttributes="@StaticHelper.AutoCompleteOff"
+                                   @bind-Value="model.Timelineinfos.City">
+                        </SfTextBox>
+                        <ValidationMessage For="@(() => model.Timelineinfos.City)"></ValidationMessage>
                     </div>
-                    <div id="SubjectList">
-                        @foreach ((var subject, Int32 i) in model.Subjects.Select((subject, i) => (subject, i)))
+                </div>
+                <div class="w-100 pt-3">
+                    <SfTextBox CssClass="e-filled" Placeholder="Title" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.Title"></SfTextBox>
+                    <ValidationMessage For="@(() => model.Timelineinfos.Title)"></ValidationMessage>
+                </div>
+            </div>
+            <hr />
+            <div class="d-flex">
+                <h6 class="d-inline">
+                    Fill out the following information for the Subject
+                </h6>
+                <div class="d-inline ml-auto" @onclick="AddSubject" @onclick:stopPropagation="false" @onclick:preventDefault>
+                    <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
+                        Subject
+                    </SfButton>
+                </div>
+            </div>
+            <div id="SubjectList">
+                @foreach ((var subject, Int32 i) in model.Subjects.Select((subject, i) => (subject, i)))
+                {
+                    <Subject subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></Subject>
+                    if (SimilarSubjects[i] != null)
+                    {
+                        <SimilarPeople PersonRank="i" SetSameAs="SetSameAsSubject" People="SimilarSubjects[i]"></SimilarPeople>
+                    }
+                }
+            </div>
+            <hr />
+            <div class="d-flex">
+                <h6 class="d-inline">
+                    Fill out the following information for the Officer
+                </h6>
+                <div class="d-inline ml-auto" @onclick="AddOfficer" @onclick:stopPropagation="false" @onclick:preventDefault>
+                    <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
+                        Officer
+                    </SfButton>
+                </div>
+            </div>
+            <div id="OfficerList">
+                @foreach ((var officer, Int32 i) in model.Officers.Select((officer, i) => (officer, i)))
+                {
+                    <Officer isSubmit="true" officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
+                    if (SimilarOfficers[i] != null)
+                    {
+                        <SimilarPeople PersonRank="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>
+                    }
+                }
+            </div>
+            <div class="form-group border-top mt-3 pt-2" id="context">
+                <h6>
+                    Context: Detailed information about the event.
+                </h6>
+                <SfRichTextEditor CssClass="w-100" @bind-Value="@model.Timelineinfos.Context" EnableResize="true" EnableHtmlSanitizer="true" ShowCharCount="true">
+                    <RichTextEditorPasteCleanupSettings></RichTextEditorPasteCleanupSettings>
+                    <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
+                </SfRichTextEditor>
+                <ValidationMessage For="@(() => model.Timelineinfos.Context)"></ValidationMessage>
+            </div>
+            <div class="form-group">
+                <ValidationSummary />
+                <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                <a href="/Index" style="float:right">Back to Home</a>
+            </div>
+        </div>
+        <div class="col-xl-5 col-lg-6 d-none d-lg-block" id="otherColumn">
+            <div class="row" id="similarEvents">
+                <div class="container-fluid d-block">
+                    <h4 class="pt-2">Similar Events</h4>
+                    <p class="mb-0 border-bottom" style="font-size:1em">
+                        Here are Events that share a date with your event, check to see if your event is a duplicate.
+                    </p>
+                    <div id="VideoList">
+                        @if (SimilarEvents.Count == 0)
                         {
-                            <Subject subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></Subject>
-                            if (SimilarSubjects[i] != null)
+                            <div class="container mt-2" style="min-height:100px;">
+                                <h5>There are no similar or duplicate Events!</h5>
+                            </div>
+                        }
+                        else
+                        {
+                            foreach (var Event in SimilarEvents)
                             {
-                                <SimilarPeople PersonRank="i" SetSameAs="SetSameAsSubject" People="SimilarSubjects[i]"></SimilarPeople>
+                                <SimilarEvents Event="Event"></SimilarEvents>
                             }
                         }
                     </div>
-                    <hr />
-                    <div class="d-flex">
-                        <h6 class="d-inline">
-                            Fill out the following information for the Officer
-                        </h6>
-                        <div class="d-inline ml-auto" @onclick="AddOfficer" @onclick:stopPropagation="false" @onclick:preventDefault>
-                            <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
-                                Officer
-                            </SfButton>
-                        </div>
-                    </div>
-                    <div id="OfficerList">
-                        @foreach ((var officer, Int32 i) in model.Officers.Select((officer, i) => (officer, i)))
-                        {
-                            <Officer isSubmit="true" officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
-                            if (SimilarOfficers[i] != null)
-                            {
-                                <SimilarPeople PersonRank="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>
-                            }
-                        }
-                    </div>
-                    <div class="form-group border-top mt-3 pt-2" id="context">
-                        <h6>
-                            Context: Detailed information about the event.
-                        </h6>
-                        <SfRichTextEditor CssClass="w-100" @bind-Value="@model.Timelineinfos.Context" EnableResize="true" EnableHtmlSanitizer="true" ShowCharCount="true">
-                            <RichTextEditorPasteCleanupSettings></RichTextEditorPasteCleanupSettings>
-                            <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
-                        </SfRichTextEditor>
-                        <ValidationMessage For="@(() => model.Timelineinfos.Context)"></ValidationMessage>
-                    </div>
-                    <div class="form-group">
-                        <ValidationSummary />
-                        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-                        <a href="/Index" style="float:right">Back to Home</a>
-                    </div>
                 </div>
-                <div class="col-xl-5 col-lg-6 d-none d-lg-block" id="otherColumn">
-                    <div class="row" id="similarEvents">
-                        <div class="container-fluid d-block">
-                            <h4 class="pt-2">Similar Events</h4>
-                            <p class="mb-0 border-bottom" style="font-size:1em">
-                                Here are Events that share a date with your event, check to see if your event is a duplicate.
-                            </p>
-                            <div id="VideoList">
-                                @if (SimilarEvents.Count == 0)
-                                {
-                                    <div class="container mt-2" style="min-height:100px;">
-                                        <h5>There are no similar or duplicate Events!</h5>
-                                    </div>
-                                }
-                                else
-                                {
-                                    foreach (var Event in SimilarEvents)
-                                    {
-                                        <SimilarEvents Event="Event"></SimilarEvents>
-                                    }
-                                }
-                            </div>
-                            @*<br />*@
-                        </div>
-                    </div>
-                    <div class="row" id="addMedia">
-                        <div class="d-block border-top container-fluid border-bottom" @onclick:stopPropagation="false" @onclick:preventDefault>
-                            <h4 class="pt-2">Add Media</h4>
-                            <p class="mb-0" style="font-size:1em">
-                                Add Media relevant to the event:
-                            </p>
-                        </div>
-                        <div id="MediaList" class="container-fluid px-0">
-                            <CascadingValue Name="IsEdit" Value="false">
-                                <MediaAccordion Medias="model.Medias" AddMedia="AddMedia" DeleteMedia="DeleteMedia" MoveMediaDown="MoveMediaDown" MoveMediaTop="MoveMediaTop" MoveMediaUp="MoveMediaUp">
-                                </MediaAccordion>
-                            </CascadingValue>
-                        </div>
-                    </div>
+            </div>
+            <div class="row" id="addMedia">
+                <div class="d-block border-top container-fluid border-bottom" @onclick:stopPropagation="false" @onclick:preventDefault>
+                    <h4 class="pt-2">Add Media</h4>
+                    <p class="mb-0" style="font-size:1em">
+                        Add Media relevant to the event:
+                    </p>
                 </div>
-            </EditForm>
+                <div id="MediaList" class="container-fluid px-0">
+                    <CascadingValue Name="IsEdit" Value="false">
+                        <MediaAccordion Medias="model.Medias" AddMedia="AddMedia" DeleteMedia="DeleteMedia" MoveMediaDown="MoveMediaDown" MoveMediaTop="MoveMediaTop" MoveMediaUp="MoveMediaUp">
+                        </MediaAccordion>
+                    </CascadingValue>
+                </div>
+            </div>
         </div>
-    </Authorized>
-</AuthorizeView>
+    </EditForm>
+</div>
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> _authState { get; set; }

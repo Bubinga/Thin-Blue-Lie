@@ -1,4 +1,5 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
 :root {
     --low: #007bff;
     --low-medium: #00F6FF;
@@ -9,7 +10,7 @@
 }
 
 html, body {
-   /* font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
+    /* font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
 }
 
 a, .btn-link {
@@ -51,16 +52,18 @@ a, .btn-link {
 del, .deleted-li, .deleted-item {
     text-decoration: line-through;
     background-color: #fbb;
-   /* color: #555;*/
+    /* color: #555;*/
 }
 
 ins, .inserted-li, .inserted-item {
     text-decoration: none;
     background-color: #d4fcbc;
 }
+
 .information span {
     display: block;
 }
+
 @media (min-width: 25em) {
 
     /* html, body {
@@ -134,6 +137,7 @@ hr.blueline {
     margin-bottom: 0px;
     margin-top: 0px !important;
 }
+
     .header-image.landing-image {
         display: flex;
     }
@@ -188,10 +192,12 @@ a.navbar-brand {
     transition: none !important;
     -webkit-transition: none !important;
 }
+
     .nav-item .btn-dark.dropdown-toggle:hover, .nav-item .btn-dark.dropdown-toggle:active,
     .nav-item .btn-dark.dropdown-toggle {
         background-color: inherit;
     }
+
 .nav-item .nav-link.onpage + .btn.dropdown-toggle {
     text-decoration: none !important;
     background-color: #2B3035 !important;
@@ -286,7 +292,7 @@ a.navbar-brand {
     outline-color: #919191 !important;
 }
 
-.btn.week.active{
+.btn.week.active {
     box-shadow: none;
     outline-width: 3px;
     outline-style: solid;
@@ -470,8 +476,7 @@ a.nav-link svg {
     padding-top: 48px; /* Space for fixed navbar */
 }
 
-.resource{
-
+.resource {
 }
 
 /* Navbar */
@@ -579,11 +584,11 @@ li p {
     color: inherit !important;
 }
 
-.e-accordion .e-acrdn-item .e-acrdn-panel .e-acrdn-content{
+.e-accordion .e-acrdn-item .e-acrdn-panel .e-acrdn-content {
     padding: 0px !important;
 }
 
-form{
+form {
     width: inherit;
 }
 
@@ -640,7 +645,7 @@ html {
 
 body {
     /* Margin bottom by footer height */
-   /* margin-bottom: 60px;*/
+    /* margin-bottom: 60px;*/
 }
 
 .footer {
@@ -667,9 +672,9 @@ body {
     border-bottom: 1px solid #dee2e6
 }
 
-.charity h4{
-    padding-left: 20px;
-}
+    .charity h4 {
+        padding-left: 20px;
+    }
 
 .charity-content {
     padding: 5px;
@@ -684,7 +689,7 @@ body {
     max-height: 150px;
 }
 
-.charity-button{
+.charity-button {
     margin-left: 10px;
 }
 
@@ -856,6 +861,6 @@ app {
     }
 }
 
-.gallery-top{
+.gallery-top {
     background-color: lightgrey
 }
