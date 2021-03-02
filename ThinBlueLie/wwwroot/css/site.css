@@ -98,21 +98,32 @@ hr.blueline {
     padding-bottom: 5px;
     padding-left: 0px;
 }
+
 .nav-with-bar ul {
     list-style-type: none;
     padding-left: 10px;
 }
-    .nav-with-bar a:hover {
-        color: #064579;
-    }
 
+.nav-with-bar a:hover {
+    color: #064579;
+}
+
+@media (max-width: 768px) {
+    .about-content {
+        text-align: center;
+        width: 100% !important;
+    }
+        .about-content a {
+            padding: 0px 0px !important;
+        }
+}
 /*Index page */
 .body {
     padding: 70px;
     margin: 0px;
 }
 
-.header-image {    
+.header-image {
     background-size: cover !important;
     background-color: #919191;
     width: 100%;

@@ -7,7 +7,7 @@
 }
 
 .about {
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 h4 {
@@ -64,3 +64,13 @@ h4 {
     .nav-with-bar a:hover {
         color: #064579;
     }
+
+@media (max-width: 768px){
+    .about-content {
+        text-align: center;
+        width: 100%;
+    }
+    .about-content a{
+        padding: 5px 0px;
+    }
+}
