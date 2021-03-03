@@ -25,7 +25,7 @@
 
     form {
         display: inherit;
-    }
+    }   
 </style>
 
 <div class="offset-xl-2 d-lg-flex d-block container-fluid px-1 px-md-5 px-sm-3 pl-lg-2 mr-lg-0 pr-lg-0" style="margin-bottom:100px;">
@@ -39,7 +39,13 @@
         <ObjectGraphDataAnnotationsValidator />
         <div class="col-xl-5 col-lg-6 col-12 border">
             <div class="d-block mb-0 pt-3 border-bottom mb-2">
-                <h4 class="mb-0 align-te">Information Submission Form</h4>
+                <h4 class="mb-0 d-flex justify-content-between">
+                    Information Submission Form
+                    <a href="/About/Submission-Guide" class="d-flex align-items-center">
+                        <span style="font-size:smaller" class="pr-2">Guide</span> 
+                        <i data-feather="help-circle"></i>
+                    </a>
+                </h4>
             </div>
             <div id="basicInfo">
                 <div class="form-group">
@@ -191,6 +197,10 @@
         if (!firstRender)
         {
             await JS.InvokeVoidAsync("MakeMobileFriendly");
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("feather.replace");
         }
     }
 }

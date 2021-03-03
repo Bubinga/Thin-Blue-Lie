@@ -1,6 +1,5 @@
 ﻿var isMobile = false;
 var isInfoPage = false;
-let test;
 function MakeMobileFriendly() {
     if (isInfoPage == false) {
         return;
@@ -27,11 +26,14 @@ function MakeMobileFriendly() {
 $(document).ready(function () {
     var path = window.location.pathname;
     if (path.includes("/Submit") || path.includes("/Edit")) {
-        document.getElementsByTagName("BODY")[0].onresize = function () { MakeMobileFriendly() };
-        test = document.getElementById('addMedia');
+        document.getElementsByTagName("BODY")[0].onresize = function () { MakeMobileFriendly() };        
         isInfoPage = true;
     }
     else {
         isInfoPage = false;
     }
+});
+
+$(document).on("keydown", ":input:not(textarea)", function (event) {
+    return event.key != "Enter";
 });

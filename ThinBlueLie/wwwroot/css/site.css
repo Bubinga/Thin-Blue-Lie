@@ -515,6 +515,11 @@ li p {
 
 
 /*Submit Settings*/
+h4 svg {
+    width: 24px !important;
+    height: 24px !important;
+}
+
 .e-btn-sb-icons {
     font-family: 'button-icons';
     line-height: 1;
