@@ -42,6 +42,10 @@
                                        FloatLabelType="@FloatLabelType.Always" @bind-Value="media.OriginalUrl">
                             </SfTextBox>
                             <ValidationMessage For="@(() => media.OriginalUrl)"></ValidationMessage>
+                            @if (media.IsValid == false)
+	                        {
+                                <div class="validation-message">Something went wrong: check that the link is valid and the correct media type</div>
+	                        }                            
                         </div>
                     }
                 </div>
@@ -70,7 +74,7 @@
                 }
                 <div class="@(media.MediaType == MediaTypeEnum.News? "col-12 pl-0" : "col-4")">
                     <label class="mb-1">
-                        Credit
+                        Credit @media.IsValid
                     </label>
                     <SfTextBox CssClass="e-filled" Placeholder="Credit" FloatLabelType="@FloatLabelType.Never" @bind-Value="media.Credit"></SfTextBox>
                 </div>
@@ -84,7 +88,7 @@
                     </label>
                     <div class="d-inline">
                         <SfCheckBox CssClass="armed-checkbox" Name="@Guid" @bind-Checked="@media.Gore" Label="Gore"></SfCheckBox>
-                    </div>
+                    </div>                    
                 </div>
             }
         </div>
@@ -92,7 +96,11 @@
             <div class="d-flex h-100 justify-content-center align-items-center">
                 @if (media.MediaType == MediaEnums.MediaTypeEnum.Image)
                 {
-                    if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+                    if(media.IsValid == false)
+                    {
+                        <img alt="placeholder image" class="preview-image" src="/Assets/Placeholder-Image.png" />
+                    }
+                    else if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
                     {
                         if (!(IsEdit && !string.IsNullOrWhiteSpace(media.SourcePath)))
                         {
@@ -106,10 +114,6 @@
                     else if (!string.IsNullOrWhiteSpace(media.SourcePath))
                     {
                         <img alt="image preview" class="preview-image" src="@media.Thumbnail" />
-                    }
-                    else
-                    {
-                        <img alt="placeholder image" class="preview-image" src="/Assets/Placeholder-Image.png" />
                     }
                 }
                 else if (media.MediaType == MediaEnums.MediaTypeEnum.News)
@@ -125,7 +129,7 @@
                 }
                 else //if it's a video
                 {
-                    if (!string.IsNullOrWhiteSpace(media.OriginalUrl) && media.Processed)
+                    if (!string.IsNullOrWhiteSpace(media.OriginalUrl) && media.Processed && media.IsValid)
                     {
                         if (media.SourceFrom != null)
                         {

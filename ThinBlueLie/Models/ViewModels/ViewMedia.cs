@@ -9,6 +9,7 @@ using System;
 using System.Web;
 using ThinBlueLie.Helper.Algorithms.WebsiteProfiling;
 using System.Collections.Generic;
+using ThinBlueLie.Helper.Validators;
 
 namespace ThinBlueLie.Models
 {
@@ -55,6 +56,7 @@ namespace ThinBlueLie.Models
             {
                 originalUrl = value;
                 this.Processed = false;
+                this.IsValid = true;
                 new Task(async () =>
                 {
                     await GetData(this);
@@ -66,7 +68,10 @@ namespace ThinBlueLie.Models
 
         public string Thumbnail { get; set; } //link to thumbnail
         public string ContentUrl { get; set; } //link to video
-        public string DisplayUrl { get; set; } //link to display   
+        public string DisplayUrl { get; set; } //link to display
+
+        [IsTrueValidator(ErrorMessage = "Something went wrong: check that the link is valid and the correct media type")]
+        public bool IsValid { get; set; } = true;
 
 
         public event EventHandler<bool> MediaProcessed;
@@ -158,11 +163,17 @@ namespace ThinBlueLie.Models
                             media.Processed = true;
                             return media;
                         }
-                        else
+                        else if (newMedia.IsValid)
                         {
                             media = await GetData(newMedia); //to check if it's a youtube video
                             return media;
-                        }                                                
+                        }
+                        else
+                        {
+                            media = newMedia;
+                            media.Processed = true;
+                            return media;
+                        }
                     }
                 }
             }

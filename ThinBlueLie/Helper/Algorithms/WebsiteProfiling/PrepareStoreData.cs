@@ -20,6 +20,7 @@ namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
         {
             var url = media.OriginalUrl;
             var source = media.SourceFrom;
+            MediaTypeEnum mediaType = (MediaTypeEnum)media.MediaType;
             url = url.Remove(url.Length - 1, 1).Insert(url.Length - 1, ".json");
             using (var httpClient = new HttpClient())
             {
@@ -48,6 +49,7 @@ namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
                     media.Thumbnail = $"https://i.ytimg.com/vi/{path}/0.jpg";
                     media.ContentUrl = $"https://www.youtube.com/watch?v={path}";
                     source = SourceFromEnum.Youtube;
+                    mediaType = MediaTypeEnum.Video;
                 }
                 if (uri.Host.Contains("v.redd.it"))
                 {
@@ -63,7 +65,17 @@ namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
                         path = uri.AbsolutePath.Remove(0, 1);
                         media.ContentUrl = $"https://v.redd.it/{path}";
                     }
+                    mediaType = MediaTypeEnum.Video;
                 }
+                if (uri.Host == "i.redd.it")
+                {
+                    mediaType = MediaTypeEnum.Image;
+                }
+                if (mediaType != media.MediaType)
+                    media.IsValid = false;
+                else
+                    media.IsValid = true;
+
                 media.sourcePath = path;
                 media.SourceFrom = source;
                 return media;
@@ -71,7 +83,10 @@ namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
         }
         public static async Task<ViewMedia> PrepareStoreData(ViewMedia media)
         {
-            Uri myUri = new Uri(media.SourcePath);
+            if (media.Processed)
+                return media;
+
+            Uri myUri = new Uri(media.OriginalUrl);
             string host = myUri.Host;
             if (media.SourceFrom == SourceFromEnum.Youtube)
             {

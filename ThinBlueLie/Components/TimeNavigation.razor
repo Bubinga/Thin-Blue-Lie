@@ -9,12 +9,12 @@
         background-color: white !important;
     }
 </style>
-<div class="d-flex mb-2">
-    <div class="col-10">
+<div class="d-flex mb-2" style="flex-wrap:wrap;">
+    <div class="col-md-10">
         <Timeline Date="(DateTime)Date" @ref="Timeline"></Timeline>
     </div>
-    <div class="ml-3 mt-auto d-flex">
-        <SfTooltip CssClass="e-tooltip-css" OpensOn="Click">
+    <div class="col-md-2 mt-md-auto mt-2 pl-0 w-100 d-inline-flex justify-content-center">
+        <SfTooltip CssClass="e-tooltip-css d-inline-block" Target=".calendar-button" OpensOn="Focus">
             <TooltipTemplates>
                 <Content>
                     <SfCalendar TValue="DateTime?" Min="InformationBase.MinDate" Max="DateTime.Today" @bind-Value="Date">
@@ -22,7 +22,7 @@
                     </SfCalendar>
                 </Content>
             </TooltipTemplates>
-            <SfButton CssClass="e-outline text mx-1" IsPrimary="true" Content="Calendar"></SfButton>
+            <SfButton CssClass="e-outline text mx-1 calendar-button" IsPrimary="true" Content="Calendar"></SfButton>
         </SfTooltip>
         <SfButton CssClass="e-outline text mx-1" IsPrimary="true"><a href="@("/Events/" + DateTime.Today.ToString("yyyy-MM-dd"))">Today</a></SfButton>
     </div>
