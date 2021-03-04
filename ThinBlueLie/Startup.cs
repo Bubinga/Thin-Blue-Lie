@@ -111,6 +111,11 @@ namespace ThinBlueLie
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetConnectionString("Redis");
+            });
+
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddScoped<ISideBySideDiffBuilder, SideBySideDiffBuilder>();
             services.AddScoped<IDiffer, Differ>();
