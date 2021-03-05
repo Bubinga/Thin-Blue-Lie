@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ThinBlueLie.Identity;
 using DataAccessLibrary.DataAccess;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Syncfusion.Blazor;
 using ThinBlueLie.Helper;
 using AutoMapper;
@@ -19,12 +18,9 @@ using DiffPlex.DiffBuilder;
 using DiffPlex;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using ThinBlueLie.Models;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Authentication.Google;
 using ThinBlueLie.Helper.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
-using Microsoft.AspNetCore.Http;
 using Dapper.Logging;
 using MySqlConnector;
 using Dapper.Logging.Configuration;
@@ -126,7 +122,7 @@ namespace ThinBlueLie
             services.AddSingleton<SearchesSubmit>();
             services.AddSingleton<SearchesEditReview>();
             services.AddSingleton<SearchesEditReview>();
-            services.AddSingleton<Helper.Services.IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddSyncfusionBlazor();
         }
