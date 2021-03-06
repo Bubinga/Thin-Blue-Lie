@@ -153,9 +153,6 @@ namespace ThinBlueLie.Bases
 
             if (!compareLogic.Compare(model.Officers, oldInfo.Officers).AreEqual)
             {
-                foreach (var officer in model.Officers.Where(subject => subject.IdOfficer == 0))
-                    officer.IdOfficer = int.MaxValue - new Random().Next(10000000);
-
                 var officerPairs = Pair.PairOfficers(Mapper.Map<List<ViewOfficer>, List<DBOfficer>>(oldInfo.Officers),
                                                            Mapper.Map<List<ViewOfficer>, List<DBOfficer>>(model.Officers));
                 bool ChangedJunction = false;

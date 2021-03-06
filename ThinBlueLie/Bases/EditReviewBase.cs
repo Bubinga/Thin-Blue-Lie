@@ -47,7 +47,7 @@ namespace ThinBlueLie.Bases
         [Inject]
         SearchesEditReview Review { get; set; }
         [Inject]
-        IDataAccess Data { get; }
+        IDataAccess Data { get; set; }
         protected override async Task OnInitializedAsync()
         {
             //TODO only trigger this if use is logged in
@@ -62,7 +62,7 @@ namespace ThinBlueLie.Bases
 
             //get number of all the unconfirmed edits that user can access
             var firstId = Ids?.FirstOrDefault()?.IdTimelineinfo;
-            if (firstId != 0 && firstId != null) //firstId will never be zero other than if ids is empty
+            if (firstId != 0 || firstId != null) //firstId will never be zero other than if ids is empty
             {
                 var change = await Review.GetEditFromId(Ids.FirstOrDefault());
                 Edits.Add(change.Item1);

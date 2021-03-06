@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ThinBlueLie.Helper.Extensions;
 
 namespace ThinBlueLie.Helper.Algorithms
 {
@@ -14,14 +15,14 @@ namespace ThinBlueLie.Helper.Algorithms
             List<int> pairedIds = new List<int>();
             foreach (var officer in NewOfficers.Union(OldOfficers))
             {
-                if (!pairedIds.Contains(officer.IdOfficer))
+                if (!pairedIds.Contains(officer.IdOfficer)) //if not already paired
                 {
-                    List<DBOfficer> pair = NewOfficers.Union(OldOfficers).Where(o => o.IdOfficer == officer.IdOfficer).ToList();
+                    List<DBOfficer> pair = NewOfficers.Union(OldOfficers).Where(o => (o.IdOfficer == officer.IdOfficer) && o.IdOfficer != 0).ToList();
                     bool isPaired = false;
                     Tuple<DBOfficer, DBOfficer> pairing;
                     for (int i = 0; i < pair.Count; i++)
                     {
-                        if (pair[i] != officer)
+                        if (pair[i] != officer) //if not comparing to self
                         {
                             if (NewOfficers.Contains(pair[i]))
                             {
