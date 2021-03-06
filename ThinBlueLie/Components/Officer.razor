@@ -54,6 +54,7 @@
                     <SfMultiSelect Mode="@VisualMode.Box" Enabled="@(officer.Misconduct != null? officer.Misconduct.Contains(1)? true : false : false)" Placeholder="Weapons" @bind-Value="@officer.Weapon" DataSource="@WeaponsList">
                         <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
                     </SfMultiSelect>
+                    <ValidationMessage For="@(() => officer.Weapon)"></ValidationMessage>
                 </div>
             </div>
         </div>
