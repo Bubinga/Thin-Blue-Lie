@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ThinBlueLie.Identity;
 using DataAccessLibrary.DataAccess;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Syncfusion.Blazor;
 using ThinBlueLie.Helper;
 using AutoMapper;
@@ -19,12 +18,9 @@ using DiffPlex.DiffBuilder;
 using DiffPlex;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using ThinBlueLie.Models;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Authentication.Google;
 using ThinBlueLie.Helper.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
-using Microsoft.AspNetCore.Http;
 using Dapper.Logging;
 using MySqlConnector;
 using Dapper.Logging.Configuration;
@@ -111,6 +107,11 @@ namespace ThinBlueLie
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetConnectionString("Redis");
+            });
+
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddScoped<ISideBySideDiffBuilder, SideBySideDiffBuilder>();
             services.AddScoped<IDiffer, Differ>();
@@ -121,7 +122,7 @@ namespace ThinBlueLie
             services.AddSingleton<SearchesSubmit>();
             services.AddSingleton<SearchesEditReview>();
             services.AddSingleton<SearchesEditReview>();
-            services.AddSingleton<Helper.Services.IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddSyncfusionBlazor();
         }
@@ -129,7 +130,7 @@ namespace ThinBlueLie
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mzg2NjkxQDMxMzgyZTM0MmUzMFczRmRWeHlYS1p2enAyWlZaQ2pqaG1RcVhpUEhuRjNJY3NiSDMzRExaTFU9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDA0NDQ1QDMxMzgyZTM0MmUzMFpjQ2xXQTBMT1N2TnQ2WDhWektjNGRVTlFOMCs3dk9PVHE0QjJ3QTN6T3c9");
             ConnectionString = Configuration["ConnectionStrings:DataDB"];
             app.UseForwardedHeaders();
 

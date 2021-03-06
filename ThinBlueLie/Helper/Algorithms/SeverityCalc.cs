@@ -78,22 +78,15 @@ namespace ThinBlueLie.Helper.Algorithms
         }
         public static string GetSeverityColor(int score)
         {
-            switch (score)
+            return score switch
             {
-                case int n when n >= 150:
-                    return "extreme";
-                case int n when n >= 100:
-                    return "high";
-                case int n when n >= 50:
-                    return "high-medium";
-                case int n when n >= 30:
-                    return "medium";
-                case int n when n >= 15:
-                    return "low-medium";
-
-                default:
-                    return "low";
-            }
+                int n when n >= 150 => "extreme",
+                int n when n >= 100 => "high",
+                int n when n >= 50 => "high-medium",
+                int n when n >= 30 => "medium",
+                int n when n >= 15 => "low-medium",
+                _ => "low",
+            };
         }
     }
 }

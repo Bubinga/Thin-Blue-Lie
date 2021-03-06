@@ -135,7 +135,7 @@ namespace ThinBlueLie.Searches
                            "JOIN timelineinfo_officer ON t.IdTimelineinfo = timelineinfo_officer.IdTimelineinfo " +
                            "JOIN officers o ON timelineinfo_officer.IdOfficer = o.IdOfficer " +
                            "WHERE o.IdOfficer = @id;";
-                people.New.OfficerPerson.Events = people.Old.OfficerPerson.Events =
+                people.New.OfficerPerson.Events =
                     await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3,
                         new {id = people.New.OfficerPerson.IdOfficer});
             }

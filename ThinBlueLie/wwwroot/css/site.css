@@ -1,4 +1,5 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
 :root {
     --low: #007bff;
     --low-medium: #00F6FF;
@@ -9,7 +10,7 @@
 }
 
 html, body {
-   /* font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
+    /* font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
 }
 
 a, .btn-link {
@@ -51,16 +52,18 @@ a, .btn-link {
 del, .deleted-li, .deleted-item {
     text-decoration: line-through;
     background-color: #fbb;
-   /* color: #555;*/
+    /* color: #555;*/
 }
 
 ins, .inserted-li, .inserted-item {
     text-decoration: none;
     background-color: #d4fcbc;
 }
+
 .information span {
     display: block;
 }
+
 @media (min-width: 25em) {
 
     /* html, body {
@@ -84,9 +87,6 @@ hr.blueline {
     background-color: #314DB2; /* Modern Browsers */
 }
 /* nav menu with blue bar */
-.nav-with-bar h5 {
-    text-decoration: underline;
-}
 
 .nav-with-bar .nav-link:hover {
     text-decoration: underline;
@@ -101,21 +101,32 @@ hr.blueline {
     padding-bottom: 5px;
     padding-left: 0px;
 }
+
 .nav-with-bar ul {
     list-style-type: none;
     padding-left: 10px;
 }
-    .nav-with-bar a:hover {
-        color: #064579;
-    }
 
+.nav-with-bar a:hover {
+    color: #064579;
+}
+
+@media (max-width: 768px) {
+    .about-content {
+        text-align: center;
+        width: 100% !important;
+    }
+        .about-content a {
+            padding: 0px 0px !important;
+        }
+}
 /*Index page */
 .body {
     padding: 70px;
     margin: 0px;
 }
 
-.header-image {    
+.header-image {
     background-size: cover !important;
     background-color: #919191;
     width: 100%;
@@ -126,6 +137,7 @@ hr.blueline {
     margin-bottom: 0px;
     margin-top: 0px !important;
 }
+
     .header-image.landing-image {
         display: flex;
     }
@@ -180,10 +192,12 @@ a.navbar-brand {
     transition: none !important;
     -webkit-transition: none !important;
 }
+
     .nav-item .btn-dark.dropdown-toggle:hover, .nav-item .btn-dark.dropdown-toggle:active,
     .nav-item .btn-dark.dropdown-toggle {
         background-color: inherit;
     }
+
 .nav-item .nav-link.onpage + .btn.dropdown-toggle {
     text-decoration: none !important;
     background-color: #2B3035 !important;
@@ -278,7 +292,7 @@ a.navbar-brand {
     outline-color: #919191 !important;
 }
 
-.btn.week.active{
+.btn.week.active {
     box-shadow: none;
     outline-width: 3px;
     outline-style: solid;
@@ -452,14 +466,17 @@ li.profile-sidebar-link a {
     margin-bottom: .3rem;
 }
 
+a.nav-link svg {
+    margin: 0px 5px 0px 0px;
+}
+
 /* Content */
 
 [role="main"] {
     padding-top: 48px; /* Space for fixed navbar */
 }
 
-.resource{
-
+.resource {
 }
 
 /* Navbar */
@@ -498,6 +515,11 @@ li p {
 
 
 /*Submit Settings*/
+h4 svg {
+    width: 24px !important;
+    height: 24px !important;
+}
+
 .e-btn-sb-icons {
     font-family: 'button-icons';
     line-height: 1;
@@ -567,6 +589,13 @@ li p {
     color: inherit !important;
 }
 
+.e-accordion .e-acrdn-item .e-acrdn-panel .e-acrdn-content {
+    padding: 0px !important;
+}
+
+form {
+    width: inherit;
+}
 
 
 /* Provide sufficient contrast against white background */
@@ -621,7 +650,7 @@ html {
 
 body {
     /* Margin bottom by footer height */
-    margin-bottom: 60px;
+    /* margin-bottom: 60px;*/
 }
 
 .footer {
@@ -648,9 +677,9 @@ body {
     border-bottom: 1px solid #dee2e6
 }
 
-.charity h4{
-    padding-left: 20px;
-}
+    .charity h4 {
+        padding-left: 20px;
+    }
 
 .charity-content {
     padding: 5px;
@@ -665,13 +694,13 @@ body {
     max-height: 150px;
 }
 
-.charity-button{
+.charity-button {
     margin-left: 10px;
 }
 
 app {
     position: relative;
-    display: flex;
+    /*display: flex;*/
     flex-direction: column;
 }
 
@@ -837,6 +866,6 @@ app {
     }
 }
 
-.gallery-top{
+.gallery-top {
     background-color: lightgrey
 }

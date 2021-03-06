@@ -1,11 +1,14 @@
 ﻿@page "/Donate"
+@inject NavigationManager navManager
+@inject IJSRuntime JSRuntime
+@implements IDisposable
+@using static ThinBlueLie.Helper.Extensions.StringExtensions
 @using Syncfusion.Blazor.Navigations
 
 <Title>Donate - Thin Blue Lie</Title>
 <Meta Property="og:type" Content="article" />
 <Meta Property="og:title" Content="Donate" />
-<Meta Name="description" Content="Seeking to help solve the epidemic? All these charities could use donations to do vital work in 
-      each of their respective areas."/>
+<Meta Name="description" Content="Seeking to help solve the epidemic? All these charities could use donations to do vital work in each of their respective areas." />
 <Link Rel="stylesheet" Href="/css/content.css" />
 
 <div class="header-image" style="background-image: url(Assets/Protests-Wallpaper.jpg) !important;">
@@ -15,34 +18,144 @@
         </h1>
     </div>
 </div>
-<div class="container border">
-    <div class="pr-0" style="min-height:1500px;">
-        <div class="pt-3 pb-2 mb-0 pl-2">
-            <h4>Purpose</h4>
-            <p>Here you can read about reputable charities to donate to help support the cause</p>
-        </div>
-        <hr class="blueline nogap" />
-        <div>
-            <div class="charity">
-                <img alt="Thin Blue Lie Logo" src="/Assets/ThinBlueLie-Logo.png" class="charity-thumbnail"/>
-                <div class="charity-content">
-                    <h4>Thin Blue Lie</h4>
-                    <p>
-                        Thin Blue Lie relies entirely on donations for operation. Each and every penny goes straight into
-                        either maintainace and improvements on the website.
-                    </p>
-                    <div class="charity-button">
-                        <form action="https://www.paypal.com/donate" method="post" target="_top">
-                            <input type="hidden" name="hosted_button_id" value="TG95ZRQRCXPMU" />
-                            <button class="e-btn e-outline e-primary" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button">Donate</button>
-                            <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
-                        </form>
+<div id="wrapper">
+    <div class="col-lg-12 col-sm-12 col-md-12">
+        <SfSidebar EnableGestures="false" @ref="sidebarObj" EnableDock=true Animate="false" Target=".main-content" MediaQuery="(min-width:768px)" @bind-IsOpen="SidebarToggle">
+            <ChildContent>
+                <div class="nav-with-bar">
+                    <ul class="pl-3 pl-sm-5">
+                        <li>
+                            <h5 class="d-flex align-items-center" @onclick="Toggle">
+                                <i class="" data-feather="menu"></i>
+                                <span class="category text-black">Navigation</span>
+                            </h5>
+                        </li>
+                        <li>
+                            <NavLink class="nav-link d-flex align-items-center pr-" href="/Donate#featured">
+                                <i data-feather="star"></i>
+                                <span class="category">Featured</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink class="nav-link d-flex align-items-center" href="/Donate#prosecution">
+                                <i data-feather="lock"></i>
+                                <span class="category">Prosecution</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink class="nav-link d-flex align-items-center" href="/Donate#political-action">
+                                <i data-feather="pen-tool"></i>
+                                <span class="category">Political Action</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink class="nav-link d-flex align-items-center" href="/Donate#bail">
+                                <i data-feather="dollar-sign"></i>
+                                <span class="category">Bail</span>
+                            </NavLink>
+                        </li>
+                    </ul>
+                </div>
+            </ChildContent>
+        </SfSidebar>
+        <div class="main-content" id="main-text">
+            <div class="sidebar-content" style="min-height:1000px;">
+                <div class="pr-md-5">
+                    <h4>Purpose</h4>
+                    <p>Here you can read about reputable charities to donate to help support the cause</p>
+                </div>
+                <hr class="blueline nogap" />
+                <div>
+                    <div class="charity">
+                        <img alt="Thin Blue Lie Logo" src="/Assets/ThinBlueLie-Logo.png" class="charity-thumbnail" />
+                        <div class="charity-content">
+                            <h4>Thin Blue Lie</h4>
+                            <p>
+                                Thin Blue Lie relies entirely on donations for operation. Each and every penny goes straight into
+                                either maintainace and improvements on the website.
+                            </p>
+                            <div class="charity-button">
+                                <form action="https://www.paypal.com/donate" method="post" target="_top">
+                                    <input type="hidden" name="hosted_button_id" value="TG95ZRQRCXPMU" />
+                                    <button class="e-btn e-outline e-primary" border="0" name="submit" title="PayPal - The safer, easier way to pay online!"
+                                            alt="Donate with PayPal button">
+                                        Donate
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div>
+                    @if (anchor == null) { }
+                    else if (anchor.Contains("featured", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                        </div>
+                    }
+                    else if (anchor.Contains("prosecution", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                        </div>
+                    }
+                    else if (anchor.Contains("political-action", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                        </div>
+                    }
+                    else if (anchor.Contains("bail", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
 @code {
+    string anchor;
+    string[] Sections = { "Featured", "Prosecution", "Political-Action", "Bail"};
+    protected override void OnInitialized()
+    {
+        navManager.LocationChanged += LocationChanged;
+    }
 
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        CheckUrl();
+        await JSRuntime.InvokeVoidAsync("feather.replace");
+    }
+    void LocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        CheckUrl();
+        this.StateHasChanged();
+    }
+    void CheckUrl()
+    {
+        var relUri = navManager.ToBaseRelativePath(navManager.Uri);
+        if (relUri.Contains("Donate") == false)
+        {
+            return;
+        }
+        anchor = relUri.Split('#').Skip(1).FirstOrDefault();
+        //if #string is not valid go to #featured
+        if (Sections.Contains(anchor, StringComparer.OrdinalIgnoreCase) == false)
+        {
+            anchor = null;
+            navManager.NavigateTo(navManager.BaseUri + "Donate#featured");
+        }
+    }
+    void IDisposable.Dispose()
+    {
+        // Unsubscribe from the event when our component is disposed
+        navManager.LocationChanged -= LocationChanged;
+    }
+
+    SfSidebar sidebarObj;
+    public bool SidebarToggle = false;
+    public void Toggle()
+    {
+        SidebarToggle = !SidebarToggle;
+    }
 }

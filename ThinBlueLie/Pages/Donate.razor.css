@@ -11,6 +11,10 @@
     padding-right: 5px;
 }
 
+.header-image {
+    background-position: 50% 38%;
+}
+
 .e-sidebar.e-dock.e-close span.category{
     display: none !important;
 }

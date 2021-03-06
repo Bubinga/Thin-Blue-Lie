@@ -8,6 +8,7 @@
 @using static ThinBlueLie.Helper.Extensions.EnumExtensions
 @using static ThinBlueLie.Helper.Algorithms.LinkConverter
 @using AutoMapper
+@implements IDisposable
 @inject IMapper Mapper
 
 <style>
@@ -20,7 +21,7 @@
         min-height: 100px !important;
     }
 </style>
-<div class="AddMedia">
+<div class="AddMedia" style="padding:15px 15px 15px 15px;">
     <div name="mediaAdd" class="container-fluid d-flex px-0 mr-0">
         <div class="col-8">
             <div class="form-row">
@@ -28,7 +29,7 @@
                     @if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
                     {
                         <div class="form-group MediaFile">
-                            <SfUploader Enabled="!(IsEdit && media.IdMedia != 0)" Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2"
+                            <SfUploader Enabled="!(IsEdit && media.IdMedia != 0)" Multiple="false" ID="UploadFiles" CssClass="e-filled mt-2" 
                                         MaxFileSize="12000000" DropArea=".control-fluid" AllowedExtensions=".img, .jpeg, .jpg, .png">
                                 <UploaderEvents ValueChange="OnFileChange" OnRemove="OnFileRemove"></UploaderEvents>
                             </SfUploader>
@@ -36,12 +37,16 @@
                     }
                     else
                     {
-                    <div class="form-group MediaLink">
-                        <SfTextBox Enabled="!(IsEdit && media.IdMedia != 0)" CssClass="e-filled" Placeholder="Link to Media" ValueChange="refresh"
-                                   FloatLabelType="@FloatLabelType.Always" @bind-Value="media.OriginalUrl">
-                        </SfTextBox>
-                        <ValidationMessage For="@(() => media.OriginalUrl)"></ValidationMessage>
-                    </div>
+                        <div class="form-group MediaLink">
+                            <SfTextBox Enabled="!(IsEdit && media.IdMedia != 0)" CssClass="e-filled" Placeholder="Link to Media" ValueChange="Refresh"
+                                       FloatLabelType="@FloatLabelType.Always" @bind-Value="media.OriginalUrl">
+                            </SfTextBox>
+                            <ValidationMessage For="@(() => media.OriginalUrl)"></ValidationMessage>
+                            @if (media.IsValid == false)
+	                        {
+                                <div class="validation-message">Something went wrong: check that the link is valid and the correct media type</div>
+	                        }                            
+                        </div>
                     }
                 </div>
             </div>
@@ -69,7 +74,7 @@
                 }
                 <div class="@(media.MediaType == MediaTypeEnum.News? "col-12 pl-0" : "col-4")">
                     <label class="mb-1">
-                        Credit
+                        Credit @media.IsValid
                     </label>
                     <SfTextBox CssClass="e-filled" Placeholder="Credit" FloatLabelType="@FloatLabelType.Never" @bind-Value="media.Credit"></SfTextBox>
                 </div>
@@ -83,7 +88,7 @@
                     </label>
                     <div class="d-inline">
                         <SfCheckBox CssClass="armed-checkbox" Name="@Guid" @bind-Checked="@media.Gore" Label="Gore"></SfCheckBox>
-                    </div>
+                    </div>                    
                 </div>
             }
         </div>
@@ -91,7 +96,11 @@
             <div class="d-flex h-100 justify-content-center align-items-center">
                 @if (media.MediaType == MediaEnums.MediaTypeEnum.Image)
                 {
-                    if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
+                    if(media.IsValid == false)
+                    {
+                        <img alt="placeholder image" class="preview-image" src="/Assets/Placeholder-Image.png" />
+                    }
+                    else if (media.SourceFrom == MediaEnums.SourceFromEnum.Device)
                     {
                         if (!(IsEdit && !string.IsNullOrWhiteSpace(media.SourcePath)))
                         {
@@ -104,11 +113,7 @@
                     }
                     else if (!string.IsNullOrWhiteSpace(media.SourcePath))
                     {
-                        <img alt="image preview"  class="preview-image" src="@media.Thumbnail" />
-                    }
-                    else
-                    {
-                        <img alt="placeholder image" class="preview-image" src="/Assets/Placeholder-Image.png" />
+                        <img alt="image preview" class="preview-image" src="@media.Thumbnail" />
                     }
                 }
                 else if (media.MediaType == MediaEnums.MediaTypeEnum.News)
@@ -124,7 +129,7 @@
                 }
                 else //if it's a video
                 {
-                    if (!string.IsNullOrWhiteSpace(media.OriginalUrl) && media.Processed)
+                    if (!string.IsNullOrWhiteSpace(media.OriginalUrl) && media.Processed && media.IsValid)
                     {
                         if (media.SourceFrom != null)
                         {
@@ -142,7 +147,7 @@
                         <img alt="placeholder image" class="preview-image" src="/Assets/Placeholder-Image.png" />
                     }
                 }
-            </div>           
+            </div>
         </div>
     </div>
 </div>
@@ -174,14 +179,25 @@
 
     string host;
 
-    void refresh()
-    {
-        StateHasChanged();
-    }
-
     protected override void OnInitialized()
     {
+        media.MediaProcessed += MediaProcessedEvent;
+    }
 
+    private void MediaProcessedEvent(object sender, bool e)
+    {
+        Serilog.Log.Debug("Media Processed");
+        Refresh();
+    }
+
+    private void Refresh()
+    {
+        this.InvokeAsync(() => this.StateHasChanged());
+    }
+
+    void IDisposable.Dispose()
+    {
+        media.MediaProcessed -= MediaProcessedEvent;
     }
 
     public void OnFileChange(UploadChangeEventArgs args)
@@ -195,4 +211,6 @@
         //foreach (var removeFile in args.FilesData)
         media.Source = null;
     }
+
+
 }

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -19,25 +20,21 @@ namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
         {
             var url = media.OriginalUrl;
             var source = media.SourceFrom;
+            MediaTypeEnum mediaType = (MediaTypeEnum)media.MediaType;
             url = url.Remove(url.Length - 1, 1).Insert(url.Length - 1, ".json");
             using (var httpClient = new HttpClient())
             {
                 var json = await httpClient.GetStringAsync(url);
-                dynamic data = JsonConvert.DeserializeObject(json);
-                data = ((JArray)data)
-                    .First
-                    .Value<JObject>("data")
-                    .Value<JArray>("children")
-                    .First
-                    .Value<JObject>("data");
-                string path = data.url_overridden_by_dest;
+                var wdata = JArray.Parse(json);                
+                dynamic data = wdata.SelectToken("[0].data.children[0].data");
+                string path = data.SelectToken("secure_media.reddit_video")?.fallback_url;
                 media.Thumbnail = data.thumbnail;
-                Uri uri = new Uri(path);
-                if (uri.AbsolutePath.IndexOf(".") != -1 && uri.AbsolutePath.Substring(uri.AbsolutePath.IndexOf(".")) == ".jpg")
+                if (path == null)
                 {
-                    path = uri.AbsolutePath.Remove(uri.AbsolutePath.Length - 4, 4).Remove(0, 1);
-                    media.MediaType = MediaTypeEnum.Image;
+                    path = data.url_overridden_by_dest;
                 }
+
+                Uri uri = new Uri(path);
                 if (uri.Host.Contains("youtu.be") || uri.Host.Contains("youtube.com"))
                 {
                     if (uri.Host.Contains("youtube.com"))
@@ -50,21 +47,46 @@ namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
                         path = uri.AbsolutePath.Remove(0, 1);                        
                     }
                     media.Thumbnail = $"https://i.ytimg.com/vi/{path}/0.jpg";
+                    media.ContentUrl = $"https://www.youtube.com/watch?v={path}";
                     source = SourceFromEnum.Youtube;
+                    mediaType = MediaTypeEnum.Video;
                 }
                 if (uri.Host.Contains("v.redd.it"))
                 {
-                    path = uri.AbsolutePath.Remove(0, 1);
+                    media.SourceFrom = SourceFromEnum.Reddit;
+                    //If it's an image
+                    if (uri.AbsolutePath.IndexOf(".") != -1 && uri.AbsolutePath.Substring(uri.AbsolutePath.IndexOf(".")) == ".jpg")
+                    {
+                        path = uri.AbsolutePath.Remove(uri.AbsolutePath.Length - 4, 4).Remove(0, 1);
+                        media.MediaType = MediaTypeEnum.Image;
+                    }
+                    else
+                    {
+                        path = uri.AbsolutePath.Remove(0, 1);
+                        media.ContentUrl = $"https://v.redd.it/{path}";
+                    }
+                    mediaType = MediaTypeEnum.Video;
                 }
+                if (uri.Host == "i.redd.it")
+                {
+                    mediaType = MediaTypeEnum.Image;
+                }
+                if (mediaType != media.MediaType)
+                    media.IsValid = false;
+                else
+                    media.IsValid = true;
+
                 media.sourcePath = path;
-                media.ContentUrl = $"https://www.youtube.com/watch?v={path}";
                 media.SourceFrom = source;
                 return media;
             }
         }
         public static async Task<ViewMedia> PrepareStoreData(ViewMedia media)
         {
-            Uri myUri = new Uri(media.SourcePath);
+            if (media.Processed)
+                return media;
+
+            Uri myUri = new Uri(media.OriginalUrl);
             string host = myUri.Host;
             if (media.SourceFrom == SourceFromEnum.Youtube)
             {

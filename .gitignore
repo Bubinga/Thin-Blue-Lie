@@ -17,6 +17,7 @@ appsettings.Development.json
 appsettings.Production.json
 Test.razor
 Test?.razor
+EmptyLayout.razor
 
 Uploads/
 Logs/

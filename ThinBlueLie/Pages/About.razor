@@ -3,20 +3,22 @@
 <Title>About - Thin Blue Lie</Title>
 <Meta Property="og:type" Content="website" />
 <Meta Property="og:title" Content="About Thin Blue Lie" />
-<Meta Name="description" Content="Thin Blue Lie was founded on 06/05/2020, in the midst of the George Floyd Protests, we were frustrated with
-      the inactition of uneducated public officials and sought to provide a overwhelming set of evidence which could not be ignored." />
+<Meta Name="description" Content="Thin Blue Lie was founded on 06/05/2020, in the midst of the George Floyd Protests. We were frustrated with the inactition of uneducated public officials and sought to provide a overwhelming set of evidence which could not be ignored." />
 <Link href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap" rel="stylesheet" />
 
 <div class="about-header-image" style="background-image: url(Assets/Protests-Wallpaper.jpg) !important;">
     <div class="my-auto text-center">
-        <img alt="Thin Blue Lie Logo" src="/favicon.ico" width="70" height="70" class="d-inline-block align-top mt-1 mr-1">
-        <h1 style="font-family: 'Crimson Text', serif; font-size: 4em;" class="text-white d-inline-block">
-            Thin Blue Lie
-        </h1>
+        <img alt="Thin Blue Lie Logo" src="/favicon.ico" width="70" height="70" class="d-inline-block mx-sm-0 mx-auto align-top mt-1 mr-1">
+        <div class="d-none d-sm-inline-block" style="flex-grow: 0; flex-shrink: 0; ">
+            <h1 style="font-family: 'Crimson Text', serif; font-size: 4em;"
+                class="text-white d-inline-block">
+                Thin Blue Lie
+            </h1>
+        </div>
     </div>
 </div>
-<div class="h-100 d-flex">
-    <div class="nav-with-bar aboutnav d-md-inline-block offset-lg-1 col-2 d-none">
+<div class="h-100 d-flex px-3" style="flex-wrap: wrap;">
+    <div class="nav-with-bar aboutnav d-md-inline-block offset-lg-1 col-md-2 ml-md-4 about-content">
         <h5>About Us</h5>
         <ul>
             <li>
@@ -26,11 +28,14 @@
                 <NavLink class="nav-link" href="/About#howitworks">How Thin Blue Lie Works</NavLink>
             </li>
             <li>
-                <NavLink class="nav-link" href="/About#future">Roadmap</NavLink>
+                <NavLink class="nav-link" href="/About/Submission-Guide">Submission Guide</NavLink>
             </li>
             <li>
-                <NavLink class="nav-link" href="/About#contributors">Contributors</NavLink>
+                <NavLink class="nav-link" href="/About#future">Roadmap</NavLink>
             </li>
+            @*<li>
+                <NavLink class="nav-link" href="/About#contributors">Contributors</NavLink>
+            </li>*@
             <li>
                 <NavLink class="nav-link" href="/About#contact">Contact</NavLink>
             </li>
@@ -39,7 +44,7 @@
             </li>
         </ul>
     </div>
-    <div class="col-md-7 d-inline-block about">
+    <div class="col-xl-7 col-lg-8 col-md-9 d-inline-block about">
         <div id="purpose">
             <h4 class="mb-0">Purpose & Founding</h4> <hr class="nogap" />
             <p>
@@ -52,8 +57,8 @@
             <h4 class="mb-0">How Thin Blue Lie Works</h4> <hr class="nogap" />
             <p>
                 Taking after Stack Exchange, Thin Blue Lie implements a <a href="/About/Reputation">Reputation system</a> where the more you
-                contribute to the website, the more privileges and power you get. We also have a pretty lenient set of
-                <a href="/About/Rules">Rules</a>.
+                contribute to the website, the more privileges and power you get. To moderate our database, we have a 
+                <a href="/About/Submission-Guide">Submission-Guide</a>.
             </p>
         </div>
         <div id="future">
@@ -73,23 +78,32 @@
             </div>*@
         <div id="contact">
             <h4 class="mb-0">Contact</h4> <hr class="nogap" />
-            <p>Listed below are emails links for contacting Thin Blue Lie. Don't hesitiate to reach out, we want to hear from you!</p>
-
-            <div class="email-description">
-                <p>Is there an issue or a suggestion you want to tell us about? Please email us here:</p>
-                <a href="mailto: feedback@thinbluelie.us">feedback@thinbluelie.us</a>
+            <p>Listed below are possible methods for contacting us at Thin Blue Lie. Don't hesitate to reach out, we want to hear from you!</p>
+            <h5>Social Media:</h5>
+            <div class="pl-3">
+                <div class="email-description">
+                    <p><strong>Discord:</strong> best way to get in contact and see the progression of Thin Blue Lie</p>
+                    <a href="https://discord.gg/dx5aaYqACA" target="_blank" rel="noopener noreferrer">Join Discord Server</a>
+                </div>
             </div>
-            <div class="email-description">
-                <p>Are you media or a journalist? Please email us here:</p>
-                <a href="mailto: media@thinbluelie.us">media@thinbluelie.us</a>
-            </div>
-            <div class="email-description">
-                <p>For anything account or privacy related:</p>
-                <a href="mailto: privacy@thinbluelie.us">privacy@thinbluelie.us</a>
-            </div>
-            <div class="email-description">
-                <p>For any bugs or techincal issues:</p>
-                <a href="mailto: developer@thinbluelie.us">developer@thinbluelie.us</a>
+            <h5>Email Contact:</h5>
+            <div class="pl-3">
+                <div class="email-description">
+                    <p>Is there an issue or a suggestion you want to tell us about? Please email us here:</p>
+                    <a href="mailto: feedback@thinbluelie.us">feedback@thinbluelie.us</a>
+                </div>
+                <div class="email-description">
+                    <p>Are you media or a journalist? Please email us here:</p>
+                    <a href="mailto: media@thinbluelie.us">media@thinbluelie.us</a>
+                </div>
+                <div class="email-description">
+                    <p>For anything account or privacy related:</p>
+                    <a href="mailto: privacy@thinbluelie.us">privacy@thinbluelie.us</a>
+                </div>
+                <div class="email-description">
+                    <p>For any bugs or techincal issues:</p>
+                    <a href="mailto: developer@thinbluelie.us">developer@thinbluelie.us</a>
+                </div>
             </div>
         </div>
     </div>

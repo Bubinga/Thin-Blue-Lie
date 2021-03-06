@@ -307,7 +307,7 @@ function customPlayer(v) {
     imagusVid = v;
     imagusAudio = document.createElement('video');
     imagusAudio.preload = 'auto';
-    imagusAudio.autoplay = 'true';
+    //imagusAudio.autoplay = 'true';
     imagusAudio.className = 'imagus imagus-audio';
     imagusAudio.style = 'display: none!important;';
     imagusVid.parentElement.insertBefore(imagusAudio, imagusVid);
@@ -564,21 +564,9 @@ v.onloadstart = () => {
   v.onemptied = () => {
     if (v === imagusVid) {
       if (v.src !== '') {
-        //if (/v(cf)?\.redd\.it/.test(v.src)) {
-        //  const prefix = v.src.split('DASH')[0].replace('vcf.', 'v.');
-        //  const id = v.src.replace(/.*?redd\.it\/(.*?)\/.*/, '$1');
-        //  const audioSrc = `${prefix}DASH_audio.mp4`;
-        //  fetch(audioSrc)
-        //    .then(response => {
-        //    imagusAudio.src = response.ok ? audioSrc :
-        //    `${prefix}audio`;
-        //  }).catch(error => console.log(error));
-        //  if (!imagusAudio.muted) {
-        //    muteTillSync = true;
-        //    imagusAudio.muted = true;
-        //  }
-        //  if (imagusVid.hasAttribute('loop')) imagusAudio.setAttribute('loop', 'true');
-        //}
+        if (/v(cf)?\.redd\.it/.test(v.src)) {          
+          if (imagusVid.hasAttribute('loop')) imagusAudio.setAttribute('loop', 'true');
+        }
         v.parentElement.parentElement.classList.add('imagus-video-wrapper');
         window.addEventListener('click', imagusClick, true);
         document.addEventListener('keyup', imagusKeys, true);
@@ -631,7 +619,7 @@ v.onloadstart = () => {
     }
   };
 
-  v.onmouseup = e => {
+    v.onmouseup = e => {
     if (e.button === 2) {
       setTimeout(() => {
         window.removeEventListener('contextmenu', preventHijack, true);
@@ -655,7 +643,7 @@ v.onloadstart = () => {
     compactControls();
   }).observe(v);
 
-  controls.onmouseup = () => {
+    controls.onclick = () => {
     if (error) return;
     elToFocus.focus({preventScroll: true});
   };
@@ -699,7 +687,7 @@ v.onloadstart = () => {
     sliderValues();
   };
 
-  muteButton.onmouseup = e => {
+  muteButton.onclick = e => {
     if (e.button > 0) return;
     const lastVolume = localStorage.getItem('videovolume');
     if (v.muted || v.volume) shortcutFuncs.toggleMute(v);
@@ -707,32 +695,32 @@ v.onloadstart = () => {
     if (audioSync) imagusAudio.muted = v.muted;
   };
 
-  playButton.onmouseup = e => {
+  playButton.onclick = e => {
     if (e.button > 0) return;
     shortcutFuncs.togglePlay(v);
   };
 
-  skipShortLeft.onmouseup = e => {
+  skipShortLeft.onclick = e => {
     if (e.button > 0) return;
     shortcutFuncs.skipLeft(v);
   };
 
-  skipShortRight.onmouseup = e => {
+  skipShortRight.onclick = e => {
     if (e.button > 0) return;
     shortcutFuncs.skipRight(v);
   };
 
-  skipLongLeft.onmouseup = e => {
+  skipLongLeft.onclick = e => {
     if (e.button > 0) return;
     v.currentTime -= settings.skipShift;
   };
 
-  skipLongRight.onmouseup = e => {
+  skipLongRight.onclick = e => {
     if (e.button > 0) return;
     v.currentTime += settings.skipShift;
   };
 
-  beginButton.onmouseup = e => {
+  beginButton.onclick = e => {
     if (e.button > 0) return;
     v.currentTime = 0;
     timeSlider.value = 0;
@@ -740,17 +728,17 @@ v.onloadstart = () => {
     currentTime.textContent = '0:00';
   };
 
-  rateDecrease.onmouseup = e => {
+  rateDecrease.onclick = e => {
     if (e.button > 0) return;
     shortcutFuncs.slowOrPrevFrame(v);
   };
 
-  rateIncrease.onmouseup = e => {
+  rateIncrease.onclick = e => {
     if (e.button > 0) return;
     shortcutFuncs.fastOrNextFrame(v);
   };
 
-  rate.onmouseup = e => {
+  rate.onclick = e => {
     if (e.button > 0) return;
     shortcutFuncs.normalSpeed(v);
   };
@@ -764,7 +752,7 @@ v.onloadstart = () => {
     if (currentRate) rate.textContent = currentRate;
   };
 
-  expandButton.onmouseup = e => {
+  expandButton.onclick = e => {
     if (e.button > 0) return;
     shortcutFuncs.toggleFS(v);
   };
@@ -870,8 +858,7 @@ v.onloadstart = () => {
       } else if (muteTillSync && imagusAudio.readyState > 2) {
         imagusAudio.muted = false;
         muteTillSync = false;
-          console.log('unmuted');
-          imagusAudio.pause();
+        console.log('unmuted');
       }
     }
     if (eInput || eMouseUp) xPosition = +tooltip.getAttribute('data-x-position');

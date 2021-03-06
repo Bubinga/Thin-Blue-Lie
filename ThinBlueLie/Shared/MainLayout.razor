@@ -1,12 +1,50 @@
 ﻿@inherits LayoutComponentBase
-@inject NavigationManager navManager 
+@inject NavigationManager navManager
 
-<Meta Property="og:url" Content="@navManager.Uri"/>
+<Meta Property="og:url" Content="@navManager.Uri" />
 
 <NavMenu />
 
-<div class="main">
+<div class="main" style="min-height:80vh;">
     <div class="content">
         @Body
     </div>
 </div>
+
+<footer class="text-center text-lg-start bg-dark text-white mt-5 pt-3">
+    <div class="container text-center text-md-start">
+        <div class="row mt-3">
+            <div class="col-md-4 col-lg-6 col-xl-5 mx-auto mb-4">
+                <h6 class="text-uppercase fw-bold">Thin Blue Lie</h6>
+                <hr class="mb-3 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #007bff; height: 2px" />
+                <p class="mb-2">
+                    Thin Blue Lie is commited to providing free and available access to all cases of police misconduct but
+                    hosting and development can be expensive. If you can afford it, please:
+                </p>
+                <a style="font-size:1.25rem" href="/Donate">Donate</a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-xl-4 mx-auto mb-4">
+                <h6 class="text-uppercase fw-bold">Useful links</h6>
+                <hr class="mb-3 mt-0 d-block mx-auto" style="width: 60px; background-color: #007bff; height: 2px" />
+                <ul class="pl-0" style="list-style-type: none;">
+                    <li><a href="/Events">Events</a></li>
+                    <li><a href="/Submit">Submit</a></li>
+                    <li><a href="/Donate">Donate</a></li>
+                    <li><a href="/Account/Profile">Your Account</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                <h6 class="text-uppercase fw-bold"><a href="/About#contact" class="text-white">Contact</a></h6>
+                <hr class="mb-3 mt-0 d-block mx-auto" style="width: 60px; background-color: #007bff; height: 2px" />
+                <ul class="pl-0" style="list-style-type: none;">
+                    <li><a href="/About#contact">Contact Page</a></li>
+                    <li><a href="mailto: feedback@thinbluelie.us">Feedback Email</a></li>
+                    <li><a href="https://discord.gg/dx5aaYqACA" target="_blank" rel="noopener noreferrer">Discord</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+        © 2020 <a style="color:inherit" href="https://thinbluelie.us">Thin Blue Lie</a>
+    </div>
+</footer>
