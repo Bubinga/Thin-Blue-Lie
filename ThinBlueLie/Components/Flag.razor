@@ -1,14 +1,9 @@
 ﻿@using DataAccessLibrary.Enums;
-@using ThinBlueLie.Models;
 @using Syncfusion.Blazor.DropDowns
-@using System.Linq
 @using DataAccessLibrary.DataModels
 @using Syncfusion.Blazor.Inputs
-@using Syncfusion.Blazor.Buttons
 @using ThinBlueLie.Helper.Extensions
 @using Microsoft.AspNetCore.Identity
-@using static ThinBlueLie.Helper.ConfigHelper
-@using Dapper
 @using DataAccessLibrary.DataAccess 
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor httpContextAccessor
@@ -30,27 +25,31 @@
             @if (submitted == false)
             {
                 <EditForm Model="flagged" OnValidSubmit="SubmitFlag">
+                    <DataAnnotationsValidator/>
                     <div style="width:200px; min-height:150px;">
                         <div class="form-group">
                             <div class="dropdown pl-0" style="position:relative;">
-                                <SfDropDownList TItem="EnumExtensions.ListItem" TValue="uint" PopupHeight="230px" FloatLabelType="@FloatLabelType.Auto" Placeholder="Reason for Flagging" @bind-Value="@flagged.FlagType" DataSource="@FlagTypes">
+                                <SfDropDownList @bind-Value="@flagged.FlagType" TItem="EnumExtensions.ListItem" TValue="FlaggedEnums.FlagTypeEnum?" PopupHeight="230px"
+                                                FloatLabelType="@FloatLabelType.Always" Placeholder="Reason for Flagging" DataSource="@FlagTypes">
                                     <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
                                 </SfDropDownList>
+                                <ValidationMessage For="@(() => flagged.FlagType)"></ValidationMessage>
                             </div>
                         </div>
                         <div class="form-group mb-2">
-                            <SfTextBox Placeholder="Explain why you are flagging" @bind-Value="flagged.Message" FloatLabelType="@FloatLabelType.Always" Multiline="true"></SfTextBox>
+                            <SfTextBox Placeholder="Explain why you are flagging" @bind-Value="flagged.Message" 
+                                       FloatLabelType="@FloatLabelType.Always" Multiline="true"></SfTextBox>
                             <ValidationMessage For="@(() => flagged.Message)"></ValidationMessage>
                         </div>
                     </div>
                     <div>
-                        <button class="submitFlag btn btn-primary w-50 mb-1">Submit</button>
+                        <button id="submit" type="submit" class="submitFlag btn btn-primary w-50 mb-1">Submit</button>
                     </div>
                 </EditForm>
             }
             else
             {
-                <h6>Thanks for flagging this post, it will be reviewed quickly</h6>
+                <h6>Thanks for flagging this post, it will be reviewed shortly</h6>
             }
         </Authorized>
     </AuthorizeView>
@@ -83,16 +82,17 @@
             flagged.UserId = null;
         }
         flagged.IdTimelineinfo = IdTimelineinfo;
-        string flaggedSql = "INSERT INTO flags (`IdTimelineinfo`, `FlagType`, `Message`, `UserId`) VALUES (@idTimelineinfo, @flagType, @message, @userId);";
+        string flaggedSql = "INSERT INTO flags (`IdTimelineinfo`, `FlagType`, `Message`, `UserId`) VALUES (@IdTimelineinfo, @FlagType, @Message, @UserId);";
         await data.SaveData(flaggedSql, new {
-            idTimelineinfo = flagged.IdTimelineinfo,
-            flagType = flagged.FlagType,
-            message = flagged.Message,
-            userId = flagged.UserId
+            flagged.IdTimelineinfo,
+            flagged.FlagType,
+            flagged.Message,
+            flagged.UserId
         });
-        Serilog.Log.Information("Submitted new Flag: \"{Message}\"", flagged.Message);
+        Serilog.Log.Information("Submitted new Flag for Event Id: {EventId}", flagged.IdTimelineinfo);
         submitted = true;
+        this.StateHasChanged();
     }
 
-    IReadOnlyList<EnumExtensions.ListItem> FlagTypes = EnumExtensions.GetDropdownList<FlaggedEnums.FlagTypeEnum>.Items;
+    IEnumerable<EnumExtensions.ListItem> FlagTypes = EnumExtensions.GetEnumDisplayNames<FlaggedEnums.FlagTypeEnum>();
 }

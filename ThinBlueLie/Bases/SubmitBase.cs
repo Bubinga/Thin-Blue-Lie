@@ -54,12 +54,13 @@ namespace ThinBlueLie.Models
                 string createNewEditHistory = @"INSERT INTO edithistory (`Confirmed`, `SubmittedBy`) 
                                                         VALUES ('2', @userId);
                                             SELECT LAST_INSERT_ID();
-                                            SET @v1 = (SELECT Max(e.IdTimelineinfo +1) FROM edithistory e);
+                                            SET @v1 = (SELECT COALESCE(Max(e.IdTimelineinfo +1), 1) FROM edithistory e);
                                             SELECT @v1;";
                 using (var multi = await connection.QueryMultipleAsync(createNewEditHistory, new { userId }))
                 {
                     EditHistoryId = editHistory.IdEditHistory = multi.Read<int>().FirstOrDefault();
-                    IdTimelineinfo = (int)(editHistory.IdTimelineinfo = multi.Read<int>().FirstOrDefault());
+                    IdTimelineinfo = multi.Read<int>().FirstOrDefault();
+                    editHistory.IdTimelineinfo = IdTimelineinfo;
                 }
 
 
@@ -121,7 +122,7 @@ namespace ThinBlueLie.Models
                     if (subject.SameAsId == null)
                     {
                         //Create new subject
-                        var subjectSql = $@"SET @v1 = (SELECT Max(e.IdSubject +1) FROM edits_subject e);                                               
+                        var subjectSql = $@"SET @v1 = (SELECT COALESCE(Max(e.IdSubject +1),1) FROM edits_subject e);                                               
                                             INSERT INTO edits_subject 
                                               (`IdEditHistory`, `IdSubject`, `Name`, `Race`, `Sex`, `Action`)
                                                VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, '0');
@@ -151,7 +152,7 @@ namespace ThinBlueLie.Models
                     if (officer.SameAsId == null)
                     {
                         //Create new officer
-                        var officerSql = $@"SET @v1 = (SELECT Max(e.IdOfficer + 1) FROM edits_officer e);                                              
+                        var officerSql = $@"SET @v1 = (SELECT COALESCE(Max(e.IdOfficer + 1),1) FROM edits_officer e);                                              
                                             INSERT INTO edits_officer (`IdEditHistory`, `IdOfficer`, `Name`, `Race`, `Sex`, `Action`)
                                                VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, '0');
                                             SELECT @v1;";

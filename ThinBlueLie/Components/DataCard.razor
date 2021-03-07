@@ -155,7 +155,7 @@ else
                     <a class="pr-2" href="/Edit?id=@Information.IdTimelineinfo">Edit</a>
                 }
                 <a href="javascript:void" @onclick="@(() => showFlagPopover = true)">Flag</a>
-                <SfDialog ShowCloseIcon="true" ID="prompt_dialog" @bind-Visible="@showFlagPopover" Target="#target" Width="240px">
+                <SfDialog ShowCloseIcon="true" ID="prompt_dialog" @bind-Visible="@showFlagPopover" Target="#target" Width="240px" AllowDragging="true">
                     <DialogTemplates>
                         <Header>
                             Flag Content
