@@ -869,3 +869,7 @@ app {
 .gallery-top {
     background-color: lightgrey
 }
+
+.reddit-video-wrapper videowrapper {
+    height: 275px !important;
+}

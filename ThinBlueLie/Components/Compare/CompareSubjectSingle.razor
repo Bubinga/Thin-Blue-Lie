@@ -1,8 +1,9 @@
 ﻿@using DiffPlex.DiffBuilder.Model;
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
+@using KellermanSoftware.CompareNetObjects 
 
 <div class="row">
-    @if (IsNewEvent == false)
+    @if (IsNewEvent == false && !AreEqual)
     {
         <div class="col-6 px-4 @((SubjectPair.Item1 != null && SubjectPair.Item2 == null)? "deleted-item" : "")">
             @if (SubjectPair.Item1 != null)
@@ -52,7 +53,9 @@
             }
         </div>
     }
-    <div class="@(IsNewEvent? "col-12" : "col-6") px-4 @((SubjectPair.Item2 != null && SubjectPair.Item1 == null && !IsNewEvent)? "inserted-item" : "")">
+    <div class="@(IsNewEvent? "col-12" : AreEqual? "" : "col-6") px-4 border-left @(AreEqual? "mx-auto" : "")
+         @((SubjectPair.Item2 != null && SubjectPair.Item1 == null && !IsNewEvent)? "inserted-item" : "")"
+         style="min-width:250px;">
         @if (SubjectPair.Item2 != null)
         {
             <p class="font-weight-bold">
@@ -107,4 +110,11 @@
     public SideBySideDiffModel? Model { get; set; }
     [CascadingParameter(Name = "IsNewEvent")]
     public bool IsNewEvent { get; set; }
+    CompareLogic compareLogic;
+    bool AreEqual;
+    protected override void OnParametersSet()
+    {
+        compareLogic = new();
+        AreEqual = compareLogic.Compare(SubjectPair.Item2, SubjectPair.Item1).AreEqual;
+    }
 }
