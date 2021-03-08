@@ -42,6 +42,7 @@ namespace ThinBlueLie.Bases
         public IEnumerable<FirstLoadEditHistory> Ids;
         public int ActiveIdIndex;
         public bool Loading = true;
+        public bool EditsOnly = true;
         public List<EditHistory> EditChanges = new List<EditHistory>();
         public List<EditReviewModel> Edits = new List<EditReviewModel>();
         [Inject]

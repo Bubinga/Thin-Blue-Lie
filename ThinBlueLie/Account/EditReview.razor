@@ -14,15 +14,17 @@
 
 <div class="sidebar-content pl-2" style="margin-right: 0px; transform: translateX(0px); margin-left: 159.991px;">
     <div class="d-flex pt-2 justify-content-between border-bottom">
-        <div class="" style="font-size:1.2rem;">Edit Review</div>
+        <div class="d-flex" style="font-size:1.2rem;">
+            <span class="pr-2">Edit Review</span>
+            <EditForm Model="EditsOnly">
+                <SfCheckBox @bind-Checked="EditsOnly" Label="Changes Only"></SfCheckBox>
+            </EditForm>
+        </div>
         <div style="left:47%;" class="position-absolute d-flex align-items-center">
             <span @onclick="() => GetPreviousEdit()" class="e-icons e-chevron-left"></span>
             @(PendingEditsCount == 0? 0 : ActiveIdIndex + 1)/@PendingEditsCount
             <span @onclick="() => GetNextEdit()" class="e-icons e-chevron-right"></span>
         </div>
-        @*<div class="d-flex">
-               <InputCheckbox>Display only Changes</InputCheckbox>
-            </div>*@
         <div class="float-right vote-buttons">
             @if (Loading == false && Ids.Any() && Ids.ToArray()[ActiveIdIndex] != null)
             {
@@ -57,24 +59,20 @@
                 {
                     <div class="text-center my-3"><h5>New Event</h5></div>
                 }
-                <CascadingValue Value="@(Ids.ToArray()[ActiveIdIndex].IsNewEvent.ToBool())">
-                    <CompareBasic Info="new Tuple<Timelineinfo, Timelineinfo>(Edits[ActiveIdIndex].Old.Data, Edits[ActiveIdIndex].New.Data)"></CompareBasic>
-                    <CompareContext CollapseContent="false" OldContext="@Edits[ActiveIdIndex].Old.Data?.Context" NewContext="@Edits[ActiveIdIndex].New.Data.Context">
-                        <Header Context="compare">
-                            <h6 style="padding: 12px; margin: 0px;">
-                                <span class="badge badge-primary">@($"{compare.LineModificationCount} Line Modifications")</span>
-                                <span class="badge badge-danger">@($"{compare.LineDeletionCount} Line Deletions")</span>
-                                <span class="badge badge-success">@($"{compare.LineAdditionCount} Line Additions")</span>
-
-                                <span class="badge badge-primary">@($"{compare.WordModificationCount} Word Modifications")</span>
-                                <span class="badge badge-danger">@($"{compare.WordDeletionCount} Word Deletions")</span>
-                                <span class="badge badge-success">@($"{compare.WordAdditionCount} Word Additions")</span>
-                            </h6>
-                        </Header>
-                    </CompareContext>
-                    <CompareMedias OldMedias="@Edits[ActiveIdIndex].Old.Medias" NewMedias="@Edits[ActiveIdIndex].New.Medias"></CompareMedias>
-                    <CompareOfficers OldOfficers="@Edits[ActiveIdIndex].Old.Officers" NewOfficers="@Edits[ActiveIdIndex].New.Officers"></CompareOfficers>
-                    <CompareSubjects OldSubjects="@Edits[ActiveIdIndex].Old.Subjects" NewSubjects="@Edits[ActiveIdIndex].New.Subjects"></CompareSubjects>
+                <CascadingValue Value="@(Ids.ToArray()[ActiveIdIndex].IsNewEvent.ToBool())" Name="IsNewEvent">
+                    <CascadingValue Value="@EditsOnly" Name="EditsOnly">
+                        <CompareBasic Info="new Tuple<Timelineinfo, Timelineinfo>(Edits[ActiveIdIndex].Old.Data, Edits[ActiveIdIndex].New.Data)"></CompareBasic>
+                        <CompareContext CollapseContent="false" OldContext="@Edits[ActiveIdIndex].Old.Data?.Context" NewContext="@Edits[ActiveIdIndex].New.Data.Context">
+                            <Header Context="compare">
+                                <h6 style="padding: 12px; margin: 0px;">
+                                    Context
+                                </h6>
+                            </Header>
+                        </CompareContext>
+                        <CompareMedias OldMedias="@Edits[ActiveIdIndex].Old.Medias" NewMedias="@Edits[ActiveIdIndex].New.Medias"></CompareMedias>
+                        <CompareOfficers OldOfficers="@Edits[ActiveIdIndex].Old.Officers" NewOfficers="@Edits[ActiveIdIndex].New.Officers"></CompareOfficers>
+                        <CompareSubjects OldSubjects="@Edits[ActiveIdIndex].Old.Subjects" NewSubjects="@Edits[ActiveIdIndex].New.Subjects"></CompareSubjects>
+                    </CascadingValue>
                 </CascadingValue>
             }
             else if (Ids.Any() && Ids.ToArray()[ActiveIdIndex].IsNewEvent.ToBool() == false)

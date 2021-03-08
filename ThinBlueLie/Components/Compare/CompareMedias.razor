@@ -1,6 +1,7 @@
 ﻿@using DiffPlex.DiffBuilder;
 @using DiffPlex.DiffBuilder.Model;
-@using ThinBlueLie.Helper.Algorithms 
+@using ThinBlueLie.Helper.Algorithms
+@using KellermanSoftware.CompareNetObjects
 @inject ISideBySideDiffBuilder sideBySide
 
 @if (Done == false)
@@ -9,16 +10,21 @@
 }
 else
 {
-<div class="d-block">
-    <h5 class="border-bottom">Media Information</h5>
-    @foreach ((var mediaPair, Int32 i) in Medias.Select((officer, i) => (officer, i)))
-    {
-        <CompareMediaSingle Model="Mediadiff[i]" Media="mediaPair"></CompareMediaSingle>
-    }
-</div>
+    <div class="d-block">
+        <h5 class="border-bottom">Media Information</h5>
+        @foreach ((var mediaPair, Int32 i) in Medias.Select((officer, i) => (officer, i)))
+        {
+            if (!(compareLogic.Compare(mediaPair.Item2,mediaPair.Item1).AreEqual && EditsOnly == true))
+            {
+                <CompareMediaSingle Model="Mediadiff[i]" Media="mediaPair"></CompareMediaSingle>
+            }
+        }
+    </div>
 }
 
 @code {
+    [CascadingParameter(Name = "EditsOnly")]
+    public bool EditsOnly { get; set; }
     private List<Tuple<ViewMedia, ViewMedia>> Medias { get; set; }
     [Parameter]
     public List<ViewMedia> OldMedias { get; set; }
@@ -26,10 +32,11 @@ else
     public List<ViewMedia> NewMedias { get; set; }
     bool Done = false;
     private List<SideBySideDiffModel?> Mediadiff;
-
+    CompareLogic compareLogic;
     //TODO this same code appears in CompareOfficers and CompareSubjects too, consolidate it into a generic method
     protected override void OnParametersSet()
     {
+        compareLogic = new CompareLogic();
         Medias = new List<Tuple<ViewMedia, ViewMedia>>();
         PairVersions pair = new PairVersions();
         Medias = pair.PairMedia(OldMedias, NewMedias);

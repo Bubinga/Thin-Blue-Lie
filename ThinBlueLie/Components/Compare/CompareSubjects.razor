@@ -1,6 +1,7 @@
 ﻿@using ThinBlueLie.Helper.Algorithms 
 @using DiffPlex.DiffBuilder;
 @using DiffPlex.DiffBuilder.Model;
+@using KellermanSoftware.CompareNetObjects
 @inject ISideBySideDiffBuilder sideBySide
 
 @if (Done == false)
@@ -13,12 +14,17 @@ else
         <h5 class="border-bottom">Subject@(Subjects.Count > 1? "s'" : "'s") Information</h5>
         @foreach ((var subjectPair, Int32 i) in Subjects.Select((officer, i) => (officer, i)))
         {
-            <CompareSubjectSingle Model="Subjectdiff[i]" SubjectPair="subjectPair"></CompareSubjectSingle>
+            if (!(compareLogic.Compare(subjectPair.Item2, subjectPair.Item1).AreEqual && EditsOnly == true))
+            {
+                <CompareSubjectSingle Model="Subjectdiff[i]" SubjectPair="subjectPair"></CompareSubjectSingle>
+            }
         }
     </div>
 }
 
 @code {
+    [CascadingParameter(Name = "EditsOnly")]
+    public bool EditsOnly { get; set; }
     private List<Tuple<DBSubject, DBSubject>> Subjects { get; set; }
     [Parameter]
     public List<DBSubject> OldSubjects { get; set; }
@@ -26,11 +32,12 @@ else
     public List<DBSubject> NewSubjects { get; set; }
     bool Done = false;
     private List<SideBySideDiffModel?> Subjectdiff = new List<SideBySideDiffModel?>();
-
+    CompareLogic compareLogic;
     protected override void OnParametersSet()
     {
+        Done = false;
         Subjects = new List<Tuple<DBSubject, DBSubject>>();
-
+        compareLogic = new CompareLogic();
         var PairSubjects = new PairVersions();
         Subjects = PairSubjects.PairSubjects(OldSubjects, NewSubjects);
 

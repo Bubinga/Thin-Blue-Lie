@@ -105,6 +105,6 @@
     public Tuple<DBSubject, DBSubject> SubjectPair { get; set; }
     [Parameter]
     public SideBySideDiffModel? Model { get; set; }
-    [CascadingParameter]
+    [CascadingParameter(Name = "IsNewEvent")]
     public bool IsNewEvent { get; set; }
 }

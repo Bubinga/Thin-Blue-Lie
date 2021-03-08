@@ -1,6 +1,7 @@
 ﻿@using DiffPlex.DiffBuilder;
 @using DiffPlex.DiffBuilder.Model;
-@using ThinBlueLie.Helper.Algorithms 
+@using ThinBlueLie.Helper.Algorithms
+@using KellermanSoftware.CompareNetObjects
 @inject ISideBySideDiffBuilder sideBySide
 
 @if (Done == false)
@@ -9,16 +10,21 @@
 }
 else
 {
-<div class="d-block">
-    <h5 class="border-bottom">Officer@(Officers.Count > 1? "s'" : "'s") Information</h5>
-    @foreach ((var officerPair, Int32 i) in Officers.Select((officer, i) => (officer, i)))
-    {
-        <CompareOfficerSingle Model="Officerdiff[i]" OfficerPair="officerPair"></CompareOfficerSingle>
-    }
-</div>
+    <div class="d-block">
+        <h5 class="border-bottom">Officer@(Officers.Count > 1? "s'" : "'s") Information</h5>
+        @foreach ((var officerPair, Int32 i) in Officers.Select((officer, i) => (officer, i)))
+        {
+            if (!(compareLogic.Compare(officerPair.Item2, officerPair.Item1).AreEqual && EditsOnly == true))
+            {
+                <CompareOfficerSingle Model="Officerdiff[i]" OfficerPair="officerPair"></CompareOfficerSingle>
+            }
+        }
+    </div>
 }
 
-@code {    
+@code {
+    [CascadingParameter(Name = "EditsOnly")]
+    public bool EditsOnly { get; set; }
     private List<Tuple<DBOfficer, DBOfficer>> Officers { get; set; }
     [Parameter]
     public List<DBOfficer> OldOfficers { get; set; }
@@ -26,16 +32,18 @@ else
     public List<DBOfficer> NewOfficers { get; set; }
     bool Done = false;
     private List<SideBySideDiffModel?> Officerdiff = new List<SideBySideDiffModel?>();
-
+    CompareLogic compareLogic;
     protected override void OnParametersSet()
     {
+        compareLogic = new CompareLogic();
         Officers = new List<Tuple<DBOfficer, DBOfficer>>();
 
         var PairOfficers = new PairVersions();
         Officers = PairOfficers.PairOfficers(OldOfficers, NewOfficers);
         foreach (var pairing in Officers)
         {
-            try{
+            try
+            {
                 //try to compare officers with the same idOfficer and build a model off of that
                 Officerdiff.Add(sideBySide.BuildDiffModel(pairing.Item1.Name, pairing.Item2.Name));
             }

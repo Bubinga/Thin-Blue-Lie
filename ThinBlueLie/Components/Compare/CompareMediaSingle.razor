@@ -154,7 +154,7 @@
 
     [Parameter]
     public SideBySideDiffModel? Model { get; set; }
-    [CascadingParameter]
+    [CascadingParameter(Name = "IsNewEvent")]
     public bool IsNewEvent { get; set; }
     string youtube2Url;
     string youtube1Url;
