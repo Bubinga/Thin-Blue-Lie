@@ -10,9 +10,6 @@
 // @grant        GM_addStyle
 // ==/UserScript==
 
-let imagusAudio;
-let audioSync;
-let audioError;
 let ytID;
 let ytTimeChecked;
 const $$ = document.querySelector.bind(document);
@@ -32,257 +29,11 @@ const settings = {
   skipCtrl: 1,
 };
 
-const shortcutFuncs = {
-  toggleCaptions: v => {
-    const validTracks = [];
-    for (let i = 0; i < v.textTracks.length; ++i) {
-      const tt = v.textTracks[i];
-      if (tt.mode === 'showing') {
-        tt.mode = 'disabled';
-        if (v.textTracks.addEventListener) {
-          // If text track event listeners are supported
-          // (they are on the most recent Chrome), add
-          // a marker to remember the old track. Use a
-          // listener to delete it if a different track
-          // is selected.
-          v.cbhtml5vsLastCaptionTrack = tt.label;
-
-          function cleanup(e) {
-            for (let i = 0; i < v.textTracks.length; ++i) {
-              const ott = v.textTracks[i];
-              if (ott.mode === 'showing') {
-                delete v.cbhtml5vsLastCaptionTrack;
-                v.textTracks.removeEventListener('change', cleanup);
-                return;
-              }
-            }
-          }
-          v.textTracks.addEventListener('change', cleanup);
-        }
-        return;
-      } else if (tt.mode !== 'hidden') {
-        validTracks.push(tt);
-      }
-    }
-    // If we got here, none of the tracks were selected.
-    if (validTracks.length === 0) {
-      return true; // Do not prevent default if no UI activated
-    }
-    // Find the best one and select it.
-    validTracks.sort((a, b) => {
-      if (v.cbhtml5vsLastCaptionTrack) {
-        const lastLabel = v.cbhtml5vsLastCaptionTrack;
-
-        if (a.label === lastLabel && b.label !== lastLabel) {
-          return -1;
-        } else if (b.label === lastLabel && a.label !== lastLabel) {
-          return 1;
-        }
-      }
-
-      const aLang = a.language.toLowerCase();
-      const bLang = b.language.toLowerCase();
-      const navLang = navigator.language.toLowerCase();
-
-      if (aLang === navLang && bLang !== navLang) {
-        return -1;
-      } else if (bLang === navLang && aLang !== navLang) {
-        return 1;
-      }
-
-      const aPre = aLang.split('-')[0];
-      const bPre = bLang.split('-')[0];
-      const navPre = navLang.split('-')[0];
-
-      if (aPre === navPre && bPre !== navPre) {
-        return -1;
-      } else if (bPre === navPre && aPre !== navPre) {
-        return 1;
-      }
-
-      return 0;
-    })[0].mode = 'showing';
-  },
-
-  togglePlay: v => {
-    v.paused ? v.play() : v.pause();
-  },
-
-  toStart: v => {
-    v.currentTime = 0;
-  },
-
-  toEnd: v => {
-    v.currentTime = v.duration;
-  },
-
-  skipLeft: (v, key, shift, ctrl) => {
-    if (shift) {
-      v.currentTime -= settings.skipShift;
-    } else if (ctrl) {
-      v.currentTime -= settings.skipCtrl;
-    } else {
-      v.currentTime -= settings.skipNormal;
-    }
-  },
-
-  skipRight: (v, key, shift, ctrl) => {
-    if (shift) {
-      v.currentTime += settings.skipShift;
-    } else if (ctrl) {
-      v.currentTime += settings.skipCtrl;
-    } else {
-      v.currentTime += settings.skipNormal;
-    }
-  },
-
-  increaseVol: v => {
-    if (audioError) return;
-    if (v.nextSibling.querySelector('volume.disabled')) {
-      v.volume = 0;
-      return;
-    }
-    const increase = (v.volume + 0.1).toFixed(1);
-    if (v.muted) {
-      v.muted = !v.muted;
-      v.volume = 0.1;
-    } else {
-      v.volume <= 0.9 ? v.volume = increase : v.volume = 1;
-    }
-  },
-
-  decreaseVol: v => {
-    if (audioError) return;
-    if (v.nextSibling.querySelector('volume.disabled')) {
-      v.volume = 0;
-      return;
-    }
-    const decrease = (v.volume - 0.1).toFixed(1);
-    v.volume >= 0.1 ? v.volume = decrease : v.volume = 0;
-  },
-
-  toggleMute: v => {
-    v.muted = !v.muted;
-    if (audioSync) imagusAudio.muted = v.muted;
-  },
-
-  toggleFS: v => {
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-      v.parentElement.classList.remove('native-fullscreen');
-    } else {
-      v.parentElement.classList.add('native-fullscreen');
-      v.parentElement.requestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-    }
-  },
-
-  reloadVideo: v => {
-    const currTime = v.currentTime;
-    v.load();
-    v.currentTime = currTime;
-  },
-
-  slowOrPrevFrame: (v, key, shift) => {
-    if (shift) { // Less-Than
-      v.currentTime -= 1 / 60;
-    } else { // Comma
-      if (v.playbackRate >= 0.1) {
-        const decrease = (v.playbackRate - 0.1).toFixed(2);
-        const rate = v.nextSibling.querySelector('rate');
-        v.playbackRate = decrease;
-        rate.textContent = `${v.playbackRate}x`;
-        if (v.playbackRate !== 1) {
-          rate.setAttribute('data-current-rate', `${v.playbackRate}x`);
-        }
-        if (v.playbackRate === 0.9) {
-          v.classList.add('playback-rate-decreased');
-        } else if (v.playbackRate === 1.1) {
-          v.classList.add('playback-rate-increased');
-        } else if (v.playbackRate === 1) {
-          v.classList.remove('playback-rate-decreased');
-          v.classList.remove('playback-rate-increased');
-          rate.removeAttribute('data-current-rate');
-        }
-      } else {
-        v.playbackRate = 0;
-      }
-      if (audioSync) imagusAudio.playbackRate = v.playbackRate;
-    }
-  },
-
-  fastOrNextFrame: (v, key, shift) => {
-    if (shift) { // Greater-Than
-      v.currentTime += 1 / 60;
-    } else { // Period
-      if (v.playbackRate <= 15.9) {
-        const increase = (v.playbackRate += 0.1).toFixed(2);
-        const rate = v.nextSibling.querySelector('rate');
-        v.playbackRate = increase;
-        rate.textContent = `${v.playbackRate}x`;
-        if (v.playbackRate !== 1) {
-          rate.setAttribute('data-current-rate', `${v.playbackRate}x`);
-        }
-        if (v.playbackRate === 0.9) {
-          v.classList.add('playback-rate-decreased');
-        } else if (v.playbackRate === 1.1) {
-          v.classList.add('playback-rate-increased');
-        } else if (v.playbackRate === 1) {
-          v.classList.remove('playback-rate-decreased');
-          v.classList.remove('playback-rate-increased');
-          rate.removeAttribute('data-current-rate');
-        }
-      } else {
-        v.playbackRate = 16;
-      }
-      if (audioSync) imagusAudio.playbackRate = v.playbackRate;
-    }
-  },
-
-  normalSpeed: v => { // ?
-    v.playbackRate = v.defaultPlaybackRate;
-    if (audioSync) imagusAudio.playbackRate = v.playbackRate;
-    v.classList.remove('playback-rate-decreased');
-    v.classList.remove('playback-rate-increased');
-    v.nextSibling.querySelector('rate').textContent = '1x';
-    v.nextSibling.querySelector('rate').removeAttribute('data-current-rate');
-  },
-
-  toPercentage: (v, key) => {
-    v.currentTime = (v.duration * (key - 48)) / 10.0;
-  },
-};
-
-const keyFuncs = {
-  32: shortcutFuncs.togglePlay, // Space
-  75: shortcutFuncs.togglePlay, // K
-  35: shortcutFuncs.toEnd, // End
-  48: shortcutFuncs.toStart, // 0
-  36: shortcutFuncs.toStart, // Home
-  37: shortcutFuncs.skipLeft, // Left arrow
-  74: shortcutFuncs.skipLeft, // J
-  39: shortcutFuncs.skipRight, // Right arrow
-  76: shortcutFuncs.skipRight, // L
-  38: shortcutFuncs.increaseVol, // Up arrow
-  40: shortcutFuncs.decreaseVol, // Down arrow
-  77: shortcutFuncs.toggleMute, // M
-  70: shortcutFuncs.toggleFS, // F
-  67: shortcutFuncs.toggleCaptions, // C
-  82: shortcutFuncs.reloadVideo, // R
-  188: shortcutFuncs.slowOrPrevFrame, // Comma or Less-Than
-  190: shortcutFuncs.fastOrNextFrame, // Period or Greater-Than
-  191: shortcutFuncs.normalSpeed, // Forward slash or ?
-  49: shortcutFuncs.toPercentage, // 1
-  50: shortcutFuncs.toPercentage, // 2
-  51: shortcutFuncs.toPercentage, // 3
-  52: shortcutFuncs.toPercentage, // 4
-  53: shortcutFuncs.toPercentage, // 5
-  54: shortcutFuncs.toPercentage, // 6
-  55: shortcutFuncs.toPercentage, // 7
-  56: shortcutFuncs.toPercentage, // 8
-  57: shortcutFuncs.toPercentage, // 9
-};
 
 function customPlayer(v) {
+  let Audio;
+  let audioSync;
+  let audioError;
   let videoWrapper;
   let savedTimeKey;
   let mouseDown;
@@ -299,23 +50,272 @@ function customPlayer(v) {
   let elToFocus;
   let clickCount = 0;
   let repeat = 0;
+  const shortcutFuncs = {
+    toggleCaptions: v => {
+      const validTracks = [];
+      for (let i = 0; i < v.textTracks.length; ++i) {
+        const tt = v.textTracks[i];
+        if (tt.mode === 'showing') {
+          tt.mode = 'disabled';
+          if (v.textTracks.addEventListener) {
+            // If text track event listeners are supported
+            // (they are on the most recent Chrome), add
+            // a marker to remember the old track. Use a
+            // listener to delete it if a different track
+            // is selected.
+            v.cbhtml5vsLastCaptionTrack = tt.label;
+
+            function cleanup(e) {
+              for (let i = 0; i < v.textTracks.length; ++i) {
+                const ott = v.textTracks[i];
+                if (ott.mode === 'showing') {
+                  delete v.cbhtml5vsLastCaptionTrack;
+                  v.textTracks.removeEventListener('change', cleanup);
+                  return;
+                }
+              }
+            }
+            v.textTracks.addEventListener('change', cleanup);
+          }
+          return;
+        } else if (tt.mode !== 'hidden') {
+          validTracks.push(tt);
+        }
+      }
+      // If we got here, none of the tracks were selected.
+      if (validTracks.length === 0) {
+        return true; // Do not prevent default if no UI activated
+      }
+      // Find the best one and select it.
+      validTracks.sort((a, b) => {
+        if (v.cbhtml5vsLastCaptionTrack) {
+          const lastLabel = v.cbhtml5vsLastCaptionTrack;
+
+          if (a.label === lastLabel && b.label !== lastLabel) {
+            return -1;
+          } else if (b.label === lastLabel && a.label !== lastLabel) {
+            return 1;
+          }
+        }
+
+        const aLang = a.language.toLowerCase();
+        const bLang = b.language.toLowerCase();
+        const navLang = navigator.language.toLowerCase();
+
+        if (aLang === navLang && bLang !== navLang) {
+          return -1;
+        } else if (bLang === navLang && aLang !== navLang) {
+          return 1;
+        }
+
+        const aPre = aLang.split('-')[0];
+        const bPre = bLang.split('-')[0];
+        const navPre = navLang.split('-')[0];
+
+        if (aPre === navPre && bPre !== navPre) {
+          return -1;
+        } else if (bPre === navPre && aPre !== navPre) {
+          return 1;
+        }
+
+        return 0;
+      })[0].mode = 'showing';
+    },
+
+    togglePlay: v => {
+      v.paused ? v.play() : v.pause();
+    },
+
+    toStart: v => {
+      v.currentTime = 0;
+    },
+
+    toEnd: v => {
+      v.currentTime = v.duration;
+    },
+
+    skipLeft: (v, key, shift, ctrl) => {
+      if (shift) {
+        v.currentTime -= settings.skipShift;
+      } else if (ctrl) {
+        v.currentTime -= settings.skipCtrl;
+      } else {
+        v.currentTime -= settings.skipNormal;
+      }
+    },
+
+    skipRight: (v, key, shift, ctrl) => {
+      if (shift) {
+        v.currentTime += settings.skipShift;
+      } else if (ctrl) {
+        v.currentTime += settings.skipCtrl;
+      } else {
+        v.currentTime += settings.skipNormal;
+      }
+    },
+
+    increaseVol: v => {
+      if (audioError) return;
+      if (v.nextSibling.querySelector('volume.disabled')) {
+        v.volume = 0;
+        return;
+      }
+      const increase = (v.volume + 0.1).toFixed(1);
+      if (v.muted) {
+        v.muted = !v.muted;
+        v.volume = 0.1;
+      } else {
+        v.volume <= 0.9 ? v.volume = increase : v.volume = 1;
+      }
+    },
+
+    decreaseVol: v => {
+      if (audioError) return;
+      if (v.nextSibling.querySelector('volume.disabled')) {
+        v.volume = 0;
+        return;
+      }
+      const decrease = (v.volume - 0.1).toFixed(1);
+      v.volume >= 0.1 ? v.volume = decrease : v.volume = 0;
+    },
+
+    toggleMute: v => {
+      v.muted = !v.muted;
+      if (audioSync) Audio.muted = v.muted;
+    },
+
+    toggleFS: v => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+        v.parentElement.classList.remove('native-fullscreen');
+      } else {
+        v.parentElement.classList.add('native-fullscreen');
+        v.parentElement.requestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+      }
+    },
+
+    reloadVideo: v => {
+      const currTime = v.currentTime;
+      v.load();
+      v.currentTime = currTime;
+    },
+
+    slowOrPrevFrame: (v, key, shift) => {
+      if (shift) { // Less-Than
+        v.currentTime -= 1 / 60;
+      } else { // Comma
+        if (v.playbackRate >= 0.1) {
+          const decrease = (v.playbackRate - 0.1).toFixed(2);
+          const rate = v.nextSibling.querySelector('rate');
+          v.playbackRate = decrease;
+          rate.textContent = `${v.playbackRate}x`;
+          if (v.playbackRate !== 1) {
+            rate.setAttribute('data-current-rate', `${v.playbackRate}x`);
+          }
+          if (v.playbackRate === 0.9) {
+            v.classList.add('playback-rate-decreased');
+          } else if (v.playbackRate === 1.1) {
+            v.classList.add('playback-rate-increased');
+          } else if (v.playbackRate === 1) {
+            v.classList.remove('playback-rate-decreased');
+            v.classList.remove('playback-rate-increased');
+            rate.removeAttribute('data-current-rate');
+          }
+        } else {
+          v.playbackRate = 0;
+        }
+        if (audioSync) Audio.playbackRate = v.playbackRate;
+      }
+    },
+
+    fastOrNextFrame: (v, key, shift) => {
+      if (shift) { // Greater-Than
+        v.currentTime += 1 / 60;
+      } else { // Period
+        if (v.playbackRate <= 15.9) {
+          const increase = (v.playbackRate += 0.1).toFixed(2);
+          const rate = v.nextSibling.querySelector('rate');
+          v.playbackRate = increase;
+          rate.textContent = `${v.playbackRate}x`;
+          if (v.playbackRate !== 1) {
+            rate.setAttribute('data-current-rate', `${v.playbackRate}x`);
+          }
+          if (v.playbackRate === 0.9) {
+            v.classList.add('playback-rate-decreased');
+          } else if (v.playbackRate === 1.1) {
+            v.classList.add('playback-rate-increased');
+          } else if (v.playbackRate === 1) {
+            v.classList.remove('playback-rate-decreased');
+            v.classList.remove('playback-rate-increased');
+            rate.removeAttribute('data-current-rate');
+          }
+        } else {
+          v.playbackRate = 16;
+        }
+        if (audioSync) Audio.playbackRate = v.playbackRate;
+      }
+    },
+
+    normalSpeed: v => { // ?
+      v.playbackRate = v.defaultPlaybackRate;
+      if (audioSync) Audio.playbackRate = v.playbackRate;
+      v.classList.remove('playback-rate-decreased');
+      v.classList.remove('playback-rate-increased');
+      v.nextSibling.querySelector('rate').textContent = '1x';
+      v.nextSibling.querySelector('rate').removeAttribute('data-current-rate');
+    },
+
+    toPercentage: (v, key) => {
+      v.currentTime = (v.duration * (key - 48)) / 10.0;
+    },
+  };
+
+  const keyFuncs = {
+    32: shortcutFuncs.togglePlay, // Space
+    75: shortcutFuncs.togglePlay, // K
+    35: shortcutFuncs.toEnd, // End
+    48: shortcutFuncs.toStart, // 0
+    36: shortcutFuncs.toStart, // Home
+    37: shortcutFuncs.skipLeft, // Left arrow
+    74: shortcutFuncs.skipLeft, // J
+    39: shortcutFuncs.skipRight, // Right arrow
+    76: shortcutFuncs.skipRight, // L
+    38: shortcutFuncs.increaseVol, // Up arrow
+    40: shortcutFuncs.decreaseVol, // Down arrow
+    77: shortcutFuncs.toggleMute, // M
+    70: shortcutFuncs.toggleFS, // F
+    67: shortcutFuncs.toggleCaptions, // C
+    82: shortcutFuncs.reloadVideo, // R
+    188: shortcutFuncs.slowOrPrevFrame, // Comma or Less-Than
+    190: shortcutFuncs.fastOrNextFrame, // Period or Greater-Than
+    191: shortcutFuncs.normalSpeed, // Forward slash or ?
+    49: shortcutFuncs.toPercentage, // 1
+    50: shortcutFuncs.toPercentage, // 2
+    51: shortcutFuncs.toPercentage, // 3
+    52: shortcutFuncs.toPercentage, // 4
+    53: shortcutFuncs.toPercentage, // 5
+    54: shortcutFuncs.toPercentage, // 6
+    55: shortcutFuncs.toPercentage, // 7
+    56: shortcutFuncs.toPercentage, // 8
+    57: shortcutFuncs.toPercentage, // 9
+  };
   const directVideo = /video/.test(document.contentType) &&
-        document.body.firstElementChild === v;
+    document.body.firstElementChild === v;
   const controls = document.createElement('controls');
   const imagus = v.classList.contains('imagus') || v.classList.contains('reddit-sync');
   if (imagus && !imagusVid) {
     imagusVid = v;
-    imagusAudio = document.createElement('video');
-    imagusAudio.preload = 'auto';
+    Audio = document.createElement('video');
+    Audio.preload = 'auto';
     //imagusAudio.autoplay = 'true';
-    imagusAudio.className = 'imagus imagus-audio';
-    imagusAudio.style = 'display: none!important;';
-    imagusVid.parentElement.insertBefore(imagusAudio, imagusVid);
+    Audio.className = 'imagus imagus-audio';
+    Audio.style = 'display: none!important;';
+    imagusVid.parentElement.insertBefore(Audio, imagusVid);
   }
   if (directVideo) {
     elToFocus = document.body;
     self === top ? document.body.classList.add('direct-video-top-level') :
-    document.body.classList.add('direct-video-embed');
+      document.body.classList.add('direct-video-embed');
   } else {
     elToFocus = v;
     videoWrapper = document.createElement('videowrapper');
@@ -417,30 +417,30 @@ function customPlayer(v) {
   if (videoWrapper) enforcePosition();
   volumeValues();
 
-v.onloadstart = () => {
+  v.onloadstart = () => {
     if (/v(cf)?\.redd\.it/.test(v.src) &&
-        v.classList.contains('reddit-sync')) {
-        const prefix = v.src.split('DASH')[0].replace('vcf.', 'v.');
-        const audioSrc = `${prefix}DASH_audio.mp4`;
-        imagusAudio.src = audioSrc
-        jQuery.ajax({
-            type: "GET",
-            url: audioSrc,
-            error: function (xhr, ajaxOptions, thrownError) {
-                switch (xhr.status) {
-                    case 403:
-                        imagusAudio.src = `${prefix}audio`;
-                }
-            } 
-        });            
-            
-        if (!imagusAudio.muted) {
-            muteTillSync = true;
-            imagusAudio.muted = true;
+      v.classList.contains('reddit-sync')) {
+      const prefix = v.src.split('DASH')[0].replace('vcf.', 'v.');
+      const audioSrc = `${prefix}DASH_audio.mp4`;
+      Audio.src = audioSrc
+      jQuery.ajax({
+        type: "GET",
+        url: audioSrc,
+        error: function (xhr, ajaxOptions, thrownError) {
+          switch (xhr.status) {
+            case 403:
+              Audio.src = `${prefix}audio`;
+          }
         }
-        if (imagusVid.hasAttribute('loop')) imagusAudio.setAttribute('loop', 'true');
+      });
+
+      if (!Audio.muted) {
+        muteTillSync = true;
+        Audio.muted = true;
+      }
+      if (imagusVid.hasAttribute('loop')) Audio.setAttribute('loop', 'true');
     }
-}
+  }
 
 
   v.onloadedmetadata = () => {
@@ -476,7 +476,7 @@ v.onloadstart = () => {
         volume.classList.remove('disabled');
       }
     }
-    elToFocus.focus({preventScroll: true});
+    elToFocus.focus({ preventScroll: true });
     if (v.duration <= settings.skipNormal) {
       skipShortLeft.classList.add('disabled');
       skipShortRight.classList.add('disabled');
@@ -525,7 +525,7 @@ v.onloadstart = () => {
 
   v.onvolumechange = () => {
     if (audioError) return;
-    if (audioSync) imagusAudio.volume = v.volume;
+    if (audioSync) Audio.volume = v.volume;
     if (v.muted || !v.volume) {
       v.classList.add('muted');
       volumeSlider.value = 0;
@@ -535,20 +535,20 @@ v.onloadstart = () => {
       v.classList.remove('muted');
       sliderValues();
       v.volume > 0.1 ? localStorage.setItem('videovolume', v.volume) :
-      localStorage.setItem('videovolume', 0.1);
+        localStorage.setItem('videovolume', 0.1);
       localStorage.setItem('videomuted', 'false');
     }
   };
 
   v.onplay = () => {
-    if (v === imagusVid && audioSync) imagusAudio.play();
+    if (v === imagusVid && audioSync) Audio.play();
     v.classList.remove('paused');
     if (videoWrapper) videoWrapper.classList.remove('paused');
     v.classList.add('playing');
   };
 
   v.onpause = () => {
-    if (v === imagusVid && audioSync) imagusAudio.pause();
+    if (v === imagusVid && audioSync) Audio.pause();
     if (!isSeeking) {
       v.classList.remove('playing');
       v.classList.add('paused');
@@ -564,8 +564,8 @@ v.onloadstart = () => {
   v.onemptied = () => {
     if (v === imagusVid) {
       if (v.src !== '') {
-        if (/v(cf)?\.redd\.it/.test(v.src)) {          
-          if (imagusVid.hasAttribute('loop')) imagusAudio.setAttribute('loop', 'true');
+        if (/v(cf)?\.redd\.it/.test(v.src)) {
+          if (imagusVid.hasAttribute('loop')) Audio.setAttribute('loop', 'true');
         }
         v.parentElement.parentElement.classList.add('imagus-video-wrapper');
         window.addEventListener('click', imagusClick, true);
@@ -575,10 +575,10 @@ v.onloadstart = () => {
       } else {
         audioSync = false;
         audioError = false;
-        imagusAudio.pause();
-        imagusAudio.removeAttribute('src');
-        imagusAudio.load();
-        imagusAudio.removeAttribute('loop');
+        Audio.pause();
+        Audio.removeAttribute('src');
+        Audio.load();
+        Audio.removeAttribute('loop');
         v.parentElement.parentElement.removeAttribute('class');
         timeTooltip.classList.add('hidden');
         window.removeEventListener('click', imagusClick, true);
@@ -619,7 +619,7 @@ v.onloadstart = () => {
     }
   };
 
-    v.onmouseup = e => {
+  v.onmouseup = e => {
     if (e.button === 2) {
       setTimeout(() => {
         window.removeEventListener('contextmenu', preventHijack, true);
@@ -630,7 +630,7 @@ v.onloadstart = () => {
 
   v.onmousemove = () => {
     controlsTimeout ? clearTimeout(controlsTimeout) :
-    v.classList.add('active');
+      v.classList.add('active');
     if (videoWrapper) videoWrapper.classList.add('active');
     controlsTimeout = setTimeout(() => {
       controlsTimeout = false;
@@ -643,9 +643,9 @@ v.onloadstart = () => {
     compactControls();
   }).observe(v);
 
-    controls.onclick = () => {
+  controls.onclick = () => {
     if (error) return;
-    elToFocus.focus({preventScroll: true});
+    elToFocus.focus({ preventScroll: true });
   };
 
   timeSlider.onmousemove = () => sliderValues();
@@ -692,7 +692,7 @@ v.onloadstart = () => {
     const lastVolume = localStorage.getItem('videovolume');
     if (v.muted || v.volume) shortcutFuncs.toggleMute(v);
     v.volume = lastVolume;
-    if (audioSync) imagusAudio.muted = v.muted;
+    if (audioSync) Audio.muted = v.muted;
   };
 
   playButton.onclick = e => {
@@ -766,12 +766,12 @@ v.onloadstart = () => {
   };
 
   if (imagusVid) {
-    imagusAudio.onloadedmetadata = () => {
+    Audio.onloadedmetadata = () => {
       audioSync = true;
-      if (v.hasAttribute('autoplay')) imagusAudio.play();
+      if (v.hasAttribute('autoplay')) Audio.play();
     };
 
-    imagusAudio.onloadeddata = () => {
+    Audio.onloadeddata = () => {
       if (v.volume && !v.muted) v.classList.remove('muted');
       volumeValues(v);
       if (volume.classList.contains('disabled')) {
@@ -780,12 +780,12 @@ v.onloadstart = () => {
       }
     };
 
-    imagusAudio.onended = () => {
-      imagusAudio.currentTime = 0;
-      if (imagusVid.hasAttribute('loop')) imagusAudio.play();
+    Audio.onended = () => {
+      Audio.currentTime = 0;
+      if (imagusVid.hasAttribute('loop')) Audio.play();
     };
 
-    imagusAudio.onerror = () => {
+    Audio.onerror = () => {
       audioError = true;
       v.classList.add('muted');
       volumeSlider.value = 0;
@@ -809,7 +809,7 @@ v.onloadstart = () => {
   function sliderValues() {
     let slider;
     let xPosition;
-    const vid = audioSync ? imagusAudio && v : v;
+    const vid = audioSync ? Audio && v : v;
     const eType = event && event.type;
     const eTime = eType === 'timeupdate';
     const eVolume = eType === 'volumechange';
@@ -837,38 +837,38 @@ v.onloadstart = () => {
         xPosition = start7 ? 0 : sliderWidth;
       } else {
         xPosition = eX < halfSlider ? (eX + (-7 + (eX / slider14ths))).toFixed(1) :
-        (eX + ((eX - halfSlider) / slider14ths)).toFixed(1);
+          (eX + ((eX - halfSlider) / slider14ths)).toFixed(1);
       }
     }
     if (eMeta || eTime || eVolume || eData || !event) {
       xPosition = eMeta || eTime ?
         ((((100 / v.duration) * v.currentTime) * sliderWidth) / 100).toFixed(1) :
-      (v.volume * sliderWidth).toFixed(1);
+        (v.volume * sliderWidth).toFixed(1);
     }
     if (eTime && event.target === imagusVid && audioSync) {
-      if (imagusVid.currentTime - imagusAudio.currentTime >= 0.1 ||
-          imagusVid.currentTime - imagusAudio.currentTime <= -0.1) {
-        imagusAudio.currentTime = imagusVid.currentTime + 0.06;
+      if (imagusVid.currentTime - Audio.currentTime >= 0.1 ||
+        imagusVid.currentTime - Audio.currentTime <= -0.1) {
+        Audio.currentTime = imagusVid.currentTime + 0.06;
         console.log('time sync corrected');
-        if (muteTillSync && imagusAudio.readyState > 2) {
-          imagusAudio.muted = false;
+        if (muteTillSync && Audio.readyState > 2) {
+          Audio.muted = false;
           muteTillSync = false;
           console.log('unmuted after time correct');
         }
-      } else if (muteTillSync && imagusAudio.readyState > 2) {
-        imagusAudio.muted = false;
+      } else if (muteTillSync && Audio.readyState > 2) {
+        Audio.muted = false;
         muteTillSync = false;
         console.log('unmuted');
       }
     }
     if (eInput || eMouseUp) xPosition = +tooltip.getAttribute('data-x-position');
     const xPosPercent = timeTarget ? (xPosition / sliderWidth) * 100 :
-    Math.round((xPosition / sliderWidth) * 100);
+      Math.round((xPosition / sliderWidth) * 100);
     let time = (xPosPercent * v.duration) / 100;
     if (eInput || eMeta || eTime || eVolume || eData || !event) {
       const valueTrail = timeTarget ? timeProgress : volumeTrail;
       const offset = halfSlider < xPosition ? -7 + (xPosition / slider14ths) :
-      (xPosition - halfSlider) / slider14ths;
+        (xPosition - halfSlider) / slider14ths;
       slider.value = timeTarget ? xPosPercent : xPosPercent / 100;
       valueTrail.style.width = `calc(${xPosPercent}% - ${offset}px)`;
       if (eInput && !timeTarget) {
@@ -889,9 +889,9 @@ v.onloadstart = () => {
     } else if (eMouseUp) {
       if (audioSync) {
         if (start7 || end7) {
-          imagusAudio.currentTime = start7 ? 0 : v.duration;
+          Audio.currentTime = start7 ? 0 : v.duration;
         } else {
-          imagusAudio.currentTime = time;
+          Audio.currentTime = time;
         }
       }
       if (start7 || end7) {
@@ -927,8 +927,8 @@ v.onloadstart = () => {
     const videovolume = localStorage.getItem('videovolume');
     const videomuted = localStorage.getItem('videomuted');
     if ((!videovolume && !videomuted) ||
-        (videovolume && videovolume === '1' &&
-         videomuted && videomuted !== 'true')) {
+      (videovolume && videovolume === '1' &&
+        videomuted && videomuted !== 'true')) {
       v.volume = 1;
       volumeSlider.value = 1;
       volumeTrail.style.width = '100%';
@@ -941,7 +941,7 @@ v.onloadstart = () => {
       v.muted = true;
     } else {
       v.volume = videovolume;
-      if (audioSync) imagusAudio.volume = v.volume;
+      if (audioSync) Audio.volume = v.volume;
       sliderValues();
       if (!volumeSlider.clientWidth) {
         new MutationObserver((_, observer) => {
@@ -950,7 +950,7 @@ v.onloadstart = () => {
             sliderValues();
             observer.disconnect();
           }
-        }).observe(v.parentElement, {childList: true, subtree: true, attributes: true});
+        }).observe(v.parentElement, { childList: true, subtree: true, attributes: true });
       }
     }
   }
@@ -1024,7 +1024,7 @@ v.onloadstart = () => {
     const func = keyFuncs[e.keyCode];
     if (func) {
       if ((func.length < 3 && e.shiftKey) ||
-          (func.length < 4 && e.ctrlKey)) return true; // Do not activate
+        (func.length < 4 && e.ctrlKey)) return true; // Do not activate
       func(e.target, e.keyCode, e.shiftKey, e.ctrlKey);
       e.preventDefault();
       e.stopPropagation();
@@ -1037,7 +1037,7 @@ v.onloadstart = () => {
     const func = keyFuncs[e.keyCode];
     if (func) {
       if ((func.length < 3 && e.shiftKey) ||
-          (func.length < 4 && e.ctrlKey)) return true; // Do not prevent default
+        (func.length < 4 && e.ctrlKey)) return true; // Do not prevent default
       e.preventDefault();
       e.stopPropagation();
       return false;
@@ -1046,11 +1046,11 @@ v.onloadstart = () => {
 
   function docHandleKeyDown(e) {
     if (document.body !== document.activeElement ||
-        e.altKey || e.metaKey) return true; // Do not activate
+      e.altKey || e.metaKey) return true; // Do not activate
     const func = keyFuncs[e.keyCode];
     if (func) {
       if ((func.length < 3 && e.shiftKey) ||
-          (func.length < 4 && e.ctrlKey)) return true; // Do not activate
+        (func.length < 4 && e.ctrlKey)) return true; // Do not activate
       func(v, e.keyCode, e.shiftKey, e.ctrlKey);
       e.preventDefault();
       e.stopPropagation();
@@ -1060,11 +1060,11 @@ v.onloadstart = () => {
 
   function docHandleKeyOther(e) {
     if (document.body !== document.activeElement ||
-        e.altKey || e.metaKey) return true; // Do not prevent default
+      e.altKey || e.metaKey) return true; // Do not prevent default
     const func = keyFuncs[e.keyCode];
     if (func) {
       if ((func.length < 3 && e.shiftKey) ||
-          (func.length < 4 && e.ctrlKey)) return true; // Do not prevent default
+        (func.length < 4 && e.ctrlKey)) return true; // Do not prevent default
       e.preventDefault();
       e.stopPropagation();
       return false;
@@ -1089,7 +1089,7 @@ v.onloadstart = () => {
         controlsDisplaced = v !== controls.previousSibling;
         if (controlsDisplaced) videoWrapper.insertBefore(controls, v.nextSibling);
         const bs =
-              videoWrapper.querySelectorAll('videowrapper > *:not(video):not(controls)');
+          videoWrapper.querySelectorAll('videowrapper > *:not(video):not(controls)');
         for (let i = 0; i < bs.length; ++i) {
           bs[i].remove();
         }
@@ -1123,8 +1123,8 @@ function ytCheckSavedTime(e) {
     if ((!ytStart || !savedTime) && !timeURL) ytTimeChecked = true;
     if (ytStart) ytStart.click();
     if (ytTimeChecked && savedTime) e.target.currentTime = savedTime;
-    e.target.focus({preventScroll: true});
-    if (self === top) window.scroll({top: 0, behavior: 'smooth'});
+    e.target.focus({ preventScroll: true });
+    if (self === top) window.scroll({ top: 0, behavior: 'smooth' });
   } else if (e.type === 'loadeddata' && !ytTimeChecked) {
     if (savedTime) e.target.currentTime = savedTime;
     ytTimeChecked = true;
@@ -1134,17 +1134,17 @@ function ytCheckSavedTime(e) {
 window.addEventListener('DOMContentLoaded', () => {
   document.arrive(
     'video[controls], video[style*="visibility: inherit !important"]',
-    {fireOnAttributesModification: true, existing: true}, v => {
+    { fireOnAttributesModification: true, existing: true }, v => {
       if (!v.parentNode.parentNode) return;
       const vP = v.parentNode;
       const vPP = v.parentNode.parentNode;
       const imagus = !v.hasAttribute('controls') &&
-            $$('html > div[style*="z-index: 2147483647"]') === v.parentNode;
+        $$('html > div[style*="z-index: 2147483647"]') === v.parentNode;
       const vidOrParentsIdOrClass =
-            `${v.id}${v.classList}${vP.id}${vP.classList}${vPP.id}${vPP.classList}`;
+        `${v.id}${v.classList}${vP.id}${vP.classList}${vPP.id}${vPP.classList}`;
       const exclude = v.classList.contains('custom-native-player') ||
-            v.classList.contains('imagus') ||
-            /(v(ideo)?|me)(-|_)?js|jw|jplay|plyr|kalt|flowp|wisti/i.test(vidOrParentsIdOrClass);
+        v.classList.contains('imagus') ||
+        /(v(ideo)?|me)(-|_)?js|jw|jplay|plyr|kalt|flowp|wisti/i.test(vidOrParentsIdOrClass);
       if (imagus || (v.hasAttribute('controls') && !exclude)) {
         if (imagus) v.classList.add('imagus');
         v.classList.add('custom-native-player');
@@ -1160,7 +1160,7 @@ window.addEventListener('DOMContentLoaded', () => {
 if (/^https?:\/\/www\.youtube\.com/.test(location.href)) {
   document.arrive(
     'video[src*="youtube.com"]',
-    {fireOnAttributesModification: true, existing: true}, v => {
+    { fireOnAttributesModification: true, existing: true }, v => {
       ytSaveCurrentTime(v);
     });
 }
