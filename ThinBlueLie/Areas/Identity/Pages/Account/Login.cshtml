@@ -56,24 +56,18 @@
             </div>
             <div class="d-flex justify-content-center">
                 <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                    <div>
-                        @foreach (var provider in Model.ExternalLogins)
-                        {
-                            if (provider.DisplayName == "Google")
-                            {
-                                <div class="g-signin2" style="border:inherit;" data-onsuccess="onSuccess" data-gapiscan="true" data-onload="true">
-                                    <div style="height:36px;width:120px;" class="abcRioButton abcRioButtonLightBlue">
-                                        <button class="abcRioButtonContentWrapper" style="border:inherit; background-color:white !important" type="submit" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
-                                            <img class="position-absolute" src="~/Assets/Google-Icon.png" style="left: 12px;height: 18px;bottom: 10px;">
-                                            <span style="font-size:13px;line-height:34px;" class="abcRioButtonContents">
-                                                <span class="ml-3">Sign in</span>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            }
-                            else { }
-                        }
+                    <div>                        
+                        <div class="g-signin2" style="border:inherit;" data-onsuccess="onSuccess" data-gapiscan="true" data-onload="true">
+                            <div style="height:36px;width:120px;" class="abcRioButton abcRioButtonLightBlue">
+                                <button class="abcRioButtonContentWrapper" style="border:inherit; background-color:white !important" type="submit" 
+                                        name="provider" value="Google" title="Log in using your Google account">
+                                    <img class="position-absolute" src="~/Assets/Google-Icon.png" style="left: 12px;height: 18px;bottom: 10px;">
+                                    <span style="font-size:13px;line-height:34px;" class="abcRioButtonContents">
+                                        <span class="ml-3">Sign in</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
