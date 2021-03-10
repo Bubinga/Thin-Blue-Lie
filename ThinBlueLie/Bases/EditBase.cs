@@ -285,10 +285,10 @@ namespace ThinBlueLie.Bases
                             pair.Item2.SourceFrom = result.SourceFrom;
                             pair.Item2.Blurb = pair.Item2.Blurb.Trim();
                             string saveNewMedia = @$"INSERT INTO editmedia 
-                                                      (`IdEditHistory`, `IdTimelineinfo`, `Rank`, `MediaType`, `SourcePath`, `OriginalUrl`,
-                                                        `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Action`)
-                                                       VALUES ('{EditHistoryId}', '{Id}', @Rank, @MediaType, @SourcePath, @OriginalUrl,
-                                                          @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', '{(int)Action}');";
+                                                      (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Thumbnail`, `OriginalUrl`,
+                                                          `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`, `Action`)
+                                                       VALUES ('{EditHistoryId}', '{Id}', @MediaType, @SourcePath, @Thumbnail, @OriginalUrl,
+                                                          @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', @Rank, '{(int)Action}');";
                             await Data.SaveData(saveNewMedia, pair.Item2);
                         }
                         //if deleted media
@@ -305,10 +305,10 @@ namespace ThinBlueLie.Bases
                             Action = EditActions.Update;
                             pair.Item2.Blurb = pair.Item2.Blurb.Trim();
                             string updateMedia = $@"INSERT INTO editmedia 
-                                                      (`IdEditHistory`, `IdTimelineinfo`, `IdMedia`, `Rank`, `MediaType`, `SourcePath`, `OriginalUrl`,
-                                                        `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Action`)
-                                                       VALUES ('{EditHistoryId}', '{Id}', @IdMedia, @Rank, @MediaType, @SourcePath, @OriginalUrl,
-                                                          @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', '{(int)Action}');";
+                                                      (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Thumbnail`, `OriginalUrl`,
+                                                          `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`, `Action`)
+                                                       VALUES ('{EditHistoryId}', '{Id}', @MediaType, @SourcePath, @Thumbnail, @OriginalUrl,
+                                                          @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', @Rank, '{(int)Action}');";
                             await Data.SaveData(updateMedia, pair.Item2);
                         }
                     }

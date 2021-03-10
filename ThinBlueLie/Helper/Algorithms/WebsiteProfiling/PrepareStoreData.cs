@@ -20,6 +20,8 @@ namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
         {
             var url = media.OriginalUrl;
             var source = media.SourceFrom;
+            var credit = media.Credit;
+            var blurb = media.Blurb;
             MediaTypeEnum mediaType = (MediaTypeEnum)media.MediaType;
             url = url.Remove(url.Length - 1, 1).Insert(url.Length - 1, ".json");
             using (var httpClient = new HttpClient())
@@ -33,6 +35,8 @@ namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
                 {
                     path = data.url_overridden_by_dest;
                 }
+                credit ??= data.author;
+                blurb = (blurb != "Placeholder Video" || blurb != "Placeholder Image")? data.title : blurb;
 
                 Uri uri = new Uri(path);
                 if (uri.Host.Contains("youtu.be") || uri.Host.Contains("youtube.com"))
@@ -78,6 +82,8 @@ namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
 
                 media.sourcePath = path;
                 media.SourceFrom = source;
+                media.Credit = credit;
+                media.Blurb = blurb;
                 return media;
             }
         }
