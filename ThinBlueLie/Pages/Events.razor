@@ -78,7 +78,7 @@ else if (EventExists)
                 <MediaCarousel Media="Event.Medias"></MediaCarousel>
             </div>
             <div class="col-lg-3">
-                <CascadingValue Value="@(User?.RepAuthorizer(PrivilegeEnum.Privileges.EditLocked) ?? false)">
+                <CascadingValue Value="@(User?.RepAuthorizer(ReputationEnum.Privileges.EditLocked) ?? false)">
                     <DataCard Information="Event.Data" Officers="Event.Officers" Subjects="Event.Subjects"></DataCard>
                 </CascadingValue>
             </div>

@@ -5,8 +5,18 @@ using System.Text;
 
 namespace DataAccessLibrary.Enums
 {
-    public static class PrivilegeEnum
+    public static class ReputationEnum
     {
+        public enum ReputationChangeEnum
+        {
+            NewEvent,
+            ThoroughEvent,
+            HelpFulFlag,
+            EventDeleted,
+            EditAccepted,
+            MaliciousPost
+        }
+
         public enum Privileges
         {
             [Display(Name = "Create, Edit, and Flag Events")]

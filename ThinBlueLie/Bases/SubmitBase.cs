@@ -184,12 +184,15 @@ namespace ThinBlueLie.Models
             }
             Serilog.Log.Information("Created new Event {@EventInfo} with EditHistory Id {EditHistoryId}", model, EditHistoryId);
             Serilog.Log.Information("Created new Edit {@EditHistory}", editHistory);
+
+            //Give account some repuation
+            await userManager.ChangeReputation(ReputationEnum.ReputationChangeEnum.NewEvent, Convert.ToInt32(userId));
+
             //TODO move all into querymultiple
             if (true) //TODO check if successful submit
             {
                 NavManager.NavigateTo("/Account/Profile");
             }
-
             SavingData = false;
         }
         public List<ViewSimilar>? SimilarEvents { get; set; } = new List<ViewSimilar>();

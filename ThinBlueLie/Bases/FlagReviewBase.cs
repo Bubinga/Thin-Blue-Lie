@@ -7,11 +7,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using ThinBlueLie.Searches;
 using ThinBlueLie.Helper.Extensions;
+using DataAccessLibrary.UserModels;
+using Microsoft.AspNetCore.Identity;
+using static DataAccessLibrary.Enums.ReputationEnum;
 
 namespace ThinBlueLie.Bases
 {
     public class FlagReviewBase : ComponentBase
     {
+        [Inject]
+        public UserManager<ApplicationUser> userManager { get; set; }
         [Inject]
         IDataAccess Data { get; set; }
         [Inject]
@@ -70,7 +75,10 @@ namespace ThinBlueLie.Bases
         }
         //Status of 0 is unreviewed, 1 is resolved, 2 is to be deleted
         public async Task ResolveFlag()
-        { await UpdateFlagStatus(1); }
+        { 
+            await UpdateFlagStatus(1);
+            await userManager.ChangeReputation(ReputationChangeEnum.HelpFulFlag, (int)Flags[ActiveIdIndex].UserId);
+        }
         public async Task DeleteFlag()
         { await UpdateFlagStatus(2); }
         public async Task UpdateFlagStatus(int Status)

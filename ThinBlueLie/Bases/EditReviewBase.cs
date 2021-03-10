@@ -13,9 +13,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using ThinBlueLie.Models.ViewModels;
 using ThinBlueLie.Searches;
+using ThinBlueLie.Helper.Extensions;
 using static DataAccessLibrary.Enums.EditEnums;
 using static ThinBlueLie.Helper.ConfigHelper;
 using static ThinBlueLie.Searches.SearchClasses;
+using DataAccessLibrary.Enums;
 
 namespace ThinBlueLie.Bases
 {
@@ -115,7 +117,7 @@ namespace ThinBlueLie.Bases
         public async Task AcceptEdit()
         {
             //TODO add check if the edit was already accepted, people could be sitting with a tab open for days
-            //Add super accept option for trusted users that has a vote value of 2
+            //Add super accept option for trusted users that can merge edit in one vote
             var Vote = Ids.ToArray()[ActiveIdIndex].Vote;
             //if the vote was already accepted
             if (Vote < 1 || Vote == null)
@@ -177,6 +179,7 @@ namespace ThinBlueLie.Bases
                 var x = Ids.ToList();
                 x.RemoveAt(ActiveIdIndex);
                 Ids = x;
+                ActiveIdIndex--;
                 PendingEditsCount--;
             }
         }
@@ -188,8 +191,8 @@ namespace ThinBlueLie.Bases
 
         public async Task MergeEdit()
         {
-            var change = EditChanges.ToArray()[ActiveIdIndex];
-            var newInfo = Edits.ToArray()[ActiveIdIndex].New;
+            var change = EditChanges[ActiveIdIndex];
+            var newInfo = Edits[ActiveIdIndex].New;
 
             //TODO change system so that I don't have to query this information twice
             using (IDbConnection connection = new MySqlConnection(GetConnectionString()))
@@ -315,6 +318,8 @@ namespace ThinBlueLie.Bases
                 //Ids = Ids.Where(i => i.IdEditHistory != confirmedEditId).ToList();
 
             }
+            var ownerId = EditChanges[ActiveIdIndex].SubmittedBy;
+            await UserManager.ChangeReputation(ReputationEnum.ReputationChangeEnum.EditAccepted, ownerId);
         }
     }
 }
