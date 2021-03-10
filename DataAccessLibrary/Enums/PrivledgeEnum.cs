@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DataAccessLibrary.Enums
 {
-    public class PrivilegeEnum
+    public static class PrivilegeEnum
     {
         public enum Privileges
         {

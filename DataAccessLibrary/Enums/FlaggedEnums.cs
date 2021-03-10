@@ -2,7 +2,7 @@
 
 namespace DataAccessLibrary.Enums
 {
-    public class FlaggedEnums
+    public static class FlaggedEnums
     {
         public enum FlagTypeEnum { 
             [Display(Name = "Vulgar or Racist")]

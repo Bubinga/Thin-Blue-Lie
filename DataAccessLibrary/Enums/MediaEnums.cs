@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLibrary.Enums
 {
-    public class MediaEnums
+    public static class MediaEnums
     {
         public enum MediaTypeEnum
         {

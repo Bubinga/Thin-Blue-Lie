@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataAccessLibrary.Enums
 {
-    public class EditEnums
+    public static class EditEnums
     {
         public enum EditActions
         {
