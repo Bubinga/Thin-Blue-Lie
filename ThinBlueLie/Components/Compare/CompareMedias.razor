@@ -23,36 +23,44 @@ else
 }
 
 @code {
-    [CascadingParameter(Name = "EditsOnly")]
-    public bool EditsOnly { get; set; }
+        [CascadingParameter(Name = "EditsOnly")]
+        public bool EditsOnly { get; set; }
     private List<Tuple<ViewMedia, ViewMedia>> Medias { get; set; }
-    [Parameter]
-    public List<ViewMedia> OldMedias { get; set; }
-    [Parameter]
-    public List<ViewMedia> NewMedias { get; set; }
+    [Parameter] public List<ViewMedia> OldMedias { get; set; }
+    [Parameter] public List<ViewMedia> NewMedias { get; set; }
+    private int id;
+    [CascadingParameter]
+    public int Id
+    {
+        get { return id; }
+        set { id = value; isNewEdit = true; }
+    }
+    bool isNewEdit = true;
     bool Done = false;
     private List<SideBySideDiffModel?> Mediadiff;
-    CompareLogic compareLogic;
+    CompareLogic compareLogic = new CompareLogic();
     //TODO this same code appears in CompareOfficers and CompareSubjects too, consolidate it into a generic method
     protected override void OnParametersSet()
     {
-        compareLogic = new CompareLogic();
-        Medias = new List<Tuple<ViewMedia, ViewMedia>>();
-        PairVersions pair = new PairVersions();
-        Medias = pair.PairMedia(OldMedias, NewMedias);
-        Mediadiff = new List<SideBySideDiffModel?>();
-        foreach (var pairing in Medias)
+        if (isNewEdit)
         {
-            try
+            Medias = new List<Tuple<ViewMedia, ViewMedia>>();
+            PairVersions pair = new PairVersions();
+            Medias = pair.PairMedia(OldMedias, NewMedias);
+            Mediadiff = new List<SideBySideDiffModel?>();
+            foreach (var pairing in Medias)
             {
-                //try to compare Medias with the same idMedia and build a model off of that
-                Mediadiff.Add(sideBySide.BuildDiffModel(pairing.Item1.Blurb, pairing.Item2.Blurb));
+                try
+                {
+                    //try to compare Medias with the same idMedia and build a model off of that
+                    Mediadiff.Add(sideBySide.BuildDiffModel(pairing.Item1.Blurb, pairing.Item2.Blurb));
+                }
+                catch (NullReferenceException)
+                {
+                    Mediadiff.Add(null);
+                }
             }
-            catch (NullReferenceException)
-            {
-                Mediadiff.Add(null);
-            }
+            Done = true;
         }
-        Done = true;
     }
 }

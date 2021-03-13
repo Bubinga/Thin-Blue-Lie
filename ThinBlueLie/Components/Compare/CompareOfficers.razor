@@ -25,6 +25,14 @@ else
 @code {
     [CascadingParameter(Name = "EditsOnly")]
     public bool EditsOnly { get; set; }
+    private int id;
+    [CascadingParameter]
+    public int Id
+    {
+        get { return id; }
+        set { id = value; isNewEdit = true; }
+    }
+    bool isNewEdit = true;
     private List<Tuple<DBOfficer, DBOfficer>> Officers { get; set; }
     [Parameter]
     public List<DBOfficer> OldOfficers { get; set; }
@@ -32,26 +40,28 @@ else
     public List<DBOfficer> NewOfficers { get; set; }
     bool Done = false;
     private List<SideBySideDiffModel?> Officerdiff = new List<SideBySideDiffModel?>();
-    CompareLogic compareLogic;
+    CompareLogic compareLogic = new CompareLogic();
     protected override void OnParametersSet()
     {
-        compareLogic = new CompareLogic();
-        Officers = new List<Tuple<DBOfficer, DBOfficer>>();
-
-        var PairOfficers = new PairVersions();
-        Officers = PairOfficers.PairOfficers(OldOfficers, NewOfficers);
-        foreach (var pairing in Officers)
+        if (isNewEdit)
         {
-            try
+            Officers = new List<Tuple<DBOfficer, DBOfficer>>();
+
+            var PairOfficers = new PairVersions();
+            Officers = PairOfficers.PairOfficers(OldOfficers, NewOfficers);
+            foreach (var pairing in Officers)
             {
-                //try to compare officers with the same idOfficer and build a model off of that
-                Officerdiff.Add(sideBySide.BuildDiffModel(pairing.Item1.Name, pairing.Item2.Name));
+                try
+                {
+                    //try to compare officers with the same idOfficer and build a model off of that
+                    Officerdiff.Add(sideBySide.BuildDiffModel(pairing.Item1.Name, pairing.Item2.Name));
+                }
+                catch (NullReferenceException)
+                {
+                    Officerdiff.Add(null);
+                }
             }
-            catch (NullReferenceException)
-            {
-                Officerdiff.Add(null);
-            }
+            Done = true;
         }
-        Done = true;
     }
 }

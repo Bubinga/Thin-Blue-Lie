@@ -26,16 +26,28 @@
             <span @onclick="() => GetNextEdit()" class="e-icons e-chevron-right"></span>
         </div>
         <div class="float-right vote-buttons">
-            @if (Loading == false && Ids.Any() && Ids.ToArray()[ActiveIdIndex] != null)
+            @if (Loading == false && Ids.Any() && Ids[ActiveIdIndex] != null)
             {
-                <SfButton CssClass="@("e-outline e-accept-button " + (Ids.ToArray()[ActiveIdIndex].Vote == 1? "active" : ""))"
-                          OnClick="async () => await AcceptEdit()" IconCss="e-icons e-check">
-                    @(Ids.ToArray()[ActiveIdIndex].Vote >= 1? "Accepted" : "Accept")
+                <AuthorizeView Roles="Admin, Moderator">
+                    <SfButton CssClass="@("e-outline e-accept-button " + (Ids[ActiveIdIndex].Vote == minimumAcceptVotes? "active" : ""))"
+                              OnClick="async () => await VoteEdit(minimumAcceptVotes)" IconCss="e-icons e-check">
+                        @(Ids[ActiveIdIndex].Vote >= 1? "Super Accepted" : "Super Accept")
+                    </SfButton>
+                </AuthorizeView>
+                <SfButton CssClass="@("e-outline e-accept-button " + (Ids[ActiveIdIndex].Vote == 1? "active" : ""))"
+                          OnClick="async () => await VoteEdit(1)" IconCss="e-icons e-check">
+                    @(Ids[ActiveIdIndex].Vote >= 1? "Accepted" : "Accept")
                 </SfButton>
-                <SfButton CssClass="@("e-outline e-decline-button " + (Ids.ToArray()[ActiveIdIndex].Vote == -1? "active" : ""))"
-                          OnClick="async () => await RejectEdit()" IconCss="e-icons e-cross">
-                    @(Ids.ToArray()[ActiveIdIndex].Vote <= -1? "Rejected" : "Reject")
+                <SfButton CssClass="@("e-outline e-decline-button " + (Ids[ActiveIdIndex].Vote == -1? "active" : ""))"
+                          OnClick="async () => await VoteEdit(-1)" IconCss="e-icons e-cross">
+                    @(Ids[ActiveIdIndex].Vote <= -1? "Rejected" : "Reject")
                 </SfButton>
+                <AuthorizeView Roles="Admin, Moderator">
+                    <SfButton CssClass="@("e-outline e-decline-button " + (Ids[ActiveIdIndex].Vote == minimumDenyVotes? "active" : ""))"
+                              OnClick="async () => await VoteEdit(minimumDenyVotes)" IconCss="e-icons e-check">
+                        @(Ids[ActiveIdIndex].Vote >= 1? "Super Rejected" : "Super Reject")
+                    </SfButton>
+                </AuthorizeView>
             }
         </div>
     </div>
@@ -53,29 +65,31 @@
         }
         else if (Ids.Any())
         {
-            @if (Ids.ToArray()[ActiveIdIndex].IdTimelineinfo != null)
+            @if (Ids[ActiveIdIndex].IdTimelineinfo != null)
             {
-                if (Ids.ToArray()[ActiveIdIndex].IsNewEvent.ToBool() == true)
+                if (Ids[ActiveIdIndex].IsNewEvent.ToBool() == true)
                 {
                     <div class="text-center my-3"><h5>New Event</h5></div>
                 }
-                <CascadingValue Value="@(Ids.ToArray()[ActiveIdIndex].IsNewEvent.ToBool())" Name="IsNewEvent">
+                <CascadingValue Value="@(Ids[ActiveIdIndex].IsNewEvent.ToBool())" Name="IsNewEvent">
                     <CascadingValue Value="@EditsOnly" Name="EditsOnly">
-                        <CompareBasic Info="new Tuple<Timelineinfo, Timelineinfo>(Edits[ActiveIdIndex].Old.Data, Edits[ActiveIdIndex].New.Data)"></CompareBasic>
-                        <CompareContext CollapseContent="false" OldContext="@Edits[ActiveIdIndex].Old.Data?.Context" NewContext="@Edits[ActiveIdIndex].New.Data.Context">
-                            <Header Context="compare">
-                                <h6 style="padding: 12px; margin: 0px;">
-                                    Context
-                                </h6>
-                            </Header>
-                        </CompareContext>
-                        <CompareMedias OldMedias="@Edits[ActiveIdIndex].Old.Medias" NewMedias="@Edits[ActiveIdIndex].New.Medias"></CompareMedias>
-                        <CompareOfficers OldOfficers="@Edits[ActiveIdIndex].Old.Officers" NewOfficers="@Edits[ActiveIdIndex].New.Officers"></CompareOfficers>
-                        <CompareSubjects OldSubjects="@Edits[ActiveIdIndex].Old.Subjects" NewSubjects="@Edits[ActiveIdIndex].New.Subjects"></CompareSubjects>
+                        <CascadingValue Value="ActiveIdIndex" Name="Id">
+                            <CompareBasic Info="new Tuple<Timelineinfo, Timelineinfo>(Edits[ActiveIdIndex].Old.Data, Edits[ActiveIdIndex].New.Data)"></CompareBasic>
+                            <CompareContext CollapseContent="false" OldContext="@Edits[ActiveIdIndex].Old.Data?.Context" NewContext="@Edits[ActiveIdIndex].New.Data.Context">
+                                <Header Context="compare">
+                                    <h6 style="padding: 12px; margin: 0px;">
+                                        Context
+                                    </h6>
+                                </Header>
+                            </CompareContext>
+                            <CompareMedias OldMedias="@Edits[ActiveIdIndex].Old.Medias" NewMedias="@Edits[ActiveIdIndex].New.Medias"></CompareMedias>
+                            <CompareOfficers OldOfficers="@Edits[ActiveIdIndex].Old.Officers" NewOfficers="@Edits[ActiveIdIndex].New.Officers"></CompareOfficers>
+                            <CompareSubjects OldSubjects="@Edits[ActiveIdIndex].Old.Subjects" NewSubjects="@Edits[ActiveIdIndex].New.Subjects"></CompareSubjects>
+                        </CascadingValue>
                     </CascadingValue>
                 </CascadingValue>
             }
-            else if (Ids.Any() && Ids.ToArray()[ActiveIdIndex].IsNewEvent.ToBool() == false)
+            else if (Ids.Any() && Ids[ActiveIdIndex].IsNewEvent.ToBool() == false)
             {
                 if ((Edits[ActiveIdIndex].New.OfficerPerson != null || Edits[ActiveIdIndex].Old.OfficerPerson != null))
                 {

@@ -41,7 +41,7 @@ namespace ThinBlueLie.Bases
         private AuthenticationState userState;
         ApplicationUser User;
         public int PendingEditsCount;
-        public IEnumerable<FirstLoadEditHistory> Ids;
+        public List<FirstLoadEditHistory> Ids;
         public int ActiveIdIndex;
         public bool Loading = true;
         public bool EditsOnly = true;
@@ -84,13 +84,13 @@ namespace ThinBlueLie.Bases
         }
         public async Task GetNextEdit()
         {
-            if (PendingEditsCount is 0)
+            if (PendingEditsCount >= 1)
                 return;
             Loading = true;
             //if it hasnt already been loaded
             if (Edits.Count - 1 <= ActiveIdIndex)
             {
-                var change = await Review.GetEditFromId(Ids.ToArray()[ActiveIdIndex == PendingEditsCount - 1 ? 0 : ActiveIdIndex + 1]);
+                var change = await Review.GetEditFromId(Ids[ActiveIdIndex == PendingEditsCount - 1 ? 0 : ActiveIdIndex + 1]);
                 Edits.Add(change.Item1);
                 EditChanges.Add(change.Item2);
             }
@@ -111,48 +111,26 @@ namespace ThinBlueLie.Bases
             StateHasChanged();
         }
 
-        const int minimumAcceptVotes = 6;
-        const int minimumDenyVotes = -4;
+        public const int minimumAcceptVotes = 5;
+        public const int minimumDenyVotes = -4;
         //TODO make only able to vote once.
-        public async Task AcceptEdit()
-        {
-            //TODO add check if the edit was already accepted, people could be sitting with a tab open for days
-            //Add super accept option for trusted users that can merge edit in one vote
-            var Vote = Ids.ToArray()[ActiveIdIndex].Vote;
-            //if the vote was already accepted
-            if (Vote < 1 || Vote == null)
-            {
-                string AcceptSql = "INSERT INTO edit_votes (IdEditHistory,UserId,Vote) " +
-                            "VALUES (@IdEditHistory, @UserId, 1) AS new " +
-                            "ON DUPLICATE KEY UPDATE " +
-                            "Vote = new.Vote; " +
-                    "SELECT e.Vote FROM edit_votes e where e.IdEditHistory = @IdEditHistory;";
-                IEnumerable<int> rows;
-                using (IDbConnection connection = new MySqlConnection(GetConnectionString()))
-                {
-                    rows = await connection.QueryAsync<int>(AcceptSql, new { IdEditHistory = Ids.ToArray()[ActiveIdIndex].IdEditHistory, UserId = User.Id });
-                }
-                Ids.ToArray()[ActiveIdIndex].Vote = 1;
-                await GetEditTask(rows);
-            }
 
-        }
-        public async Task RejectEdit()
+        public async Task VoteEdit(short voteAmount)
         {
-            var Vote = Ids.ToArray()[ActiveIdIndex].Vote;
-            if (Vote > -1 || Vote == null)
+            var Vote = Ids[ActiveIdIndex].Vote;
+            if (Vote != voteAmount)
             {
                 string RejectSql = "INSERT INTO edit_votes (`IdEditHistory`, `UserId`, `Vote`) " +
-                        "VALUES(@IdEditHistory, @UserId, -1) AS new " +
+                        "VALUES(@IdEditHistory, @UserId, @Vote) AS new " +
                         "ON DUPLICATE KEY UPDATE " +
                         "Vote = new.Vote; " +
                     "SELECT e.Vote FROM edit_votes e where e.IdEditHistory = @IdEditHistory;";
                 IEnumerable<int> rows;
                 using (IDbConnection connection = new MySqlConnection(GetConnectionString()))
                 {
-                    rows = await connection.QueryAsync<int>(RejectSql, new { IdEditHistory = Ids.ToArray()[ActiveIdIndex].IdEditHistory, UserId = User.Id });
+                    rows = await connection.QueryAsync<int>(RejectSql, new { IdEditHistory = Ids[ActiveIdIndex].IdEditHistory, UserId = User.Id, Vote = voteAmount });
                 }
-                Ids.ToArray()[ActiveIdIndex].Vote = -1;
+                Ids[ActiveIdIndex].Vote = voteAmount;
                 await GetEditTask(rows);
             }
         }
@@ -173,7 +151,7 @@ namespace ThinBlueLie.Bases
 
             if (DidSomething)
             {
-                //var id = Ids.ToArray()[ActiveIdIndex].IdEditHistory;
+                //var id = Ids[ActiveIdIndex].IdEditHistory;
                 Edits.RemoveAt(ActiveIdIndex);
                 EditChanges.RemoveAt(ActiveIdIndex);
                 var x = Ids.ToList();
@@ -186,7 +164,7 @@ namespace ThinBlueLie.Bases
         public async Task DenyEdit()
         {
             string DenyEditSql = "UPDATE edithistory SET `Confirmed` = '2' WHERE (`IdEditHistory` = @id);";
-            await Data.SaveData(DenyEditSql, new { id = Ids.ToArray()[ActiveIdIndex].IdEditHistory });
+            await Data.SaveData(DenyEditSql, new { id = Ids[ActiveIdIndex].IdEditHistory });
         }
 
         public async Task MergeEdit()
@@ -200,11 +178,11 @@ namespace ThinBlueLie.Bases
                 if (change.Edits == 1)
                 {
                     string EditChangedQuery = "INSERT INTO timelineinfo(`IdTimelineinfo`, `Title`, `Date`, `State`, `City`, `Context`, `Locked`, `Owner`)" +
-                                                   $"VALUES(@IdTimelineinfo, @Title, @Date, @State, @City, @context, @Locked, '{Ids.ToArray()[ActiveIdIndex].SubmittedBy}')" +
+                                                   $"VALUES(@IdTimelineinfo, @Title, @Date, @State, @City, @context, @Locked, '{Ids[ActiveIdIndex].SubmittedBy}')" +
                                                 "ON DUPLICATE KEY UPDATE " +
                                                    "`Title` = @Title, `Date` = @Date, `State` = @State, " +
                                                    "`City` = @City, `Context` = @Context, " +
-                                                   $"`Locked` = @Locked, `Owner` = '{Ids.ToArray()[ActiveIdIndex].SubmittedBy}';";
+                                                   $"`Locked` = @Locked, `Owner` = '{Ids[ActiveIdIndex].SubmittedBy}';";
                     await connection.ExecuteAsync(EditChangedQuery, newInfo.Data);
                 }
                 if (change.EditMedia == 1)
@@ -312,9 +290,9 @@ namespace ThinBlueLie.Bases
                 }
 
                 string changeToConfirmed = "UPDATE edithistory SET `Confirmed` = '1' WHERE (`IdEditHistory` = @IdEditHistory);";
-                await connection.ExecuteAsync(changeToConfirmed, new { Ids.ToArray()[ActiveIdIndex].IdEditHistory });
+                await connection.ExecuteAsync(changeToConfirmed, new { Ids[ActiveIdIndex].IdEditHistory });
                 Serilog.Log.Information("Merged Edit for Event {id}", newInfo.Data.IdTimelineinfo);
-                //var confirmedEditId = Ids.ToArray()[ActiveIdIndex].IdEditHistory;
+                //var confirmedEditId = Ids[ActiveIdIndex].IdEditHistory;
                 //Ids = Ids.Where(i => i.IdEditHistory != confirmedEditId).ToList();
 
             }
