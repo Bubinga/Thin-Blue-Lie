@@ -9,6 +9,8 @@ using KellermanSoftware.CompareNetObjects;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,38 +20,64 @@ using ThinBlueLie.Helper.Extensions;
 using ThinBlueLie.Models;
 using static DataAccessLibrary.Enums.EditEnums;
 using static ThinBlueLie.Helper.Algorithms.WebsiteProfiling.WebsiteProfile;
-using static ThinBlueLie.Helper.ConfigHelper;
-using static ThinBlueLie.Models.SubmitBase;
+using static ThinBlueLie.Searches.SearchClasses;
 
-namespace ThinBlueLie.Bases
+namespace ThinBlueLie.Pages
 {
-    public class EditBase : InformationBase
+    public partial class Edit
     {
-        //public new SubmitModel model = new SubmitModel
-        //{
-        //    Timelineinfos = new ViewTimelineinfo(),
-        //    Medias = new List<ViewMedia> { new ViewMedia { } },
-        //    Officers = new List<ViewOfficer> { new ViewOfficer { } },
-        //    Subjects = new List<ViewSubject> { new ViewSubject { } }
-        //};
         internal uint Id;
-        [Inject]
-        SignInManager<ApplicationUser> SignInManager { get; set; }
-        [Inject]
-        UserManager<ApplicationUser> UserManager { get; set; }
-        [Inject]
-        public IMapper Mapper { get; set; }
-        [Inject]
-        NavigationManager navManager { get; set; }
-        [Inject]
-        IDataAccess Data { get; set; }
+        [Inject] UserManager<ApplicationUser> UserManager { get; set; }
+        [Inject] IMapper Mapper { get; set; }
+        [Inject] NavigationManager NavManager { get; set; }
+        [Inject] IDataAccess Data { get; set; }
+        [Inject] IJSRuntime JS { get; set; }
 
-
-        SubmitModel oldInfo = new SubmitModel();
-
+        SubmitModel oldInfo = new();
         public bool? EventExists = null;
-
         public bool EventPendingEdit = false;
+        string id;
+        [CascadingParameter]
+        private Task<AuthenticationState> AuthState { get; set; }
+
+        protected override async Task OnInitializedAsync()
+        {
+            var uri = new Uri(NavManager.Uri);
+            id = QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var type) ? type.First() : "";
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                Id = Convert.ToUInt32(id);
+                userState = await AuthState;
+                User = await UserManager.GetUserAsync(userState.User);
+                model = await FetchDataAsync();
+                if (model.Officers != null)
+                {
+                    for (int i = 0; i < model.Officers.Count; i++)
+                    {
+                        SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
+                    };
+                    for (int i = 0; i < model.Subjects.Count; i++)
+                    {
+                        SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
+                    };
+
+                    DateValue = Convert.ToDateTime(model.Timelineinfos.Date);
+                    this.StateHasChanged();
+                }
+            }
+        }
+        protected async override Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (!firstRender)
+            {
+                await JS.InvokeVoidAsync("MakeMobileFriendly");
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("feather.replace");
+            }
+        }
+
         internal async Task<SubmitModel> FetchDataAsync()
         {
             string checkPending = "SELECT e.Confirmed FROM edithistory e where e.IdTimelineinfo = @id Order by e.Timestamp desc Limit 1;";
@@ -107,7 +135,7 @@ namespace ThinBlueLie.Bases
                         Officers = Officers,
                         Subjects = Subjects
                     };
-                    SubmitModel model = new SubmitModel();
+                    SubmitModel model = new();
                     Mapper.Map(oldInfo, model);
                     EventExists = true;
                     return model;
@@ -116,7 +144,6 @@ namespace ThinBlueLie.Bases
             EventExists = false;
             return new SubmitModel { Timelineinfos = new ViewTimelineinfo {Locked = timelineinfo.Locked } };
         }
-
 
 
         public EditHistory editHistory;
@@ -148,8 +175,8 @@ namespace ThinBlueLie.Bases
             userId = Convert.ToInt32(UserManager.GetUserId(userState.User));
 
             editHistory = new EditHistory();
-            PairVersions Pair = new PairVersions();
-            CompareLogic compareLogic = new CompareLogic();
+            PairVersions Pair = new();
+            CompareLogic compareLogic = new();
 
             if (!compareLogic.Compare(model.Officers, oldInfo.Officers).AreEqual)
             {
@@ -343,7 +370,7 @@ namespace ThinBlueLie.Bases
                                          WHERE (`IdEditHistory` = '{EditHistoryId}');";
             await Data.SaveData(updateEditHistory, editHistory);
             Serilog.Log.Information("Created new Edit {EditChanges} for Event {id}", compareLogic.Compare(model, oldInfo).Differences, Id);
-            navManager.NavigateTo("/Account/Profile");
+            NavManager.NavigateTo("/Account/Profile");
             SavingData = false;
         }
     }

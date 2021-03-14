@@ -11,12 +11,12 @@ using DataAccessLibrary.UserModels;
 using Microsoft.AspNetCore.Identity;
 using static DataAccessLibrary.Enums.ReputationEnum;
 
-namespace ThinBlueLie.Bases
+namespace ThinBlueLie.Pages.Account
 {
-    public class FlagReviewBase : ComponentBase
+    public partial class FlagReview
     {
         [Inject]
-        public UserManager<ApplicationUser> userManager { get; set; }
+        public UserManager<ApplicationUser> UserManager { get; set; }
         [Inject]
         IDataAccess Data { get; set; }
         [Inject]
@@ -77,7 +77,7 @@ namespace ThinBlueLie.Bases
         public async Task ResolveFlag()
         { 
             await UpdateFlagStatus(1);
-            await userManager.ChangeReputation(ReputationChangeEnum.HelpFulFlag, (int)Flags[ActiveIdIndex].UserId);
+            await UserManager.ChangeReputation(ReputationChangeEnum.HelpFulFlag, (int)Flags[ActiveIdIndex].UserId);
         }
         public async Task DeleteFlag()
         { await UpdateFlagStatus(2); }

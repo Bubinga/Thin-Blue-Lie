@@ -2,19 +2,12 @@
 @using static ThinBlueLie.Searches.SearchClasses
 @using ThinBlueLie.Helper.Extensions;
 @using Syncfusion.Blazor.Buttons;
-@inherits SimilarPeopleBase
 
 <style>
     .event {
         list-style-type: none;
     }
 </style>
-@*@if (People.Count == 0)
-    {
-        <div class="container mt-2" style="min-height:100px;">
-            <h5>There are no similar People!</h5>
-        </div>
-    }*@
 @if (People.Count != 0)
 {
     @foreach (var Person in People)
@@ -56,18 +49,4 @@
         </div>
     }
 }
-@code {
-    [Parameter]
-    public List<SimilarPersonGeneral> People { get; set; } = null;
 
-    [Parameter]
-    public int PersonRank { get; set; }
-    [Parameter]
-    public EventCallback<SimilarPeopleModel> SetSameAs { get; set; }
-
-    public class SimilarPeopleModel : CommonPerson
-    {
-        public int IdPerson { get; set; }
-        public int PersonRank { get; set; }
-    }
-}

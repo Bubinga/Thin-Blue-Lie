@@ -3,7 +3,9 @@ using DataAccessLibrary.DataModels;
 using DataAccessLibrary.UserModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using MySqlConnector;
+using Syncfusion.Blazor.ProgressBar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +13,25 @@ using System.Threading.Tasks;
 using ThinBlueLie.Models;
 using static ThinBlueLie.Helper.ConfigHelper;
 
-namespace ThinBlueLie.Bases
+namespace ThinBlueLie.Pages.Account
 {
-    public class ProfileBase : ComponentBase
+    public partial class Profile
     {
-        public ProfileModel profile = new ProfileModel();
+        public ProfileModel profile = new();
         public List<Timelineinfo> Events { get; set; }
-        [CascadingParameter]
-        public Task<AuthenticationState> AuthState { get; set; }
+        [CascadingParameter] public Task<AuthenticationState> AuthState { get; set; }
+        [Inject] UserManager<ApplicationUser> UserManager { get; set; }
         public AuthenticationState userState;
         public ApplicationUser User;
+        bool Loading;
+        protected override async Task OnInitializedAsync()
+        {
+            Loading = true;
+            userState = await AuthState;
+            User = await UserManager.GetUserAsync(userState.User);
+            Loading = false;
+            await GetProfile();
+        }
         public async Task GetProfile()
         {
             string sql = "SELECT " +

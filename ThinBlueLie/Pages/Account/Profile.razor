@@ -8,8 +8,6 @@
 @using Syncfusion.Blazor.Buttons
 @using static ThinBlueLie.Helper.Extensions.EnumExtensions
 @using static DataAccessLibrary.Enums.ReputationEnum
-@inherits ProfileBase
-@inject UserManager<ApplicationUser> userManager
 
 
 <Title>Profile - Thin Blue Lie</Title>
@@ -55,7 +53,7 @@
                     </div>
                     @if (!FullUser)
                     {
-                        <SfProgressBar @ref="Reputation" Type="ProgressType.Linear" Height="35"
+                        <SfProgressBar Type="ProgressType.Linear" Height="35"
                                        ID="Percentage"
                                        TrackThickness="24"
                                        ProgressThickness="24" Role="ModeType.Success"
@@ -96,9 +94,9 @@
             </p>
         </div>
     </div>
-    <div class="d-flex">
+    <div style="width:100%">
         <SfGrid DataSource="@profile.Submissions" AllowSelection="false" AllowFiltering="true"
-                EnableVirtualization="true" Height="550" AllowResizing="true">
+                EnableVirtualization="true" Height="300" AllowResizing="true">
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
             <GridPageSettings PageCount="5"></GridPageSettings>
             <GridColumns>
@@ -144,7 +142,7 @@
                     <Template>
                         @{
                             var Event = (context as ProfileInfo).IdTimelineinfo;
-                            //Implement delete event
+                            //TODO Implement delete event
                             @*<SfButton IsPrimary="true" CssClass="e-outline e-danger" IconCss="e-icons e-delete"></SfButton>*@
                             <SfButton IsPrimary="true" CssClass="e-outline e-info edit-button" IconCss="e-icons e-edit">
                                 <a href="Edit?id=@Event"></a>
@@ -157,15 +155,3 @@
         </SfGrid>
     </div>
 </div>
-@code {
-    SfProgressBar Reputation;
-    bool Loading;
-    protected override async Task OnInitializedAsync()
-    {
-        Loading = true;
-        userState = await AuthState;
-        User = await userManager.GetUserAsync(userState.User);
-        Loading = false;
-        await GetProfile();
-    }
-}

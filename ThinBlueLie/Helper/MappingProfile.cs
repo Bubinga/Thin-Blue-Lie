@@ -4,7 +4,6 @@ using System.Linq;
 using ThinBlueLie.Models;
 using static DataAccessLibrary.Enums.TimelineinfoEnums;
 using static ThinBlueLie.Helper.Extensions.IntExtensions;
-using static ThinBlueLie.Models.SubmitBase;
 using static ThinBlueLie.Models.ViewModels.EditReviewModel;
 using static ThinBlueLie.Searches.SearchClasses;
 

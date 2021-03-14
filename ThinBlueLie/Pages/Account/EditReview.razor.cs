@@ -19,19 +19,11 @@ using static ThinBlueLie.Helper.ConfigHelper;
 using static ThinBlueLie.Searches.SearchClasses;
 using DataAccessLibrary.Enums;
 
-namespace ThinBlueLie.Bases
+namespace ThinBlueLie.Pages.Account
 {
-    public class EditReviewBase : ComponentBase
+    public partial class EditReview
     {
-        public EditReviewModel versions = new EditReviewModel();
-        //ensure editcount is same for all across, so get editcount from edits and use the same number against the others
-        //highest edit count where confirmed = 1 is the active one
-        //return two rows for all queries, the first being active, second being inactive
-        //load on arrow click, get a list of all edits which have either
-        //      the original post having a submittedby matching the user
-        //      edits where editcount = 0
-        //      the original post being a community post
-        //  store status of post in community column
+        public EditReviewModel versions = new();
         [Inject]
         public UserManager<ApplicationUser> UserManager { get; set; }
         [Inject]
@@ -45,8 +37,8 @@ namespace ThinBlueLie.Bases
         public int ActiveIdIndex;
         public bool Loading = true;
         public bool EditsOnly = true;
-        public List<EditHistory> EditChanges = new List<EditHistory>();
-        public List<EditReviewModel> Edits = new List<EditReviewModel>();
+        public List<EditHistory> EditChanges = new();
+        public List<EditReviewModel> Edits = new();
         [Inject]
         SearchesEditReview Review { get; set; }
         [Inject]
@@ -79,7 +71,7 @@ namespace ThinBlueLie.Bases
                     ActiveIdIndex = 0;
                 }
             }
-            PendingEditsCount = Ids.Count();
+            PendingEditsCount = Ids.Count;
             Loading = false;
         }
         public async Task GetNextEdit()
@@ -128,7 +120,7 @@ namespace ThinBlueLie.Bases
                 IEnumerable<int> rows;
                 using (IDbConnection connection = new MySqlConnection(GetConnectionString()))
                 {
-                    rows = await connection.QueryAsync<int>(RejectSql, new { IdEditHistory = Ids[ActiveIdIndex].IdEditHistory, UserId = User.Id, Vote = voteAmount });
+                    rows = await connection.QueryAsync<int>(RejectSql, new { Ids[ActiveIdIndex].IdEditHistory, UserId = User.Id, Vote = voteAmount });
                 }
                 Ids[ActiveIdIndex].Vote = voteAmount;
                 await GetEditTask(rows);

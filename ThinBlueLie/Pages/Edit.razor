@@ -1,6 +1,5 @@
 ﻿@page "/Edit"
-@inherits EditBase
-@using ThinBlueLie.Bases
+@inherits InformationBase
 @using Microsoft.AspNetCore.WebUtilities
 @using Syncfusion.Blazor.DropDowns
 @using ThinBlueLie.Helper.Extensions
@@ -13,9 +12,6 @@
 @using Syncfusion.Blazor.Calendars
 @using Microsoft.AspNetCore.Identity
 @using DataAccessLibrary.UserModels
-@inject UserManager<ApplicationUser> userManager
-@inject NavigationManager navManager
-@inject IJSRuntime JS
 @attribute [Authorize]
 
 <Title>Edit Event - Thin Blue Lie</Title>
@@ -187,50 +183,4 @@ else
             <SfSpinner Visible="SavingData" CssClass="e-spin-overlay" />
         </div>
     </div>
-}
-
-
-
-@code {
-    string id;
-    [CascadingParameter]
-    private Task<AuthenticationState> _authState { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var uri = new Uri(navManager.Uri);
-        id = QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var type) ? type.First() : "";
-        if (!string.IsNullOrWhiteSpace(id))
-        {
-            Id = Convert.ToUInt32(id);
-            userState = await _authState;
-            User = await userManager.GetUserAsync(userState.User);
-            model = await FetchDataAsync();
-            if (model.Officers != null)
-            {
-                for (int i = 0; i < model.Officers.Count; i++)
-                {
-                    SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
-                };
-                for (int i = 0; i < model.Subjects.Count; i++)
-                {
-                    SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
-                };
-
-                DateValue = Convert.ToDateTime(model.Timelineinfos.Date);
-                this.StateHasChanged();
-            }
-        }
-    }
-    protected async override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-        {
-            await JS.InvokeVoidAsync("MakeMobileFriendly");
-        }
-        else
-        {
-            await JS.InvokeVoidAsync("feather.replace");
-        }
-    }
 }
