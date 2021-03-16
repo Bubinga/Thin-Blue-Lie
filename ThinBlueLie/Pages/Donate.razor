@@ -11,7 +11,7 @@
 <Meta Name="description" Content="Seeking to help solve the epidemic? All these charities could use donations to do vital work in each of their respective areas." />
 <Link Rel="stylesheet" Href="/css/content.css" />
 
-<div class="header-image" style="background-image: url(Assets/Protests-Wallpaper.jpg) !important;">
+<div class="header-image" style="background-image: url(http://cityoflovejoy.com/ImageRepository/Document?documentID=1553) !important;">
     <div class="my-auto text-center">
         <h1 style="font-family: 'Crimson Text', serif; font-size: 4em;" class="text-white d-inline-block">
             Donate
@@ -49,9 +49,9 @@
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink class="nav-link d-flex align-items-center" href="/Donate#bail">
-                                <i data-feather="dollar-sign"></i>
-                                <span class="category">Bail</span>
+                            <NavLink class="nav-link d-flex align-items-center" href="/Donate#education">
+                                <i data-feather="book"></i>
+                                <span class="category">Education</span>
                             </NavLink>
                         </li>
                     </ul>
@@ -66,46 +66,201 @@
                 </div>
                 <hr class="blueline nogap" />
                 <div>
-                    <div class="charity">
-                        <img alt="Thin Blue Lie Logo" src="/Assets/ThinBlueLie-Logo.png" class="charity-thumbnail" />
-                        <div class="charity-content">
-                            <h4>Thin Blue Lie</h4>
-                            <p>
-                                Thin Blue Lie relies entirely on donations for operation. Each and every penny goes straight into
-                                either maintainace and improvements on the website.
-                            </p>
-                            <div class="charity-button">
-                                <form action="https://www.paypal.com/donate" method="post" target="_top">
-                                    <input type="hidden" name="hosted_button_id" value="TG95ZRQRCXPMU" />
-                                    <button class="e-btn e-outline e-primary" border="0" name="submit" title="PayPal - The safer, easier way to pay online!"
-                                            alt="Donate with PayPal button">
-                                        Donate
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
                     @if (anchor == null) { }
                     else if (anchor.Contains("featured", StringComparison.OrdinalIgnoreCase))
                     {
-                        <div class="resource">
+                        <div class="charity">
+                            <img alt="Thin Blue Lie Logo" src="/Assets/ThinBlueLie-Logo.png" class="charity-thumbnail" />
+                            <div class="charity-content">
+                                <h4>Thin Blue Lie</h4>
+                                <p>
+                                    We here at Thin Blue Lie rely on donations just like yours to keep this website up and our database live. Through crowdsourcing
+                                    our data, we can circumnavigate tradional legal avenues to misconduct data. By being beholden only to our donors, we can pursue
+                                    ambitious goals and research projects. We work hard to make sure our data, America's data, stays open and free to access with no
+                                    restrictions. In the future only hope to expand further to the smallest towns in America and eventually internationally.
+                                </p>
+                                <div class="charity-button">
+                                    <form action="https://www.paypal.com/donate" method="post" target="_top">
+                                        <input type="hidden" name="hosted_button_id" value="TG95ZRQRCXPMU" />
+                                        <button class="e-btn e-outline e-primary" border="0" name="submit" title="PayPal - The safer, easier way to pay online!"
+                                                alt="Donate with PayPal button">
+                                            Donate
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="charity">
+                            <img alt="Equal Justice Initiative Logo" src="https://s12982.pcdn.co/wp-content/uploads/2016/03/logo-eji.png" class="charity-thumbnail" />
+                            <div class="charity-content">
+                                <h4>Equal Justive Initiative</h4>
+                                <p>
+                                    The Equal Justice Initiative provides legal representation to people who have been illegally convicted, unfairly sentenced, or
+                                    abused in state jails and prisons. They boast a rare perfect score on Charity Navigator. EJI actively challenges the death penalty and
+                                    excessive punishment and also provides re-entry assistance to formerly incarcerated people. EJI works with communities that have been
+                                    marginalized by poverty and discouraged by unequal treatment and thus is committed to changing the narrative about race in America.
+                                    They produce groundbreaking reports, an award-winning calendar, and short films that explore our nation’s history of racial injustice.
+                                </p>
+                                <div class="charity-button">
+                                    <a href="https://eji.org/" class="e-btn e-outline e-primary" target="_blank" rel="noopener noreferrer">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="charity">
+                            <img alt="Campaign Zero Logo" src="https://avatars.githubusercontent.com/u/19274654?s=200&v=4" class="charity-thumbnail" />
+                            <div class="charity-content">
+                                <h4>Campaign Zero</h4>
+                                <p>
+                                    Campaign ZERO was developed with contributions from activists, protesters and researchers across the nation.
+                                    This data-informed platform presents a package of policy solutions to end police violence in America.
+                                    It integrates community demands and policy recommendations from research organizations and President Obama's Task Force on
+                                    21st Century Policing. Campaign Zero is unique in its data and research based approach and it's ability to enact real legislation and change.
+                                </p>
+                                <div class="charity-button">
+                                    <a href="https://www.joincampaignzero.org/" class="e-btn e-outline e-primary" target="_blank" rel="noopener noreferrer">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="charity">
+                            <img alt="Center for Policing Equity Logo" src="https://media-exp1.licdn.com/dms/image/C560BAQFdNracb0GsTg/company-logo_200_200/0/1558626169167?e=2159024400&v=beta&t=RPtPVb3mIbGFXiTx5xIPu0oFsHJRafaNQKZYnd5NqWI" class="charity-thumbnail" />
+                            <div class="charity-content">
+                                <h4>Center for Policing Equity</h4>
+                                <p>
+                                    Center for Policing Equity’s work continues to simultaneously aid police departments to realize their own equity goals as well
+                                    as advance the scientific understanding of issues of equity within organizations and policing. Center for Policing Equity (CPE)
+                                    produces analyses identifying and reducing the causes of racial disparities in public safety and advocates for large-scale and
+                                    meaningful change. Using evidence-based approaches to social justice, they use data to create levers for social, cultural and policy
+                                    change. Our aim is to bridge the divide of communication, generational mistrust, and suffering. But most of all, they aim to be the path
+                                    that science can forge towards public safety, community trust, and racial equity.
+                                </p>
+                                <div class="charity-button">
+                                    <a href="https://policingequity.org/" class="e-btn e-outline e-primary" target="_blank" rel="noopener noreferrer">Learn More</a>
+                                </div>
+                            </div>
                         </div>
                     }
                     else if (anchor.Contains("prosecution", StringComparison.OrdinalIgnoreCase))
                     {
-                        <div class="resource">
+                        <div class="charity">
+                            <img alt="Equal Justice Initiative Logo" src="https://s12982.pcdn.co/wp-content/uploads/2016/03/logo-eji.png" class="charity-thumbnail" />
+                            <div class="charity-content">
+                                <h4>Equal Justive Initiative</h4>
+                                <p>
+                                    The Equal Justice Initiative provides legal representation to people who have been illegally convicted, unfairly sentenced, or
+                                    abused in state jails and prisons. They boast a rare perfect score on Charity Navigator. EJI actively challenges the death penalty and
+                                    excessive punishment and also provides re-entry assistance to formerly incarcerated people. EJI works with communities that have been
+                                    marginalized by poverty and discouraged by unequal treatment and thus is committed to changing the narrative about race in America.
+                                    They produce groundbreaking reports, an award-winning calendar, and short films that explore our nation’s history of racial injustice.
+                                </p>
+                                <div class="charity-button">
+                                    <a href="https://eji.org/" class="e-btn e-outline e-primary" target="_blank" rel="noopener noreferrer">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="charity">
+                            <img alt="The Bail Project Logo" src="https://pbs.twimg.com/profile_images/928396415792971776/B1ru32wF.jpg" class="charity-thumbnail" />
+                            <div class="charity-content">
+                                <h4>The Bail Project</h4>
+                                <p>
+                                    The Bail Project combats mass incarceration by disrupting the money bail system—one person at a time.
+                                    We restore the presumption of innocence, reunite families, and challenge a system that criminalizes race and poverty.
+                                    We’re on a mission to end cash bail and create a more just, equitable, and humane pretrial system. Because bail is returned
+                                    at the end of a case, donations to The Bail Project™ National Revolving Bail Fund can be recycled and reused to pay bail two
+                                    to three times per year, maximizing the impact of every dollar. 100% of online donations are used to bring people home.
+                                </p>
+                                <div class="charity-button">
+                                    <a href="https://bailproject.org/" class="e-btn e-outline e-primary" target="_blank" rel="noopener noreferrer">Learn More</a>
+                                </div>
+                            </div>
                         </div>
                     }
                     else if (anchor.Contains("political-action", StringComparison.OrdinalIgnoreCase))
                     {
-                        <div class="resource">
+                        <div class="charity">
+                            <img alt="Campaign Zero Logo" src="https://avatars.githubusercontent.com/u/19274654?s=200&v=4" class="charity-thumbnail" />
+                            <div class="charity-content">
+                                <h4>Campaign Zero</h4>
+                                <p>
+                                    Campaign ZERO was developed with contributions from activists, protesters and researchers across the nation.
+                                    This data-informed platform presents a package of policy solutions to end police violence in America.
+                                    It integrates community demands and policy recommendations from research organizations and President Obama's Task Force on
+                                    21st Century Policing. Campaign Zero is unique in its data and research based approach and it's ability to enact real legislation and change.
+                                </p>
+                                <div class="charity-button">
+                                    <a href="https://www.joincampaignzero.org/" class="e-btn e-outline e-primary" target="_blank" rel="noopener noreferrer">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="charity">
+                            <img alt="Advancement Project Logo" src="/Assets/Advancement-Project.png" class="charity-thumbnail" />
+                            <div class="charity-content">
+                                <h4>Campaign Zero</h4>
+                                <p>
+                                    Advancement Project is a next generation, multi-racial civil rights organization. Rooted in the great human rights struggles for
+                                    equality and justice, we exist to fulfill America’s promise of a caring, inclusive and just democracy. We use innovative tools and
+                                    strategies to strengthen social movements and achieve high impact policy change. We envision a future where people of color are
+                                    free – where they can thrive, be safe and exercise power. Driven by the genius of ordinary people and their movements, racism will no
+                                    longer exist and justice will be radically transformed.
+                                </p>
+                                <div class="charity-button">
+                                    <a href="https://advancementproject.org/home/" class="e-btn e-outline e-primary" target="_blank" rel="noopener noreferrer">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="charity">
+                            <img alt="National Institute for Criminal Justice Reform Logo" src="https://pbs.twimg.com/profile_images/1268181417743118336/kqczBXyb_400x400.jpg" class="charity-thumbnail" />
+                            <div class="charity-content">
+                                <h4>National Institute for Criminal Justice Reform</h4>
+                                <p>
+                                    The National Institute for Criminal Justice Reform (NICJR) works to reduce incarceration and violence, improve the outcomes
+                                    of system-involved youth and adults, and increase the capacity and expertise of the organizations that serve these individuals.
+                                    NICJR provides technical assistance, consulting, research, organizational development, and advocacy in the fields of juvenile and
+                                    criminal justice, youth development, and violence prevention. NICJR works with an array of organizations, including government
+                                    agencies, nonprofit organizations, and philanthropic foundations.
+                                </p>
+                                <div class="charity-button">
+                                    <a href="https://nicjr.org/" class="e-btn e-outline e-primary" target="_blank" rel="noopener noreferrer">Learn More</a>
+                                </div>
+                            </div>
                         </div>
                     }
-                    else if (anchor.Contains("bail", StringComparison.OrdinalIgnoreCase))
+                    else if (anchor.Contains("education", StringComparison.OrdinalIgnoreCase))
                     {
-                        <div class="resource">
+                        <div class="charity">
+                            <img alt="Thin Blue Lie Logo" src="/Assets/ThinBlueLie-Logo.png" class="charity-thumbnail" />
+                            <div class="charity-content">
+                                <h4>Thin Blue Lie</h4>
+                                <p>
+                                    We here at Thin Blue Lie rely on donations just like yours to keep this website up and our database live. Through crowdsourcing
+                                    our data, we can circumnavigate tradional legal avenues to misconduct data. By being beholden only to our donors, we can pursue
+                                    ambitious goals and research projects. We work hard to make sure our data, America's data, stays open and free to access with no
+                                    restrictions. In the future only hope to expand further to the smallest towns in America and eventually internationally.
+                                </p>
+                                <div class="charity-button">
+                                    <form action="https://www.paypal.com/donate" method="post" target="_top">
+                                        <input type="hidden" name="hosted_button_id" value="TG95ZRQRCXPMU" />
+                                        <button class="e-btn e-outline e-primary" border="0" name="submit" title="PayPal - The safer, easier way to pay online!"
+                                                alt="Donate with PayPal button">
+                                            Donate
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="charity">
+                            <img alt="National Museum of African American History and Culture Logo" src="https://public.media.smithsonianmag.com/filer/b8/bc/b8bc6038-44c9-46eb-b78e-9150569c3eaa/nmaahc_logo.jpg" class="charity-thumbnail" />
+                            <div class="charity-content">
+                                <h4>National Museum of African American History and Culture</h4>
+                                <p>
+                                    The National Museum of African American History and Culture is the only national museum devoted exclusively to the documentation of
+                                    African American life, history, and culture. It was established by Act of Congress in 2003, following decades of efforts to promote and
+                                    highlight the contributions of African Americans. To date, the Museum has collected more than 36,000 artifacts and nearly 100,000 individuals
+                                    have become members.
+                                </p>
+                                <div class="charity-button">
+                                    <a href="https://nmaahc.si.edu/" class="e-btn e-outline e-primary" target="_blank" rel="noopener noreferrer">Learn More</a>
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>
@@ -115,7 +270,7 @@
 </div>
 @code {
     string anchor;
-    string[] Sections = { "Featured", "Prosecution", "Political-Action", "Bail"};
+    string[] Sections = { "Featured", "Prosecution", "Political-Action", "Education" };
     protected override void OnInitialized()
     {
         navManager.LocationChanged += LocationChanged;

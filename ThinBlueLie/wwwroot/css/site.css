@@ -692,6 +692,7 @@ body {
 
 .charity-thumbnail {
     max-height: 150px;
+    max-width: 150px;
 }
 
 .charity-button {
