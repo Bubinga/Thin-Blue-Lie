@@ -1,4 +1,5 @@
 ﻿@page "/Solutions"
+@inject IJSRuntime JS
 @using Syncfusion.Blazor.Navigations
 
 <Title>Possible Solutions - Thin Blue Lie</Title>
@@ -29,13 +30,17 @@
                 the solutions we have laid out here, misconduct can be severely curtailed. Each article cites various sources and points to other resources to
                 learn more about the topic.
             </p>
+            <p class="text-black-50">
+                <i data-feather="slash"></i> = Solution has not been written about yet.
+            </p>
         </div>
         <hr class="blueline nogap" />
     </div>
     <div class="card-columns">
         <div class="card">
             <div class="card-body">
-                <a class="card-title">Defund the Police</a>
+                <a class="card-title">Defund the Police <i data-feather="slash"></i>
+                </a>
                 <p class="card-text">
                     
                 </p>
@@ -43,7 +48,17 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <a class="card-title">Encouraging Inter-cop Intervention</a>
+                <a class="card-title">Demilitarization <i data-feather="slash"></i></a>
+                <p class="card-text">
+                    Through the 1033 Program, police agencies are given surplus military supplies ranging from grenade launchers to 
+                    mine-resistant vehicles. By limiting access to this equipment, police resort to violence less meaning fewer people 
+                    and pets are killed and police become more of a protective than occupying presence.
+                </p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <a class="card-title">Training <i data-feather="slash"></i></a>
                 <p class="card-text">
                     
                 </p>
@@ -51,7 +66,15 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <a class="card-title">Training</a>
+                <a class="card-title">Community Oversight <i data-feather="slash"></i></a>
+                <p class="card-text">
+                   
+                </p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <a class="card-title">Encouraging Inter-cop Intervention <i data-feather="slash"></i></a>
                 <p class="card-text">
                     
                 </p>
@@ -59,31 +82,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <a class="card-title">Community Oversight</a>
-                <p class="card-text">
-                   
-                </p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <a class="card-title">Ending Policing for Profit</a>
-                <p class="card-text">
-                   
-                </p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <a class="card-title">Demilitarization</a>
-                <p class="card-text">
-                   
-                </p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <a class="card-title">Restructure Police Unions</a>
+                <a class="card-title">Restructure Police Unions <i data-feather="slash"></i></a>
                 <p class="card-text">
                     Police unions are a major obstacle to reform and function to actively protect offending officers. 
                     By limiting the power of police unions through actions like opening collective bargaining to the 
@@ -91,5 +90,22 @@
                 </p>
             </div>
         </div>
+        <div class="card">
+            <div class="card-body">
+                <a class="card-title">Ending Policing for Profit <i data-feather="slash"></i></a>
+                <p class="card-text">
+                   
+                </p>
+            </div>
+        </div>
     </div>
 </div>
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("feather.replace");
+        }
+    }
+}
