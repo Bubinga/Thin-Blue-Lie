@@ -707,10 +707,6 @@ body {
     padding-bottom: 10px;
     border-bottom: 1px solid #dee2e6
 }
-.resource i {
-    margin: 0px;
-    padding: 0px;
-}
     .charity u, .resource u {
         margin: 0px;
     }
@@ -726,9 +722,13 @@ body {
     padding-right: 250px;
 }
 
-    .charity-content *, .resource-content * {
+    .charity-content > *, .resource-content > * {
         margin-left: 10px;
     }
+
+.resource svg {
+    margin-right: 7px;
+}
 
 .charity-thumbnail, .resource-thumbnail {
     max-height: 150px;
