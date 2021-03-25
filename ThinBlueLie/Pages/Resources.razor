@@ -20,7 +20,7 @@
 </div>
 <div id="wrapper">
     <div class="col-lg-12 col-sm-12 col-md-12">
-        <SfSidebar EnableGestures="false" @ref="sidebarObj" EnableDock=true  Animate="false" Target=".main-content" MediaQuery="(min-width:768px)" @bind-IsOpen="SidebarToggle">
+        <SfSidebar EnableGestures="false" @ref="sidebarObj" EnableDock=true Animate="false" Target=".main-content" MediaQuery="(min-width:768px)" @bind-IsOpen="SidebarToggle">
             <ChildContent>
                 <div class="nav-with-bar">
                     <ul class="pl-3 pl-sm-5">
@@ -37,15 +37,21 @@
                             </NavLink>
                         </li>
                         <li>
+                            <NavLink class="nav-link d-flex align-items-center" href="/Resources#books">
+                                <i data-feather="book"></i>
+                                <span class="category">Books</span>
+                            </NavLink>
+                        </li>
+                        <li>
                             <NavLink class="nav-link d-flex align-items-center" href="/Resources#datasets">
                                 <i data-feather="database"></i>
                                 <span class="category">Data Sets</span>
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink class="nav-link d-flex align-items-center" href="/Resources#books">
-                                <i data-feather="book"></i>
-                                <span class="category">Books</span>
+                            <NavLink class="nav-link d-flex align-items-center" href="/Resources#articles">
+                                <i data-feather="columns"></i>
+                                <span class="category">Articles</span>
                             </NavLink>
                         </li>
                         <li>
@@ -83,21 +89,165 @@
                     <hr class="blueline nogap" />
                     <br />
                 </div>
-                <div>
+                <div class="resource-list">
                     @if (anchor == null) { }
                     else if (anchor.Contains("featured", StringComparison.OrdinalIgnoreCase))
                     {
                         <div class="resource">
+                            <img aria-hidden="true" src="https://m.media-amazon.com/images/I/415s-zIcqHL.jpg" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4><u>Bias</u> by Jennifer Eberhardt</h4>
+                                <p>
+                                    With a perspective that is simultaneously scientific, investigative, and informed by personal experience, Dr. Jennifer Eberhardt, social psychologist of Stanford, provides an exceptional examination of the effects, causes, and possible mitigation of bias. From prisons to her own life she examines how bias causes the racism we see in the world and then offers us tools to address it. While bias’s grasp seems almost inescapable, Eberhardt shows through experimentation and brilliant scientific explanation how we can overcome it. The ideas presented provide an approach applicable to much more than just police misconduct.
+                                </p>
+                                <a href="https://www.amazon.com/Biased-Uncovering-Hidden-Prejudice-Shapes-ebook/dp/B07DH89ZDY" target="_blank" rel="noopener noreferrer"
+                                   type="button" class="btn btn-outline-info">
+                                    Amazon
+                                </a>
+                            </div>
                         </div>
                     }
                     else if (anchor.Contains("books", StringComparison.OrdinalIgnoreCase))
                     {
                         <div class="resource">
+                            <img aria-hidden="true" src="https://m.media-amazon.com/images/I/415s-zIcqHL.jpg" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4><u>Bias</u> by Jennifer Eberhardt</h4>
+                                <p>
+                                    With a perspective that is simultaneously scientific, investigative, and informed by personal experience, Dr. Jennifer Eberhardt, social psychologist of Stanford, provides an exceptional examination of the effects, causes, and possible mitigation of bias. From prisons to her own life she examines how bias causes the racism we see in the world and then offers us tools to address it. While bias’s grasp seems almost inescapable, Eberhardt shows through experimentation and brilliant scientific explanation how we can overcome it. The ideas presented provide an approach applicable to much more than just police misconduct.
+                                </p>
+                                <a href="https://www.amazon.com/Biased-Uncovering-Hidden-Prejudice-Shapes-ebook/dp/B07DH89ZDY" target="_blank" rel="noopener noreferrer"
+                                   type="button" class="btn btn-outline-info">
+                                    Amazon
+                                </a>
+                            </div>
+                        </div>
+                        <div class="resource">
+                            <img aria-hidden="true" src="https://images-na.ssl-images-amazon.com/images/I/81QPD1bzTHL.jpg" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4><u>The New Jim Crow</u> by Michelle Alexander</h4>
+                                <p>
+                                    Called one of the most influential books of the past 20 years, <i>The New Jim Crow</i> expertly shows how America’s criminal justice system has effectively replicated the effects of Jim Crow laws and created a new racial caste system. Through statistics and legal citations she explores how the get-tough approach to crime combined with Reagan’s war on drugs has devastated Black America. Through this book, Michelle Alexander laid the intellectual basis for the revitalized critique of America’s criminal justice system over the past decade. We consider <i>The New Jim Crow</i> essential reading.
+                                </p>
+                                <a href="https://www.amazon.com/New-Jim-Crow-Incarceration-Colorblindness/dp/1620971933/" target="_blank" rel="noopener noreferrer"
+                                   type="button" class="btn btn-outline-info">
+                                    Amazon
+                                </a>
+                            </div>
+                        </div>
+                        <div class="resource">
+                            <img aria-hidden="true" src="https://images-na.ssl-images-amazon.com/images/I/91NW+YOFFaL.jpg" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4><u>From the War on Poverty to the War on Crime: The Making of Mass Incarceration in America</u> by Elizabeth Hinton</h4>
+                                <p>
+                                    Although Republicans have long been easy targets to blame for the dysfunctional police and criminal justice system, in <i>From the War on Poverty to the War on Crime</i> esteemed professor Elizabeth Hinton presents a rare and persuasive argument that our carceral state was built “by a consensus of liberals and conservatives who privileged punitive responses to urban problems as a reaction to the civil rights movement”. Called a “prequel to Michelle Alexander’s <i>The New Jim Crow</i>”, this book dives deep into nuance often overlooked and illustrates how we arrived at where we are today.
+                                </p>
+                                <a href="https://www.amazon.com/War-Poverty-Crime-Incarceration-America/dp/0674737237" target="_blank" rel="noopener noreferrer"
+                                   type="button" class="btn btn-outline-info">
+                                    Amazon
+                                </a>
+                            </div>
+                        </div>
+                        <div class="resource">
+                            <img aria-hidden="true" src="https://images-na.ssl-images-amazon.com/images/I/91lFTK2639L.jpg" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4><u>Between the World and Me</u> by Ta-Nehisi Coates</h4>
+                                <p>
+                                    Ta-Nehisi Coates’ Between the World and Me, a letter to his 15-year-old son, is an intimate insight into Coates’s life and thoughts as a black man and now a black father. Coates wants so much for his son but worries that it will all be taken away as America has done to black people in the past. While not as academic as the other books listed, Between the World and Me still manages to masterfully teach and provoke thought in a personal and exploratory narrative.
+                                </p>
+                                <a href="https://www.amazon.com/Between-World-Me-Ta-Nehisi-Coates/dp/0451482212" target="_blank" rel="noopener noreferrer"
+                                   type="button" class="btn btn-outline-info">
+                                    Amazon
+                                </a>
+                            </div>
+                        </div>
+                        <div class="resource">
+                            <img aria-hidden="true" src="https://images-na.ssl-images-amazon.com/images/I/51rWOpoVNrL._SX323_BO1,204,203,200_.jpg" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4><u>From #BlackLivesMatter to Black Liberation</u> by Keeanga-Yamahtta Taylor</h4>
+                                <p>
+                                    Academic Keeanga-Yamahtta Taylor places the #BlackLivesMatter movement in its historical context in <i>From #BlackLivesMatter to Black Liberation</i> by examining the lines from early American racism to contemporary mass incarceration and police violence. Taylor also presents a persuasive case on why a fight against racism must also be a fight against our existing economic system. Activist, philosopher, and favorite of Thin Blue Lie, Cornel West called this book “the best analysis we have of the #BlackLivesMatter moment of the long struggle for freedom in America.”
+                                </p>
+                                <a href="https://www.amazon.com/BlackLivesMatter-Black-Liberation-Keeanga-Yamahtta-Taylor/dp/1608465624" target="_blank" rel="noopener noreferrer"
+                                   type="button" class="btn btn-outline-info">
+                                    Amazon
+                                </a>
+                            </div>
+                        </div>
+                        <div class="resource">
+                            <img aria-hidden="true" src="https://pbs.twimg.com/media/B0pc4ZmCcAAGOa2.png:large" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4><a href="https://www.themarshallproject.org/books">Marshall Project Book List</a></h4>
+                                <p>
+                                    The Marshall Project, a nonpartisan, nonprofit news organization that covers and advocates for changes in the U.S. criminal justice system, has put together a list of books about criminal justice, curated by the staff. If you go through all the books listed here, the Marshall Project’s list extends it with equally interesting books for you to read.
+                                </p>
+                                <a href="https://www.themarshallproject.org/books" target="_blank" rel="noopener noreferrer"
+                                   type="button" class="btn btn-outline-info">
+                                    Marshall Project List
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    else if (anchor.Contains("articles", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                        </div>
+                    }
+                    else if (anchor.Contains("datasets", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="resource">
+                            <img aria-hidden="true" src="https://ritholtz.com/wp-content/uploads/2020/05/map.jpg" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4><a href="https://mappingpoliceviolence.org/">Mapping Police Violence</a></h4>
+                                <p>
+                                    Mapping Police Violence puts a location to every case of police murder and provides several charts and graphs showing the trendlines in the data. Their entire database can also be downloaded.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="resource">
+                            <img aria-hidden="true" src="https://www.alexrojas.org/img/portfolio/p9.jpeg" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4><a href="https://www.washingtonpost.com/graphics/investigations/police-shootings-database/">
+                                        Washington Post Police Shootings Database</a>
+                                </h4>
+                                <p>
+                                    In 2015, The Washington Post began to log every fatal shooting by an on-duty police officer in the United States. In that time there have been more than 5,000 such shootings recorded by The Post. Each killing contains information such as the name of the victim, thier race, sex, and age, etc.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="resource">
+                            <img aria-hidden="true" src="/Assets/PuppyCideLogo.png" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4><a href="https://puppycidedb.com/">Puppycide Database Project</a></h4>
+                                <p>
+                                    The goal of PuppycideDB is to provide a fast, comprehensive record of every police shooting of an animal in the United States using open source software that can be shared freely and anonymously with anyone and hosted anywhere. They allow easy and free access to add and read from their database.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="resource">
+                            <img aria-hidden="true" src="https://action.aclu.org/files/aclu/NYCLU_Logo_Blue_RGB_small_0.png" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4><a href="https://www.nyclu.org/en/campaigns/nypd-misconduct-database">NYPD Misconduct Complaint Database</a></h4>
+                                <p>
+                                    The NYPD Misconduct Complaint Database is a repository of complaints made by the public on record at the Civilian Complaint Review Board. The database includes 323,911 unique complaint records involving 81,550 active or former NYPD officers. It is one of the largest police misconduct databases that exist.
+                                </p>
+                            </div>
                         </div>
                     }
                     else if (anchor.Contains("podcasts", StringComparison.OrdinalIgnoreCase))
                     {
                         <div class="resource">
+                            <img aria-hidden="true" src="https://admin.itsnicethat.com/images/0AVEHA9dz74865I_QAtzKcixLtQ=/112474/format-webp%7Cwidth-2880/5a5794357fa44cfef4000535.jpg" class="resource-thumbnail" />
+                            <div class="resource-content">
+                                <h4>Warriors in the Garden - This American Life</h4>
+                                <p>
+                                    This episode of <i>This American Life</i> is by reporter Saidu Tejan-Thomas Jr. of podcast <i>Resistance</i>, who tells the story of three men who came together to protest the murder of George Floyd. They were unified, loud, and impressive, but over time these three friends end up in three very different places. This episode tells of the heat of protests, attempted murder, the many expected cases of police misconduct, and how the three men eventually decided to best combat police brutality.
+                                </p>
+                                <a href="https://www.thisamericanlife.org/733/warriors-in-the-garden" target="_blank" rel="noopener noreferrer"
+                                   type="button" class="btn btn-outline-info">
+                                    This American Life Website
+                                </a>
+                            </div>
                         </div>
                     }
                     else if (anchor.Contains("public-figures", StringComparison.OrdinalIgnoreCase))
@@ -107,7 +257,60 @@
                     }
                     else if (anchor.Contains("art", StringComparison.OrdinalIgnoreCase))
                     {
-                        <div class="resource">
+                        <div class="card-columns">
+                            <div class="card">
+                                <img class="card-img-top" src="https://news.harvard.edu/wp-content/uploads/2020/06/082619_HipHop_010_V_1785x2500.jpg" aria-hidden="true">
+                                <div class="card-body">
+                                    <a class="card-title h5" href="https://news.harvard.edu/gazette/story/2020/07/hiphops-long-history-of-exposing-police-brutality/">
+                                        Protesting police violence, a playlist
+                                    </a>
+                                    <p class="card-text">
+                                        From Grandmaster Flash and the Furious Five to Kendrick Lamar, Professor Marcyliena Morgan explains in an interview how police brutality has been discussed in hip hip over time and how each one, in a way, formed the other.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/en/a/a0/H.E.R._-_I_Can%27t_Breathe.png" aria-hidden="true">
+                                <div class="card-body">
+                                    <h5 class="card-title">I Can't Breathe</h5>
+                                    <p class="card-text">
+                                        <a href="https://open.spotify.com/track/4CPszpSnlbgnQLIQYyzIR2?si=mDN_TeFgTbKVCO6YzbfsNQ" class="btn btn-outline-success">Spotify</a>
+                                        <a href="https://www.youtube.com/watch?v=E-1Bf_XWaPE" class="btn btn-outline-danger">Youtube</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <img class="card-img-top" src="https://images-na.ssl-images-amazon.com/images/I/81g9bu3VTvL._AC_UL600_SR600,600_.jpg" aria-hidden="true">
+                                <div class="card-body">
+                                    <h5 class="card-title">Cops Shot the Kid - Nas</h5>
+                                    <p class="card-text">
+                                        <a href="https://open.spotify.com/track/1vi9adPJiD4d22ybGp25hy?si=zS03MUTDTGCdLuP2mn_aGQ" class="btn btn-outline-success">Spotify</a>
+                                        <a href="https://www.youtube.com/watch?v=TBT7ytgVB9c" class="btn btn-outline-danger">Youtube</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <img class="card-img-top" src="https://www.rap-up.com/app/uploads/2013/09/j-cole-crooked-smile.jpg" aria-hidden="true" />
+                                <div class="card-body">
+                                    <h5 class="card-title">Crooked Smile - J Cole</h5>
+                                    <p class="card-text">
+                                        <a href="https://www.youtube.com/watch?v=fzzMOMkjm8A" class="btn btn-outline-danger">Youtube</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/en/f/fe/Black_America_Again.png" aria-hidden="true" />
+                                <div class="card-body">
+                                    <h5 class="card-title">Black America Again - Common ft. Stevie Wonder</h5>
+                                    <p class="card-text">
+                                        A powerful 21-minute video on what Black America could be, what it is, and what is preventing it. The song alone is moving, but when paired with the video it's even more.
+                                    </p>
+                                    <p class="card-text">
+                                        <a href="https://open.spotify.com/track/5ICTtAzYoMlPfaAwmaDjYy?si=NSJ6Kkd1TEWxc6u0D6XUxQ" class="btn btn-outline-success">Spotify</a>
+                                        <a href="https://www.youtube.com/watch?v=WMNyCNdgayE" class="btn btn-outline-danger">Youtube</a>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>
@@ -117,7 +320,7 @@
 </div>
 @code {
     string anchor;
-    string[] Sections = { "Featured", "Books", "DataSets", "Podcasts", "Public-Figures", "Art" };
+    string[] Sections = { "Featured", "Books", "Articles", "DataSets", "Podcasts", "Public-Figures", "Art" };
     protected override void OnInitialized()
     {
         navManager.LocationChanged += LocationChanged;
