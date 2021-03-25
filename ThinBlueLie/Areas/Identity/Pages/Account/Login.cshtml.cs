@@ -20,20 +20,17 @@ namespace ThinBlueLie.Areas.Identity.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, 
-            ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _logger = logger;
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
+        [BindProperty]
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public string ReturnUrl { get; set; }
@@ -67,7 +64,7 @@ namespace ThinBlueLie.Areas.Identity.Pages.Account
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();;
 
             ReturnUrl = returnUrl;
         }
@@ -86,22 +83,24 @@ namespace ThinBlueLie.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (!user.EmailConfirmed)
+                else if (!user.EmailConfirmed)
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt. You must have a confirmed email account.");
                     return Page();
                 }
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     Serilog.Log.Information("User {Email} logged in.", user.Email);
-                    return LocalRedirect(returnUrl);
+                    if (Url.IsLocalUrl(returnUrl))
+                        return LocalRedirect(returnUrl);
+                    return RedirectToPage("/");
                 }
-                if (result.RequiresTwoFactor)
+                else if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
-                if (result.IsLockedOut)
+                else if (result.IsLockedOut)
                 {
                     Serilog.Log.Warning("User account {Email} locked out.", user.Email);
                     return RedirectToPage("./Lockout");

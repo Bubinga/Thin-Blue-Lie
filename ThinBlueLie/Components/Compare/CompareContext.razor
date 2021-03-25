@@ -3,6 +3,7 @@
 @using System.IO
 @using DiffPlex.DiffBuilder;
 @using DiffPlex.DiffBuilder.Model;
+@using KellermanSoftware.CompareNetObjects
 @inject IJSRuntime JSRuntime
 @inject ISideBySideDiffBuilder sideBySide
 
@@ -39,6 +40,16 @@ else
     </div>
 }
 @code {
+    [CascadingParameter(Name = "EditsOnly")]
+    public bool EditsOnly { get; set; }
+    private int id;
+    [CascadingParameter]
+    public int Id
+    {
+        get { return id; }
+        set { id = value; isNewEdit = true; }
+    }
+    bool isNewEdit = true;
     [Parameter]
     public int MaxHeight { get; set; } = 300;
 
@@ -62,9 +73,10 @@ else
     private SideBySideDiffModel diff;
     private ElementReference pane;
     private int paneHeight;
-
+    CompareLogic compareLogic;
     string PrettifyHtmlString(string html)
     {
+        compareLogic = new CompareLogic();
         var parser = new HtmlParser();
         var dom = parser.ParseDocument("<html><body></body></html>");
         var document = parser.ParseFragment(html, dom.Body);
@@ -84,7 +96,7 @@ else
     /// <returns></returns>
     protected override async Task OnParametersSetAsync()
     {
-        if (IsNewEvent == false)
+        if (IsNewEvent == false && isNewEdit)
         {
             //Make it tabbed nicely
             OldContext = PrettifyHtmlString(OldContext);

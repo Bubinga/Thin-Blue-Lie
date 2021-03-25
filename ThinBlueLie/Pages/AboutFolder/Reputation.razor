@@ -1,14 +1,15 @@
 ﻿@page "/About/Reputation"
-@using static DataAccessLibrary.Enums.PrivilegeEnum
+@using static DataAccessLibrary.Enums.ReputationEnum
 @using static ThinBlueLie.Helper.Extensions.EnumExtensions 
 
 <Title>Reputation System - Thin Blue Lie</Title>
 <Meta Property="og:type" Content="article" />
 <Meta Property="og:title" Content="Reputation System" />
-<Meta Name="description" Content="Thin Blue Lie uses a Reputation system to moderate the website. 
-      The more reputation you have, which you can get from contributing to the database, the more you can do." />
+<Meta Name="description" Content="Thin Blue Lie uses a Reputation system to moderate the website. The more reputation you have, which you can get from contributing to the database, the more you can do." />
 
-
+@{ 
+    string format = "+#.##;-#.##;0";
+}
 <div class="container mt-4">   
     <div class="main-content" style="height: 250px;">
         <div class="main-content">
@@ -25,31 +26,32 @@
                     <div class="row">
                         <div class="col-6">
                             <p>
-                                <strong>Submission:</strong><span class="text-success">+15</span>
+                                <strong>Submission:</strong><span class="text-success">@(((int)ReputationChangeEnum.NewEvent).ToString(format))</span>
                                 You submitted a new event to our database.
                             </p>
                             <p>
-                                <strong>Edits Accepted:</strong><span class="text-success">+10</span>
+                                <strong>Edits Accepted:</strong><span class="text-success">@(((int)ReputationChangeEnum.EditAccepted).ToString(format))</span>
                                 One of your edits(not to your own post) got accepted
                             </p>
                             <p>
-                                <strong>Helpful Flags:</strong><span class="text-success">+5</span>
+                                <strong>Helpful Flags:</strong><span class="text-success">@(((int)ReputationChangeEnum.HelpFulFlag).ToString(format))</span>
                                 You flagged something troublesome and brought it to the attention
                                 of a moderator! Thank you!
                             </p>
                         </div>
                         <div class="col-6">
                             <p>
-                                <strong>Thorough Post</strong><span class="text-success">+25</span>
+                                <strong>Thorough Post</strong><span class="text-success">@(((int)ReputationChangeEnum.ThoroughEvent).ToString(format))</span>
                                 One of your posts is well fleshed out. It has a long enough context, 
                                 enough media, and is accurate.
                             </p>
                             <p>
-                                <strong>Bad Post Deleted:</strong><span class="text-danger">-5</span>
+                                <strong>Bad Post Deleted:</strong><span class="text-danger">@(((int)ReputationChangeEnum.EventDeleted).ToString(format))</span>
                                 A post of yours got deleted by a moderator for breaking a rule.
                             </p>
                             <p>
-                                <strong>Post Gets 6 Violent, Spam, or Fake Flags:</strong><span class="text-danger">-15</span>
+                                <strong>Post Gets 6 Violent, Spam, or Fake Flags:</strong><span class="text-danger">
+                                @(((int)ReputationChangeEnum.MaliciousPost).ToString(format))</span>
                                 Only going to happen to malicous posts. 
                             </p>
                         </div>

@@ -9,7 +9,7 @@ namespace DataAccessLibrary.DataModels.EditModels
         public int IdEditHistory { get; set; }
         public DateTime Timestamp { get; set; }
         public byte Confirmed { get; set; }
-        public int? SubmittedBy { get; set; }
+        public int SubmittedBy { get; set; }
         public int? IdTimelineinfo { get; set; }
         public byte Edits { get; set; }
         public byte EditMedia { get; set; }

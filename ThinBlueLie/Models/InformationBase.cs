@@ -4,25 +4,21 @@ using Syncfusion.Blazor.RichTextEditor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ThinBlueLie.Helper;
-using ThinBlueLie.Helper.Extensions;
-using ThinBlueLie.Models;
 using static DataAccessLibrary.Enums.MediaEnums;
 using static ThinBlueLie.Components.SimilarPeople;
 using static ThinBlueLie.Helper.Extensions.EnumExtensions;
-using static ThinBlueLie.Models.SubmitBase;
 using static ThinBlueLie.Searches.SearchClasses;
 
-namespace ThinBlueLie.Bases
+namespace ThinBlueLie.Models
 {
     public class InformationBase : ComponentBase
     {
 
         [Inject]
-        public SearchesSubmit searchesSubmit { get; set; }
+        public SearchesSubmit SearchesSubmit { get; set; }
 
-        public SubmitModel model = new SubmitModel()
+        public SubmitModel model = new()
         {
             Timelineinfos = new ViewTimelineinfo(),
             Medias = new List<ViewMedia> { 
@@ -34,7 +30,7 @@ namespace ThinBlueLie.Bases
             Subjects = new List<ViewSubject> { new ViewSubject { Rank = 0 } }
         };
 
-        public List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
+        public List<ToolbarItemModel> Tools = new()
         {
             new ToolbarItemModel() { Command = ToolbarCommand.Bold },
             new ToolbarItemModel() { Command = ToolbarCommand.Italic },
@@ -124,7 +120,7 @@ namespace ThinBlueLie.Bases
         internal async void SuggestSubjects(SimilarPersonCallback personCallback)
         {
             //TODO don't do suggest if name is too short or something
-            var similarSubject = await searchesSubmit.SearchSubject(personCallback.Name);
+            var similarSubject = await SearchesSubmit.SearchSubject(personCallback.Name);
             SimilarSubjects[personCallback.Index] = similarSubject;
             this.StateHasChanged();
         }
@@ -133,7 +129,7 @@ namespace ThinBlueLie.Bases
         internal async void SuggestOfficers(SimilarPersonCallback personCallback)
         {
             //TODO don't do suggest if name is too short or something
-            var similarOfficer = await searchesSubmit.SearchOfficer(personCallback.Name);
+            var similarOfficer = await SearchesSubmit.SearchOfficer(personCallback.Name);
             SimilarOfficers[personCallback.Index] = similarOfficer;
             this.StateHasChanged();
         }

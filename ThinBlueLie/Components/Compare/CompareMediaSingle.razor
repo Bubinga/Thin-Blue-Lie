@@ -3,15 +3,11 @@
 @using static ThinBlueLie.Helper.Algorithms.LinkConverter
 @using static ThinBlueLie.Helper.Extensions.EnumExtensions
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
+@using KellermanSoftware.CompareNetObjects
 
 
-<style>
-    .reddit-video-wrapper videowrapper{
-        height: 275px !important;
-    }
-</style>
 <div class="row my-2">
-    @if (IsNewEvent == false)
+    @if (IsNewEvent == false && !AreEqual)
     {
         <div class="col-6 @(Media.Item1 == null && Media.Item2 != null? "imaginary-item" : "")
                             @(Media.Item1 != null && Media.Item2 == null? "deleted-item" : "")">
@@ -79,7 +75,7 @@
             }
         </div>
     }
-    <div class="@(IsNewEvent? "col-12" : "col-6") @((Media.Item2 == null && Media.Item1 != null && !IsNewEvent)? "imaginary-item" : "")
+    <div class="@(IsNewEvent? "col-12" : AreEqual? "pl-3" : "col-6") @((Media.Item2 == null && Media.Item1 != null && !IsNewEvent)? "imaginary-item" : "")
                         @((Media.Item1 == null && Media.Item2 != null && !IsNewEvent)? "inserted-item" : "")">
         @if (Media.Item2 != null)
         {
@@ -137,7 +133,7 @@
                     }
                     else if ((Media.Item2.MediaType == MediaEnums.MediaTypeEnum.Image))
                     {
-                        <img alt="image preview"  class="img-fluid" src="@Media.Item2.ContentUrl" style="max-height:275px; width: auto;"/>
+                        <img alt="image preview" class="img-fluid" src="@Media.Item2.ContentUrl" style="max-height:275px; width: auto;" />
                     }
                     else if ((Media.Item2.MediaType == MediaEnums.MediaTypeEnum.News))
                     {
@@ -154,13 +150,17 @@
 
     [Parameter]
     public SideBySideDiffModel? Model { get; set; }
-    [CascadingParameter]
+    [CascadingParameter(Name = "IsNewEvent")]
     public bool IsNewEvent { get; set; }
     string youtube2Url;
     string youtube1Url;
+    CompareLogic compareLogic;
+    bool AreEqual;
     protected override async Task OnParametersSetAsync()
     {
-        //TODO this is a crappy fix to youtube videos not having fullscreen. 
+        compareLogic = new();
+        AreEqual = compareLogic.Compare(Media.Item2, Media.Item1).AreEqual;
+        //TODO this is a crappy fix to youtube videos not having fullscreen.
         await Task.Delay(50);
         if (Media.Item2?.MediaType == MediaTypeEnum.Video && Media.Item2?.SourceFrom == SourceFromEnum.Youtube)
         {

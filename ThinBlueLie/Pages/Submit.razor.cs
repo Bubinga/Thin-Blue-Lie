@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using AutoMapper;
+using Dapper;
 using DataAccessLibrary.DataModels.EditModels;
 using DataAccessLibrary.Enums;
 using DataAccessLibrary.UserModels;
@@ -6,6 +7,7 @@ using Ganss.XSS;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.JSInterop;
 using MySqlConnector;
 using Syncfusion.Blazor.Calendars;
 using System;
@@ -13,22 +15,46 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ThinBlueLie.Bases;
 using ThinBlueLie.Helper;
 using ThinBlueLie.Helper.Extensions;
+using ThinBlueLie.Models;
 using static ThinBlueLie.Helper.Algorithms.WebsiteProfiling.WebsiteProfile;
+using static ThinBlueLie.Searches.SearchClasses;
 
-namespace ThinBlueLie.Models
+namespace ThinBlueLie.Pages
 {
-    public partial class SubmitBase : InformationBase
+    public partial class Submit
     {
 
         [Inject] NavigationManager NavManager { get; set; }
-        [Inject] SignInManager<ApplicationUser> signInManager { get; set; }
-        [Inject] UserManager<ApplicationUser> userManager { get; set; }
-
+        [Inject] SignInManager<ApplicationUser> SignInManager { get; set; }
+        [Inject] UserManager<ApplicationUser> UserManager { get; set; }
+        [Inject] IJSRuntime JS { get; set; }
         public AuthenticationState userState;
         public bool SavingData { get; set; }
+        [CascadingParameter] Task<AuthenticationState> AuthState { get; set; }
+
+        protected override async Task OnInitializedAsync()
+        {
+            userState = await AuthState;
+            if (userState.User.Identity.IsAuthenticated)
+            {
+                SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
+                SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
+                SimilarEvents = await SearchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
+            }
+        }
+        protected async override Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (!firstRender)
+            {
+                await JS.InvokeVoidAsync("MakeMobileFriendly");
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("feather.replace");
+            }
+        }
         protected async Task HandleValidSubmitAsync()
         {
             //display loading gif in modal while doing the processing
@@ -37,12 +63,12 @@ namespace ThinBlueLie.Models
             this.StateHasChanged();
             model.Timelineinfos.Locked = 0;
             string? userId;
-            if (signInManager.IsSignedIn(userState.User))
-                userId = userManager.GetUserId(userState.User);
+            if (SignInManager.IsSignedIn(userState.User))
+                userId = UserManager.GetUserId(userState.User);
             else
                 userId = null;
 
-            EditHistory editHistory = new EditHistory();
+            EditHistory editHistory = new();
             //TODO if user is has perms auto verify
             int IdTimelineinfo;
             int EditHistoryId;
@@ -54,12 +80,13 @@ namespace ThinBlueLie.Models
                 string createNewEditHistory = @"INSERT INTO edithistory (`Confirmed`, `SubmittedBy`) 
                                                         VALUES ('2', @userId);
                                             SELECT LAST_INSERT_ID();
-                                            SET @v1 = (SELECT Max(e.IdTimelineinfo +1) FROM edithistory e);
+                                            SET @v1 = (SELECT COALESCE(Max(e.IdTimelineinfo +1), 1) FROM edithistory e);
                                             SELECT @v1;";
                 using (var multi = await connection.QueryMultipleAsync(createNewEditHistory, new { userId }))
                 {
                     EditHistoryId = editHistory.IdEditHistory = multi.Read<int>().FirstOrDefault();
-                    IdTimelineinfo = (int)(editHistory.IdTimelineinfo = multi.Read<int>().FirstOrDefault());
+                    IdTimelineinfo = multi.Read<int>().FirstOrDefault();
+                    editHistory.IdTimelineinfo = IdTimelineinfo;
                 }
 
 
@@ -121,7 +148,7 @@ namespace ThinBlueLie.Models
                     if (subject.SameAsId == null)
                     {
                         //Create new subject
-                        var subjectSql = $@"SET @v1 = (SELECT Max(e.IdSubject +1) FROM edits_subject e);                                               
+                        var subjectSql = $@"SET @v1 = (SELECT COALESCE(Max(e.IdSubject +1),1) FROM edits_subject e);                                               
                                             INSERT INTO edits_subject 
                                               (`IdEditHistory`, `IdSubject`, `Name`, `Race`, `Sex`, `Action`)
                                                VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, '0');
@@ -151,7 +178,7 @@ namespace ThinBlueLie.Models
                     if (officer.SameAsId == null)
                     {
                         //Create new officer
-                        var officerSql = $@"SET @v1 = (SELECT Max(e.IdOfficer + 1) FROM edits_officer e);                                              
+                        var officerSql = $@"SET @v1 = (SELECT COALESCE(Max(e.IdOfficer + 1),1) FROM edits_officer e);                                              
                                             INSERT INTO edits_officer (`IdEditHistory`, `IdOfficer`, `Name`, `Race`, `Sex`, `Action`)
                                                VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, '0');
                                             SELECT @v1;";
@@ -183,19 +210,22 @@ namespace ThinBlueLie.Models
             }
             Serilog.Log.Information("Created new Event {@EventInfo} with EditHistory Id {EditHistoryId}", model, EditHistoryId);
             Serilog.Log.Information("Created new Edit {@EditHistory}", editHistory);
+
+            //Give account some repuation
+            await UserManager.ChangeReputation(ReputationEnum.ReputationChangeEnum.NewEvent, Convert.ToInt32(userId));
+
             //TODO move all into querymultiple
             if (true) //TODO check if successful submit
             {
                 NavManager.NavigateTo("/Account/Profile");
             }
-
             SavingData = false;
         }
         public List<ViewSimilar>? SimilarEvents { get; set; } = new List<ViewSimilar>();
         protected async void FindEvents(ChangedEventArgs<DateTime?> args)
         {
             model.Timelineinfos.Date = Convert.ToDateTime(DateValue);
-            SimilarEvents = await searchesSubmit.GetSimilar(args.Value?.ToString("yyyy-MM-dd"));
+            SimilarEvents = await SearchesSubmit.GetSimilar(args.Value?.ToString("yyyy-MM-dd"));
             this.StateHasChanged();
         }
     }

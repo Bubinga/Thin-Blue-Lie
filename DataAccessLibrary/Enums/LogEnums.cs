@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLibrary.Enums
 {
-    public class LogEnums
+    public static class LogEnums
     {
         public enum ActionEnum
         {

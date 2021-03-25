@@ -121,7 +121,7 @@ namespace ThinBlueLie
             services.AddSingleton<SearchesTimeline>();
             services.AddSingleton<SearchesSubmit>();
             services.AddSingleton<SearchesEditReview>();
-            services.AddSingleton<SearchesEditReview>();
+            services.AddSingleton<SearchesFlagReview>();
             services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddSyncfusionBlazor();

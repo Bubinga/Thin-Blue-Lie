@@ -1,0 +1,67 @@
+﻿@page "/Account/ReviewFlags"
+@using Syncfusion.Blazor.Spinner
+@using Syncfusion.Blazor.Buttons
+@using ThinBlueLie.Helper.Extensions
+@layout AccountLayout
+
+<Title>Flag Review - Thin Blue Lie</Title>
+
+<AuthorizeView Roles="Admin, Moderator">
+    <div class="sidebar-content pl-2" style="margin-right: 0px; transform: translateX(0px); margin-left: 159.991px; min-height:200px;">
+        <div class="d-flex pt-2 justify-content-between border-bottom">
+            <div class="" style="font-size:1.2rem;">Flag Review</div>
+            <div style="left:47%;" class="position-absolute d-flex align-items-center">
+                <span @onclick="() => GetPreviousFlag()" class="e-icons e-chevron-left"></span>
+                @(PendingFlagsCount == 0? 0 : ActiveIdIndex + 1)/@PendingFlagsCount
+                <span @onclick="() => GetNextFlag()" class="e-icons e-chevron-right"></span>
+            </div>
+            <div class="float-right vote-buttons">
+                @if (Loading == false && Ids.Any())
+                {
+                    <SfButton CssClass="e-outline e-accept-button"
+                              OnClick="async () => await ResolveFlag()" IconCss="e-icons e-check">
+                        Resolve
+                    </SfButton>
+                    <SfButton CssClass="e-outline e-decline-button"
+                              OnClick="async () => await DeleteFlag()" IconCss="e-icons e-cross">
+                        Delete
+                    </SfButton>
+                }
+            </div>
+        </div>
+        <div class="flag-wrapper px-4 mt-2">
+            @if (Loading)
+            {
+                <SfSpinner Visible="true" Type="SpinnerType.Material" Label="Loading....">
+                </SfSpinner>
+            }
+            else if (PendingFlagsCount == 0 && Loading == false)
+            {
+                <div class="text-center container-fluid">
+                    <h3 class="mt-5">There are no current Pending Flags</h3>
+                </div>
+            }
+            else if (Ids.Any() && Flags[ActiveIdIndex] is not null)
+            {
+                var flag = Flags[ActiveIdIndex];
+
+                <div class="d-flex justify-content-between border-bottom mb-2">
+                    <a href="@("/Events/" + flag.Date.ToString("yyyy-MM-dd") + "/" + UriExtensions.CreateTitleUrl(flag.EventTitle))">@flag.EventTitle</a>
+                    <span>Id: @flag.IdTimelineinfo</span>
+                </div>
+                <div class="px-2">
+                    <h6>
+                        @EnumExtensions.GetEnumDisplayName((FlaggedEnums.FlagTypeEnum)flag.FlagType)
+                    </h6>
+                    <p style="text-indent:15px" class="pr-5">
+                        @flag.Message
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</AuthorizeView>
+
+@code {
+
+}

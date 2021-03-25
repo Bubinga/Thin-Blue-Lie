@@ -1,8 +1,9 @@
 ﻿@using DiffPlex.DiffBuilder.Model;
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
+@using KellermanSoftware.CompareNetObjects 
 
 <div class="row my-2 border-bottom">
-    @if (IsNewEvent == false)
+    @if (IsNewEvent == false && !AreEqual)
     {
         <div class="col-6 px-4 border-right @((OfficerPair.Item1 != null && OfficerPair.Item2 == null)? "deleted-item" : "")">
             @if (OfficerPair.Item1 != null)
@@ -58,8 +59,9 @@
             }
         </div>
     }
-    <div class="@(IsNewEvent? "col-12" : "col-6") px-4 border-left 
-                    @((OfficerPair.Item2 != null && OfficerPair.Item1 == null && !IsNewEvent)? "inserted-item" : "")">
+    <div class="@(IsNewEvent? "col-12" : AreEqual? "" : "col-6") px-4 border-left @(AreEqual? "mx-auto" : "")
+                    @((OfficerPair.Item2 != null && OfficerPair.Item1 == null && !IsNewEvent)? "inserted-item" : "")"
+         style="min-width:250px;">
         @if (OfficerPair.Item2 != null)
         {
             <p class="font-weight-bold">
@@ -126,6 +128,13 @@
     public Tuple<DBOfficer, DBOfficer> OfficerPair { get; set; }
     [Parameter]
     public SideBySideDiffModel? Model { get; set; }
-    [CascadingParameter]
+    [CascadingParameter(Name = "IsNewEvent")]
     public bool IsNewEvent { get; set; }
+    CompareLogic compareLogic;
+    bool AreEqual;
+    protected override void OnParametersSet()
+    {
+        compareLogic = new();
+        AreEqual = compareLogic.Compare(OfficerPair.Item2, OfficerPair.Item1).AreEqual;
+    }
 }

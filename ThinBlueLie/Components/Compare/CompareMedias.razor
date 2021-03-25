@@ -1,6 +1,7 @@
 ﻿@using DiffPlex.DiffBuilder;
 @using DiffPlex.DiffBuilder.Model;
-@using ThinBlueLie.Helper.Algorithms 
+@using ThinBlueLie.Helper.Algorithms
+@using KellermanSoftware.CompareNetObjects
 @inject ISideBySideDiffBuilder sideBySide
 
 @if (Done == false)
@@ -9,43 +10,57 @@
 }
 else
 {
-<div class="d-block">
-    <h5 class="border-bottom">Media Information</h5>
-    @foreach ((var mediaPair, Int32 i) in Medias.Select((officer, i) => (officer, i)))
-    {
-        <CompareMediaSingle Model="Mediadiff[i]" Media="mediaPair"></CompareMediaSingle>
-    }
-</div>
+    <div class="d-block">
+        <h5 class="border-bottom">Media Information</h5>
+        @foreach ((var mediaPair, Int32 i) in Medias.Select((officer, i) => (officer, i)))
+        {
+            if (!(compareLogic.Compare(mediaPair.Item2,mediaPair.Item1).AreEqual && EditsOnly == true))
+            {
+                <CompareMediaSingle Model="Mediadiff[i]" Media="mediaPair"></CompareMediaSingle>
+            }
+        }
+    </div>
 }
 
 @code {
+        [CascadingParameter(Name = "EditsOnly")]
+        public bool EditsOnly { get; set; }
     private List<Tuple<ViewMedia, ViewMedia>> Medias { get; set; }
-    [Parameter]
-    public List<ViewMedia> OldMedias { get; set; }
-    [Parameter]
-    public List<ViewMedia> NewMedias { get; set; }
+    [Parameter] public List<ViewMedia> OldMedias { get; set; }
+    [Parameter] public List<ViewMedia> NewMedias { get; set; }
+    private int id;
+    [CascadingParameter]
+    public int Id
+    {
+        get { return id; }
+        set { id = value; isNewEdit = true; }
+    }
+    bool isNewEdit = true;
     bool Done = false;
     private List<SideBySideDiffModel?> Mediadiff;
-
+    CompareLogic compareLogic = new CompareLogic();
     //TODO this same code appears in CompareOfficers and CompareSubjects too, consolidate it into a generic method
     protected override void OnParametersSet()
     {
-        Medias = new List<Tuple<ViewMedia, ViewMedia>>();
-        PairVersions pair = new PairVersions();
-        Medias = pair.PairMedia(OldMedias, NewMedias);
-        Mediadiff = new List<SideBySideDiffModel?>();
-        foreach (var pairing in Medias)
+        if (isNewEdit)
         {
-            try
+            Medias = new List<Tuple<ViewMedia, ViewMedia>>();
+            PairVersions pair = new PairVersions();
+            Medias = pair.PairMedia(OldMedias, NewMedias);
+            Mediadiff = new List<SideBySideDiffModel?>();
+            foreach (var pairing in Medias)
             {
-                //try to compare Medias with the same idMedia and build a model off of that
-                Mediadiff.Add(sideBySide.BuildDiffModel(pairing.Item1.Blurb, pairing.Item2.Blurb));
+                try
+                {
+                    //try to compare Medias with the same idMedia and build a model off of that
+                    Mediadiff.Add(sideBySide.BuildDiffModel(pairing.Item1.Blurb, pairing.Item2.Blurb));
+                }
+                catch (NullReferenceException)
+                {
+                    Mediadiff.Add(null);
+                }
             }
-            catch (NullReferenceException)
-            {
-                Mediadiff.Add(null);
-            }
+            Done = true;
         }
-        Done = true;
     }
 }

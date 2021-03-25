@@ -9,13 +9,14 @@ namespace ThinBlueLie.Helper.Algorithms.WebsiteProfiling
         //go from 0989uwefbwef to youtube.com/watch?v=0989uwefbwef
         public static string PrepareSendData(ViewMedia media)
         {
-            string path;
             if (media.SourceFrom == MediaEnums.SourceFromEnum.Youtube)
             {
-                var builder = new UriBuilder();
-                builder.Host = "youtube.com";
-                builder.Scheme = "https";
-                builder.Query = "v=" + media.SourcePath;
+                var builder = new UriBuilder
+                {
+                    Host = "youtube.com",
+                    Scheme = "https",
+                    Query = "v=" + media.SourcePath
+                };
 
                 return builder.Uri.ToString();
             }

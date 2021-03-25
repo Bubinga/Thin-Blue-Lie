@@ -1,8 +1,5 @@
 ﻿@page "/Submit"
-@inherits SubmitBase
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject AutoMapper.IMapper mapper
-@inject IJSRuntime JS
+@inherits InformationBase
 @attribute [Authorize]
 @using Syncfusion.Blazor.Spinner
 @using Syncfusion.Blazor.DropDowns
@@ -178,29 +175,3 @@
         </div>
     </EditForm>
 </div>
-@code {
-    [CascadingParameter]
-    private Task<AuthenticationState> _authState { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        userState = await _authState;
-        if (userState.User.Identity.IsAuthenticated)
-        {
-            SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
-            SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
-            SimilarEvents = await searchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
-        }
-    }
-    protected async override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-        {
-            await JS.InvokeVoidAsync("MakeMobileFriendly");
-        }
-        else
-        {
-            await JS.InvokeVoidAsync("feather.replace");
-        }
-    }
-}
