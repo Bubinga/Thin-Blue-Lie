@@ -21,11 +21,6 @@ namespace ThinBlueLie.Models
         [Range(0, 130,
         ErrorMessage = "Age must be between {1} and {2}.")]
         public int? Age { get; set; }
-        [Required]
-        [MisconductValidator]
-        public int[]? Misconduct { get; set; }
-        [WeaponValidator("Misconduct", ErrorMessage = "'Unnecessary Use of Force' is selected, enter at least one weapon")]
-        public int[]? Weapon { get; set; }
         public int? SameAsId { get; set; }
     }
 }

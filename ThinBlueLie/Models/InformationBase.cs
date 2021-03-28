@@ -21,11 +21,12 @@ namespace ThinBlueLie.Models
         public SubmitModel model = new()
         {
             Timelineinfos = new ViewTimelineinfo(),
-            Medias = new List<ViewMedia> { 
-                new ViewMedia { MediaType = MediaTypeEnum.Image, Blurb="Placeholder Image", Rank = 0 },
-               new ViewMedia { MediaType = MediaTypeEnum.Video, Blurb="Placeholder Video",Rank = 1 },
-                  new ViewMedia { MediaType = MediaTypeEnum.News, Blurb="Placeholder News", Rank = 2, SourceFrom = SourceFromEnum.Link }
+            Medias = new List<ViewMedia> {
+                new ViewMedia { MediaType = MediaTypeEnum.Image, Blurb = "Placeholder Image", Rank = 0 },
+                new ViewMedia { MediaType = MediaTypeEnum.Video, Blurb = "Placeholder Video", Rank = 1 },
+                new ViewMedia { MediaType = MediaTypeEnum.News, Blurb = "Placeholder News", Rank = 2, SourceFrom = SourceFromEnum.Link }
             },
+            Misconducts = new(),
             Officers = new List<ViewOfficer> { new ViewOfficer { Rank = 0 } },
             Subjects = new List<ViewSubject> { new ViewSubject { Rank = 0 } }
         };
@@ -115,11 +116,24 @@ namespace ThinBlueLie.Models
                 SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
             }           
         }
+        public bool MaxMisconducts = false;
+        internal void AddMisconduct()
+        {
+            int maxMisconductCount = model.Officers.Count * model.Subjects.Count;
+            MaxMisconducts = maxMisconductCount <= model.Misconducts.Count;
+            if (MaxMisconducts == false)
+            {
+                var newMisconduct = new ViewMisconduct();
+                model.Misconducts.Add(newMisconduct);                
+            }
+        }
 
         public List<List<SimilarPersonGeneral>> SimilarSubjects { get; set; } = new List<List<SimilarPersonGeneral>>();
         internal async void SuggestSubjects(SimilarPersonCallback personCallback)
         {
             //TODO don't do suggest if name is too short or something
+            if (personCallback.Name.Length < 3)
+                return;
             var similarSubject = await SearchesSubmit.SearchSubject(personCallback.Name);
             SimilarSubjects[personCallback.Index] = similarSubject;
             this.StateHasChanged();
@@ -129,6 +143,8 @@ namespace ThinBlueLie.Models
         internal async void SuggestOfficers(SimilarPersonCallback personCallback)
         {
             //TODO don't do suggest if name is too short or something
+            if (personCallback.Name.Length < 3)
+                return;
             var similarOfficer = await SearchesSubmit.SearchOfficer(personCallback.Name);
             SimilarOfficers[personCallback.Index] = similarOfficer;
             this.StateHasChanged();
@@ -203,6 +219,11 @@ namespace ThinBlueLie.Models
             {
                 model.Officers[i].Rank = i;
             }
+        }
+
+        internal void DeleteMisconduct(ViewMisconduct misconduct)
+        {
+            model.Misconducts.Remove(misconduct);
         }
 
     }

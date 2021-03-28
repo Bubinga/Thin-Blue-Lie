@@ -17,8 +17,9 @@ namespace ThinBlueLie.Models.ViewModels
         {
             public Timelineinfo Data { get; set; }
             public List<ViewMedia> Medias { get; set; }
-            public List<DBOfficer> Officers { get; set; }
-            public List<DBSubject> Subjects { get; set; }
+            public List<Officer> Officers { get; set; }
+            public List<Subject> Subjects { get; set; }
+            public List<Misconducts> Misconducts { get; set; }
             public SimilarOfficer OfficerPerson { get; set; }
             public SimilarSubject SubjectPerson { get; set; }
         }

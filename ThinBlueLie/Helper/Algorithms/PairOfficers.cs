@@ -9,28 +9,28 @@ namespace ThinBlueLie.Helper.Algorithms
 {
     public partial class PairVersions
     {
-        public List<Tuple<DBOfficer, DBOfficer>> PairOfficers(List<DBOfficer> OldOfficers, List<DBOfficer> NewOfficers)
+        public List<Tuple<Officer, Officer>> PairOfficers(List<Officer> OldOfficers, List<Officer> NewOfficers)
         {
-            List<Tuple<DBOfficer, DBOfficer>> Officers = new List<Tuple<DBOfficer, DBOfficer>>();
+            List<Tuple<Officer, Officer>> Officers = new List<Tuple<Officer, Officer>>();
             List<int> pairedIds = new List<int>();
             foreach (var officer in NewOfficers.Union(OldOfficers))
             {
                 if (!pairedIds.Contains(officer.IdOfficer)) //if not already paired
                 {
-                    List<DBOfficer> pair = NewOfficers.Union(OldOfficers).Where(o => (o.IdOfficer == officer.IdOfficer) && o.IdOfficer != 0).ToList();
+                    List<Officer> pair = NewOfficers.Union(OldOfficers).Where(o => (o.IdOfficer == officer.IdOfficer) && o.IdOfficer != 0).ToList();
                     bool isPaired = false;
-                    Tuple<DBOfficer, DBOfficer> pairing;
+                    Tuple<Officer, Officer> pairing;
                     for (int i = 0; i < pair.Count; i++)
                     {
                         if (pair[i] != officer) //if not comparing to self
                         {
                             if (NewOfficers.Contains(pair[i]))
                             {
-                                pairing = new Tuple<DBOfficer, DBOfficer>(officer, pair[i]);
+                                pairing = new Tuple<Officer, Officer>(officer, pair[i]);
                             }
                             else //if oldOfficer contains it
                             {
-                                pairing = new Tuple<DBOfficer, DBOfficer>(pair[i], officer);
+                                pairing = new Tuple<Officer, Officer>(pair[i], officer);
                             }
                             Officers.Add(pairing);
                             isPaired = true;
@@ -41,11 +41,11 @@ namespace ThinBlueLie.Helper.Algorithms
                     {
                         if (NewOfficers.Contains(officer))
                         {
-                            pairing = new Tuple<DBOfficer?, DBOfficer?>(null, officer);
+                            pairing = new Tuple<Officer?, Officer?>(null, officer);
                         }
                         else //if oldOfficer contains it
                         {
-                            pairing = new Tuple<DBOfficer?, DBOfficer?>(officer, null);
+                            pairing = new Tuple<Officer?, Officer?>(officer, null);
                         }
                         Officers.Add(pairing);
                         pairedIds.Add(officer.IdOfficer);

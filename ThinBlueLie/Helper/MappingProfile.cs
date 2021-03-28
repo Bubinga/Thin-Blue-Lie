@@ -15,25 +15,25 @@ namespace ThinBlueLie.Helper
         {
             // Add as many of these lines as you need to map your objects
 
-            CreateMap<Officers, CommonPerson>()
+            CreateMap<Officer, CommonPerson>()
                .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (RaceEnum?)src.Race))
                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (SexEnum?)src.Sex));
-            CreateMap<Subjects, CommonPerson>()
+            CreateMap<Subject, CommonPerson>()
                .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (RaceEnum?)src.Race))
                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (SexEnum?)src.Sex));
-            CreateMap<Subjects, ViewSubject>()
+            CreateMap<Subject, ViewSubject>()
                 .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (RaceEnum?)src.Race))
                 .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (SexEnum?)src.Sex));
-            CreateMap<Officers, ViewOfficer>()
+            CreateMap<Officer, ViewOfficer>()
                .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (RaceEnum?)src.Race))
                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (SexEnum?)src.Sex));
 
-            CreateMap<ViewOfficer, Officers>();
-            CreateMap<ViewSubject, Subjects>();
-            CreateMap<ViewOfficer, DBOfficer>()
-                .ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => src.Misconduct.Sum()))
-                .ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => src.Weapon.Sum()));
-            CreateMap<ViewSubject, DBSubject>();
+            CreateMap<ViewOfficer, Officer>();
+            CreateMap<ViewSubject, Subject>();
+            CreateMap<ViewOfficer, Officer>();
+                //.ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => src.Misconduct.Sum()))
+                //.ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => src.Weapon.Sum()));
+            CreateMap<ViewSubject, Subject>();
             CreateMap<ViewOfficer, CommonPerson>();
             CreateMap<ViewSubject, CommonPerson>();
 
@@ -42,16 +42,16 @@ namespace ThinBlueLie.Helper
             CreateMap<SimilarOfficer, CommonPerson>();
             CreateMap<SimilarSubject, CommonPerson>();
 
-            CreateMap<DBOfficer, CommonPerson>()
+            CreateMap<Officer, CommonPerson>()
                .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (RaceEnum?)src.Race))
                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (SexEnum?)src.Sex));
-            CreateMap<DBSubject, CommonPerson>()
+            CreateMap<Subject, CommonPerson>()
                 .ForMember(dest => dest.Race, opt => opt.MapFrom(src => (RaceEnum?)src.Race))
                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => (SexEnum?)src.Sex));
-            CreateMap<DBOfficer, ViewOfficer>()
-                .ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => IntToArray(src.Misconduct)))
-                .ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => IntToArray(src.Weapon)));
-            CreateMap<DBSubject, ViewSubject>();
+            CreateMap<Officer, ViewOfficer>();
+               // .ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => IntToArray(src.Misconduct)))
+               // .ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => IntToArray(src.Weapon)));
+            CreateMap<Subject, ViewSubject>();
 
             CreateMap<ViewMedia, EditMedia>()
                 .ForMember(dest => dest.Rank, opt => opt.MapFrom(src => (short)src.Rank))
@@ -68,14 +68,24 @@ namespace ThinBlueLie.Helper
             CreateMap<Timelineinfo, ViewTimelineinfo>()
                 .ForMember(dest => dest.SubmittedBy, opt => opt.MapFrom(src => src.Owner));
 
+
+            CreateMap<EditMisconducts, ViewMisconduct>();
+            CreateMap<ViewMisconduct, EditMisconducts>();
+            CreateMap<Misconducts, ViewMisconduct>()
+                .ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => IntToArray(src.Misconduct)))
+                .ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => IntToArray(src.Weapon)));
+            CreateMap<ViewMisconduct, Misconducts>()
+                .ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => src.Misconduct.Sum()))
+                .ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => src.Weapon.Sum()));
+
             //For Deep Cloning
             CreateMap<EditReviewSegment, EditReviewSegment>();
             CreateMap<Timelineinfo, Timelineinfo>();
             CreateMap<Media, Media>();
-            CreateMap<DBOfficer, DBOfficer>();
-            CreateMap<DBSubject, DBSubject>();
-            CreateMap<Officers, Officers>();
-            CreateMap<Subjects, Subjects>();
+            CreateMap<Officer, Officer>();
+            CreateMap<Subject, Subject>();
+            CreateMap<Officer, Officer>();
+            CreateMap<Subject, Subject>();
 
             CreateMap<SubmitModel, SubmitModel>();
             CreateMap<ViewTimelineinfo, ViewTimelineinfo>();

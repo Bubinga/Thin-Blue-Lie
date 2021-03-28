@@ -27,6 +27,8 @@ namespace ThinBlueLie.Models
         [ValidateComplexType]
         [ListCountValidator(1, MaximumSubjects, "Subjects")]
         public List<ViewSubject> Subjects { get; set; }
-        
+        [BindProperty]
+        [ValidateComplexType]
+        public List<ViewMisconduct> Misconducts { get; set; }        
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Dapper;
+using DataAccessLibrary.DataModels;
 using DataAccessLibrary.DataModels.EditModels;
 using DataAccessLibrary.Enums;
 using DataAccessLibrary.UserModels;
@@ -30,6 +31,7 @@ namespace ThinBlueLie.Pages
         [Inject] SignInManager<ApplicationUser> SignInManager { get; set; }
         [Inject] UserManager<ApplicationUser> UserManager { get; set; }
         [Inject] IJSRuntime JS { get; set; }
+        [Inject] public IMapper Mapper { get; set; }
         public AuthenticationState userState;
         public bool SavingData { get; set; }
         [CascadingParameter] Task<AuthenticationState> AuthState { get; set; }
@@ -156,19 +158,7 @@ namespace ThinBlueLie.Pages
                         //Add to subjects table and return id
                         IdSubject = await connection.QuerySingleAsync<int>(subjectSql, subject);
                         editHistory.Subjects = 1;
-                    }
-                    //Add to junction table    
-                    var junctionSql = @"INSERT INTO edits_timelineinfo_subject (`IdEditHistory`, `IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)
-                                        VALUES (@EditHistoryId, @IdTimelineinfo, @IdSubject, @Armed, @Age);";
-                    await connection.ExecuteAsync(junctionSql, new
-                    {
-                        EditHistoryId,
-                        IdTimelineinfo,
-                        IdSubject = subject.SameAsId == null? IdSubject : subject.SameAsId,
-                        Armed = Convert.ToByte(subject.Armed),
-                        subject.Age
-                    });
-                    editHistory.Timelineinfo_Subject = 1;
+                    }                    
                 }
                 //Officer Table
                 foreach (var officer in model.Officers)
@@ -185,26 +175,19 @@ namespace ThinBlueLie.Pages
                         //Add to officers table and return id
                         IdOfficer = await connection.QuerySingleAsync<int>(officerSql, officer);
                         editHistory.Officers = 1;
-                    }
-                    //Add to junction table
-                    var junctionSql = "INSERT INTO edits_timelineinfo_officer (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
-                                    "VALUES (@EditHistoryId, @IdTimelineinfo, @idofficer, @age, @misconduct, @weapon);";
-                    await connection.ExecuteAsync(junctionSql, new
-                    {
-                        EditHistoryId,
-                        IdTimelineinfo,
-                        idofficer = officer.SameAsId == null? IdOfficer : officer.SameAsId,
-                        age = officer.Age,
-                        misconduct = officer.Misconduct.Sum(),
-                        weapon = officer.Weapon?.Sum() == 0? null : officer.Weapon?.Sum(),
-                    });
-                    editHistory.Timelineinfo_Officer = 1;
+                    }                   
                 }
+
+                var editMisconducts = Mapper.Map<List<ViewMisconduct>, List<EditMisconducts>>(model.Misconducts);
+                editMisconducts.ForEach(m => { m.IdTimelineinfo = IdTimelineinfo; m.IdEditHistory = EditHistoryId; });
+                string newTimelineinfoSubject = "INSERT INTO edits_misconducts (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `IdSubject`, `Misconduct`, `Weapon`, `Armed`) " +
+                                                    "VALUES (@IdEditHistory, @IdTimelineinfo, @IdOfficer, @IdSubject, @Misconduct, @Weapon, @Armed);";
+                await connection.ExecuteAsync(newTimelineinfoSubject, editMisconducts);
+
                 string updateEditHistory = @$"UPDATE edithistory SET 
                                                 `IdTimelineinfo` = @IdTimelineinfo,
                                                 `Confirmed` = '0',`Edits` = @Edits, `EditMedia` = @EditMedia,
-                                                `Officers` = @Officers, `Subjects` = @Subjects, `Timelineinfo_Officer` = @Timelineinfo_Officer, 
-                                                `Timelineinfo_Subject` = @Timelineinfo_Subject 
+                                                `Officers` = @Officers, `Subjects` = @Subjects, `Misconducts` = @Misconducts
                                             WHERE (`IdEditHistory` = '{EditHistoryId}');";
                 await connection.ExecuteAsync(updateEditHistory, editHistory);
             }

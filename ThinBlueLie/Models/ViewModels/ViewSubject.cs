@@ -20,6 +20,5 @@ namespace ThinBlueLie.Models
         ErrorMessage = "Age must be between {1} and {2}.")]
         public int? Age { get; set; }
         public int? SameAsId { get; set; }
-        public bool Armed { get; set; }
     }
 }

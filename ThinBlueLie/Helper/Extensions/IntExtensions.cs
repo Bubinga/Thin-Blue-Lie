@@ -14,7 +14,7 @@ namespace ThinBlueLie.Helper.Extensions
             int power = 0;
             if (n == null || n == 0)
             {
-                return new int[] { 0 };
+                return Array.Empty<int>();
             }
             while (n != 0)
             {

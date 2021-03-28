@@ -37,26 +37,6 @@
                     <ValidationMessage For="@(() => officer.Sex)"></ValidationMessage>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-6 form-field">
-                    <label class="form-check-label">
-                        Type of Misconduct
-                    </label>
-                    <SfMultiSelect Mode="@VisualMode.Box" Placeholder="Miconducts" @bind-Value="@officer.Misconduct" DataSource="@MisconductsList">
-                        <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
-                    </SfMultiSelect>
-                    <ValidationMessage For="@(() => officer.Misconduct)"></ValidationMessage>
-                </div>
-                <div class="col-6">
-                    <label class="form-check-label">
-                        Type of Weapon
-                    </label>
-                    <SfMultiSelect Mode="@VisualMode.Box" Enabled="@(officer.Misconduct != null? officer.Misconduct.Contains(1)? true : false : false)" Placeholder="Weapons" @bind-Value="@officer.Weapon" DataSource="@WeaponsList">
-                        <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
-                    </SfMultiSelect>
-                    <ValidationMessage For="@(() => officer.Weapon)"></ValidationMessage>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -66,15 +46,6 @@
     public ViewOfficer officer { get; set; }
     [Parameter]
     public bool isSubmit { get; set; }
-    protected override void OnInitialized()
-    {
-        if (isSubmit)
-        {
-            officer.Misconduct = new int[] { };
-            officer.Weapon = new int[] { };
-        }
-
-    }
 
     [Parameter]
     public EventCallback<int> DeleteOfficer { get; set; }

@@ -104,11 +104,7 @@ namespace ThinBlueLie.Pages
         {
             List<FirstLoadEvents> events = new();
             string getEventsFromDate = "SELECT t.Title, t.Context, t.IdTimelineinfo FROM timelineinfo t WHERE t.Date = @date";
-            (await Data.LoadDataNoLog<FirstLoadEvents?, dynamic>(getEventsFromDate, new
-            {
-            date = Date?.ToString("yyyy-MM-dd")}
-
-            , GetConnectionString())).ForEach(e => events.Add(e));
+            (await Data.LoadDataNoLog<FirstLoadEvents?, dynamic>(getEventsFromDate, new{date = Date?.ToString("yyyy-MM-dd")},GetConnectionString())).ForEach(e => events.Add(e));
             int eventCount = 0;
             if (events.Any())
             {
@@ -116,12 +112,7 @@ namespace ThinBlueLie.Pages
                 {
                     string getFirstMedia = "Select *,(true) as Processed from media m where m.IdTimelineinfo = @id order by m.rank Limit 1";
                     evnt.Media = new ViewMedia();
-                    evnt.Media = await Data.LoadDataSingle<ViewMedia, dynamic>(getFirstMedia, new
-                    {
-                    id = evnt.IdTimelineinfo
-                    }
-
-                    );
+                    evnt.Media = await Data.LoadDataSingle<ViewMedia, dynamic>(getFirstMedia, new {id = evnt.IdTimelineinfo});
                     var htmlDoc = new HtmlDocument();
                     htmlDoc.LoadHtml(evnt.Context);
                     var htmlBody = htmlDoc.DocumentNode;
@@ -150,38 +141,32 @@ namespace ThinBlueLie.Pages
                     From timelineinfo t
                     Left Join edithistory e on t.IdTimelineinfo = e.IdTimelineinfo
                     where t.date = @date and t.Title Regexp @title and Confirmed = 1;";
-            var timelineinfo = await Data.LoadDataSingle<Timelineinfo, dynamic>(query, new
-            {
-            date = Date?.ToString("yyyy-MM-dd"), title
-            }
-
-            );
+            var timelineinfo = await Data.LoadDataSingle<Timelineinfo, dynamic>(query, new {date = Date?.ToString("yyyy-MM-dd"), title});
             if (timelineinfo.IdTimelineinfo != 0) //If title matches title on that day
             {
                 var mediaQuery = "SELECT *,(true) as Processed From media m where m.IdTimelineinfo = @id Order By m.Rank;";
-                var officerQuery = "SELECT o.Name, o.Race, o.Sex, t_o.Age, t_o.Misconduct, t_o.Weapon " + "FROM timelineinfo t " + "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " + "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " + "WHERE t.IdTimelineinfo = @id ;";
-                var subjectQuery = "SELECT s.Name, s.Race, s.Sex, t_s.Age, t_s.Armed " + "FROM timelineinfo t " + "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " + "JOIN subjects s ON t_s.IdSubject = s.IdSubject " + "WHERE t.IdTimelineinfo = @id;";
+                string misconductQuery = "SELECT * from misconducts WHERE IdTimelineinfo = @id";
+                var officerQuery = "SELECT distinct o.* FROM misconducts m " +
+                                        "Join officers o on m.IdOfficer = o.IdOfficer " +
+                                        "WHERE m.IdTimelineinfo = @id;";
+                var subjectQuery = "SELECT distinct o.* FROM misconducts m " +
+                                        "Join subjects o on m.IdSubject = o.IdSubject " +
+                                        "WHERE m.IdTimelineinfo = @id;";
                 //get media, officers, and subjects using timelineinfo id
-                List<ViewMedia> media = await Data.LoadData<ViewMedia, dynamic>(mediaQuery, new
-                {
-                id = timelineinfo.IdTimelineinfo
-                }
-
-                );
-                List<DBOfficer> officers = await Data.LoadData<DBOfficer, dynamic>(officerQuery, new
-                {
-                id = timelineinfo.IdTimelineinfo
-                }
-
-                );
-                List<DBSubject> subjects = await Data.LoadData<DBSubject, dynamic>(subjectQuery, new
-                {
-                id = timelineinfo.IdTimelineinfo
-                }
-
-                );
+                List<ViewMedia> media = await Data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = timelineinfo.IdTimelineinfo });
+                List<Misconducts> misconducts = await Data.LoadData<Misconducts, dynamic>(misconductQuery, new { id = timelineinfo.IdTimelineinfo });
+                List<Officer> officers = await Data.LoadData<Officer, dynamic>(officerQuery, new { id = timelineinfo.IdTimelineinfo });
+                List<Subject> subjects = await Data.LoadData<Subject, dynamic>(subjectQuery, new { id = timelineinfo.IdTimelineinfo });
                 await ViewMedia.GetDataMany(media);
-                Event = new ViewEvent{Data = timelineinfo, Medias = media, Officers = Mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers), Subjects = Mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects)};
+                officers.SetAgeFromDOB(timelineinfo.Date);
+                subjects.SetAgeFromDOB(timelineinfo.Date);
+                Event = new ViewEvent {
+                    Data = timelineinfo,
+                    Medias = media,
+                    Misconducts = misconducts,
+                    Officers = Mapper.Map<List<Officer>, List<ViewOfficer>>(officers), 
+                    Subjects = Mapper.Map<List<Subject>, List<ViewSubject>>(subjects) 
+                };
                 EventExists = true;
                 Serilog.Log.Information("Sucessfully fetched '{EventTitle}' event", timelineinfo.Title);
             }

@@ -33,11 +33,11 @@ else
         set { id = value; isNewEdit = true; }
     }
     bool isNewEdit = true;
-    private List<Tuple<DBSubject, DBSubject>> Subjects { get; set; }
+    private List<Tuple<Subject, Subject>> Subjects { get; set; }
     [Parameter]
-    public List<DBSubject> OldSubjects { get; set; }
+    public List<Subject> OldSubjects { get; set; }
     [Parameter]
-    public List<DBSubject> NewSubjects { get; set; }
+    public List<Subject> NewSubjects { get; set; }
     bool Done = false;
     private List<SideBySideDiffModel?> Subjectdiff = new List<SideBySideDiffModel?>();
     CompareLogic compareLogic;
@@ -46,7 +46,7 @@ else
         if (isNewEdit)
         {
             Done = false;
-            Subjects = new List<Tuple<DBSubject, DBSubject>>();
+            Subjects = new List<Tuple<Subject, Subject>>();
             compareLogic = new CompareLogic();
             var PairSubjects = new PairVersions();
             Subjects = PairSubjects.PairSubjects(OldSubjects, NewSubjects);

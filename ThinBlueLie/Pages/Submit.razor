@@ -39,7 +39,7 @@
                 <h4 class="mb-0 d-flex justify-content-between">
                     Information Submission Form
                     <a href="/About/Submission-Guide" class="d-flex align-items-center">
-                        <span style="font-size:smaller" class="pr-2">Guide</span> 
+                        <span style="font-size:smaller" class="pr-2">Guide</span>
                         <i data-feather="help-circle"></i>
                     </a>
                 </h4>
@@ -90,7 +90,7 @@
             <div id="SubjectList">
                 @foreach ((var subject, Int32 i) in model.Subjects.Select((subject, i) => (subject, i)))
                 {
-                    <Subject subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></Subject>
+                    <SubjectCard subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></SubjectCard>
                     if (SimilarSubjects[i] != null)
                     {
                         <SimilarPeople PersonRank="i" SetSameAs="SetSameAsSubject" People="SimilarSubjects[i]"></SimilarPeople>
@@ -111,11 +111,29 @@
             <div id="OfficerList">
                 @foreach ((var officer, Int32 i) in model.Officers.Select((officer, i) => (officer, i)))
                 {
-                    <Officer isSubmit="true" officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></Officer>
+                    <OfficerCard isSubmit="true" officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></OfficerCard>
                     if (SimilarOfficers[i] != null)
                     {
                         <SimilarPeople PersonRank="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>
                     }
+                }
+            </div>
+            <div class="d-flex">
+                <h6 class="d-inline">
+                    Link Officers and Subjects with Misconducts
+                </h6>
+                <div class="d-inline ml-auto" @onclick="AddMisconduct" @onclick:stopPropagation="false" @onclick:preventDefault>
+                    <SfButton IconCss="e-btn-sb-icons e-add-icon" CssClass="e-small e-flat float-right" IsPrimary="true" IconPosition=@IconPosition.Right>
+                        Misconduct
+                    </SfButton>
+                </div>
+            </div>
+            <div id="MisconductList">
+                @foreach (var misconduct in model.Misconducts)
+                {
+                    <MisconductCard Misconduct="misconduct" Officers="model.Officers" 
+                                    Subjects="model.Subjects" DeleteMisconduct="DeleteMisconduct" AllMisconducts="model.Misconducts">
+                    </MisconductCard>
                 }
             </div>
             <div class="form-group border-top mt-3 pt-2" id="context">

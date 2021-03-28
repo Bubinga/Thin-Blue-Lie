@@ -33,11 +33,11 @@ else
         set { id = value; isNewEdit = true; }
     }
     bool isNewEdit = true;
-    private List<Tuple<DBOfficer, DBOfficer>> Officers { get; set; }
+    private List<Tuple<Officer, Officer>> Officers { get; set; }
     [Parameter]
-    public List<DBOfficer> OldOfficers { get; set; }
+    public List<Officer> OldOfficers { get; set; }
     [Parameter]
-    public List<DBOfficer> NewOfficers { get; set; }
+    public List<Officer> NewOfficers { get; set; }
     bool Done = false;
     private List<SideBySideDiffModel?> Officerdiff = new List<SideBySideDiffModel?>();
     CompareLogic compareLogic = new CompareLogic();
@@ -45,7 +45,7 @@ else
     {
         if (isNewEdit)
         {
-            Officers = new List<Tuple<DBOfficer, DBOfficer>>();
+            Officers = new List<Tuple<Officer, Officer>>();
 
             var PairOfficers = new PairVersions();
             Officers = PairOfficers.PairOfficers(OldOfficers, NewOfficers);

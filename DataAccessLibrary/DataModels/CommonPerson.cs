@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static DataAccessLibrary.Enums.TimelineinfoEnums;
 
-namespace ThinBlueLie.Models
+namespace DataAccessLibrary.DataModels
 {
     public class CommonPerson
     {
@@ -12,7 +12,6 @@ namespace ThinBlueLie.Models
         public int? Age { get; set; }
         public SexEnum Sex { get; set; }
         public RaceEnum Race { get; set; }
-        public string? Image { get; set; }
-        public byte? Local { get; set; }
+        public DateTime DOB { get; set; }
     }
 }

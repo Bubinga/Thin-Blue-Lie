@@ -15,8 +15,7 @@ namespace ThinBlueLie.Helper.Extensions
         {
             if (!((editHistory?.Edits ?? 0 ) == 0) ||
                 !((editHistory?.EditMedia ?? 0) == 0) ||
-                !((editHistory?.Timelineinfo_Subject ?? 0) == 0) ||
-                !((editHistory?.Timelineinfo_Officer ?? 0) == 0))
+                !((editHistory?.Misconducts ?? 0) == 0))
             {
                 return true;
             }
@@ -26,12 +25,29 @@ namespace ThinBlueLie.Helper.Extensions
         public static bool PersonChange<T>(this T subject, T oldSubject) where T : CommonPerson
         {
             if ((subject?.Name != oldSubject?.Name) || (subject?.Race != oldSubject?.Race) ||
-                        (subject?.Sex != oldSubject?.Sex) || (subject?.Image != oldSubject?.Image) ||
-                        (subject?.Local != oldSubject?.Local))
+                (subject?.Sex != oldSubject?.Sex))
             {
                 return true;
             }
             return false;
+        }
+
+        public static int AgeFromDOB(this DateTime DOB, DateTime? endDate)
+        {
+            if (endDate == null)
+                endDate = DateTime.Today;
+            DateTime now = (DateTime)endDate;
+            int age = now.Year - DOB.Year;
+            if (DOB > now.AddYears(-age)) age--;
+            return age;
+        }
+
+        public static void SetAgeFromDOB<T>(this List<T> People, DateTime? date) where T : CommonPerson
+        {
+            foreach (var person in People)
+            {
+                person.Age = person.DOB.AgeFromDOB(date);            
+            }
         }
     }
 }

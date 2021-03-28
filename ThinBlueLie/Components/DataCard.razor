@@ -2,7 +2,7 @@
 @using static ThinBlueLie.Helper.Extensions.EnumExtensions
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
 @using static ThinBlueLie.Models.ViewSimilar;
-@using static ThinBlueLie.Helper.Extensions.IntExtensions 
+@using static ThinBlueLie.Helper.Extensions.IntExtensions
 @using static DataAccessLibrary.Enums.TimelineinfoEnums
 @using Syncfusion.Blazor.Spinner
 @using Syncfusion.Blazor.Popups
@@ -34,47 +34,6 @@ else
                     <h5 class="card-title mb-0"> @Information.City, @GetEnumDisplayName((TimelineinfoEnums.StateEnum)Information.State)</h5>
                     <hr class="mt-0 pb-0 mb-2 pt-0" />
                 </div>
-
-                @*<h6 class="text-left mb-0">Subject's Information</h6>
-                    <hr style="height:1px;" class="mt-0 pb-0 mb-0 pt-0" />*@
-                <div class="people">
-                    <span class="similar-bold">
-                        <strong>Subject@(subjectsDetails.Count != 1? "s:" : ":")</strong>
-                    </span>
-                    @if (subjectsDetails.Count > 1)
-                    {
-                        <ul class="people-list">
-                            @for (int i = 0; i < subjectsDetails.Count; i++)
-                            {
-                                <li>
-                                    @subjectsDetails[i]
-                                    @{
-                                        var subject = Subjects[i];
-                                    }
-                                    <SfChip Selection="SelectionType.None">
-                                        <ChipItems>
-                                            <ChipItem CssClass="@(!subject.Armed? "e-success" : "e-danger")"
-                                                      Text="@(!subject.Armed? "Unarmed" : "Armed")"></ChipItem>
-                                        </ChipItems>
-                                    </SfChip>
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <div class="single-person">@subjectsDetails[0]</div>
-                        <div>
-                            <SfChip Selection="SelectionType.None">
-                                <ChipItems>
-                                    <ChipItem CssClass="@(!Subjects[0].Armed? "e-success" : "e-danger")"
-                                              Text="@(!Subjects[0].Armed? "Unarmed" : "Armed")"></ChipItem>
-                                </ChipItems>
-                            </SfChip>
-                        </div>
-                    }
-                </div>
-                @*<h6 class="text-left mb-0">Officers's Information</h6>*@
                 <div class="people">
                     <span class="similar-bold">
                         <strong>Officer@(officersDetails.Count != 1? "s:" : ":")</strong>
@@ -89,63 +48,63 @@ else
                                 </li>
 
                                 var officer = Officers[i];
-                                <SfChip Selection="SelectionType.None">
-                                    <ChipItems>
-                                        @foreach (MisconductEnum misconduct in Enum.GetValues(typeof(MisconductEnum)))
-                                        {
-                                            if (officer.Misconduct.Contains((int)misconduct))
-                                            {
-                                                <ChipItem Text="@GetEnumDisplayName(misconduct)"></ChipItem>
-                                            }
-                                        }
-                                        @if (officer.Weapon?.Length != 0)
-                                        {
-                                            @foreach (WeaponEnum weapon in Enum.GetValues(typeof(WeaponEnum)))
-                                            {
-                                                if (officer.Weapon.Contains((int)weapon))
-                                                {
-                                                    <ChipItem CssClass="e-danger" Text="@GetEnumDisplayName(weapon)"></ChipItem>
-                                                }
-                                            }
-                                        }
-                                    </ChipItems>
-                                </SfChip>
-
                             }
                         </ul>
                     }
-                    else
+                    else { <div class="single-person">@officersDetails[0]</div> }
+                </div>
+                <div class="people">
+                    <span class="similar-bold">
+                        <strong>Subject@(subjectsDetails.Count != 1? "s:" : ":")</strong>
+                    </span>
+                    @if (subjectsDetails.Count > 1)
                     {
-                        <div class="single-person">@officersDetails[0]</div>
+                        <ul class="people-list">
+                            @for (int i = 0; i < subjectsDetails.Count; i++)
+                            {
+                                <li>
+                                    @subjectsDetails[i]
+                                    @{
+                                        var subject = Subjects[i];
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else  { <div class="single-person">@subjectsDetails[0]</div> }
+                </div>
+                <div>
+                    <span class="similar-bold">
+                        <strong>Misconduct@(Misconducts.Count != 1? "s:" : ":")</strong>
+                    </span>
+                    @foreach (var misconduct in Misconducts)
+                    {
+                        var subject = Subjects.Where(s => s.IdSubject == misconduct.IdSubject).FirstOrDefault();
+                        var officer = Officers.Where(o => o.IdOfficer == misconduct.IdOfficer).FirstOrDefault();
+                        var misconductArray = IntToArray(misconduct.Misconduct);
+                        var weaponArray = IntToArray(misconduct.Weapon);
+
                         <div>
+                            @officer.Name to @subject.Name
                             <SfChip Selection="SelectionType.None">
                                 <ChipItems>
-                                    @foreach (MisconductEnum misconduct in Enum.GetValues(typeof(MisconductEnum)))
+                                    @foreach (MisconductEnum misconductValue in Enum.GetValues(typeof(MisconductEnum)))
                                     {
-                                        if (Officers[0].Misconduct.Contains((int)misconduct))
+                                        if (misconductArray.Contains((int)misconductValue))
                                         {
-                                            <ChipItem Text="@GetEnumDisplayName(misconduct)"></ChipItem>
-                                        }
+                                            <ChipItem Text="@GetEnumDisplayName(misconductValue)"></ChipItem>}
                                     }
-                                </ChipItems>
-                            </SfChip>
-                        </div>
-                        if (Officers[0].Weapon?.Length != 0)
-                        {
-                            <div>
-                                <SfChip Selection="SelectionType.None">
-                                    <ChipItems>
+                                    @if (weaponArray.Length != 0)
+                                    {
                                         @foreach (WeaponEnum weapon in Enum.GetValues(typeof(WeaponEnum)))
                                         {
-                                            if (Officers[0].Weapon.Contains((int)weapon))
+                                            if (weaponArray.Contains((int)weapon))
                                             {
-                                                <ChipItem CssClass="e-danger" Text="@GetEnumDisplayName(weapon)"></ChipItem>
-                                            }
-                                        }
-                                    </ChipItems>
-                                </SfChip>
-                            </div>
-                        }
+                                                <ChipItem CssClass="e-danger" Text="@GetEnumDisplayName(weapon)"></ChipItem>}
+                                        }}
+                                </ChipItems>
+                            </SfChip>                            
+                        </div>
                     }
                 </div>
             </div>
@@ -172,6 +131,8 @@ else
 @code {
     [Parameter]
     public Timelineinfo Information { get; set; }
+    [Parameter]
+    public List<Misconducts> Misconducts { get; set; }
     [Parameter]
     public List<ViewOfficer> Officers { get; set; }
     [Parameter]

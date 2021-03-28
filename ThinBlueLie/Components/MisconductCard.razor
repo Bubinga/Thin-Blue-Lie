@@ -1,0 +1,103 @@
+﻿@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Buttons
+@using ThinBlueLie.Helper.Extensions
+@inject AutoMapper.IMapper mapper
+
+<div class="Add-Misconduct mt-2">
+    <div class="card border-dark mb-3 mx-auto">
+        <div class="card-body text-dark pt-2">
+            <div @onclick="@(() => DeleteMisconduct.InvokeAsync(Misconduct))" @onclick:stopPropagation="false" @onclick:preventDefault class="position-absolute d-inline-flex" style="right: 5px; top:0px; z-index:2;">
+                <SfButton IconCss="e-icons e-close-icon" IsPrimary="true" CssClass="e-flat e-custom"></SfButton>
+            </div>
+            <div class="form-row position-relative my-2">
+                <div class="col-6">
+                    <SfDropDownList TItem="ViewSubject" TValue="ViewSubject" PopupHeight="230px" Placeholder="Subject" @bind-Value="Misconduct.Subject" DataSource="@subjects">
+                        <DropDownListFieldSettings Text="Name"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                    <ValidationMessage For="@(() => Misconduct.Subject)"></ValidationMessage>
+                </div>
+                <div class="col-6">
+                    <SfDropDownList TItem="ViewOfficer" TValue="ViewOfficer" PopupHeight="230px" Placeholder="Officer" @bind-Value="Misconduct.Officer" DataSource="@officers">
+                        <DropDownListFieldSettings Text="Name"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                    <ValidationMessage For="@(() => Misconduct.Officer)"></ValidationMessage>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-6 form-field">
+                    <label class="form-check-label">
+                        Type of Misconduct
+                    </label>
+                    <SfMultiSelect Mode="@VisualMode.Box" Placeholder="Miconducts" @bind-Value="@Misconduct.Misconduct" DataSource="@MisconductsList">
+                        <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
+                    </SfMultiSelect>
+                    <ValidationMessage For="@(() => Misconduct.Misconduct)"></ValidationMessage>
+                </div>
+                <div class="col-6">
+                    <label class="form-check-label">
+                        Type of Weapon
+                    </label>
+                    <SfMultiSelect Mode="@VisualMode.Box" Enabled="@(Misconduct.Misconduct != null? Misconduct.Misconduct.Contains(1)? true : false : false)" Placeholder="Weapons" @bind-Value="@Misconduct.Weapon" DataSource="@WeaponsList">
+                        <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
+                    </SfMultiSelect>
+                    <ValidationMessage For="@(() => Misconduct.Weapon)"></ValidationMessage>
+                </div>
+                <div class="ml-3 d-inline-block" style="width:6rem;">
+                    <SfCheckBox CssClass="armed-checkbox" @bind-Checked="@Misconduct.Armed" Label="Armed"></SfCheckBox>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public List<ViewSubject> Subjects { get; set; }
+    [Parameter] public List<ViewOfficer> Officers { get; set; }
+    [Parameter] public ViewMisconduct Misconduct { get; set; }
+    [Parameter] public List<ViewMisconduct> AllMisconducts { get; set; }
+
+    List<ViewOfficer> officers;
+    List<ViewSubject> subjects;
+    List<ViewMisconduct> otherMisconducts;
+
+
+    [Parameter]
+    public EventCallback<ViewMisconduct> DeleteMisconduct { get; set; }
+
+    IReadOnlyList<EnumExtensions.ListItem> MisconductsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.MisconductEnum>.Items;
+    IReadOnlyList<EnumExtensions.ListItem> WeaponsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.WeaponEnum>.Items;
+
+    protected override void OnParametersSet()
+    {
+        otherMisconducts = AllMisconducts.Where(m => m != Misconduct).ToList();
+        SetAvailableOfficers();
+        SetAvailableSubjects();
+        //TODO Fix this god awful code
+        //officers = new();
+        //mapper.Map<List<ViewOfficer>, List<ViewOfficer>>(Officers, officers);
+        //subjects = new();
+        //mapper.Map<List<ViewSubject>, List<ViewSubject>>(Subjects, subjects);
+    }
+    void SetAvailableOfficers()
+    {
+        officers = new();
+        foreach (var officer in Officers)
+        {
+            if (otherMisconducts.Where(m => m.Officer == officer).Count() < Subjects.Count)
+            {
+                officers.Add(officer);
+            }
+        }
+    }
+    void SetAvailableSubjects()
+    {
+        subjects = new();
+        foreach (var subject in Subjects)
+        {
+            if (otherMisconducts.Where(m => m.Subject == subject).Count() < Officers.Count)
+            {
+                subjects.Add(subject);
+            }
+        }
+    }
+}

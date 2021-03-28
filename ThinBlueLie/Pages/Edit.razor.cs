@@ -26,7 +26,7 @@ namespace ThinBlueLie.Pages
 {
     public partial class Edit
     {
-        internal uint Id;
+        internal uint TimelineinfoId;
         [Inject] UserManager<ApplicationUser> UserManager { get; set; }
         [Inject] IMapper Mapper { get; set; }
         [Inject] NavigationManager NavManager { get; set; }
@@ -46,7 +46,7 @@ namespace ThinBlueLie.Pages
             id = QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var type) ? type.First() : "";
             if (!string.IsNullOrWhiteSpace(id))
             {
-                Id = Convert.ToUInt32(id);
+                TimelineinfoId = Convert.ToUInt32(id);
                 userState = await AuthState;
                 User = await UserManager.GetUserAsync(userState.User);
                 model = await FetchDataAsync();
@@ -81,13 +81,14 @@ namespace ThinBlueLie.Pages
         internal async Task<SubmitModel> FetchDataAsync()
         {
             string checkPending = "SELECT e.Confirmed FROM edithistory e where e.IdTimelineinfo = @id Order by e.Timestamp desc Limit 1;";
-            int Confirmed = await Data.LoadDataSingle<int, dynamic>(checkPending, new { id = Id });
-            if (Confirmed == 0) { 
+            int Confirmed = await Data.LoadDataSingle<int, dynamic>(checkPending, new { id = TimelineinfoId });
+            if (Confirmed == 0)
+            {
                 EventPendingEdit = true;
-                return new SubmitModel { Timelineinfos = new ViewTimelineinfo { } }; 
+                return new SubmitModel { Timelineinfos = new ViewTimelineinfo { } };
             }
             var query = "SELECT * From timelineinfo t where t.IdTimelineinfo = @id;";
-            Timelineinfo timelineinfo = await Data.LoadDataSingle<Timelineinfo, dynamic>(query, new { id = Id });
+            Timelineinfo timelineinfo = await Data.LoadDataSingle<Timelineinfo, dynamic>(query, new { id = TimelineinfoId });
             //TODO change to multipleQueryAsync
             if (timelineinfo != null)
             {
@@ -97,27 +98,29 @@ namespace ThinBlueLie.Pages
                 {
                     var mediaQuery = "SELECT *, (true) as Processed " +
                                             "From media m where m.IdTimelineinfo = @id Order By m.Rank;";
-                    var officerQuery = "SELECT o.*, t_o.Age, t_o.Misconduct, t_o.Weapon " +
-                            "FROM timelineinfo t " +
-                            "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
-                            "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
-                            "WHERE t.IdTimelineinfo = @id ;";
-                    var subjectQuery = "SELECT s.*, t_s.Age, t_s.Armed " +
-                            "FROM timelineinfo t " +
-                            "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
-                            "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
-                            "WHERE t.IdTimelineinfo = @id;";
+                    string misconductQuery = "SELECT * from misconducts WHERE IdTimelineinfo = @id";
+                    var officerQuery = "SELECT distinct o.* FROM misconducts m " +
+                                            "Join officers o on m.IdOfficer = o.IdOfficer " +
+                                            "WHERE m.IdTimelineinfo = @id;";
+                    var subjectQuery = "SELECT distinct o.* FROM misconducts m " +
+                                            "Join subjects o on m.IdSubject = o.IdSubject " +
+                                            "WHERE m.IdTimelineinfo = @id;";
 
                     //get media, officers, and subjects using timelineinfo id
-                    List<ViewMedia> Media = await Data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = Id });
-                    List<DBOfficer> officers = await Data.LoadData<DBOfficer, dynamic>(officerQuery, new { id = Id });
-                    List<DBSubject> subjects = await Data.LoadData<DBSubject, dynamic>(subjectQuery, new { id = Id });
+                    List<ViewMedia> Media = await Data.LoadData<ViewMedia, dynamic>(mediaQuery, new { id = TimelineinfoId });
+                    List<Misconducts> misconducts = await Data.LoadData<Misconducts, dynamic>(misconductQuery, new { id = TimelineinfoId });
+                    List<Officer> officers = await Data.LoadData<Officer, dynamic>(officerQuery, new { id = TimelineinfoId });
+                    List<Subject> subjects = await Data.LoadData<Subject, dynamic>(subjectQuery, new { id = TimelineinfoId });
 
                     Media = await ViewMedia.GetDataMany(Media);
 
                     var Info = Mapper.Map<Timelineinfo, ViewTimelineinfo>(timelineinfo);
-                    var Officers = Mapper.Map<List<DBOfficer>, List<ViewOfficer>>(officers);
-                    var Subjects = Mapper.Map<List<DBSubject>, List<ViewSubject>>(subjects);
+                    var Misconducts = Mapper.Map<List<Misconducts>, List<ViewMisconduct>>(misconducts);
+                    var Officers = Mapper.Map<List<Officer>, List<ViewOfficer>>(officers);
+                    var Subjects = Mapper.Map<List<Subject>, List<ViewSubject>>(subjects);
+
+                    officers.SetAgeFromDOB(timelineinfo.Date);
+                    subjects.SetAgeFromDOB(timelineinfo.Date);
                     for (int i = 0; i < Officers.Count; i++)
                     {
                         Officers[i].Rank = i;
@@ -131,6 +134,7 @@ namespace ThinBlueLie.Pages
                     oldInfo = new SubmitModel
                     {
                         Timelineinfos = Info,
+                        Misconducts = Misconducts,
                         Medias = Media,
                         Officers = Officers,
                         Subjects = Subjects
@@ -142,7 +146,7 @@ namespace ThinBlueLie.Pages
                 }
             }
             EventExists = false;
-            return new SubmitModel { Timelineinfos = new ViewTimelineinfo {Locked = timelineinfo.Locked } };
+            return new SubmitModel { Timelineinfos = new ViewTimelineinfo { Locked = timelineinfo.Locked } };
         }
 
 
@@ -154,7 +158,7 @@ namespace ThinBlueLie.Pages
                 string createNewEditHistory = @"INSERT INTO edithistory (`Confirmed`, `SubmittedBy`, `IdTimelineinfo`) 
                                                         VALUES ('2', @userId, @IdTimelineinfo);
                                             SELECT LAST_INSERT_ID();";
-                EditHistoryId = await Data.LoadDataSingle<int, dynamic>(createNewEditHistory, new { userId, IdTimelineinfo = Id });
+                EditHistoryId = await Data.LoadDataSingle<int, dynamic>(createNewEditHistory, new { userId, IdTimelineinfo = TimelineinfoId });
                 CreatedNewEditHistory = true;
             }
         }
@@ -178,123 +182,67 @@ namespace ThinBlueLie.Pages
             PairVersions Pair = new();
             CompareLogic compareLogic = new();
 
-            if (!compareLogic.Compare(model.Officers, oldInfo.Officers).AreEqual)
-            {
-                var officerPairs = Pair.PairOfficers(Mapper.Map<List<ViewOfficer>, List<DBOfficer>>(oldInfo.Officers),
-                                                           Mapper.Map<List<ViewOfficer>, List<DBOfficer>>(model.Officers));
-                bool ChangedJunction = false;
-                foreach (var pair in officerPairs)
-                {
-                    //if officer changed and the change was not a deletion
-                    if (pair.Item2 != null &&
-                        Mapper.Map<DBOfficer, CommonPerson>(pair.Item2).PersonChange(Mapper.Map<DBOfficer, CommonPerson>(pair.Item1)))
-                    {
-                        //create new edithistory 
-                        string sql = @"INSERT INTO edithistory (`SubmittedBy`, `Officers`)
-                                                  VALUES (@userId, '1');
-                                                  Set @editHistoryId = (Select LAST_INSERT_ID());
-                                       INSERT INTO edits_officer
-                                                 (`IdEditHistory`, `IdOfficer`, `Name`, `Race`, `Sex`, `Image`, `Local`, `Action`) 
-                                                 VALUES (@editHistoryId, @IdOfficer, @Name, @Race, @Sex, @Image, @Local, @Action);";
-                        EditActions Action;
-                        if (pair.Item1 == null)
-                            Action = EditActions.Addition;
-                        //if (pair.Item2 == null)  Not the place to do deletion of person
-                        //    Action = EditActions.Deletion;
-                        else
-                            Action = EditActions.Update;
-                        await Data.SaveData(sql, new
-                        {
-                            userId = userId,
-                            IdOfficer = pair.Item2?.IdOfficer,
-                            Name = pair.Item2?.Name.Trim(),
-                            Race = (int?)(pair.Item2?.Race ?? 0),
-                            Sex = (int?)(pair.Item2?.Sex ?? 0),
-                            Image = pair.Item1?.Image ?? pair.Item2?.Image,
-                            Local = pair.Item1?.Local ?? pair.Item2?.Local,
-                            Action = (int)Action
-                        });
-                    }
-                    if ((pair.Item1?.Age != pair.Item2?.Age) || (pair.Item1?.Misconduct != pair.Item2?.Misconduct)
-                        || (pair.Item1?.Weapon != pair.Item2?.Weapon))
-                        ChangedJunction = true;
-                }
-                if (ChangedJunction)
-                {
-                    editHistory.Timelineinfo_Officer = 1; 
-                    await CreateEmptyEditHistory();               
-                    
-                    foreach (var officer in model.Officers)
-                    {
-                        var weapon = officer.Weapon?.Sum() == 0 ? null : officer.Weapon?.Sum();
-                        string newTimelineinfoOfficer = $@"INSERT INTO edits_timelineinfo_officer
-                                                        (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `Misconduct`, `Weapon`, `Age`) 
-                                                        VALUES ('{EditHistoryId}', '{Id}', @IdOfficer, '{officer.Misconduct.Sum()}', '{weapon}', @Age);";
-                        await Data.SaveData(newTimelineinfoOfficer, officer);
-                    }                    
-                }
-            }
+
             if (!compareLogic.Compare(model.Subjects, oldInfo.Subjects).AreEqual)
             {
-                foreach (var subject in model.Subjects.Where(subject => subject.IdSubject == 0))
-                    subject.IdSubject = int.MaxValue - new Random().Next(10000000);
-
-                var subjectPairs = Pair.PairSubjects(Mapper.Map<List<ViewSubject>, List<DBSubject>>(oldInfo.Subjects),
-                                                           Mapper.Map<List<ViewSubject>, List<DBSubject>>(model.Subjects));
-                bool ChangedJunction = false;
-                foreach (var pair in subjectPairs)
+                for (int i = 0; i < model.Subjects.Count; i++)
                 {
-
-                    //if subject changed and the change was not a deletion
-                    if (pair.Item2 != null &&
-                        Mapper.Map<DBSubject, CommonPerson>(pair.Item2).PersonChange(Mapper.Map<DBSubject, CommonPerson>(pair.Item1)))
+                    var subject = model.Subjects[i];
+                    if (subject.IdSubject == 0)
                     {
-                        string sql = @"INSERT INTO edithistory (`SubmittedBy`, `Subjects`)
-                                                  VALUES (@userId, '1');
-                                                  Set @editHistoryId = (Select LAST_INSERT_ID());
-                                       INSERT INTO edits_subject
-                                                 (`IdEditHistory`, `IdSubject`, `Name`, `Race`, `Sex`, `Image`, `Local`, `Action`) 
-                                                 VALUES (@editHistoryId, @IdSubject, @Name, @Race, @Sex, @Image, @Local, @Action);";
-                        EditActions Action;
-                        if (pair.Item1 == null)
-                            Action = EditActions.Addition;
-                        //if (pair.Item2 == null)
-                        //    Action = EditActions.Deletion; not where person deletion should happen
-                        else
-                            Action = EditActions.Update;
-                        await Data.SaveData(sql, new
-                        {
-                            userId = userId,
-                            IdSubject = pair.Item2?.IdSubject,
-                            Name = pair.Item2?.Name.Trim(),
-                            Race = (int?)(pair.Item2?.Race ?? 0), // should never be null anyways
-                            Sex = (int?)(pair.Item2?.Sex ?? 0),
-                            Image = pair.Item1?.Image ?? pair.Item2?.Image,
-                            Local = pair.Item1?.Local ?? pair.Item2?.Local,
-                            Action = (int)Action
-                        });
+                        var subjectSql = @"SET @v1 = (SELECT COALESCE(Max(e.IdSubject +1),1) FROM edits_subject e);                                               
+                                                INSERT INTO edits_subject 
+                                                  (`IdEditHistory`, `IdSubject`, `Name`, `Race`, `Sex`, `Action`)
+                                                   VALUES (@IdEditHistory, @v1, @Name, @Race, @Sex, '0');
+                                                SELECT @v1;";
+                        //Add to subjects table and return id
+                        dynamic editSubject = subject;
+                        editSubject.IdEditHistory = EditHistoryId;
+                        var subjectId = await Data.SaveDataAndReturn<dynamic>(subjectSql, editSubject);
+                        model.Misconducts.Where(m => m.Subject == subject).FirstOrDefault().Subject.IdSubject = subjectId;
+                        model.Subjects[i].IdSubject = subjectId;
                     }
-                    //junction table has to change
-                    if ((pair.Item1?.Age != pair.Item2?.Age) || (pair.Item1?.Armed != pair.Item2?.Armed))
-                        ChangedJunction = true;
-                }
-                if (ChangedJunction)
-                {
-                    editHistory.Timelineinfo_Subject = 1; //triggers editHistory's set
-                    await CreateEmptyEditHistory();
-                    string newTimelineinfoSubject = $@"INSERT INTO edits_timelineinfo_subject
-                                                        (`IdEditHistory`, `IdTimelineinfo`, `IdSubject`, `Armed`, `Age`) 
-                                                        VALUES ('{EditHistoryId}', '{Id}', @IdSubject, @Armed, @Age);";
-                    await Data.SaveData(newTimelineinfoSubject, model.Subjects);
                 }
             }
+            if (!compareLogic.Compare(model.Officers, oldInfo.Officers).AreEqual)
+            {
+                for (int i = 0; i < model.Officers.Count; i++)
+                {
+                    var officer = model.Officers[i];
+                    if (officer.IdOfficer == 0)
+                    {
+                        var officerSql = @"SET @v1 = (SELECT COALESCE(Max(e.IdOfficer +1),1) FROM edits_officer e);                                               
+                                                INSERT INTO edits_officer 
+                                                  (`IdEditHistory`, `IdOfficer`, `Name`, `Race`, `Sex`, `Action`)
+                                                   VALUES (@IdEditHistory, @v1, @Name, @Race, @Sex, '0');
+                                                SELECT @v1;";
+                        //Add to officers table and return id
+                        dynamic editOfficer = officer;
+                        editOfficer.IdEditHistory = EditHistoryId;
+                        var officerId = await Data.SaveDataAndReturn<dynamic>(officerSql, editOfficer);
+                        model.Misconducts.Where(m => m.Officer == officer).FirstOrDefault().Officer.IdOfficer = officerId;
+                        model.Officers[i].IdOfficer = officerId;
+                    }
+                }
+            }
+            if (!compareLogic.Compare(model.Misconducts, oldInfo.Misconducts).AreEqual)
+            {
+                editHistory.Misconducts = 1; //triggers editHistory's set                
+                await CreateEmptyEditHistory();
+                var editMisconducts = Mapper.Map<List<ViewMisconduct>, List<EditMisconducts>>(model.Misconducts);
+                editMisconducts.ForEach(m => { m.IdTimelineinfo = (int)TimelineinfoId; m.IdEditHistory = EditHistoryId; });
+                string newTimelineinfoSubject = "INSERT INTO edits_misconducts (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `IdSubject`, `Misconduct`, `Weapon`, `Armed`) " +
+                                                    "VALUES (@IdEditHistory, @IdTimelineinfo, @IdOfficer, @IdSubject, @Misconduct, @Weapon, @Armed);";
+                await Data.SaveData(newTimelineinfoSubject, editMisconducts);
+            }
+
             if (!compareLogic.Compare(model.Medias, oldInfo.Medias).AreEqual)
             {
                 editHistory.EditMedia = 1;
                 await CreateEmptyEditHistory();
                 //giving it a random id that will be used for pairing, but never inserted into database
                 foreach (var media in model.Medias.Where(subject => subject.IdMedia == 0))
-                    media.IdMedia = int.MaxValue - new Random().Next(10000000);
+                    media.IdMedia = (int)(int.MaxValue - new Random().Next(10000000));
                 var mediaPairs = Pair.PairMedia(oldInfo.Medias, model.Medias);
                 foreach (var pair in mediaPairs)
                 {
@@ -314,7 +262,7 @@ namespace ThinBlueLie.Pages
                             string saveNewMedia = @$"INSERT INTO editmedia 
                                                       (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Thumbnail`, `OriginalUrl`,
                                                           `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`, `Action`)
-                                                       VALUES ('{EditHistoryId}', '{Id}', @MediaType, @SourcePath, @Thumbnail, @OriginalUrl,
+                                                       VALUES ('{EditHistoryId}', '{TimelineinfoId}', @MediaType, @SourcePath, @Thumbnail, @OriginalUrl,
                                                           @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', @Rank, '{(int)Action}');";
                             await Data.SaveData(saveNewMedia, pair.Item2);
                         }
@@ -323,7 +271,7 @@ namespace ThinBlueLie.Pages
                         {
                             Action = EditActions.Deletion;
                             string deleteMedia = $@"INSERT INTO editmedia (`IdEditHistory`, `IdTimelineinfo`, `IdMedia`, `SubmittedBy`, `Action`) 
-                                                    VALUES ('{EditHistoryId}', '{Id}', '{pair.Item1.IdMedia}', '{userId}', '{(int)Action}');";
+                                                    VALUES ('{EditHistoryId}', '{TimelineinfoId}', '{pair.Item1.IdMedia}', '{userId}', '{(int)Action}');";
                             await Data.SaveData(deleteMedia, new { });
                         }
                         //if updated
@@ -334,7 +282,7 @@ namespace ThinBlueLie.Pages
                             string updateMedia = $@"INSERT INTO editmedia 
                                                       (`IdEditHistory`, `IdTimelineinfo`, `MediaType`, `SourcePath`, `Thumbnail`, `OriginalUrl`,
                                                           `Gore`, `SourceFrom`, `Blurb`, `Credit`, `SubmittedBy`, `Rank`, `Action`)
-                                                       VALUES ('{EditHistoryId}', '{Id}', @MediaType, @SourcePath, @Thumbnail, @OriginalUrl,
+                                                       VALUES ('{EditHistoryId}', '{TimelineinfoId}', @MediaType, @SourcePath, @Thumbnail, @OriginalUrl,
                                                           @Gore, @SourceFrom, @Blurb, @Credit, '{userId}', @Rank, '{(int)Action}');";
                             await Data.SaveData(updateMedia, pair.Item2);
                         }
@@ -358,18 +306,17 @@ namespace ThinBlueLie.Pages
                 model.Timelineinfos.Context = sanitizer.Sanitize(model.Timelineinfos.Context);
                 string InsertEdits = $@"INSERT INTO edits (`IdEditHistory`, `IdTimelineinfo`, `Title`, `Date`, `State`, 
                                            `City`, `Context`, `Locked`) 
-                                        VALUES ('{EditHistoryId}', '{Id}', @Title, @Date, @State,
+                                        VALUES ('{EditHistoryId}', '{TimelineinfoId}', @Title, @Date, @State,
                                             @City, @Context, @Locked);";
                 await Data.SaveData(InsertEdits, model.Timelineinfos);
             }
 
             string updateEditHistory = @$"UPDATE edithistory SET 
                                                `Confirmed` = '0',`Edits` = @Edits, `EditMedia` = @EditMedia,
-                                                `Officers` = @Officers, `Subjects` = @Subjects, `Timelineinfo_Officer` = @Timelineinfo_Officer, 
-                                                `Timelineinfo_Subject` = @Timelineinfo_Subject 
+                                                `Officers` = @Officers, `Subjects` = @Subjects, `Misconducts` = @Misconducts
                                          WHERE (`IdEditHistory` = '{EditHistoryId}');";
             await Data.SaveData(updateEditHistory, editHistory);
-            Serilog.Log.Information("Created new Edit {EditChanges} for Event {id}", compareLogic.Compare(model, oldInfo).Differences, Id);
+            Serilog.Log.Information("Created new Edit {EditChanges} for Event {id}", compareLogic.Compare(model, oldInfo).Differences, TimelineinfoId);
             NavManager.NavigateTo("/Account/Profile");
             SavingData = false;
         }

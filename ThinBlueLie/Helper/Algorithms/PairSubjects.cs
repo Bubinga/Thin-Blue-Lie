@@ -7,28 +7,28 @@ namespace ThinBlueLie.Helper.Algorithms
 {
     public partial class PairVersions
     {
-        public List<Tuple<DBSubject, DBSubject>> PairSubjects(List<DBSubject> OldSubjects, List<DBSubject> NewSubjects)
+        public List<Tuple<Subject, Subject>> PairSubjects(List<Subject> OldSubjects, List<Subject> NewSubjects)
         {
-            List<Tuple<DBSubject, DBSubject>> Subjects = new List<Tuple<DBSubject, DBSubject>>();
+            List<Tuple<Subject, Subject>> Subjects = new List<Tuple<Subject, Subject>>();
             List<int> pairedIds = new List<int>();
             foreach (var subject in NewSubjects.Union(OldSubjects))
             {
                 if (!pairedIds.Contains(subject.IdSubject))
                 {
-                    List<DBSubject> pair = NewSubjects.Union(OldSubjects).Where(o => o.IdSubject == subject.IdSubject).ToList();
+                    List<Subject> pair = NewSubjects.Union(OldSubjects).Where(o => o.IdSubject == subject.IdSubject).ToList();
                     bool isPaired = false;
-                    Tuple<DBSubject, DBSubject> pairing;
+                    Tuple<Subject, Subject> pairing;
                     for (int i = 0; i < pair.Count; i++)
                     {
                         if (pair[i] != subject)
                         {
                             if (NewSubjects.Contains(pair[i]))
                             {
-                                pairing = new Tuple<DBSubject, DBSubject>(subject, pair[i]);
+                                pairing = new Tuple<Subject, Subject>(subject, pair[i]);
                             }
                             else //if oldOfficer contains it
                             {
-                                pairing = new Tuple<DBSubject, DBSubject>(pair[i], subject);
+                                pairing = new Tuple<Subject, Subject>(pair[i], subject);
                             }
                             Subjects.Add(pairing);
                             isPaired = true;
@@ -39,11 +39,11 @@ namespace ThinBlueLie.Helper.Algorithms
                     {
                         if (NewSubjects.Contains(subject))
                         {
-                            pairing = new Tuple<DBSubject?, DBSubject?>(null, subject);
+                            pairing = new Tuple<Subject?, Subject?>(null, subject);
                         }
                         else //if oldOfficer contains it
                         {
-                            pairing = new Tuple<DBSubject?, DBSubject?>(subject, null);
+                            pairing = new Tuple<Subject?, Subject?>(subject, null);
                         }
                         Subjects.Add(pairing);
                         pairedIds.Add(subject.IdSubject);

@@ -38,18 +38,6 @@
                     )))
                     </span>
                 }
-                <p>
-                    @if (SubjectPair.Item2 != null ? SubjectPair.Item2.Armed == SubjectPair.Item1.Armed : false)
-                    {
-                        @(SubjectPair.Item1.Armed == true? "Armed" : "Unarmed")
-                    }
-                    else
-                    {
-                        <del>
-                            @(SubjectPair.Item1.Armed == true? "Armed" : "Unarmed")
-                        </del>
-                    }
-                </p>
             }
         </div>
     }
@@ -88,24 +76,12 @@
                     )))
                 </span>
             }
-            <p>
-                @if ((SubjectPair.Item1 != null ? SubjectPair.Item1.Armed == SubjectPair.Item2.Armed : false) || IsNewEvent)
-                {
-                    @(SubjectPair.Item2.Armed == true? "Armed" : "Unarmed")
-                }
-                else
-                {
-                    <ins>
-                        @(SubjectPair.Item2.Armed == true? "Armed" : "Unarmed")
-                    </ins>
-                }
-            </p>
         }
     </div>
 </div>
 @code {
     [Parameter]
-    public Tuple<DBSubject, DBSubject> SubjectPair { get; set; }
+    public Tuple<Subject, Subject> SubjectPair { get; set; }
     [Parameter]
     public SideBySideDiffModel? Model { get; set; }
     [CascadingParameter(Name = "IsNewEvent")]
