@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using static DataAccessLibrary.Enums.TimelineinfoEnums;
 
 namespace ThinBlueLie.Models
 {
@@ -23,6 +24,7 @@ namespace ThinBlueLie.Models
         [Required]
         [MinLength(75, ErrorMessage = "Please type at least 75 characters")]
         public string Context { get; set; }
+        public SupDataEnum SupData { get; set; }
         public byte Locked { get; set; }
         public int? SubmittedBy { get; set; }
     }

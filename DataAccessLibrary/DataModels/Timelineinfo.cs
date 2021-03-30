@@ -15,6 +15,7 @@ namespace DataAccessLibrary.DataModels
         public string Context { get; set; }
         public byte Locked { get; set; }
         public int Owner { get; set; }
+        public SupDataEnum SupData { get; set; }
         /// <summary>
         /// Last time edits for this event was updated
         /// </summary> 

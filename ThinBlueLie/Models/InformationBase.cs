@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ThinBlueLie.Helper;
 using static DataAccessLibrary.Enums.MediaEnums;
+using static DataAccessLibrary.Enums.TimelineinfoEnums;
 using static ThinBlueLie.Components.SimilarPeople;
 using static ThinBlueLie.Helper.Extensions.EnumExtensions;
 using static ThinBlueLie.Searches.SearchClasses;
@@ -60,6 +61,13 @@ namespace ThinBlueLie.Models
         public DateTime Today { get; set; } =  DateTime.Today;
         public static readonly DateTime MinDate = new DateTime(1776, 7, 4);
         public DateTime? DateValue { get; set; } = DateTime.Today;
+
+        public class CheckableEnum
+        {
+            public SupDataEnum DataPoint { get; set; }
+            public bool IsSelected;
+        }
+        public List<CheckableEnum> CheckableEnums { get; set; } = new List<CheckableEnum>();
 
         internal void SetSameAsSubject(SimilarPeopleModel person)
         {

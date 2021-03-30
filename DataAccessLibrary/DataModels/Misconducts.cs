@@ -14,5 +14,6 @@ namespace DataAccessLibrary.DataModels
         public int Misconduct { get; set; }
         public int? Weapon { get; set; }
         public byte Armed { get; set; }
+        public byte SWAT { get; set; }
     }
 }

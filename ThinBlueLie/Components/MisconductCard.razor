@@ -12,12 +12,14 @@
             <div class="form-row position-relative my-2">
                 <div class="col-6">
                     <SfDropDownList TItem="ViewSubject" TValue="ViewSubject" PopupHeight="230px" Placeholder="Subject" @bind-Value="Misconduct.Subject" DataSource="@subjects">
+                        <DropDownListEvents TItem="ViewSubject" TValue="ViewSubject" ValueChange="updateOfficers"></DropDownListEvents>
                         <DropDownListFieldSettings Text="Name"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => Misconduct.Subject)"></ValidationMessage>
                 </div>
                 <div class="col-6">
                     <SfDropDownList TItem="ViewOfficer" TValue="ViewOfficer" PopupHeight="230px" Placeholder="Officer" @bind-Value="Misconduct.Officer" DataSource="@officers">
+                        <DropDownListEvents TItem="ViewOfficer" TValue="ViewOfficer" ValueChange="updateSubjects"></DropDownListEvents>
                         <DropDownListFieldSettings Text="Name"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <ValidationMessage For="@(() => Misconduct.Officer)"></ValidationMessage>
@@ -42,8 +44,9 @@
                     </SfMultiSelect>
                     <ValidationMessage For="@(() => Misconduct.Weapon)"></ValidationMessage>
                 </div>
-                <div class="ml-3 d-inline-block" style="width:6rem;">
-                    <SfCheckBox CssClass="armed-checkbox" @bind-Checked="@Misconduct.Armed" Label="Armed"></SfCheckBox>
+                <div class="ml-1 d-flex" style="width:6rem;">
+                    <SfCheckBox CssClass="armed-checkbox mr-4" @bind-Checked="@Misconduct.Armed" Label="Armed"></SfCheckBox>
+                    <SfCheckBox CssClass="armed-checkbox" @bind-Checked="@Misconduct.SWAT" Label="SWAT"></SfCheckBox>
                 </div>
             </div>
         </div>
@@ -77,6 +80,16 @@
         //mapper.Map<List<ViewOfficer>, List<ViewOfficer>>(Officers, officers);
         //subjects = new();
         //mapper.Map<List<ViewSubject>, List<ViewSubject>>(Subjects, subjects);
+    }
+    void updateOfficers(ChangeEventArgs<ViewSubject,ViewSubject> args)
+    {
+        var usedFields = otherMisconducts.Where(s => s.Subject == Misconduct.Subject).ToList();
+        officers = Officers.Except(usedFields.Select(s => s.Officer)).ToList();
+    }
+    void updateSubjects(ChangeEventArgs<ViewOfficer, ViewOfficer> args)
+    {
+        var usedFields = otherMisconducts.Where(s => s.Officer == Misconduct.Officer).ToList();
+        subjects = Subjects.Except(usedFields.Select(s => s.Subject)).ToList();
     }
     void SetAvailableOfficers()
     {

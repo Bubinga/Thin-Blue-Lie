@@ -130,7 +130,7 @@ namespace ThinBlueLie
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDA0NDQ1QDMxMzgyZTM0MmUzMFpjQ2xXQTBMT1N2TnQ2WDhWektjNGRVTlFOMCs3dk9PVHE0QjJ3QTN6T3c9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDE4MzI1QDMxMzgyZTM0MmUzMFZOdnJVREc3R1RTU0FTbEw3Y20rbUlwWFR0d3AyekVBNjNkdTRSZVBNdWs9");
             ConnectionString = Configuration["ConnectionStrings:DataDB"];
             app.UseForwardedHeaders();
 

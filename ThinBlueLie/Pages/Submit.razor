@@ -7,7 +7,7 @@
 @using ThinBlueLie.Helper.Extensions
 @using Syncfusion.Blazor.RichTextEditor
 @using Syncfusion.Blazor.Buttons
-@using static ThinBlueLie.Searches.SearchClasses;
+@using static DataAccessLibrary.Enums.TimelineinfoEnums
 @using Syncfusion.Blazor.Calendars
 
 
@@ -74,6 +74,15 @@
                 <div class="w-100 pt-3">
                     <SfTextBox CssClass="e-filled" Placeholder="Title" FloatLabelType="@FloatLabelType.Always" @bind-Value="model.Timelineinfos.Title"></SfTextBox>
                     <ValidationMessage For="@(() => model.Timelineinfos.Title)"></ValidationMessage>
+                </div>
+                <div class="mt-3">
+                    <ul class="pl-0" style="list-style-type:none;">
+                        @foreach (var datum in CheckableEnums)
+                        {
+                        <li> <SfCheckBox Label="@EnumExtensions.GetEnumDisplayName(datum.DataPoint)" @bind-Checked="datum.IsSelected"></SfCheckBox></li>
+                        }
+                        @{ model.Timelineinfos.SupData = (SupDataEnum)(CheckableEnums.Where(cb => cb.IsSelected).Select(val => (int)val.DataPoint)).Sum(); }
+                    </ul>
                 </div>
             </div>
             <hr />

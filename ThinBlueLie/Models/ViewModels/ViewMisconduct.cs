@@ -19,5 +19,6 @@ namespace ThinBlueLie.Models
         [WeaponValidator("Misconduct", ErrorMessage = "'Unnecessary Use of Force' is selected, enter at least one weapon")]
         public int[]? Weapon { get; set; }
         public byte Armed { get; set; }
+        public byte SWAT { get; set; }
     }
 }

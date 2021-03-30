@@ -19,9 +19,8 @@ using System.Threading.Tasks;
 using ThinBlueLie.Helper;
 using ThinBlueLie.Helper.Extensions;
 using ThinBlueLie.Models;
-using static ThinBlueLie.Helper.Algorithms.WebsiteProfiling.WebsiteProfile;
 using static ThinBlueLie.Searches.SearchClasses;
-
+using static DataAccessLibrary.Enums.TimelineinfoEnums;
 namespace ThinBlueLie.Pages
 {
     public partial class Submit
@@ -43,6 +42,8 @@ namespace ThinBlueLie.Pages
             {
                 SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
                 SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
+                foreach (var DPvalue in Enum.GetValues(typeof(SupDataEnum)))
+                    CheckableEnums.Add(new CheckableEnum() { DataPoint = (SupDataEnum)DPvalue });
                 SimilarEvents = await SearchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
             }
         }
@@ -57,6 +58,7 @@ namespace ThinBlueLie.Pages
                 await JS.InvokeVoidAsync("feather.replace");
             }
         }
+
         protected async Task HandleValidSubmitAsync()
         {
             //display loading gif in modal while doing the processing

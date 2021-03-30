@@ -231,8 +231,9 @@ namespace ThinBlueLie.Pages
                 await CreateEmptyEditHistory();
                 var editMisconducts = Mapper.Map<List<ViewMisconduct>, List<EditMisconducts>>(model.Misconducts);
                 editMisconducts.ForEach(m => { m.IdTimelineinfo = (int)TimelineinfoId; m.IdEditHistory = EditHistoryId; });
-                string newTimelineinfoSubject = "INSERT INTO edits_misconducts (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `IdSubject`, `Misconduct`, `Weapon`, `Armed`) " +
-                                                    "VALUES (@IdEditHistory, @IdTimelineinfo, @IdOfficer, @IdSubject, @Misconduct, @Weapon, @Armed);";
+                string newTimelineinfoSubject = 
+                    "INSERT INTO edits_misconducts (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `IdSubject`, `Misconduct`, `Weapon`, `Armed`, `SWAT`) " +
+                             "VALUES (@IdEditHistory, @IdTimelineinfo, @IdOfficer, @IdSubject, @Misconduct, @Weapon, @Armed, @SWAT);";
                 await Data.SaveData(newTimelineinfoSubject, editMisconducts);
             }
 
