@@ -147,42 +147,42 @@ namespace ThinBlueLie.Pages
                 //Subject Table
                 foreach (var subject in model.Subjects)
                 {
-                    int IdSubject = 0;
                     subject.Name = subject.Name.Trim();
+                    //Not existing subject so create new subject
                     if (subject.SameAsId == null)
                     {
-                        //Create new subject
+                        subject.DOB = subject.Age?.AgeToDOB(model.Timelineinfos.Date); 
                         var subjectSql = $@"SET @v1 = (SELECT COALESCE(Max(e.IdSubject +1),1) FROM edits_subject e);                                               
                                             INSERT INTO edits_subject 
-                                              (`IdEditHistory`, `IdSubject`, `Name`, `Race`, `Sex`, `Action`)
-                                               VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, '0');
+                                              (`IdEditHistory`, `IdSubject`, `Name`, `Race`, `Sex`, `DOB`, `Action`)
+                                               VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, @DOB, '0');
                                             SELECT @v1;";
                         //Add to subjects table and return id
-                        IdSubject = await connection.QuerySingleAsync<int>(subjectSql, subject);
+                        subject.IdSubject = await connection.QuerySingleAsync<int>(subjectSql, subject);
                         editHistory.Subjects = 1;
                     }                    
                 }
                 //Officer Table
                 foreach (var officer in model.Officers)
                 {
-                    int IdOfficer = 0;
                     officer.Name = officer.Name.Trim();
+                    //Not existing officer, so create new officer
                     if (officer.SameAsId == null)
                     {
-                        //Create new officer
+                        officer.DOB = officer.Age?.AgeToDOB(model.Timelineinfos.Date);
                         var officerSql = $@"SET @v1 = (SELECT COALESCE(Max(e.IdOfficer + 1),1) FROM edits_officer e);                                              
-                                            INSERT INTO edits_officer (`IdEditHistory`, `IdOfficer`, `Name`, `Race`, `Sex`, `Action`)
-                                               VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, '0');
+                                            INSERT INTO edits_officer (`IdEditHistory`, `IdOfficer`, `Name`, `Race`, `Sex`, `DOB`, `Action`)
+                                               VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, @DOB, '0');
                                             SELECT @v1;";
                         //Add to officers table and return id
-                        IdOfficer = await connection.QuerySingleAsync<int>(officerSql, officer);
+                        officer.IdOfficer = await connection.QuerySingleAsync<int>(officerSql, officer);
                         editHistory.Officers = 1;
                     }                   
                 }
 
                 var editMisconducts = Mapper.Map<List<ViewMisconduct>, List<EditMisconducts>>(model.Misconducts);
                 editMisconducts.ForEach(m => { m.IdTimelineinfo = IdTimelineinfo; m.IdEditHistory = EditHistoryId; });
-                string newTimelineinfoSubject = "INSERT INTO edits_misconducts (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `IdSubject`, `Misconduct`, `Weapon`, `Armed`) " +
+                string newTimelineinfoSubject = "INSERT INTO edit_misconducts (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `IdSubject`, `Misconduct`, `Weapon`, `Armed`) " +
                                                     "VALUES (@IdEditHistory, @IdTimelineinfo, @IdOfficer, @IdSubject, @Misconduct, @Weapon, @Armed);";
                 await connection.ExecuteAsync(newTimelineinfoSubject, editMisconducts);
 

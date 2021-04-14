@@ -32,6 +32,15 @@ namespace ThinBlueLie.Helper.Extensions
             return false;
         }
 
+        public static DateTime AgeToDOB(this int Age, DateTime? endDate)
+        {
+            if (endDate == null)
+                endDate = DateTime.Today;
+            var DOB = ((DateTime)endDate).AddYears(-Age);
+            DOB = new DateTime(DOB.Year,1,1);
+            return DOB;
+        }
+
         public static int AgeFromDOB(this DateTime DOB, DateTime? endDate)
         {
             if (endDate == null)
@@ -46,7 +55,7 @@ namespace ThinBlueLie.Helper.Extensions
         {
             foreach (var person in People)
             {
-                person.Age = person.DOB.AgeFromDOB(date);            
+                person.Age = person.DOB?.AgeFromDOB(date);            
             }
         }
     }

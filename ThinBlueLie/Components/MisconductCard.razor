@@ -1,6 +1,7 @@
 ﻿@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Buttons
 @using ThinBlueLie.Helper.Extensions
+@using System.Collections.ObjectModel 
 @inject AutoMapper.IMapper mapper
 
 <div class="Add-Misconduct mt-2">
@@ -75,21 +76,20 @@
         otherMisconducts = AllMisconducts.Where(m => m != Misconduct).ToList();
         SetAvailableOfficers();
         SetAvailableSubjects();
-        //TODO Fix this god awful code
-        //officers = new();
-        //mapper.Map<List<ViewOfficer>, List<ViewOfficer>>(Officers, officers);
-        //subjects = new();
-        //mapper.Map<List<ViewSubject>, List<ViewSubject>>(Subjects, subjects);
     }
     void updateOfficers(ChangeEventArgs<ViewSubject,ViewSubject> args)
     {
         var usedFields = otherMisconducts.Where(s => s.Subject == Misconduct.Subject).ToList();
         officers = Officers.Except(usedFields.Select(s => s.Officer)).ToList();
+        //var officerlist = Officers.Except(usedFields.Select(s => s.Officer)).ToList();
+        //officers = new ObservableCollection<ViewOfficer>(officerlist);
     }
     void updateSubjects(ChangeEventArgs<ViewOfficer, ViewOfficer> args)
     {
         var usedFields = otherMisconducts.Where(s => s.Officer == Misconduct.Officer).ToList();
         subjects = Subjects.Except(usedFields.Select(s => s.Subject)).ToList();
+        //var subjectlist = Subjects.Except(usedFields.Select(s => s.Subject)).ToList();
+        //subjects = new ObservableCollection<ViewSubject>(subjectlist);
     }
     void SetAvailableOfficers()
     {

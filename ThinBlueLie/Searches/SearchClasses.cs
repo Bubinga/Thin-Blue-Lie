@@ -1,4 +1,5 @@
-﻿using DataAccessLibrary.Enums;
+﻿using DataAccessLibrary.DataModels;
+using DataAccessLibrary.Enums;
 using System;
 using System.Collections.Generic;
 
@@ -32,7 +33,7 @@ namespace ThinBlueLie.Searches
             public double Score { get; set; }
             //public int MiddleNameCount { get; set; }
         }
-        public class SimilarPerson
+        public class SimilarPerson : CommonPerson
         {
             public class SimilarPersonEvents
             {
@@ -40,13 +41,7 @@ namespace ThinBlueLie.Searches
                 public DateTime Date { get; set; }
                 public byte State { get; set; }
                 public string City { get; set; }
-            }           
-            public string Name { get; set; }
-            public TimelineinfoEnums.RaceEnum Race { get; set; }
-            public TimelineinfoEnums.SexEnum Sex { get; set; }
-            public byte? Age { get; set; }
-            public string? Image { get; set; }
-            public byte? Local { get; set; }
+            }
             public List<SimilarPersonEvents> Events { get; set; }
 
         }

@@ -12,6 +12,6 @@ namespace DataAccessLibrary.DataModels
         public int? Age { get; set; }
         public SexEnum Sex { get; set; }
         public RaceEnum Race { get; set; }
-        public DateTime DOB { get; set; }
+        public DateTime? DOB { get; set; }
     }
 }

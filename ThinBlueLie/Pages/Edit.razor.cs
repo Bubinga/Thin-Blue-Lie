@@ -170,7 +170,6 @@ namespace ThinBlueLie.Pages
         int userId;
         int EditHistoryId;
         public ApplicationUser User;
-        //TODO only add to junction tables is something changes. 
         internal async void HandleValidSubmitAsync()
         {
             CreatedNewEditHistory = false;
@@ -190,10 +189,11 @@ namespace ThinBlueLie.Pages
                     var subject = model.Subjects[i];
                     if (subject.IdSubject == 0)
                     {
+                        subject.DOB = subject.Age?.AgeToDOB(model.Timelineinfos.Date);
                         var subjectSql = @"SET @v1 = (SELECT COALESCE(Max(e.IdSubject +1),1) FROM edits_subject e);                                               
                                                 INSERT INTO edits_subject 
-                                                  (`IdEditHistory`, `IdSubject`, `Name`, `Race`, `Sex`, `Action`)
-                                                   VALUES (@IdEditHistory, @v1, @Name, @Race, @Sex, '0');
+                                                  (`IdEditHistory`, `IdSubject`, `Name`, `Race`, `Sex`, `DOB`, `Action`)
+                                                   VALUES (@IdEditHistory, @v1, @Name, @Race, @Sex, @DOB, '0');
                                                 SELECT @v1;";
                         //Add to subjects table and return id
                         dynamic editSubject = subject;
@@ -211,10 +211,11 @@ namespace ThinBlueLie.Pages
                     var officer = model.Officers[i];
                     if (officer.IdOfficer == 0)
                     {
+                        officer.DOB = officer.Age?.AgeToDOB(model.Timelineinfos.Date);
                         var officerSql = @"SET @v1 = (SELECT COALESCE(Max(e.IdOfficer +1),1) FROM edits_officer e);                                               
                                                 INSERT INTO edits_officer 
-                                                  (`IdEditHistory`, `IdOfficer`, `Name`, `Race`, `Sex`, `Action`)
-                                                   VALUES (@IdEditHistory, @v1, @Name, @Race, @Sex, '0');
+                                                  (`IdEditHistory`, `IdOfficer`, `Name`, `Race`, `Sex`, `DOB`, `Action`)
+                                                   VALUES (@IdEditHistory, @v1, @Name, @Race, @Sex, @DOB, '0');
                                                 SELECT @v1;";
                         //Add to officers table and return id
                         dynamic editOfficer = officer;
@@ -232,7 +233,7 @@ namespace ThinBlueLie.Pages
                 var editMisconducts = Mapper.Map<List<ViewMisconduct>, List<EditMisconducts>>(model.Misconducts);
                 editMisconducts.ForEach(m => { m.IdTimelineinfo = (int)TimelineinfoId; m.IdEditHistory = EditHistoryId; });
                 string newTimelineinfoSubject = 
-                    "INSERT INTO edits_misconducts (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `IdSubject`, `Misconduct`, `Weapon`, `Armed`, `SWAT`) " +
+                    "INSERT INTO edit_misconducts (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `IdSubject`, `Misconduct`, `Weapon`, `Armed`, `SWAT`) " +
                              "VALUES (@IdEditHistory, @IdTimelineinfo, @IdOfficer, @IdSubject, @Misconduct, @Weapon, @Armed, @SWAT);";
                 await Data.SaveData(newTimelineinfoSubject, editMisconducts);
             }

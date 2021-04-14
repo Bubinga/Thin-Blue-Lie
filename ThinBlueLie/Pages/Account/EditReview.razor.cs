@@ -262,7 +262,7 @@ namespace ThinBlueLie.Pages.Account
                 }
                 if (change.Misconducts == 1)
                 {
-                    string getTOChanges = "Select * from edits_misconducts e Where e.IdEditHistory = @id";
+                    string getTOChanges = "Select * from edit_misconducts e Where e.IdEditHistory = @id";
                     var changes = await connection.QueryAsync<EditMisconducts>(getTOChanges, new { id = change.IdEditHistory });
                     string deleteEverything = "Delete from misconducts m where m.IdTimelineinfo = @IdTimelineinfo;";
                     await connection.ExecuteAsync(deleteEverything, changes);

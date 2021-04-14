@@ -113,6 +113,7 @@ namespace ThinBlueLie.Helper
                     Name = person.Name,
                     Race = person.Race,
                     Sex = person.Sex,
+                    DOB = person.DOB,
                     IdPerson = person.IdOfficer
                 };
                 SimilarPeople.Add(Person);
@@ -180,6 +181,7 @@ namespace ThinBlueLie.Helper
                     Name = person.Name,
                     Race = person.Race,
                     Sex = person.Sex,
+                    DOB = person.DOB,
                     IdPerson = person.IdSubject
                 };
                 SimilarPeople.Add(Person);

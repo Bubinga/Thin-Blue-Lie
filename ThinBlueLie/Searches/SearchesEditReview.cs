@@ -99,8 +99,7 @@ namespace ThinBlueLie.Searches
         {
             var people = new EditReviewModel {New = new EditReviewSegment(), Old = new EditReviewSegment()};
             var WhatChangedQuery = "Select * from edithistory e Where e.IdEditHistory = @id";
-            var editChanges =
-                await Data.LoadDataSingle<EditHistory, dynamic>(WhatChangedQuery, new {id});
+            var editChanges = await Data.LoadDataSingle<EditHistory, dynamic>(WhatChangedQuery, new {id});
             if (editChanges.Subjects == 1)
             {
                 var SubjectChangedQuery = "Select * From edits_subject s Where s.IdEditHistory = @id";
@@ -108,8 +107,7 @@ namespace ThinBlueLie.Searches
                     await Data.LoadDataSingle<SimilarSubject, dynamic>(SubjectChangedQuery, new {id}); //Get new subject
 
                 var SubjectOldQuery = "Select * From subjects s Where s.IdSubject = @id;";
-                people.Old.SubjectPerson = await Data.LoadDataSingle<SimilarSubject, dynamic>(SubjectOldQuery,
-                    new {id = people.New.SubjectPerson.IdSubject});
+                people.Old.SubjectPerson = await Data.LoadDataSingle<SimilarSubject, dynamic>(SubjectOldQuery, new {id = people.New.SubjectPerson.IdSubject});
 
                 var sql3 = "SELECT distinct t.IdTimelineinfo, t.Date, t.City, t.State " +
                            "FROM timelineinfo t " +
@@ -117,8 +115,7 @@ namespace ThinBlueLie.Searches
                            "JOIN subjects s ON m.IdSubject = s.IdSubject " +
                            "WHERE s.IdSubject = @id;";
                 people.New.SubjectPerson.Events = people.Old.SubjectPerson.Events
-                    = await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3,
-                        new {id = people.New.SubjectPerson.IdSubject});
+                    = await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3, new {id = people.New.SubjectPerson.IdSubject});
             }
 
             if (editChanges.Officers == 1)

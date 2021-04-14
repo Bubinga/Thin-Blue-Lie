@@ -21,7 +21,7 @@ namespace ThinBlueLie.Models
 
         public SubmitModel model = new()
         {
-            Timelineinfos = new ViewTimelineinfo(),
+            Timelineinfos = new ViewTimelineinfo() {Date = DateTime.Today },
             Medias = new List<ViewMedia> {
                 new ViewMedia { MediaType = MediaTypeEnum.Image, Blurb = "Placeholder Image", Rank = 0 },
                 new ViewMedia { MediaType = MediaTypeEnum.Video, Blurb = "Placeholder Video", Rank = 1 },

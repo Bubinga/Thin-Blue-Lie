@@ -16,7 +16,7 @@ namespace ThinBlueLie.Helper.Validators
             int[] values = (int[])value;
             if (values.Sum() > misconductMax | values.Sum() == 0) //bad
             {
-                return new ValidationResult("Select at least one Misconduct", new[] { validationContext.MemberName });
+                return new ValidationResult("Select at least one Misconduct Type", new[] { validationContext.MemberName });
             }
             else
             {

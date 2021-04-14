@@ -29,6 +29,7 @@ namespace ThinBlueLie.Models
         public List<ViewSubject> Subjects { get; set; }
         [BindProperty]
         [ValidateComplexType]
+        [MisconductListValidator]
         public List<ViewMisconduct> Misconducts { get; set; }        
     }
 }

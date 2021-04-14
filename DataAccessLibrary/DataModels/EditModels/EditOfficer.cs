@@ -6,7 +6,6 @@ namespace DataAccessLibrary.DataModels
 {
     public class EditOfficer
     {
-        public int IdEditOfficer { get; set; }
         public int IdEditHistory { get; set; }
         public int IdOfficer { get; set; }
         public int EditCount { get; set; }
@@ -14,9 +13,6 @@ namespace DataAccessLibrary.DataModels
         public byte Race { get; set; }
         public byte Sex { get; set; }
         public DateTime DOB { get; set; }
-        public string? Image { get; set; }
-        public byte Local { get; set; }
-        public List<Misconducts> Interactions { get; set; }
         public byte Action { get; set; }
     }
 }

@@ -99,7 +99,7 @@
             <div id="SubjectList">
                 @foreach ((var subject, Int32 i) in model.Subjects.Select((subject, i) => (subject, i)))
                 {
-                    <SubjectCard subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects"></SubjectCard>
+                    <SubjectCard subject="subject" DeleteSubject="DeleteSubject" SuggestSubjects="SuggestSubjects" EventDate="model.Timelineinfos.Date"></SubjectCard>
                     if (SimilarSubjects[i] != null)
                     {
                         <SimilarPeople PersonRank="i" SetSameAs="SetSameAsSubject" People="SimilarSubjects[i]"></SimilarPeople>
@@ -120,7 +120,8 @@
             <div id="OfficerList">
                 @foreach ((var officer, Int32 i) in model.Officers.Select((officer, i) => (officer, i)))
                 {
-                    <OfficerCard isSubmit="true" officer="officer" DeleteOfficer="DeleteOfficer" SuggestOfficers="SuggestOfficers"></OfficerCard>
+                    <OfficerCard officer="officer" DeleteOfficer="DeleteOfficer" 
+                                 SuggestOfficers="SuggestOfficers" EventDate="model.Timelineinfos.Date"></OfficerCard>
                     if (SimilarOfficers[i] != null)
                     {
                         <SimilarPeople PersonRank="i" SetSameAs="SetSameAsOfficer" People="SimilarOfficers[i]"></SimilarPeople>
