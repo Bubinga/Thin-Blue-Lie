@@ -260,24 +260,14 @@ namespace ThinBlueLie.Pages.Account
                         }
                     }
                 }
-                if (change.Timelineinfo_Officer == 1)
+                if (change.Misconducts == 1)
                 {
-                    string getTOChanges = "Select * from edits_timelineinfo_officer e Where e.IdEditHistory = @id";
-                    var changes = await connection.QueryAsync<EditTimelineinfoOfficer>(getTOChanges, new { id = change.IdEditHistory });
-                    string deleteEverything = "Delete from timelineinfo_officer t_o where t_o.IdTimelineinfo = @IdTimelineinfo;";
+                    string getTOChanges = "Select * from edit_misconducts e Where e.IdEditHistory = @id";
+                    var changes = await connection.QueryAsync<EditMisconducts>(getTOChanges, new { id = change.IdEditHistory });
+                    string deleteEverything = "Delete from misconducts m where m.IdTimelineinfo = @IdTimelineinfo;";
                     await connection.ExecuteAsync(deleteEverything, changes);
-                    string applyChanges = @"INSERT INTO timelineinfo_officer (IdTimelineinfo, IdOfficer, Age, Misconduct, Weapon) 
-                                            VALUES (@IdTimelineinfo, @IdOfficer, @Age, @Misconduct, @Weapon);";
-                    await connection.ExecuteAsync(applyChanges, changes);
-                }
-                if (change.Timelineinfo_Subject == 1)
-                {
-                    string getTOChanges = "Select * from edits_timelineinfo_subject e Where e.IdEditHistory = @id";
-                    var changes = await connection.QueryAsync<EditTimelineinfoSubject>(getTOChanges, new { id = change.IdEditHistory });
-                    string deleteEverything = "Delete from timelineinfo_subject ts where ts.IdTimelineinfo = @IdTimelineinfo;";
-                    await connection.ExecuteAsync(deleteEverything, changes);
-                    string applyChanges = @"INSERT INTO timelineinfo_subject (IdTimelineinfo, IdSubject, Age, Armed) 
-                                            VALUES (@IdTimelineinfo, @IdSubject, @Age, @Armed);";
+                    string applyChanges = "INSERT INTO misconducts (`IdTimelineinfo`, `IdOfficer`, `IdSubject`, `SubjectAge`, `OfficerAge`, `Misconduct`, `Weapon`, `Armed`) "+ 
+                                                "VALUES (@IdTimelineinfo, @IdOfficer, @IdSubject, @SubjectAge, @OfficerAge, @Misconduct, @Weapon, @Armed`);";
                     await connection.ExecuteAsync(applyChanges, changes);
                 }
 

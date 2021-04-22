@@ -15,7 +15,6 @@ namespace DataAccessLibrary.DataModels.EditModels
         public byte EditMedia { get; set; }
         public byte Officers { get; set; }
         public byte Subjects { get; set; }
-        public byte Timelineinfo_Subject { get; set; }
-        public byte Timelineinfo_Officer { get; set; }
+        public byte Misconducts { get; set; }
     }
 }

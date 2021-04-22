@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Dapper;
+using DataAccessLibrary.DataModels;
 using DataAccessLibrary.DataModels.EditModels;
 using DataAccessLibrary.Enums;
 using DataAccessLibrary.UserModels;
@@ -18,9 +19,8 @@ using System.Threading.Tasks;
 using ThinBlueLie.Helper;
 using ThinBlueLie.Helper.Extensions;
 using ThinBlueLie.Models;
-using static ThinBlueLie.Helper.Algorithms.WebsiteProfiling.WebsiteProfile;
 using static ThinBlueLie.Searches.SearchClasses;
-
+using static DataAccessLibrary.Enums.TimelineinfoEnums;
 namespace ThinBlueLie.Pages
 {
     public partial class Submit
@@ -30,6 +30,7 @@ namespace ThinBlueLie.Pages
         [Inject] SignInManager<ApplicationUser> SignInManager { get; set; }
         [Inject] UserManager<ApplicationUser> UserManager { get; set; }
         [Inject] IJSRuntime JS { get; set; }
+        [Inject] public IMapper Mapper { get; set; }
         public AuthenticationState userState;
         public bool SavingData { get; set; }
         [CascadingParameter] Task<AuthenticationState> AuthState { get; set; }
@@ -41,6 +42,8 @@ namespace ThinBlueLie.Pages
             {
                 SimilarOfficers.Add(new List<SimilarPersonGeneral> { });
                 SimilarSubjects.Add(new List<SimilarPersonGeneral> { });
+                foreach (var DPvalue in Enum.GetValues(typeof(SupDataEnum)))
+                    CheckableEnums.Add(new CheckableEnum() { DataPoint = (SupDataEnum)DPvalue });
                 SimilarEvents = await SearchesSubmit.GetSimilar(DateTime.Today.ToString("yyyy-MM-dd"));
             }
         }
@@ -55,6 +58,7 @@ namespace ThinBlueLie.Pages
                 await JS.InvokeVoidAsync("feather.replace");
             }
         }
+
         protected async Task HandleValidSubmitAsync()
         {
             //display loading gif in modal while doing the processing
@@ -143,68 +147,49 @@ namespace ThinBlueLie.Pages
                 //Subject Table
                 foreach (var subject in model.Subjects)
                 {
-                    int IdSubject = 0;
                     subject.Name = subject.Name.Trim();
+                    //Not existing subject so create new subject
                     if (subject.SameAsId == null)
                     {
-                        //Create new subject
+                        subject.DOB = subject.Age?.AgeToDOB(model.Timelineinfos.Date); 
                         var subjectSql = $@"SET @v1 = (SELECT COALESCE(Max(e.IdSubject +1),1) FROM edits_subject e);                                               
                                             INSERT INTO edits_subject 
-                                              (`IdEditHistory`, `IdSubject`, `Name`, `Race`, `Sex`, `Action`)
-                                               VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, '0');
+                                              (`IdEditHistory`, `IdSubject`, `Name`, `Race`, `Sex`, `DOB`, `Action`)
+                                               VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, @DOB, '0');
                                             SELECT @v1;";
                         //Add to subjects table and return id
-                        IdSubject = await connection.QuerySingleAsync<int>(subjectSql, subject);
+                        subject.IdSubject = await connection.QuerySingleAsync<int>(subjectSql, subject);
                         editHistory.Subjects = 1;
-                    }
-                    //Add to junction table    
-                    var junctionSql = @"INSERT INTO edits_timelineinfo_subject (`IdEditHistory`, `IdTimelineinfo`, `IdSubject`, `Armed`, `Age`)
-                                        VALUES (@EditHistoryId, @IdTimelineinfo, @IdSubject, @Armed, @Age);";
-                    await connection.ExecuteAsync(junctionSql, new
-                    {
-                        EditHistoryId,
-                        IdTimelineinfo,
-                        IdSubject = subject.SameAsId == null? IdSubject : subject.SameAsId,
-                        Armed = Convert.ToByte(subject.Armed),
-                        subject.Age
-                    });
-                    editHistory.Timelineinfo_Subject = 1;
+                    }                    
                 }
                 //Officer Table
                 foreach (var officer in model.Officers)
                 {
-                    int IdOfficer = 0;
                     officer.Name = officer.Name.Trim();
+                    //Not existing officer, so create new officer
                     if (officer.SameAsId == null)
                     {
-                        //Create new officer
+                        officer.DOB = officer.Age?.AgeToDOB(model.Timelineinfos.Date);
                         var officerSql = $@"SET @v1 = (SELECT COALESCE(Max(e.IdOfficer + 1),1) FROM edits_officer e);                                              
-                                            INSERT INTO edits_officer (`IdEditHistory`, `IdOfficer`, `Name`, `Race`, `Sex`, `Action`)
-                                               VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, '0');
+                                            INSERT INTO edits_officer (`IdEditHistory`, `IdOfficer`, `Name`, `Race`, `Sex`, `DOB`, `Action`)
+                                               VALUES ('{EditHistoryId}', @v1, @Name, @Race, @Sex, @DOB, '0');
                                             SELECT @v1;";
                         //Add to officers table and return id
-                        IdOfficer = await connection.QuerySingleAsync<int>(officerSql, officer);
+                        officer.IdOfficer = await connection.QuerySingleAsync<int>(officerSql, officer);
                         editHistory.Officers = 1;
-                    }
-                    //Add to junction table
-                    var junctionSql = "INSERT INTO edits_timelineinfo_officer (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `Age`, `Misconduct`, `Weapon`)" +
-                                    "VALUES (@EditHistoryId, @IdTimelineinfo, @idofficer, @age, @misconduct, @weapon);";
-                    await connection.ExecuteAsync(junctionSql, new
-                    {
-                        EditHistoryId,
-                        IdTimelineinfo,
-                        idofficer = officer.SameAsId == null? IdOfficer : officer.SameAsId,
-                        age = officer.Age,
-                        misconduct = officer.Misconduct.Sum(),
-                        weapon = officer.Weapon?.Sum() == 0? null : officer.Weapon?.Sum(),
-                    });
-                    editHistory.Timelineinfo_Officer = 1;
+                    }                   
                 }
+
+                var editMisconducts = Mapper.Map<List<ViewMisconduct>, List<EditMisconducts>>(model.Misconducts);
+                editMisconducts.ForEach(m => { m.IdTimelineinfo = IdTimelineinfo; m.IdEditHistory = EditHistoryId; });
+                string newTimelineinfoSubject = "INSERT INTO edit_misconducts (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `IdSubject`, `Misconduct`, `Weapon`, `Armed`) " +
+                                                    "VALUES (@IdEditHistory, @IdTimelineinfo, @IdOfficer, @IdSubject, @Misconduct, @Weapon, @Armed);";
+                await connection.ExecuteAsync(newTimelineinfoSubject, editMisconducts);
+
                 string updateEditHistory = @$"UPDATE edithistory SET 
                                                 `IdTimelineinfo` = @IdTimelineinfo,
                                                 `Confirmed` = '0',`Edits` = @Edits, `EditMedia` = @EditMedia,
-                                                `Officers` = @Officers, `Subjects` = @Subjects, `Timelineinfo_Officer` = @Timelineinfo_Officer, 
-                                                `Timelineinfo_Subject` = @Timelineinfo_Subject 
+                                                `Officers` = @Officers, `Subjects` = @Subjects, `Misconducts` = @Misconducts
                                             WHERE (`IdEditHistory` = '{EditHistoryId}');";
                 await connection.ExecuteAsync(updateEditHistory, editHistory);
             }

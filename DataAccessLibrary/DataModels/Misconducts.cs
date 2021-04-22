@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DataAccessLibrary.DataModels
 {
-    public class EditTimelineinfoOfficer
+    public class Misconducts
     {
-        public int IdEditsTimelineinfoOfficer { get; set; }
-        public int IdEditHistory { get; set; }
         public int IdTimelineinfo { get; set; }
         public int IdOfficer { get; set; }
+        public int IdSubject { get; set; }
         public int Misconduct { get; set; }
-        public int Weapon { get; set; }
-        public int? Age { get; set; }
+        public int? Weapon { get; set; }
+        public byte Armed { get; set; }
+        public byte SWAT { get; set; }
     }
 }

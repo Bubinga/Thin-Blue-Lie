@@ -17,6 +17,7 @@ using static ThinBlueLie.Helper.Extensions.IntExtensions;
 using ThinBlueLie.Models;
 using ThinBlueLie.Models.ViewModels;
 using static ThinBlueLie.Models.ViewModels.EditReviewModel;
+using static ThinBlueLie.Helper.Extensions.ClassExtensions;
 using MySqlConnector;
 
 namespace ThinBlueLie.Searches
@@ -98,8 +99,7 @@ namespace ThinBlueLie.Searches
         {
             var people = new EditReviewModel {New = new EditReviewSegment(), Old = new EditReviewSegment()};
             var WhatChangedQuery = "Select * from edithistory e Where e.IdEditHistory = @id";
-            var editChanges =
-                await Data.LoadDataSingle<EditHistory, dynamic>(WhatChangedQuery, new {id});
+            var editChanges = await Data.LoadDataSingle<EditHistory, dynamic>(WhatChangedQuery, new {id});
             if (editChanges.Subjects == 1)
             {
                 var SubjectChangedQuery = "Select * From edits_subject s Where s.IdEditHistory = @id";
@@ -107,17 +107,15 @@ namespace ThinBlueLie.Searches
                     await Data.LoadDataSingle<SimilarSubject, dynamic>(SubjectChangedQuery, new {id}); //Get new subject
 
                 var SubjectOldQuery = "Select * From subjects s Where s.IdSubject = @id;";
-                people.Old.SubjectPerson = await Data.LoadDataSingle<SimilarSubject, dynamic>(SubjectOldQuery,
-                    new {id = people.New.SubjectPerson.IdSubject});
+                people.Old.SubjectPerson = await Data.LoadDataSingle<SimilarSubject, dynamic>(SubjectOldQuery, new {id = people.New.SubjectPerson.IdSubject});
 
-                var sql3 = "SELECT t.IdTimelineinfo, t.Date, t.City, t.State " +
+                var sql3 = "SELECT distinct t.IdTimelineinfo, t.Date, t.City, t.State " +
                            "FROM timelineinfo t " +
-                           "JOIN timelineinfo_subject ON t.IdTimelineinfo = timelineinfo_subject.IdTimelineinfo " +
-                           "JOIN subjects s ON timelineinfo_subject.IdSubject = s.IdSubject " +
+                           "JOIN misconducts m ON t.IdTimelineinfo = m.IdTimelineinfo " +
+                           "JOIN subjects s ON m.IdSubject = s.IdSubject " +
                            "WHERE s.IdSubject = @id;";
                 people.New.SubjectPerson.Events = people.Old.SubjectPerson.Events
-                    = await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3,
-                        new {id = people.New.SubjectPerson.IdSubject});
+                    = await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3, new {id = people.New.SubjectPerson.IdSubject});
             }
 
             if (editChanges.Officers == 1)
@@ -130,10 +128,10 @@ namespace ThinBlueLie.Searches
                 people.Old.OfficerPerson = await Data.LoadDataSingle<SimilarOfficer, dynamic>(OfficerOldQuery,
                     new {id = people.New.OfficerPerson.IdOfficer});
 
-                var sql3 = "SELECT t.IdTimelineinfo, t.Date, t.City, t.State " +
+                var sql3 = "SELECT distinct t.IdTimelineinfo, t.Date, t.City, t.State " +
                            "FROM timelineinfo t " +
-                           "JOIN timelineinfo_officer ON t.IdTimelineinfo = timelineinfo_officer.IdTimelineinfo " +
-                           "JOIN officers o ON timelineinfo_officer.IdOfficer = o.IdOfficer " +
+                           "JOIN misconducts m ON t.IdTimelineinfo = m.IdTimelineinfo " +
+                           "JOIN officers o ON m.IdOfficer = o.IdOfficer " +
                            "WHERE o.IdOfficer = @id;";
                 people.New.OfficerPerson.Events =
                     await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3,
@@ -152,28 +150,29 @@ namespace ThinBlueLie.Searches
             var query = "SELECT * From timelineinfo t where t.IdTimelineinfo = @id";
             var timelineinfo = await Data.LoadDataSingle<Timelineinfo, dynamic>(query, new {id});
             var mediaQuery = "SELECT *, (true) as Processed From media m where m.IdTimelineinfo = @id Order By m.Rank;";
-            var officerQuery = "SELECT o.*, t_o.Age, t_o.Misconduct, t_o.Weapon " +
-                               "FROM timelineinfo t " +
-                               "JOIN timelineinfo_officer t_o ON t.IdTimelineinfo = t_o.IdTimelineinfo " +
-                               "JOIN officers o ON t_o.IdOfficer = o.IdOfficer " +
-                               "WHERE t.IdTimelineinfo = @id ;";
-            var subjectQuery = "SELECT s.*, t_s.Age, t_s.Armed " +
-                               "FROM timelineinfo t " +
-                               "JOIN timelineinfo_subject t_s ON t.IdTimelineinfo = t_s.IdTimelineinfo " +
-                               "JOIN subjects s ON t_s.IdSubject = s.IdSubject " +
-                               "WHERE t.IdTimelineinfo = @id;";
+            string misconductQuery = "SELECT * from misconducts WHERE IdTimelineinfo = @id";
+            var officerQuery = "SELECT distinct o.* FROM misconducts m " +
+                                    "Join officers o on m.IdOfficer = o.IdOfficer " +
+                                    "WHERE m.IdTimelineinfo = @id;";
+            var subjectQuery = "SELECT distinct o.* FROM misconducts m " +
+                                    "Join subjects o on m.IdSubject = o.IdSubject " +
+                                    "WHERE m.IdTimelineinfo = @id;";
 
             //get media, officers, and subjects using timelineinfo id
             var media = await Data.LoadData<ViewMedia, dynamic>(mediaQuery, new {id});
-            var officers = await Data.LoadData<DBOfficer, dynamic>(officerQuery, new {id});
-            var subjects = await Data.LoadData<DBSubject, dynamic>(subjectQuery, new {id});
+            var misconducts = await Data.LoadData<Misconducts, dynamic>(misconductQuery, new { id });
+            var officers = await Data.LoadData<Officer, dynamic>(officerQuery, new {id});
+            var subjects = await Data.LoadData<Subject, dynamic>(subjectQuery, new {id});
 
             media = await ViewMedia.GetDataMany(media);
+            officers.SetAgeFromDOB(timelineinfo.Date);
+            subjects.SetAgeFromDOB(timelineinfo.Date);
 
             return new EditReviewSegment
             {
                 Data = timelineinfo,
                 Medias = media,
+                Misconducts = misconducts,
                 Officers = officers,
                 Subjects = subjects
             };
@@ -227,30 +226,12 @@ namespace ThinBlueLie.Searches
                 await ViewMedia.GetDataMany(newInfo.Medias);
             }
 
-            if (editChanges.Timelineinfo_Officer == 1)
+            if (editChanges.Misconducts == 1)
             {
-                var changesToTimelineOfficerQuery =
-                    $@"SELECT o.*, t_o.Age, t_o.Misconduct, t_o.Weapon 
-                        FROM edithistory e
-                        JOIN edits_timelineinfo_officer t_o ON e.IdEditHistory = t_o.IdEditHistory 
-                        JOIN {(id.IsNewEvent.ToBool() ? "edits_officer" : "officers")} o ON t_o.IdOfficer = o.IdOfficer 
-                        WHERE e.IdEditHistory = {id.IdEditHistory};";
-                var changesToTimelineOfficer =
-                    await Data.LoadData<DBOfficer, dynamic>(changesToTimelineOfficerQuery, new { });
-                newInfo.Officers = changesToTimelineOfficer;
-            }
-
-            if (editChanges.Timelineinfo_Subject == 1)
-            {
-                var changesToTimelineSubjectQuery =
-                    $@"SELECT s.*, t_s.Age, t_s.Armed
-                        FROM edithistory e
-                        JOIN edits_timelineinfo_subject t_s ON e.IdEditHistory = t_s.IdEditHistory 
-                        JOIN {(id.IsNewEvent.ToBool() ? "edits_subject" : "subjects")} s ON t_s.IdSubject = s.IdSubject 
-                        WHERE e.IdEditHistory = @id;";
-                var changesToTimelineSubject = await Data.LoadData<DBSubject, dynamic>(changesToTimelineSubjectQuery,
-                    new {id = id.IdEditHistory});
-                newInfo.Subjects = changesToTimelineSubject;
+                var changesToMisconductsQuery = "SELECT * from edit_misconducts where IdEditHistory = @id;";
+                var changesToMisconducts =
+                    await Data.LoadData<Misconducts, dynamic>(changesToMisconductsQuery, new {id = id.IdEditHistory });
+                newInfo.Misconducts = changesToMisconducts;
             }
 
             return new Tuple<EditReviewSegment, EditHistory>(newInfo, editChanges);

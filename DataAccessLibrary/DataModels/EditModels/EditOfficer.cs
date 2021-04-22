@@ -6,15 +6,13 @@ namespace DataAccessLibrary.DataModels
 {
     public class EditOfficer
     {
-        public int IdEditOfficer { get; set; }
         public int IdEditHistory { get; set; }
         public int IdOfficer { get; set; }
         public int EditCount { get; set; }
         public string Name { get; set; }
         public byte Race { get; set; }
         public byte Sex { get; set; }
-        public string? Image { get; set; }
-        public byte Local { get; set; }
+        public DateTime DOB { get; set; }
         public byte Action { get; set; }
     }
 }

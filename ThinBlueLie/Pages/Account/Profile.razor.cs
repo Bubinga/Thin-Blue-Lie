@@ -29,8 +29,11 @@ namespace ThinBlueLie.Pages.Account
             Loading = true;
             userState = await AuthState;
             User = await UserManager.GetUserAsync(userState.User);
+            if (User != null)
+            {
+                await GetProfile();
+            }
             Loading = false;
-            await GetProfile();
         }
         public async Task GetProfile()
         {

@@ -11,20 +11,29 @@ namespace DataAccessLibrary.Enums
             Unarmed, 
             Armed
         }
+        [Flags]
+        public enum SupDataEnum
+        {
+            [Display(Name = "Drug Related")]
+            DrugRelated=1,
+            [Display(Name = "Protest Related")]
+            Protest
+        }
 
         public enum StateEnum
         {
-            Alabama, Alaska, [Display(Name = "American Samoa")] AmericanSamoa, Arizona, Arkansas,
-            California, Colorado, Connecticut, Delaware, [Display(Name = "District of Columbia")] DistrictofColumbia,
-            Florida, Georgia, Guam, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland,
-            Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada,
-            [Display(Name = "New Hampshire")] NewHampshire, [Display(Name = "New Jersey")] NewJersey,
-            [Display(Name = "New Mexico")] NewMexico, [Display(Name = "New York")] NewYork, [Display(Name = "North Carolina")] NorthCarolina,
-            [Display(Name = "North Dakota")] NorthDakota, [Display(Name = "Northern Mariana Islands")] NorthernMarianaIslands,
-            Ohio, Oklahoma, Oregon, Pennsylvania, [Display(Name = "Puerto Rico")] PuertoRico,
+            Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware, Florida, Georgia,  Hawaii, 
+            Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Michigan, 
+            Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada, [Display(Name = "New Hampshire")] NewHampshire,
+            [Display(Name = "New Jersey")] NewJersey, [Display(Name = "New Mexico")] NewMexico, 
+            [Display(Name = "New York")] NewYork, [Display(Name = "North Carolina")] NorthCarolina,
+            [Display(Name = "North Dakota")] NorthDakota, Ohio, Oklahoma, Oregon, Pennsylvania, 
             [Display(Name = "Rhode Island")] RhodeIsland, [Display(Name = "South Carolina")] SouthCarolina,
-            [Display(Name = "South Dakota")] SouthDakota, Tennessee, Texas, [Display(Name = "Virgin Islands")] VirginIslands,
-            Utah, Vermont, Virginia, Washington, [Display(Name = "West Virginia")] WestVirginia, Wisconsin, Wyoming
+            [Display(Name = "South Dakota")] SouthDakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, 
+            [Display(Name = "West Virginia")] WestVirginia, Wisconsin, Wyoming,
+            [Display(Name = "American Samoa")] AmericanSamoa, [Display(Name = "Washington DC")] DistrictofColumbia, Guam,
+            [Display(Name = "Northern Mariana Islands")] NorthernMarianaIslands, [Display(Name = "Puerto Rico")] PuertoRico,
+            [Display(Name = "Virgin Islands")] VirginIslands,
         }
 
 

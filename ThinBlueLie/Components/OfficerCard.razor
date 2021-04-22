@@ -1,6 +1,8 @@
 ﻿@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Buttons
 @using ThinBlueLie.Helper.Extensions
+@using Syncfusion.Blazor.Calendars
+@using static ThinBlueLie.Helper.Extensions.ClassExtensions
 
 <div class="AddOfficer mt-2">
     <div class="card border-dark mb-3 mx-auto">
@@ -17,11 +19,19 @@
                     </SfTextBox>
                     <ValidationMessage For="@(() => officer.Name)"></ValidationMessage>
                 </div>
-                <div class="my-2 col-sm-4">
-                    <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1
-                                      @bind-Value="officer.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
-                    <ValidationMessage For="@(() => officer.Age)"></ValidationMessage>
-                </div>               
+                <div class="my-2 d-flex col-sm-4">
+                        <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1 ShowSpinButton="false"
+                                          @bind-Value="officer.Age" FloatLabelType="@FloatLabelType.Always">                            
+                        </SfNumericTextBox>
+                        <ValidationMessage For="@(() => officer.Age)"></ValidationMessage>
+                    @*<NumericTextBoxEvents TValue="int?" ValueChange="UpdateDOB"></NumericTextBoxEvents>
+                        <div class="col-8 px-0">
+                        <SfDatePicker TValue="DateTime?" Placeholder="Date of Birth" @bind-Value="officer.DOB"
+                                      Min="@(EventDate.AddYears(-130))" Max="EventDate" FloatLabelType="FloatLabelType.Always">
+                            <DatePickerEvents TValue="DateTime?" ValueChange="UpdateAge"></DatePickerEvents>
+                        </SfDatePicker>
+                    </div>*@                    
+                </div>
             </div>
             <div class="form-row position-relative my-2">
                 <div class="col-6">
@@ -37,26 +47,6 @@
                     <ValidationMessage For="@(() => officer.Sex)"></ValidationMessage>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-6 form-field">
-                    <label class="form-check-label">
-                        Type of Misconduct
-                    </label>
-                    <SfMultiSelect Mode="@VisualMode.Box" Placeholder="Miconducts" @bind-Value="@officer.Misconduct" DataSource="@MisconductsList">
-                        <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
-                    </SfMultiSelect>
-                    <ValidationMessage For="@(() => officer.Misconduct)"></ValidationMessage>
-                </div>
-                <div class="col-6">
-                    <label class="form-check-label">
-                        Type of Weapon
-                    </label>
-                    <SfMultiSelect Mode="@VisualMode.Box" Enabled="@(officer.Misconduct != null? officer.Misconduct.Contains(1)? true : false : false)" Placeholder="Weapons" @bind-Value="@officer.Weapon" DataSource="@WeaponsList">
-                        <MultiSelectFieldSettings Text="Text" Value="Value"></MultiSelectFieldSettings>
-                    </SfMultiSelect>
-                    <ValidationMessage For="@(() => officer.Weapon)"></ValidationMessage>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -65,17 +55,7 @@
     [Parameter]
     public ViewOfficer officer { get; set; }
     [Parameter]
-    public bool isSubmit { get; set; }
-    protected override void OnInitialized()
-    {
-        if (isSubmit)
-        {
-            officer.Misconduct = new int[] { };
-            officer.Weapon = new int[] { };
-        }
-
-    }
-
+    public DateTime EventDate { get; set; }
     [Parameter]
     public EventCallback<int> DeleteOfficer { get; set; }
     [Parameter]
@@ -87,4 +67,12 @@
     IReadOnlyList<EnumExtensions.ListItem> MisconductsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.MisconductEnum>.Items;
     IReadOnlyList<EnumExtensions.ListItem> WeaponsList = EnumExtensions.GetDropdownList<TimelineinfoEnums.WeaponEnum>.Items;
 
+    void UpdateDOB()
+    {
+        officer.DOB = officer.Age?.AgeToDOB(EventDate);
+    }
+    void UpdateAge()
+    {
+        officer.Age = officer.DOB?.AgeFromDOB(EventDate);
+    }
 }

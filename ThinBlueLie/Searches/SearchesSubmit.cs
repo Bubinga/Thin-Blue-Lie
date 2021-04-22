@@ -82,20 +82,21 @@ namespace ThinBlueLie.Helper
             }
             //return list of names in order of lowest to highest score
             var SortedNames = nameScores.OrderByDescending(o => o.Score).ToList();
-            var Ids = String.Join(",", SortedNames.Where(s => s.Score > 0.7).Select(x => x.Id));            
+            var filteredIds = SortedNames.Where(s => s.Score > 0.7).Select(x => x.Id).ToArray(); //Only Ids with high enough score  
+            var Ids = string.Join(",", filteredIds);
             List<SimilarOfficer> similarPeople;
             if (!string.IsNullOrWhiteSpace(Ids))
             {
-                var sql2 = "SELECT o.Name, o.Race, o.Sex, IdOfficer FROM officers o Where IdOfficer in (@IdList) ORDER BY field(IdOfficer, @IdList)";
-                similarPeople = await Data.LoadData<SimilarOfficer, dynamic>(sql2, new {IdList = Ids });
-                for (int i = 0; i < Ids.Length; i++)
+                var sql2 = $"SELECT * FROM officers Where IdOfficer in ({Ids}) ORDER BY field(IdOfficer, {Ids})";
+                similarPeople = await Data.LoadData<SimilarOfficer, dynamic>(sql2, new {});
+                for (int i = 0; i < filteredIds.Length; i++)
                 {
-                    var sql3 = "SELECT t.Date, t.City, t.State " +
-                                "FROM timelineinfo t " +
-                                "JOIN timelineinfo_officer ON t.IdTimelineinfo = timelineinfo_officer.IdTimelineinfo " +
-                                "JOIN officers o ON timelineinfo_officer.IdOfficer = o.IdOfficer " +
-                                "WHERE o.IdOfficer = @Id;";
-                    similarPeople[i].Events = await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3, new {Id = Ids[i] });
+                    var sql3 = "SELECT distinct t.Date, t.City, t.State " +
+                                   "FROM timelineinfo t " +
+                                   "JOIN misconducts m ON t.IdTimelineinfo = m.IdTimelineinfo " +
+                                   "JOIN officers o ON m.IdOfficer = o.IdOfficer " +
+                                   "WHERE o.IdOfficer = @id;";
+                    similarPeople[i].Events = await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3, new {Id = filteredIds[i] });
                 }                          
             }
             else
@@ -112,6 +113,7 @@ namespace ThinBlueLie.Helper
                     Name = person.Name,
                     Race = person.Race,
                     Sex = person.Sex,
+                    DOB = person.DOB,
                     IdPerson = person.IdOfficer
                 };
                 SimilarPeople.Add(Person);
@@ -148,20 +150,21 @@ namespace ThinBlueLie.Helper
             }
             //return list of names in order of lowest to highest score
             var SortedNames = nameScores.OrderByDescending(o => o.Score).ToList();
-            var Ids = String.Join(",", SortedNames.Where(s => s.Score > 0.7).Select(x => x.Id));   //deliminated ids of possible names        
+            var filteredIds = SortedNames.Where(s => s.Score > 0.7).Select(x => x.Id).ToArray(); //Only Ids with high enough score  
+            var Ids = string.Join(",", filteredIds);
             List<SimilarSubject> similarPeople;
             if (!string.IsNullOrWhiteSpace(Ids))
             {
-                var sql2 = "SELECT * FROM subjects Where IdSubject in (@IdList) ORDER BY field(IdSubject, @IdList)";
-                similarPeople = await Data.LoadData<SimilarSubject, dynamic>(sql2, new {IdList = Ids });
-                for (int i = 0; i < Ids.Length; i++)
+                var sql2 = $"SELECT * FROM subjects Where IdSubject in ({Ids}) ORDER BY field(IdSubject, {Ids})";
+                similarPeople = await Data.LoadData<SimilarSubject, dynamic>(sql2, new {});
+                for (int i = 0; i < filteredIds.Length; i++)
                 {
-                    var sql3 = "SELECT t.Date, t.City, t.State " +
-                                "FROM timelineinfo t " +
-                                "JOIN timelineinfo_subject ON t.IdTimelineinfo = timelineinfo_subject.IdTimelineinfo " +
-                                "JOIN subjects s ON timelineinfo_subject.IdSubject = s.IdSubject " +
-                                "WHERE s.IdSubject = @Id;";
-                    similarPeople[i].Events = await Data.LoadData<SimilarSubject.SimilarPersonEvents, dynamic>(sql3, new {Id = Ids[i] });
+                    var sql3 = "SELECT distinct t.Date, t.City, t.State " +
+                                   "FROM timelineinfo t " +
+                                   "JOIN misconducts m ON t.IdTimelineinfo = m.IdTimelineinfo " +
+                                   "JOIN subjects s ON m.IdSubject = s.IdSubject " +
+                                   "WHERE s.IdSubject = @Id;";
+                    similarPeople[i].Events = await Data.LoadData<SimilarPerson.SimilarPersonEvents, dynamic>(sql3, new {Id = filteredIds[i] });
                 }
             }
             else
@@ -178,6 +181,7 @@ namespace ThinBlueLie.Helper
                     Name = person.Name,
                     Race = person.Race,
                     Sex = person.Sex,
+                    DOB = person.DOB,
                     IdPerson = person.IdSubject
                 };
                 SimilarPeople.Add(Person);
@@ -198,15 +202,13 @@ namespace ThinBlueLie.Helper
             foreach ((var Event, int i) in SimilarTimelineinfos.Select((Event, i) => (Event, i)))
             {
                 var Id = Event.IdTimelineinfo;
-                var officerQuery = "SELECT o.*, tio.Age FROM timelineinfo t " +
-                    "JOIN timelineinfo_officer tio ON t.IdTimelineinfo = tio.IdTimelineinfo " +
-                    "JOIN officers o ON tio.IdOfficer = o.IdOfficer " +
-                    "WHERE t.IdTimelineinfo = @id;";
+                var officerQuery = @"Select distinct o.* from officers o
+                                        JOIN misconducts m on o.IdOfficer = m.IdOfficer
+                                        WHERE m.IdTimelineinfo = 1;";
                 var Officers = await Data.LoadData<CommonPerson, dynamic>(officerQuery, new { id = Id });
-                var subjectQuery = "SELECT s.Name, s.Race, s.Sex, ts.Age FROM timelineinfo t " +
-                    "JOIN timelineinfo_subject ts ON t.IdTimelineinfo = ts.IdTimelineinfo " +
-                    "JOIN subjects s ON ts.IdSubject = s.IdSubject " +
-                    "WHERE t.IdTimelineinfo = @id;";
+                var subjectQuery = @"Select distinct s.* from subjects s
+                                        JOIN misconducts m on s.IdSubject = m.IdSubject
+                                        WHERE m.IdTimelineinfo = 1;";
                 var Subjects = await Data.LoadData<CommonPerson, dynamic>(subjectQuery, new { id = Id });
                 var MediaQuery = "Select *,(true) as Processed From media m Where(m.IdTimelineinfo = @id);";
                 var Media = await Data.LoadData<ViewMedia, dynamic>(MediaQuery, new {id = Id });

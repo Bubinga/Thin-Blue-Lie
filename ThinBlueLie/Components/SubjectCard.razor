@@ -18,7 +18,7 @@
                     <ValidationMessage For="@(() => subject.Name)"></ValidationMessage>
                 </div>
                 <div class="my-2 col-sm-4">
-                    <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1
+                    <SfNumericTextBox Placeholder="Age" Decimals=0 ValidateDecimalOnType="true" TValue="int?" Min=0 Max=130 Step=1 ShowSpinButton="false"
                                       @bind-Value="subject.Age" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
                     <ValidationMessage For="@(() => subject.Age)"></ValidationMessage>
                 </div>
@@ -36,10 +36,7 @@
                     </SfDropDownList>
                     <ValidationMessage For="@(() => subject.Sex)"></ValidationMessage>
                 </div>
-            </div>
-            <div class="ml-3 d-inline-block" style="width:6rem;">
-                <SfCheckBox CssClass="armed-checkbox" @bind-Checked="@subject.Armed" Label="Armed"></SfCheckBox>
-            </div>            
+            </div>       
         </div>
     </div>
 </div>
@@ -47,7 +44,8 @@
 @code {
     [Parameter]
     public ViewSubject subject { get; set; }
-
+    [Parameter]
+    public DateTime EventDate { get; set; }
     [Parameter]
     public EventCallback<int> DeleteSubject { get; set; }
     [Parameter]

@@ -51,7 +51,7 @@ namespace ThinBlueLie.Searches
                     var result = await Data.LoadDataNoLog<Timelineinfo, dynamic>(query, new {date = dates[i].ToString("yyyy-MM-dd") }, GetConnectionString());
                     foreach (var Event in result)
                     {
-                        var officerquery = "SELECT Misconduct,Weapon FROM timelineinfo_officer Where IdTimelineinfo = @id;";
+                        var officerquery = "SELECT * from misconducts Where IdTimelineinfo = @id;";
                         var officerresult = await Data.LoadDataNoLog<TimelineinfoOfficerShort, dynamic>(officerquery, new {id = Event.IdTimelineinfo}, GetConnectionString());
                         results.Add(new TimelineinfoFull {Timelineinfo = Event, OfficerInfo = officerresult });
                     }

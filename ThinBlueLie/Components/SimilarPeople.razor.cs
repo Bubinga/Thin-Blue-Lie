@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DataAccessLibrary.DataModels;
 using Microsoft.AspNetCore.Components;
 using ThinBlueLie.Models;
 using static ThinBlueLie.Searches.SearchClasses;
