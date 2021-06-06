@@ -84,8 +84,9 @@ namespace ThinBlueLie.Models
             {
                 processed = value;
                 new Task(() =>
-                {                    
-                    MediaProcessed?.Invoke(this, processed);
+                {
+                    if (value)
+                        MediaProcessed?.Invoke(this, processed);
                 }).Start();
             }
         }
@@ -117,7 +118,7 @@ namespace ThinBlueLie.Models
                 }
                 if (uri.Host.Contains("reddit.com") || uri.Host.Contains("i.redd.it"))
                 {
-                    media.originalUrl = media.originalUrl.Split("?")[0].Split("#")[0];
+                    media.originalUrl = media.originalUrl.Split("?")[0].Split("#")[0]; //removes extra share stuff reddit adds on
                     media.SourceFrom = SourceFromEnum.Reddit;
                 }
             }
@@ -132,7 +133,7 @@ namespace ThinBlueLie.Models
                         Uri uri = new Uri(media.OriginalUrl);
                         if (uri.Host.Contains("youtu.be"))
                         {
-                            uri = new Uri(media.OriginalUrl.Split("?")[0].Split("#")[0]);
+                            uri = new Uri(media.OriginalUrl.Split("?")[0].Split("#")[0]); //removes excess query strings
                             media.sourcePath = uri.AbsolutePath.Remove(0, 1);
                         }
                         if (uri.Host.Contains("youtube.com"))
@@ -157,23 +158,23 @@ namespace ThinBlueLie.Models
                     else
                     {
                         var newMedia = await WebsiteProfile.GetRedditDataAsync(media);                       
-                        if (newMedia.SourcePath.Contains(".mp4"))
-                        {
-                            media = newMedia;
+                        //if (newMedia.SourcePath.Contains(".mp4"))
+                        //{
                             media.Processed = true;
-                            return media;
-                        }
-                        else if (newMedia.IsValid)
-                        {
-                            media = await GetData(newMedia); //to check if it's a youtube video
-                            return media;
-                        }
-                        else
-                        {
                             media = newMedia;
-                            media.Processed = true;
                             return media;
-                        }
+                        //}
+                        //else if (newMedia.IsValid)
+                        //{
+                        //    media = await GetData(newMedia); //to check if it's a youtube video
+                        //    return media;
+                        //}
+                        //else
+                        //{
+                        //    media = newMedia;
+                        //    media.Processed = true;
+                        //    return media;
+                        //}
                     }
                 }
             }

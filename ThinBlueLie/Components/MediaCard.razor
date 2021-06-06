@@ -59,7 +59,7 @@
             <div class="form-row align-middle mb-2">
                 @if (media.MediaType != MediaTypeEnum.News)
                 {
-                    <div class="col-8 dropdown pl-0">
+                    <div class="col-5 dropdown pl-0">
                         <label class="mb-1">
                             Source's Location
                         </label>
@@ -72,7 +72,7 @@
                         <ValidationMessage For="@(() => media.SourceFrom)"></ValidationMessage>
                     </div>
                 }
-                <div class="@(media.MediaType == MediaTypeEnum.News? "col-12 pl-0" : "col-4")">
+                <div class="@(media.MediaType == MediaTypeEnum.News? "col-12 pl-0" : "col-7")">
                     <label class="mb-1">
                         Credit
                     </label>
@@ -129,7 +129,7 @@
                 }
                 else //if it's a video
                 {
-                    if (!string.IsNullOrWhiteSpace(media.OriginalUrl) && media.Processed && media.IsValid)
+                    if (!string.IsNullOrWhiteSpace(media.OriginalUrl) && media.IsValid)
                     {
                         if (media.SourceFrom != null)
                         {
@@ -192,6 +192,7 @@
 
     private void Refresh()
     {
+        //this.StateHasChanged();
         this.InvokeAsync(() => this.StateHasChanged());
     }
 

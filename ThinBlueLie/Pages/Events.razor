@@ -1,18 +1,10 @@
 ﻿@page "/Events/{Date:datetime}/{Title}"
 @page "/Events/{Date:datetime}"
 @page "/Events"
-@using ThinBlueLie.ViewModels
 @using ThinBlueLie.Helper.Extensions
-@using DataAccessLibrary.DataAccess
 @using Syncfusion.Blazor.Spinner
-@using static ThinBlueLie.Helper.ConfigHelper
-@using Microsoft.AspNetCore.WebUtilities
 @using HtmlAgilityPack
-@using ThinBlueLie.Models.ViewModels
-@using DataAccessLibrary.UserModels;
 @using static ThinBlueLie.Helper.Extensions.StringExtensions
-@using static ThinBlueLie.Helper.Algorithms.LinkConverter
-@using Microsoft.AspNetCore.Identity
 
 
 <Meta Property="og:type" Content="article" />
@@ -117,7 +109,7 @@ else if (EventExists)
 }
 else if (FakeEvent)
 {
-    <h4 class="text-center mt-4">Opps, something went wrong! Please double-check your link</h4>
+    <h4 class="text-center mt-4">Oops, something went wrong! Please double-check your link</h4>
 }
 else if (NoEvents)
 {
