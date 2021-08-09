@@ -72,8 +72,8 @@ namespace ThinBlueLie.Helper
             CreateMap<EditMisconducts, ViewMisconduct>()
                 .ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => IntToArray(src.Misconduct)))
                 .ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => IntToArray(src.Weapon)))
-                .ForMember(dest => dest.Officer, opt => opt.MapFrom(src => new ViewOfficer() {IdOfficer = src.IdOfficer ?? 0}))
-                .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => new ViewSubject() {IdSubject = src.IdSubject ?? 0}));
+                .ForMember(dest => dest.Officer, opt => opt.MapFrom(src => new ViewOfficer() {IdOfficer = src.IdOfficer}))
+                .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => new ViewSubject() {IdSubject = src.IdSubject}));
             CreateMap<ViewMisconduct, EditMisconducts>()
                 .ForMember(dest => dest.Misconduct, opt => opt.MapFrom(src => src.Misconduct.Sum()))
                 .ForMember(dest => dest.Weapon, opt => opt.MapFrom(src => src.Weapon.Sum()))

@@ -28,9 +28,9 @@ namespace ThinBlueLie.Helper.Validators
 
             if (Misconducts.Contains(MisconductEnum.Force))
             {
-                value = value ?? 0;
+                value = value ?? Array.Empty<int>();
                 var weapons = Array.ConvertAll((int[])value, b => (short)b).Cast<WeaponEnum>().ToArray();
-                if ((weapons?.Length ?? 0) == 0)
+                if ((weapons?.Length ?? 0) == 0) //if weapons is null or zero
                     return new ValidationResult(ErrorMessage, new[] { validationContext.MemberName });
             }
             return null;

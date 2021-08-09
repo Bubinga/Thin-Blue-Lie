@@ -9,7 +9,5 @@ namespace DataAccessLibrary.DataModels
     public class EditMisconducts : Misconducts
     {
         public int IdEditHistory { get; set; }
-        public new int? IdOfficer { get; set; }
-        public new int? IdSubject { get; set; }
     }
 }

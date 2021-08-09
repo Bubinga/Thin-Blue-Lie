@@ -628,6 +628,9 @@ form {
     width: inherit;
 }
 
+.misconduct-link{
+    min-height: 75px;
+}
 
 /* Provide sufficient contrast against white background */
 .btn-primary {

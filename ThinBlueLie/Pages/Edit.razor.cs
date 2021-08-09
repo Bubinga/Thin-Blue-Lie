@@ -305,11 +305,10 @@ namespace ThinBlueLie.Pages
                 sanitizer.AllowedCssProperties.Remove("whitespace");
                 model.Timelineinfos.Title = model.Timelineinfos.Title.Trim();
                 model.Timelineinfos.City = model.Timelineinfos.City.Trim();
+                var supdata = (int)model.Timelineinfos.SupData;
                 model.Timelineinfos.Context = sanitizer.Sanitize(model.Timelineinfos.Context);
-                string InsertEdits = $@"INSERT INTO edits (`IdEditHistory`, `IdTimelineinfo`, `Title`, `Date`, `State`, 
-                                           `City`, `Context`, `Locked`) 
-                                        VALUES ('{EditHistoryId}', '{TimelineinfoId}', @Title, @Date, @State,
-                                            @City, @Context, @Locked);";
+                string InsertEdits = $@"INSERT INTO edits (`IdEditHistory`, `IdTimelineinfo`, `Title`, `Date`, `State`, `City`, `SupData`, `Context`, `Locked`) 
+                                               VALUES ('{EditHistoryId}', '{TimelineinfoId}', @Title, @Date, @State, @City, '{supdata}',@Context, @Locked);";
                 await Data.SaveData(InsertEdits, model.Timelineinfos);
             }
 

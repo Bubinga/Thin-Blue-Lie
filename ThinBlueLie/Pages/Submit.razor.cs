@@ -94,8 +94,8 @@ namespace ThinBlueLie.Pages
                 }
 
 
-                string timelineSave = $@"INSERT INTO edits (`IdTimelineinfo`, `IdEditHistory`, `Title`, `Date`, `State`, `City`, `Context`, `Locked`)
-                                       VALUES ('{IdTimelineinfo}', '{EditHistoryId}', @Title, @Date, @State, @City, @context, @Locked);";   
+                string timelineSave = $@"INSERT INTO edits (`IdTimelineinfo`, `IdEditHistory`, `Title`, `Date`, `State`, `City`, `SupData`, `Context`, `Locked`)
+                                       VALUES ('{IdTimelineinfo}', '{EditHistoryId}', @Title, @Date, @State, @City, @SupData, @context, @Locked);";   
 
                 //Insert data into edits table
                 await connection.QueryAsync<int>(timelineSave, new
@@ -104,6 +104,7 @@ namespace ThinBlueLie.Pages
                     Date = DateValue,
                     model.Timelineinfos.State,
                     City = model.Timelineinfos.City.Trim(),
+                    SupData = (int)model.Timelineinfos.SupData,
                     context = sanitizer.Sanitize(model.Timelineinfos.Context),
                     model.Timelineinfos.Locked,
                     submittedby = userId, //nullable
@@ -176,14 +177,14 @@ namespace ThinBlueLie.Pages
                                             SELECT @v1;";
                         //Add to officers table and return id
                         officer.IdOfficer = await connection.QuerySingleAsync<int>(officerSql, officer);
-                        editHistory.Officers = 1;
+                        editHistory.Officers = 1; //Set Officers data point to true because something has been done
                     }                   
                 }
 
                 var editMisconducts = Mapper.Map<List<ViewMisconduct>, List<EditMisconducts>>(model.Misconducts);
                 editMisconducts.ForEach(m => { m.IdTimelineinfo = IdTimelineinfo; m.IdEditHistory = EditHistoryId; });
-                string newTimelineinfoSubject = "INSERT INTO edit_misconducts (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `IdSubject`, `Misconduct`, `Weapon`, `Armed`) " +
-                                                    "VALUES (@IdEditHistory, @IdTimelineinfo, @IdOfficer, @IdSubject, @Misconduct, @Weapon, @Armed);";
+                string newTimelineinfoSubject = "INSERT INTO edit_misconducts (`IdEditHistory`, `IdTimelineinfo`, `IdOfficer`, `IdSubject`, `Misconduct`, `Weapon`, `Armed`, `SWAT`) " +
+                                                    "VALUES (@IdEditHistory, @IdTimelineinfo, @IdOfficer, @IdSubject, @Misconduct, @Weapon, @Armed, @SWAT);";
                 await connection.ExecuteAsync(newTimelineinfoSubject, editMisconducts);
 
                 string updateEditHistory = @$"UPDATE edithistory SET 
@@ -196,7 +197,7 @@ namespace ThinBlueLie.Pages
             Serilog.Log.Information("Created new Event {@EventInfo} with EditHistory Id {EditHistoryId}", model, EditHistoryId);
             Serilog.Log.Information("Created new Edit {@EditHistory}", editHistory);
 
-            //Give account some repuation
+            //Give account some reputation
             await UserManager.ChangeReputation(ReputationEnum.ReputationChangeEnum.NewEvent, Convert.ToInt32(userId));
 
             //TODO move all into querymultiple
