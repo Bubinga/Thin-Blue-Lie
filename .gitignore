@@ -21,6 +21,7 @@ EmptyLayout.razor
 
 Uploads/
 Logs/
+/Seq
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
